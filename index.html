@@ -158,6 +158,8 @@
   body.beheer .add{display:none!important}
   body.beheer .cart-btn{display:none!important}
   .mgmt-badge{display:none}
+  .suggest-btn{float:right;margin-top:-2px;background:var(--amber);color:#fff;border:none;border-radius:8px;padding:4px 12px;font-size:.78rem;font-weight:700;cursor:pointer}
+  .suggest-btn:active{transform:scale(.96)}
   body.beheer .mgmt-badge{display:inline-block;margin-left:10px;padding:3px 10px;border-radius:999px;background:var(--amber);color:#fff;font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle}
   #beheerbar .bstat{flex-basis:100%;text-align:center;font-size:.82rem;font-weight:700;margin:0}
   #beheerbar .bstat small{color:rgba(255,255,255,.6);font-weight:500}
@@ -308,7 +310,7 @@
       <div><label id="amLSpice">Pittigheid</label><select id="fSpice"></select></div>
       <div><label id="amLRh">Serveertip-type</label><select id="fRh"></select></div>
     </div>
-    <label id="amLDesc">Beschrijving (NL)</label><textarea id="fDesc"></textarea>
+    <label id="amLDesc">Beschrijving (NL)</label><button type="button" class="suggest-btn" id="fSuggest">✨ Voorstel</button><textarea id="fDesc"></textarea>
     <label id="amLTh">Thais schrift</label><input id="fTh" type="text" placeholder="ปลาหมึกทอด">
     <div class="row2">
       <div><label id="amLNameEn">Naam (EN)</label><input id="fNaamEn" type="text"></div>
@@ -1056,6 +1058,7 @@ async function initBeheer(){
   document.getElementById("bPublish").onclick = publishAll;
   document.getElementById("fCancel").onclick = () => document.getElementById("addModal").classList.remove("open");
   document.getElementById("fSave").onclick = saveNewDish;
+  document.getElementById("fSuggest").onclick = suggestDesc;
   document.getElementById("bSluit").onclick = () => location.href = location.pathname;
   applyBeheerLang();
 }
@@ -1105,6 +1108,27 @@ function openAddModal(){
   ["fNaam","fPrijs","fDesc","fTh","fNaamEn","fNaamTh","fEmoji"].forEach(i=>document.getElementById(i).value="");
   document.getElementById("fSpice").value="0"; document.getElementById("fRh").value="wok";
   document.getElementById("addModal").classList.add("open");
+}
+function suggestDesc(){
+  const type = val("fRh");
+  const spice = parseInt(val("fSpice"))||0;
+  const base = {
+    fried:"Krokant gefrituurd, goudbruin en knapperig.",
+    grill:"Gegrild met een hartige, licht rokerige smaak.",
+    soup:"Aromatische Thaise soep met verse kruiden.",
+    curry:"Romige Thaise curry, rijk en vol van smaak.",
+    wok:"Op hoog vuur gewokt met verse ingrediënten.",
+    rice:"Hartig rijstgerecht op smaak gebracht met Thaise kruiden.",
+    salad:"Frisse Thaise salade met een pittig-zure dressing.",
+    sticky:"Zoet dessert met kleefrijst en kokos.",
+    stickyplain:"Thaise kleefrijst — het perfecte bijgerecht.",
+    cold:"Verfrissend en koud geserveerd.",
+    rotiwarm:"Warm en zoet, heerlijk als dessert.",
+    drink:"Verfrissende Thaise drank."
+  }[type] || "Authentiek Thais gerecht, met zorg vers bereid.";
+  const noSpice = ["drink","sticky","cold","rotiwarm","stickyplain"].includes(type);
+  const sp = noSpice ? "" : (spice>=3?" Heel pittig — voor de liefhebber.":spice===2?" Lekker pittig.":spice===1?" Mild pittig.":"");
+  document.getElementById("fDesc").value = base + sp;
 }
 function saveNewDish(){
   const naam = val("fNaam").trim(); const prijs = parseFloat(val("fPrijs"));
