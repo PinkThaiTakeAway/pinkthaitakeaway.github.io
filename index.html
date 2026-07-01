@@ -399,7 +399,7 @@ const I18N = {
       makeHidden:"🚫 Niet bestelbaar maken", makeShown:"✅ Weer bestelbaar maken", del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
       addTitle:"Gerecht toevoegen", addHint:"Velden met * zijn verplicht. Engels/Thais is optioneel — laat je het leeg, dan wordt de Nederlandse tekst gebruikt.",
-      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel",
+      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"},
       spiceOpts:["Niet pittig","Mild","Pittig","Heel pittig"], cancel:"Annuleren", addBtn:"Toevoegen",
       rhLabels:{curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"},
       aNaam:"Vul een naam in.", aPrijs:"Vul een geldige prijs in.", aImg:"Dit bestand is geen geldige afbeelding.", aImgProc:"Foto kon niet verwerkt worden.",
@@ -438,7 +438,7 @@ const I18N = {
       makeHidden:"🚫 Make unavailable", makeShown:"✅ Make available again", del:"🗑️ Delete this dish",
       pickHint:"Tap a photo, paste a URL, or upload your own. Then export below.",
       addTitle:"Add a dish", addHint:"Fields marked * are required. English/Thai are optional — if left empty, the Dutch text is used.",
-      lName:"Name", lCat:"Category", lPrice:"Price (€)", lSpice:"Spiciness", lRh:"Serving-tip type", lDesc:"Description", lTh:"Thai script", lEmoji:"Emoji", opt:"optional",
+      lName:"Name", lCat:"Category", lPrice:"Price (€)", lSpice:"Spiciness", lRh:"Serving-tip type", lDesc:"Description", lTh:"Thai script", lEmoji:"Emoji", opt:"optional", langLabels:{nl:"NL",en:"EN",th:"TH"},
       spiceOpts:["Not spicy","Mild","Spicy","Very spicy"], cancel:"Cancel", addBtn:"Add",
       rhLabels:{curry:"Curry / sauce",soup:"Soup",fried:"Fried / crispy",wok:"Wok / stir-fried",rice:"Rice dish",grill:"Grilled meat",salad:"Salad (cold)",rotiwarm:"Roti / pan-warm",cold:"Cold (ice/dessert)",sticky:"Mango sticky rice",stickyplain:"Sticky rice",drink:"Drink"},
       aNaam:"Please enter a name.", aPrijs:"Please enter a valid price.", aImg:"This file is not a valid image.", aImgProc:"The photo could not be processed.",
@@ -477,7 +477,7 @@ const I18N = {
       makeHidden:"🚫 ปิดการสั่งซื้อ", makeShown:"✅ เปิดการสั่งซื้ออีกครั้ง", del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
       addTitle:"เพิ่มเมนู", addHint:"ช่องที่มี * ต้องกรอก ภาษาอังกฤษ/ไทยไม่บังคับ ถ้าเว้นว่างจะใช้ข้อความภาษาดัตช์",
-      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี",
+      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"},
       spiceOpts:["ไม่เผ็ด","เผ็ดน้อย","เผ็ด","เผ็ดมาก"], cancel:"ยกเลิก", addBtn:"เพิ่ม",
       rhLabels:{curry:"แกง / ซอส",soup:"ซุป",fried:"ทอด / กรอบ",wok:"ผัด",rice:"ข้าว",grill:"เนื้อย่าง",salad:"ยำ (เย็น)",rotiwarm:"โรตี / อุ่นกระทะ",cold:"เย็น (ไอศกรีม/ของหวาน)",sticky:"ข้าวเหนียวมะม่วง",stickyplain:"ข้าวเหนียว",drink:"เครื่องดื่ม"},
       aNaam:"กรุณากรอกชื่อ", aPrijs:"กรุณากรอกราคาที่ถูกต้อง", aImg:"ไฟล์นี้ไม่ใช่รูปภาพที่ถูกต้อง", aImgProc:"ไม่สามารถประมวลผลรูปได้",
@@ -1092,17 +1092,18 @@ function openAddModal(){
   const A = T().adm;
   document.getElementById("amTitle").textContent = A.addTitle;
   document.getElementById("amHint").textContent = A.addHint;
-  document.getElementById("amLName").textContent = A.lName + " (NL) *";
+  const L = A.langLabels;
+  document.getElementById("amLName").textContent = A.lName + ` (${L.nl}) *`;
   document.getElementById("amLCat").textContent = A.lCat + " *";
   document.getElementById("amLPrice").textContent = A.lPrice + " *";
   document.getElementById("amLSpice").textContent = A.lSpice;
   document.getElementById("amLRh").textContent = A.lRh;
-  document.getElementById("amLDesc").textContent = `${A.lDesc} (NL) — ${A.opt}`;
-  document.getElementById("amLDescEn").textContent = `${A.lDesc} (EN) — ${A.opt}`;
-  document.getElementById("amLDescTh").textContent = `${A.lDesc} (TH) — ${A.opt}`;
+  document.getElementById("amLDesc").textContent = `${A.lDesc} (${L.nl}) — ${A.opt}`;
+  document.getElementById("amLDescEn").textContent = `${A.lDesc} (${L.en}) — ${A.opt}`;
+  document.getElementById("amLDescTh").textContent = `${A.lDesc} (${L.th}) — ${A.opt}`;
   document.getElementById("amLTh").textContent = `${A.lTh} — ${A.opt}`;
-  document.getElementById("amLNameEn").textContent = `${A.lName} (EN) — ${A.opt}`;
-  document.getElementById("amLNameTh").textContent = `${A.lName} (TH) — ${A.opt}`;
+  document.getElementById("amLNameEn").textContent = `${A.lName} (${L.en}) — ${A.opt}`;
+  document.getElementById("amLNameTh").textContent = `${A.lName} (${L.th}) — ${A.opt}`;
   document.getElementById("amLEmoji").textContent = `${A.lEmoji} — ${A.opt}`;
   document.getElementById("fCancel").textContent = A.cancel;
   document.getElementById("fSave").textContent = A.addBtn;
