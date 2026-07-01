@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<title>Pink Thai TakeAway — Online bestellen &amp; afhalen</title>
+<meta name="description" content="Verse Thaise gerechten. Bestel door de week online en haal je bestelling op zaterdag af.">
+<meta name="theme-color" content="#0E3B33">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pink Thai TakeAway">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Pink Thai TakeAway — Online bestellen & afhalen">
+<meta property="og:description" content="Verse Thaise gerechten. Bestel door de week, afhalen op zaterdag.">
+<meta property="og:image" content="og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E3B33'/%3E%3Cpath d='M14 34h36a18 18 0 0 1-36 0z' fill='%23FBF6EC'/%3E%3Crect x='12' y='32' width='40' height='4' rx='2' fill='%23E8962E'/%3E%3Cpath d='M26 14c-3 3-3 6 0 9M32 12c-3 3-3 6 0 9M38 14c-3 3-3 6 0 9' fill='none' stroke='%23E8962E' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Noto+Sans+Thai:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1410; --paper:#FBF6EC; --card:#FFFDF8;
+    --forest:#0E3B33; --forest-2:#15564A;
+    --amber:#E8508E; --amber-deep:#C93A75; --chili:#D64525; --lime:#9DB838; --pink:#E8508E;
+    --muted:#6B6256; --line:#EBE1CF;
+    --wa:#128C7E; --wa-deep:#0E7567; --ok:#3F9D5A;
+    --radius:18px;
+    --shadow:0 1px 2px rgba(26,20,16,.05), 0 8px 24px rgba(26,20,16,.06);
+    --shadow-lg:0 12px 40px rgba(14,59,51,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans','Noto Sans Thai',system-ui,sans-serif;background-color:#F0E7D2;background-image:radial-gradient(rgba(14,59,51,.07) 1.3px, transparent 1.7px),radial-gradient(88% 55% at 100% 0%, rgba(232,80,142,.09), transparent 60%),radial-gradient(72% 46% at 0% 6%, rgba(21,86,74,.07), transparent 52%);background-size:22px 22px,100% 700px,100% 540px;background-repeat:repeat,no-repeat,no-repeat;color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:96px}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;line-height:1.05;font-weight:600}
+  :lang(th) h1, :lang(th) h2, :lang(th) h3{font-family:'Noto Sans Thai','Fraunces',serif;font-weight:700}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  :focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:8px}
+
+  header{position:sticky;top:0;z-index:60;background:rgba(251,246,236,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .bar{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;gap:10px}
+  .brand{display:flex;align-items:baseline;gap:8px;min-width:0;flex:0 1 auto}
+  .brand .logo{font-family:'Fraunces',serif;font-weight:800;font-size:1.18rem;color:var(--forest);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .logo .dot{color:var(--amber)}
+  .bar-right{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .langsw{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+  .langsw button{font-size:.74rem;font-weight:800;color:var(--muted);padding:7px 9px;letter-spacing:.02em}
+  .langsw button.on{background:var(--forest);color:#fff}
+  .cart-btn{position:relative;display:flex;align-items:center;gap:7px;background:var(--forest);color:#fff;font-weight:700;font-size:.86rem;padding:8px 13px;border-radius:999px;transition:transform .15s,background .2s}
+  .cart-btn:hover{background:var(--forest-2)}
+  .cart-btn:active{transform:scale(.96)}
+  .cart-btn .count{background:var(--amber);color:var(--ink);font-size:.76rem;font-weight:800;min-width:19px;height:19px;border-radius:999px;display:grid;place-items:center;padding:0 5px}
+
+  .hero{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 85% -10%, rgba(232,80,142,.32), transparent 55%),radial-gradient(90% 80% at -10% 110%, rgba(201,58,117,.22), transparent 55%),var(--forest);color:#FBF6EC}
+  .hero::before{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(120% 90% at 88% -10%, rgba(232,80,142,.30), transparent 55%),linear-gradient(112deg, var(--forest) 0%, rgba(14,59,51,.96) 30%, rgba(14,59,51,.55) 66%, rgba(14,59,51,.78) 100%),url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Phat_Thai_kung_Chang_Khien_street_stall.jpg/1280px-Phat_Thai_kung_Chang_Khien_street_stall.jpg') center right/cover no-repeat}
+  .hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1.2px, transparent 1.2px);background-size:18px 18px;mask-image:linear-gradient(180deg,transparent,#000 40%);pointer-events:none}
+  .hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:54px 22px 62px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:16px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--amber)}
+  .hero h1{font-size:clamp(2.3rem,8vw,4.2rem);font-weight:600;letter-spacing:-.02em;max-width:15ch}
+  .hero h1 em{font-style:italic;color:var(--amber)}
+  .hero p{margin-top:16px;max-width:48ch;font-size:clamp(1rem,2.4vw,1.16rem);color:rgba(251,246,236,.82)}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-size:.86rem;font-weight:600}
+  .chip .stat{width:9px;height:9px;border-radius:999px;background:#5BD27E;box-shadow:0 0 0 3px rgba(91,210,126,.25);flex:0 0 auto}
+  .hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:var(--amber);color:var(--ink);font-weight:800;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s,background .2s}
+  .hero-cta:hover{background:var(--amber-deep)}
+  .hero-cta:active{transform:scale(.97)}
+
+  .catnav{position:sticky;top:57px;z-index:50;background:rgba(251,246,236,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .catnav-inner{max-width:1100px;margin:0 auto;display:flex;gap:8px;padding:11px 14px;overflow-x:auto;scrollbar-width:none}
+  .catnav-inner::-webkit-scrollbar{display:none}
+  .cat-link{flex:0 0 auto;font-size:.88rem;font-weight:700;color:var(--muted);padding:8px 15px;border-radius:999px;border:1px solid var(--line);background:#fff;transition:all .18s;white-space:nowrap}
+  .cat-link:hover{color:var(--ink);border-color:var(--amber)}
+  .cat-link.active{background:var(--forest);color:#fff;border-color:var(--forest)}
+
+  main{max-width:1100px;margin:0 auto;padding:8px 18px 40px}
+  .section{padding-top:40px;scroll-margin-top:116px}
+  .section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px}
+  .section-head h2{font-size:clamp(1.7rem,4.5vw,2.3rem)}
+  .section-head .th{font-size:1rem;color:var(--amber);font-weight:700;font-family:'Noto Sans Thai',sans-serif}
+  .section-head .rule{flex:1;height:1px;background:var(--line)}
+
+  .grid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:980px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+  .thumb{position:relative;aspect-ratio:4/3;overflow:hidden;background:linear-gradient(135deg,var(--forest),var(--forest-2))}
+  .thumb .ph{position:absolute;inset:0;display:grid;place-items:center;font-size:3.2rem;color:rgba(255,255,255,.85)}
+  .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s}
+  .thumb img.loaded{opacity:1}
+  .badge-spice{position:absolute;top:10px;left:10px;z-index:2;background:rgba(26,20,16,.62);backdrop-filter:blur(4px);color:#fff;font-size:.72rem;font-weight:700;padding:5px 9px;border-radius:999px;display:flex;align-items:center;gap:4px}
+  .card-body{padding:15px 16px 16px;display:flex;flex-direction:column;flex:1}
+  .card-title{display:flex;flex-direction:column;gap:1px}
+  .card-title .nm{font-family:'Fraunces',serif;font-weight:600;font-size:1.18rem;line-height:1.15}
+  :lang(th) .card-title .nm{font-family:'Noto Sans Thai',serif;font-weight:700}
+  .card-title .sub{font-size:.82rem;color:var(--amber);font-weight:700;font-family:'Noto Sans Thai',sans-serif}
+  .card-desc{margin-top:8px;font-size:.88rem;color:var(--muted)}
+  .reheat{margin-top:10px;font-size:.82rem}
+  .reheat summary{cursor:pointer;font-weight:700;color:var(--forest);list-style:none;display:inline-flex;align-items:center;gap:5px}
+  .reheat summary::-webkit-details-marker{display:none}
+  .reheat[open] summary{margin-bottom:6px}
+  .reheat p{color:var(--muted);line-height:1.5}
+  .card-foot{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .price{font-weight:800;font-size:1.08rem;color:var(--forest)}
+
+  .add{background:var(--amber);color:var(--ink);font-weight:800;font-size:.9rem;padding:9px 16px;border-radius:999px;transition:transform .12s,background .2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .add:hover{background:var(--amber-deep)}
+  .add:active{transform:scale(.95)}
+  .stepper{display:flex;align-items:center;background:var(--forest);border-radius:999px;color:#fff}
+  .stepper button{color:#fff;font-size:1.2rem;font-weight:700;width:38px;height:38px;display:grid;place-items:center;border-radius:999px}
+  .stepper button:active{background:var(--forest-2)}
+  .stepper .q{min-width:24px;text-align:center;font-weight:800;font-size:.95rem}
+
+  .fotopick{display:none;border-top:1px dashed var(--line);padding:12px 16px;background:#fff;flex-direction:column;gap:8px}
+  body.beheer .fotopick{display:flex}
+  .filebtn{display:inline-block;width:100%;text-align:center;background:var(--forest-2);color:#fff;font-weight:700;font-size:.82rem;padding:9px 12px;border-radius:8px;cursor:pointer}
+  .filebtn:active{opacity:.85}
+  .toggle-dish{width:100%;font-weight:700;font-size:.82rem;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer}
+  .card.hidden-dish{opacity:.5}
+  .hidden-badge{position:absolute;top:8px;right:8px;z-index:3;background:var(--chili);color:#fff;font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:.04em}
+  .del-dish{width:100%;font-weight:700;font-size:.82rem;padding:9px 12px;border-radius:8px;border:1px solid var(--chili);background:#fff;color:var(--chili);cursor:pointer}
+  .addmodal{display:none;position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.55);align-items:flex-start;justify-content:center;padding:18px;overflow-y:auto}
+  .addmodal.open{display:flex}
+  .addmodal .box{background:#fff;border-radius:14px;max-width:480px;width:100%;padding:18px;margin:auto}
+  .addmodal h3{font-family:var(--display);font-size:1.3rem;margin-bottom:4px;color:var(--forest)}
+  .addmodal label{display:block;font-size:.8rem;font-weight:700;margin:11px 0 4px}
+  .addmodal input,.addmodal select,.addmodal textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:.9rem;background:#fff}
+  .addmodal textarea{resize:vertical;min-height:46px}
+  .addmodal .row2{display:flex;gap:10px}
+  .addmodal .row2>div{flex:1;min-width:0}
+  .addmodal .opt{color:var(--muted);font-weight:500}
+  .addmodal .actions{display:flex;gap:10px;margin-top:16px}
+  .addmodal .actions button{flex:1;padding:12px;border-radius:9px;font-weight:700;cursor:pointer;border:none}
+  .addmodal .save{background:var(--amber);color:#fff}
+  .addmodal .cancel{background:#eee;color:var(--ink)}
+  .pickrow{display:flex;gap:8px}
+  .pickrow input{flex:1;min-width:0;font-family:inherit;font-size:.85rem;padding:8px 10px;border:1px solid var(--line);border-radius:9px}
+  .pickrow input:focus{outline:none;border-color:var(--amber)}
+  .pickrow button{background:var(--forest);color:#fff;font-weight:700;font-size:.82rem;padding:8px 13px;border-radius:9px;flex:0 0 auto}
+  .pickresults{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;min-height:2px}
+  .pickresults::-webkit-scrollbar{display:none}
+  .pickresults img{width:74px;height:56px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;flex:0 0 auto}
+  .pickresults img:hover{border-color:var(--amber)}
+  .pickhint{font-size:.74rem;color:var(--muted)}
+
+  #beheerbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:75;background:var(--ink);color:#fff;align-items:center;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));flex-wrap:wrap;justify-content:center}
+  body.beheer #beheerbar{display:flex}
+  body.beheer .floatbar{display:none!important}
+  body.beheer .add{display:none!important}
+  body.beheer .cart-btn{display:none!important}
+  #beheerbar .bstat{flex-basis:100%;text-align:center;font-size:.82rem;font-weight:700;margin:0}
+  #beheerbar .bstat small{color:rgba(255,255,255,.6);font-weight:500}
+  #beheerbar button{font-weight:700;font-size:.85rem;padding:10px 18px;border-radius:9px;border:none}
+  #beheerbar .exp{background:var(--amber);color:var(--ink)}
+  #beheerbar .sl{background:var(--forest-2);color:#fff}
+
+  .floatbar{position:fixed;left:0;right:0;bottom:0;z-index:70;transform:translateY(120%);transition:transform .3s cubic-bezier(.4,0,.2,1);padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,var(--paper) 28%)}
+  .floatbar.show{transform:translateY(0)}
+  .floatbar-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--forest);color:#fff;border-radius:999px;padding:10px 12px 10px 22px;box-shadow:var(--shadow-lg)}
+  .floatbar .info{display:flex;flex-direction:column;line-height:1.2}
+  .floatbar .info .n{font-size:.78rem;color:rgba(255,255,255,.7);font-weight:600}
+  .floatbar .info .t{font-size:1.15rem;font-weight:800}
+  .floatbar .go{background:var(--amber);color:var(--ink);font-weight:800;padding:13px 22px;border-radius:999px;display:flex;align-items:center;gap:8px;transition:transform .12s,background .2s}
+  .floatbar .go:active{transform:scale(.96)}
+
+  .overlay{position:fixed;inset:0;z-index:80;background:rgba(14,59,51,.45);opacity:0;visibility:hidden;transition:opacity .25s;backdrop-filter:blur(2px)}
+  .overlay.open{opacity:1;visibility:visible}
+  .sheet{position:fixed;top:0;right:0;bottom:0;z-index:90;width:min(440px,100%);background:var(--paper);transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(14,59,51,.2)}
+  .sheet.open{transform:translateX(0)}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
+  .sheet-head h2{font-size:1.5rem}
+  .close{font-size:1.5rem;color:var(--muted);width:40px;height:40px;border-radius:999px;display:grid;place-items:center}
+  .close:hover{background:var(--line)}
+  .sheet-body{flex:1;overflow-y:auto;padding:14px 20px}
+  .empty{text-align:center;color:var(--muted);padding:60px 20px;white-space:pre-line}
+  .empty .big{font-size:3rem;margin-bottom:10px}
+
+  .line{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .line .lthumb{width:54px;height:54px;border-radius:12px;flex:0 0 auto;background:linear-gradient(135deg,var(--forest),var(--forest-2));display:grid;place-items:center;font-size:1.5rem;overflow:hidden;position:relative;color:#fff}
+  .line .lthumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .line .ldetail{flex:1;min-width:0}
+  .line .ln{font-weight:700;font-size:.95rem}
+  .line .lp{color:var(--muted);font-size:.85rem;font-weight:600}
+  .line .lstep{display:flex;align-items:center;align-self:center;background:#fff;border:1px solid var(--line);border-radius:999px}
+  .line .lstep button{width:32px;height:32px;font-size:1.1rem;font-weight:700;color:var(--forest);display:grid;place-items:center;border-radius:999px}
+  .line .lstep .q{min-width:22px;text-align:center;font-weight:800;font-size:.9rem}
+
+  .pickupbox{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.88rem}
+  .pickupbox b{color:var(--forest)}
+  .fields{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+  .field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:5px}
+  .field label .req{color:var(--chili)}
+  .field input,.field select,.field textarea{width:100%;font-family:inherit;font-size:.95rem;color:var(--ink);padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fff}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--amber)}
+  .field input.invalid{border-color:var(--chili);background:#fdf3f1}
+  .field textarea{resize:vertical;min-height:54px}
+
+  .sheet-foot{padding:16px 20px calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--card)}
+  .totals{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);margin-bottom:4px}
+  .totals.grand{font-size:1.15rem;font-weight:800;color:var(--ink);margin-bottom:14px}
+  .paybox{background:#FFF3F8;border:1px solid var(--amber);color:var(--ink);font-size:.84rem;line-height:1.5;padding:10px 12px;border-radius:10px;margin-bottom:12px}
+  .payopts{display:flex;gap:8px}
+  .payopt{flex:1;padding:11px 8px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .payopt.active{border-color:var(--amber);background:#FFF3F8;color:var(--amber-deep)}
+  .pricerow{align-items:center}
+  .pricerow .eur{font-weight:800;color:var(--forest);font-size:1rem}
+  .pricerow input{max-width:100px;font-weight:700}
+  .pricerow button{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(18px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:24px;font-size:.85rem;font-weight:700;z-index:120;opacity:0;transition:.25s;pointer-events:none;max-width:88%;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.ok{background:var(--forest)}
+  .toast.err{background:var(--chili)}
+  .wa-btn{width:100%;background:var(--wa);color:#fff;font-weight:800;font-size:1.05rem;padding:15px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .12s,background .2s}
+  .wa-btn:hover{background:var(--wa-deep)}
+  .wa-btn:active{transform:scale(.98)}
+  .order-msg{font-size:.85rem;text-align:center;margin-top:10px;font-weight:600;min-height:1em}
+  .order-msg.ok{color:var(--ok)}
+  .order-msg.err{color:var(--chili)}
+  .note{font-size:.74rem;color:var(--muted);text-align:center;margin-top:9px}
+
+  footer{background:var(--forest);color:rgba(251,246,236,.85);margin-top:30px}
+  .foot-inner{max-width:1100px;margin:0 auto;padding:42px 22px;display:grid;gap:26px;grid-template-columns:1fr}
+  @media(min-width:720px){.foot-inner{grid-template-columns:1.4fr 1fr 1fr}}
+  footer .logo{font-family:'Fraunces',serif;font-weight:800;font-size:1.6rem;color:#fff}
+  footer .logo .dot{color:var(--amber)}
+  footer h4{color:var(--amber);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-family:'Plus Jakarta Sans',sans-serif}
+  footer p{font-size:.92rem;margin-bottom:4px}
+  .copy{font-size:.78rem;color:rgba(251,246,236,.55);border-top:1px solid rgba(255,255,255,.12);padding:18px 22px;text-align:center;max-width:1100px;margin:0 auto}
+
+  @media(max-width:560px){
+    .brand .logo{font-size:1rem}
+    #cartLabel{display:none}
+    .cart-btn{padding:8px 11px}
+    .langsw button{padding:7px 8px;font-size:.72rem}
+    .bar{gap:8px;padding:10px 14px}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand"><span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span></div>
+    <div class="bar-right">
+      <div class="langsw" id="langsw">
+        <button data-lang="nl">NL</button><button data-lang="en">EN</button><button data-lang="th">ไทย</button>
+      </div>
+      <button class="cart-btn" id="cartBtn" aria-label="winkelmandje"><span>🧺 <span id="cartLabel">Mandje</span></span><span class="count" id="hdrCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow" id="eyebrow"></span>
+    <h1 id="heroTitle"></h1>
+    <p id="heroP"></p>
+    <div class="chips">
+      <span class="chip">📍 <span id="cfgAdres">—</span></span>
+      <span class="chip">🛍 <span id="chipPickup">—</span></span>
+      <span class="chip"><span class="stat"></span> <span id="chipOrder">—</span></span>
+    </div>
+    <button class="hero-cta" id="heroCta"></button>
+  </div>
+</section>
+
+<nav class="catnav" aria-label="menu"><div class="catnav-inner" id="catnav"></div></nav>
+
+<main id="menu"></main>
+
+<div class="floatbar" id="floatbar">
+  <div class="floatbar-inner">
+    <div class="info"><span class="n" id="fbCount">0</span><span class="t" id="fbTotal">€ 0,00</span></div>
+    <button class="go" id="fbGo"></button>
+  </div>
+</div>
+
+<div id="beheerbar">
+  <span class="bstat"><span id="bTitle">Beheermodus</span> · <small id="bCount">0 / 0</small></span>
+  <button class="sl" id="bAdd">➕ Gerecht</button>
+  <button class="sl" id="bToken">🔑 Token</button>
+  <button class="exp" id="bPublish">⬆ Publiceren</button>
+  <button class="sl" id="bSluit">Sluiten</button>
+</div>
+
+<div class="addmodal" id="addModal">
+  <div class="box">
+    <h3 id="amTitle">Gerecht toevoegen</h3>
+    <p class="pickhint" id="amHint">Velden met * zijn verplicht.</p>
+    <label id="amLName">Naam (NL) *</label><input id="fNaam" type="text">
+    <div class="row2">
+      <div><label id="amLCat">Categorie *</label><select id="fCat"></select></div>
+      <div><label id="amLPrice">Prijs (€) *</label><input id="fPrijs" type="number" step="0.50" min="0" placeholder="15.00"></div>
+    </div>
+    <div class="row2">
+      <div><label id="amLSpice">Pittigheid</label><select id="fSpice"></select></div>
+      <div><label id="amLRh">Serveertip-type</label><select id="fRh"></select></div>
+    </div>
+    <label id="amLDesc">Beschrijving (NL)</label><textarea id="fDesc"></textarea>
+    <label id="amLTh">Thais schrift</label><input id="fTh" type="text" placeholder="ปลาหมึกทอด">
+    <div class="row2">
+      <div><label id="amLNameEn">Naam (EN)</label><input id="fNaamEn" type="text"></div>
+      <div><label id="amLNameTh">Naam (TH)</label><input id="fNaamTh" type="text"></div>
+    </div>
+    <label id="amLEmoji">Emoji</label><input id="fEmoji" type="text" maxlength="4" placeholder="🍽️">
+    <div class="actions"><button class="cancel" id="fCancel">Annuleren</button><button class="save" id="fSave">Toevoegen</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<aside class="sheet" id="sheet" aria-modal="true" role="dialog">
+  <div class="sheet-head"><h2 id="sheetTitle"></h2><button class="close" id="closeBtn" aria-label="x">✕</button></div>
+  <div class="sheet-body" id="sheetBody"></div>
+  <div class="sheet-foot" id="sheetFoot" style="display:none">
+    <div class="totals"><span id="lblSub"></span><span id="subTotal">€ 0,00</span></div>
+    <div class="totals grand"><span id="lblTot"></span><span id="grandTotal">€ 0,00</span></div>
+    <p class="paybox" id="payNotice"></p>
+    <button class="wa-btn" id="waBtn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.523 5.26l-.999 3.648 3.65-.957zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      <span id="waBtnLabel"></span>
+    </button>
+    <p class="order-msg" id="orderMsg" aria-live="polite"></p>
+    <p class="note" id="orderNote"></p>
+  </div>
+</aside>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span>
+      <p style="margin-top:10px;max-width:34ch" id="footTagline"></p>
+    </div>
+    <div><h4 id="footPickupHead"></h4><p id="footPickup">—</p><p id="footOrder">—</p></div>
+    <div><h4 id="footFindHead"></h4><p id="cfgAdres2">—</p><p id="cfgTel">—</p></div>
+  </div>
+  <p class="copy">© <span id="year"></span> <span class="brandname">Pink Thai TakeAway</span></p>
+</footer>
+
+<script>
+/* ===================================================================
+   CONFIG — gegevens van het restaurant
+=================================================================== */
+const CONFIG = {
+  naam: "Pink Thai TakeAway",
+  whatsapp: "66825834264",                       // +66 82-583-4264
+  email: "RuchaneeSarayan1@gmail.com",          // waar bestellingen binnenkomen
+  adres: "Hakvoortseweg 30, 5084 HA Biest-Houtakker (voordeur aan de oprit)",
+  telefoon: "06 58 97 73 39",
+  afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 }  // dag: 0=zo..6=za
+};
+
+/* ===================================================================
+   VERTALINGEN — controleer de Thaise/Engelse teksten gerust even
+=================================================================== */
+const I18N = {
+  nl: {
+    locale:"nl-NL", zaterdag:"zaterdag", vrijdag:"vrijdag",
+    eyebrow:"Vers · Bestellen door de week · Afhalen op zaterdag",
+    heroTitle:"Echt Thais, <em>vers voor je weekend.</em>",
+    heroP:"Bestel deze week online en haal je verse Thaise gerechten op zaterdag af. Met liefde gewokt en gestampt.",
+    chipPickup:"Afhalen za · 17:00–19:00", chipOrder:"Bestel t/m vrijdag",
+    heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
+    items:n=>n+" "+(n===1?"gerecht":"gerechten"),
+    yourOrder:"Jouw bestelling", empty:"Je mandje is nog leeg.\nKies iets lekkers uit het menu.",
+    add:"+ Toevoegen",
+    pickupNotice:p=>`Afhalen op <b>${p}</b>. Bestel uiterlijk vrijdag.`,
+    payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
+    payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
+    payMsgCash:t=>`💵 Je betaalt <b>${t}</b> <b>contant</b> bij het ophalen. Gepast betalen wordt gewaardeerd.`,
+    labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd",
+    phName:"Voor- en achternaam", phEmail:"voor je bevestiging", phNote:"Bijv. niet te pittig, geen pinda's...",
+    subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
+    orderOk:"Bestelling verstuurd! WhatsApp is geopend en je krijgt een e-mailbevestiging. Je ontvangt nog een Tikkie voor het totaalbedrag.",
+    orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
+    note:"Je opent WhatsApp met je bestelling; het restaurant ontvangt 'm ook per e-mail.",
+    spice:["Mild pittig","Kruidig","Pittig"],
+    footPickupHead:"Afhalen", footOrder:"Bestellen t/m vrijdag",
+    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.",
+    searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
+    adm:{title:"Beheermodus", add:"➕ Gerecht", expF:"⬇ foto's", expH:"⬇ verborgen", expE:"⬇ extra", wis:"Wis keuzes", sluit:"Sluiten",
+      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN",
+      phTerm:"Zoekterm", search:"🔍 Zoek", phUrl:"of plak een eigen foto-URL", setUrl:"Zet", ownPhoto:"📷 Eigen foto van je toestel",
+      makeHidden:"🚫 Niet bestelbaar maken", makeShown:"✅ Weer bestelbaar maken", del:"🗑️ Dit gerecht verwijderen",
+      pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
+      addTitle:"Gerecht toevoegen", addHint:"Velden met * zijn verplicht. Engels/Thais is optioneel — laat je het leeg, dan wordt de Nederlandse tekst gebruikt.",
+      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel",
+      spiceOpts:["Niet pittig","Mild","Pittig","Heel pittig"], cancel:"Annuleren", addBtn:"Toevoegen",
+      rhLabels:{curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"},
+      aNaam:"Vul een naam in.", aPrijs:"Vul een geldige prijs in.", aImg:"Dit bestand is geen geldige afbeelding.", aImgProc:"Foto kon niet verwerkt worden.",
+      cDel:"Dit toegevoegde gerecht definitief verwijderen?", cWis:"Lokale fotokeuzes wissen?",
+      cExport:(n,t)=>`${n} van de ${t} gerechten heeft een foto. Sommige foto's zijn misschien nog aan het laden. Toch exporteren?`,
+      savePrice:"Prijs opslaan", priceErr:"Ongeldige prijs.", pushOk:"✓ Opgeslagen", pushErr:"Opslaan mislukt — controleer token/internet.",
+      tokenBtn:"🔑 Token", tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", tokenSaved:"Token opgeslagen. Sla je prijs nu opnieuw op.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publish:"⬆ Publiceren", publishOk:"Alles gepubliceerd ✓"}
+  },
+  en: {
+    locale:"en-GB", zaterdag:"Saturday", vrijdag:"Friday",
+    eyebrow:"Fresh · Order during the week · Pickup on Saturday",
+    heroTitle:"Real Thai, <em>fresh for your weekend.</em>",
+    heroP:"Order online during the week and pick up your fresh Thai dishes on Saturday. Wok-fried and pounded with care.",
+    chipPickup:"Pickup Sat · 17:00–19:00", chipOrder:"Order until Friday",
+    heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
+    items:n=>n+" "+(n===1?"item":"items"),
+    yourOrder:"Your order", empty:"Your basket is empty.\nPick something tasty from the menu.",
+    add:"+ Add",
+    pickupNotice:p=>`Pickup on <b>${p}</b>. Order by Friday at the latest.`,
+    payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
+    payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
+    payMsgCash:t=>`💵 You'll pay <b>${t}</b> in <b>cash</b> on pickup. Exact change appreciated.`,
+    labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", labelNote:"Note (optional)", labelSlot:"Pickup time",
+    phName:"Full name", phEmail:"for your confirmation", phNote:"E.g. not too spicy, no peanuts...",
+    subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
+    orderOk:"Order sent! WhatsApp has opened and you'll receive an email confirmation. You'll also get a Tikkie payment request for the total.",
+    orderErr:"Please enter your name, phone and a valid email address.",
+    note:"WhatsApp opens with your order; the restaurant also receives it by email.",
+    spice:["Mild","Spicy","Hot"],
+    footPickupHead:"Pickup", footOrder:"Order until Friday",
+    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.",
+    searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
+    adm:{title:"Admin mode", add:"➕ Dish", expF:"⬇ photos", expH:"⬇ hidden", expE:"⬇ extra", wis:"Clear choices", sluit:"Close",
+      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN",
+      phTerm:"Search term", search:"🔍 Search", phUrl:"or paste your own photo URL", setUrl:"Set", ownPhoto:"📷 Your own photo",
+      makeHidden:"🚫 Make unavailable", makeShown:"✅ Make available again", del:"🗑️ Delete this dish",
+      pickHint:"Tap a photo, paste a URL, or upload your own. Then export below.",
+      addTitle:"Add a dish", addHint:"Fields marked * are required. English/Thai are optional — if left empty, the Dutch text is used.",
+      lName:"Name", lCat:"Category", lPrice:"Price (€)", lSpice:"Spiciness", lRh:"Serving-tip type", lDesc:"Description", lTh:"Thai script", lEmoji:"Emoji", opt:"optional",
+      spiceOpts:["Not spicy","Mild","Spicy","Very spicy"], cancel:"Cancel", addBtn:"Add",
+      rhLabels:{curry:"Curry / sauce",soup:"Soup",fried:"Fried / crispy",wok:"Wok / stir-fried",rice:"Rice dish",grill:"Grilled meat",salad:"Salad (cold)",rotiwarm:"Roti / pan-warm",cold:"Cold (ice/dessert)",sticky:"Mango sticky rice",stickyplain:"Sticky rice",drink:"Drink"},
+      aNaam:"Please enter a name.", aPrijs:"Please enter a valid price.", aImg:"This file is not a valid image.", aImgProc:"The photo could not be processed.",
+      cDel:"Permanently delete this added dish?", cWis:"Clear local photo choices?",
+      cExport:(n,t)=>`${n} of ${t} dishes have a photo. Some may still be loading. Export anyway?`,
+      savePrice:"Save price", priceErr:"Invalid price.", pushOk:"✓ Saved", pushErr:"Save failed — check token/internet.",
+      tokenBtn:"🔑 Token", tokenAsk:"Paste your GitHub token (stored only on this device, not online):", tokenSaved:"Token saved. Save your price again now.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publish:"⬆ Publish", publishOk:"All published ✓"}
+  },
+  th: {
+    locale:"th-TH", zaterdag:"วันเสาร์", vrijdag:"วันศุกร์",
+    eyebrow:"สดใหม่ · สั่งภายในสัปดาห์ · รับวันเสาร์",
+    heroTitle:"อาหารไทยแท้ <em>สดใหม่สำหรับสุดสัปดาห์</em>",
+    heroP:"สั่งออนไลน์ภายในสัปดาห์ แล้วมารับอาหารไทยสดใหม่ในวันเสาร์ ปรุงสดทุกจาน",
+    chipPickup:"รับวันเสาร์ · 17:00–19:00", chipOrder:"สั่งได้ถึงวันศุกร์",
+    heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
+    items:n=>n+" รายการ",
+    yourOrder:"คำสั่งซื้อของคุณ", empty:"ตะกร้าของคุณว่างเปล่า\nเลือกเมนูอร่อยๆ ได้เลย",
+    add:"+ เพิ่ม",
+    pickupNotice:p=>`รับสินค้า <b>${p}</b> · กรุณาสั่งภายในวันศุกร์`,
+    payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
+    payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
+    payMsgCash:t=>`💵 ชำระ <b>${t}</b> <b>เงินสด</b> ตอนรับอาหาร`,
+    labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ",
+    phName:"ชื่อ-นามสกุล", phEmail:"สำหรับการยืนยัน", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
+    subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
+    orderOk:"ส่งคำสั่งซื้อแล้ว! เปิด WhatsApp และคุณจะได้รับอีเมลยืนยัน เราจะส่งคำขอชำระเงิน (Tikkie) ตามยอดรวม",
+    orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
+    note:"WhatsApp จะเปิดพร้อมคำสั่งซื้อของคุณ ทางร้านจะได้รับทางอีเมลด้วย",
+    spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
+    footPickupHead:"รับสินค้า", footOrder:"สั่งได้ถึงวันศุกร์",
+    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์",
+    searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
+    adm:{title:"โหมดผู้ดูแล", add:"➕ เมนู", expF:"⬇ รูปภาพ", expH:"⬇ ที่ซ่อน", expE:"⬇ เพิ่มเติม", wis:"ล้างที่เลือก", sluit:"ปิด",
+      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่",
+      phTerm:"คำค้นหา", search:"🔍 ค้นหา", phUrl:"หรือวางลิงก์รูปภาพเอง", setUrl:"ตั้ง", ownPhoto:"📷 รูปจากเครื่องของคุณ",
+      makeHidden:"🚫 ปิดการสั่งซื้อ", makeShown:"✅ เปิดการสั่งซื้ออีกครั้ง", del:"🗑️ ลบเมนูนี้",
+      pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
+      addTitle:"เพิ่มเมนู", addHint:"ช่องที่มี * ต้องกรอก ภาษาอังกฤษ/ไทยไม่บังคับ ถ้าเว้นว่างจะใช้ข้อความภาษาดัตช์",
+      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี",
+      spiceOpts:["ไม่เผ็ด","เผ็ดน้อย","เผ็ด","เผ็ดมาก"], cancel:"ยกเลิก", addBtn:"เพิ่ม",
+      rhLabels:{curry:"แกง / ซอส",soup:"ซุป",fried:"ทอด / กรอบ",wok:"ผัด",rice:"ข้าว",grill:"เนื้อย่าง",salad:"ยำ (เย็น)",rotiwarm:"โรตี / อุ่นกระทะ",cold:"เย็น (ไอศกรีม/ของหวาน)",sticky:"ข้าวเหนียวมะม่วง",stickyplain:"ข้าวเหนียว",drink:"เครื่องดื่ม"},
+      aNaam:"กรุณากรอกชื่อ", aPrijs:"กรุณากรอกราคาที่ถูกต้อง", aImg:"ไฟล์นี้ไม่ใช่รูปภาพที่ถูกต้อง", aImgProc:"ไม่สามารถประมวลผลรูปได้",
+      cDel:"ลบเมนูที่เพิ่มนี้ถาวรหรือไม่?", cWis:"ล้างการเลือกรูปในเครื่องหรือไม่?",
+      cExport:(n,t)=>`มีรูป ${n} จาก ${t} เมนู บางรูปอาจกำลังโหลด ส่งออกเลยหรือไม่?`,
+      savePrice:"บันทึกราคา", priceErr:"ราคาไม่ถูกต้อง", pushOk:"✓ บันทึกแล้ว", pushErr:"บันทึกไม่สำเร็จ — ตรวจสอบโทเคน/อินเทอร์เน็ต",
+      tokenBtn:"🔑 โทเคน", tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", tokenSaved:"บันทึกโทเคนแล้ว บันทึกราคาอีกครั้ง", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publish:"⬆ เผยแพร่", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓"}
+  }
+};
+
+const CATS = [
+  {id:"voorgerechten", nm:{nl:"Voorgerechten",en:"Starters",th:"ของทานเล่น"}, th:"ของทานเล่น", emoji:"🥟"},
+  {id:"soepen",        nm:{nl:"Soepen",en:"Soups",th:"ต้ม"},                  th:"ต้ม",        emoji:"🍲"},
+  {id:"currys",        nm:{nl:"Curry's",en:"Curries",th:"แกง"},               th:"แกง",        emoji:"🍛"},
+  {id:"wok",           nm:{nl:"Wok & Noedels",en:"Wok & Noodles",th:"ผัด"},   th:"ผัด",        emoji:"🍜"},
+  {id:"rijst",         nm:{nl:"Rijst",en:"Rice",th:"ข้าว"},                   th:"ข้าว",       emoji:"🍚"},
+  {id:"isaan",         nm:{nl:"Isaan (Noordoost)",en:"Isaan (Northeast)",th:"อีสาน"}, th:"อีสาน",  emoji:"🌶️"},
+  {id:"zuid",          nm:{nl:"Zuid-Thais",en:"Southern Thai",th:"อาหารใต้"},        th:"อาหารใต้",   emoji:"🥥"},
+  {id:"dessert",       nm:{nl:"Dessert",en:"Dessert",th:"ของหวาน"},           th:"ของหวาน",    emoji:"🥭"},
+  {id:"dranken",       nm:{nl:"Dranken",en:"Drinks",th:"เครื่องดื่ม"},        th:"เครื่องดื่ม", emoji:"🥤"},
+];
+
+const MENU = [
+  {id:"popia", cat:"voorgerechten", emoji:"🥟", price:5.00, spice:0, foto:"Thai fried spring rolls",
+   th:"ปอเปี๊ยะทอด", name:{nl:"Loempia's",en:"Spring Rolls",th:"ปอเปี๊ยะทอด"},
+   desc:{nl:"Knapperige groenteloempia's met zoetzure dip. 5 stuks.",en:"Crispy vegetable spring rolls with sweet chilli dip. 5 pieces.",th:"ปอเปี๊ยะผักทอดกรอบ เสิร์ฟพร้อมน้ำจิ้มหวาน 5 ชิ้น"}},
+  {id:"satay", cat:"voorgerechten", emoji:"🍢", price:5.00, spice:1, foto:"Chicken satay Thai",
+   th:"สะเต๊ะไก่", name:{nl:"Kip saté",en:"Chicken Satay",th:"สะเต๊ะไก่"},
+   desc:{nl:"Gegrilde kipspiesjes met romige pindasaus. 5 stuks.",en:"Grilled chicken skewers with creamy peanut sauce. 5 pieces.",th:"ไก่สะเต๊ะย่าง เสิร์ฟพร้อมน้ำจิ้มถั่ว 5 ไม้"}},
+  {id:"toast", cat:"voorgerechten", emoji:"🍤", price:5.00, spice:0, foto:"Prawn toast",
+   th:"ขนมปังหน้ากุ้ง", name:{nl:"Garnalentoast",en:"Prawn Toast",th:"ขนมปังหน้ากุ้ง"},
+   desc:{nl:"Krokant gebakken brood met garnalenpasta en sesam. 5 stuks.",en:"Crispy fried bread topped with shrimp paste and sesame. 5 pieces.",th:"ขนมปังหน้ากุ้งทอดกรอบ โรยงา 5 ชิ้น"}},
+
+  {id:"tomyum", cat:"soepen", emoji:"🍲", price:7.00, spice:3, foto:"Tom yum goong",
+   th:"ต้มยำกุ้ง", name:{nl:"Tom Yum Goong",en:"Tom Yum Goong",th:"ต้มยำกุ้ง"},
+   desc:{nl:"Pittig-zure garnalensoep met citroengras, galangal en limoenblad.",en:"Spicy-sour prawn soup with lemongrass, galangal and lime leaf.",th:"ต้มยำกุ้งรสเปรี้ยวเผ็ด ใส่ตะไคร้ ข่า และใบมะกรูด"}},
+  {id:"tomkha", cat:"soepen", emoji:"🥥", price:7.00, spice:1, foto:"Tom kha kai",
+   th:"ต้มข่าไก่", name:{nl:"Tom Kha Kai",en:"Tom Kha Kai",th:"ต้มข่าไก่"},
+   desc:{nl:"Milde kokossoep met kip, galangal en verse kruiden.",en:"Mild coconut soup with chicken, galangal and fresh herbs.",th:"ต้มข่าไก่ น้ำกะทิรสอ่อน ใส่ข่าและสมุนไพรสด"}},
+
+  {id:"green", cat:"currys", emoji:"🍛", price:15.00, spice:3, foto:"Thai green curry",
+   th:"แกงเขียวหวาน", name:{nl:"Groene curry",en:"Green Curry",th:"แกงเขียวหวาน"},
+   desc:{nl:"Kip, Thaise aubergine en basilicum in romige groene currysaus. Met jasmijnrijst.",en:"Chicken, Thai aubergine and basil in creamy green curry. With jasmine rice.",th:"แกงเขียวหวานไก่ มะเขือ และใบโหระพา เสิร์ฟพร้อมข้าวหอมมะลิ"}},
+  {id:"red", cat:"currys", emoji:"🍛", price:15.00, spice:3, foto:"Thai red curry",
+   th:"แกงเผ็ด", name:{nl:"Rode curry",en:"Red Curry",th:"แกงเผ็ด"},
+   desc:{nl:"Rundvlees, bamboescheuten en kokos in pittige rode currysaus. Met jasmijnrijst.",en:"Beef, bamboo shoots and coconut in spicy red curry. With jasmine rice.",th:"แกงเผ็ดเนื้อ หน่อไม้ และกะทิ เสิร์ฟพร้อมข้าวหอมมะลิ"}},
+  {id:"massaman", cat:"currys", emoji:"🥘", price:15.00, spice:1, foto:"Massaman curry",
+   th:"แกงมัสมั่น", name:{nl:"Massaman curry",en:"Massaman Curry",th:"แกงมัสมั่น"},
+   desc:{nl:"Zacht gestoofd rund, aardappel en geroosterde pinda. Mild en kruidig. Met rijst.",en:"Slow-cooked beef, potato and roasted peanuts. Mild and aromatic. With rice.",th:"แกงมัสมั่นเนื้อตุ๋น มันฝรั่ง และถั่วลิสงคั่ว รสอ่อนหอมเครื่องเทศ เสิร์ฟพร้อมข้าว"}},
+  {id:"panang", cat:"currys", emoji:"🍛", price:15.00, spice:2, foto:"Panang curry",
+   th:"พะแนง", name:{nl:"Panang curry",en:"Panang Curry",th:"พะแนง"},
+   desc:{nl:"Romige, iets dikkere curry met kip en kaffirlimoenblad. Met jasmijnrijst.",en:"Creamy, slightly thicker curry with chicken and kaffir lime leaf. With jasmine rice.",th:"พะแนงไก่ น้ำแกงข้นรสกลมกล่อม ใส่ใบมะกรูด เสิร์ฟพร้อมข้าวหอมมะลิ"}},
+
+  {id:"padthai", cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"Pad thai",
+   th:"ผัดไทย", name:{nl:"Pad Thai",en:"Pad Thai",th:"ผัดไทย"},
+   desc:{nl:"Woknoedels met ei, taugé, geroosterde pinda en tamarinde. Met kip of garnaal.",en:"Wok noodles with egg, bean sprouts, peanuts and tamarind. With chicken or prawn.",th:"ก๋วยเตี๋ยวผัดไทย ใส่ไข่ ถั่วงอก ถั่วลิสง และน้ำมะขาม เลือกไก่หรือกุ้ง"}},
+  {id:"padseeew", cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"Pad see ew",
+   th:"ผัดซีอิ๊ว", name:{nl:"Pad See Ew",en:"Pad See Ew",th:"ผัดซีอิ๊ว"},
+   desc:{nl:"Brede rijstnoedels gewokt in zoete sojasaus met ei en broccoli.",en:"Wide rice noodles wok-fried in sweet soy with egg and broccoli.",th:"เส้นใหญ่ผัดซีอิ๊ว ใส่ไข่และบรอกโคลี"}},
+  {id:"krapow", cat:"wok", emoji:"🌿", price:15.00, spice:3, foto:"Phat kaphrao",
+   th:"ผัดกะเพรา", name:{nl:"Pad Krapow Moo",en:"Pad Krapow (Basil Pork)",th:"ผัดกะเพราหมู"},
+   desc:{nl:"Gewokt varkensgehakt met heilige basilicum en chili, gebakken ei erbovenop.",en:"Wok-fried minced pork with holy basil and chilli, topped with a fried egg.",th:"ผัดกะเพราหมูสับ ใส่พริกและใบกะเพรา ราดไข่ดาว"}},
+
+  {id:"khaopad", cat:"rijst", emoji:"🍚", price:15.00, spice:0, foto:"Thai fried rice",
+   th:"ข้าวผัด", name:{nl:"Thaise gebakken rijst",en:"Thai Fried Rice",th:"ข้าวผัด"},
+   desc:{nl:"Gebakken jasmijnrijst met ei, ui en tomaat. Met kip of garnaal.",en:"Fried jasmine rice with egg, onion and tomato. With chicken or prawn.",th:"ข้าวผัดใส่ไข่ หอมใหญ่ และมะเขือเทศ เลือกไก่หรือกุ้ง"}},
+  {id:"khaomungai", cat:"rijst", emoji:"🍗", price:15.00, spice:1, foto:"Khao man kai",
+   th:"ข้าวมันไก่", name:{nl:"Khao Man Gai",en:"Khao Man Gai",th:"ข้าวมันไก่"},
+   desc:{nl:"Gepocheerde kip op gearomatiseerde rijst met gemberdip.",en:"Poached chicken on aromatic rice with ginger dip.",th:"ข้าวมันไก่ ไก่นุ่ม เสิร์ฟพร้อมน้ำจิ้มขิง"}},
+
+  {id:"mango", cat:"dessert", emoji:"🥭", price:7.50, spice:0, foto:"Mango sticky rice",
+   th:"ข้าวเหนียวมะม่วง", name:{nl:"Mango kleefrijst",en:"Mango Sticky Rice",th:"ข้าวเหนียวมะม่วง"},
+   desc:{nl:"Zoete kokoskleefrijst met verse rijpe mango.",en:"Sweet coconut sticky rice with fresh ripe mango.",th:"ข้าวเหนียวมูนกะทิ เสิร์ฟพร้อมมะม่วงสุก"}},
+  {id:"banana", cat:"dessert", emoji:"🍌", price:6.00, spice:0, foto:"Fried banana Thai",
+   th:"กล้วยทอด", name:{nl:"Gebakken banaan",en:"Fried Banana",th:"กล้วยทอด"},
+   desc:{nl:"Krokant gefrituurde banaan met honing en sesam.",en:"Crispy deep-fried banana with honey and sesame.",th:"กล้วยทอดกรอบ ราดน้ำผึ้งและงา"}},
+
+  /* ===== extra keuze ===== */
+  // Voorgerechten (€5 per 5 stuks)
+  {id:"todmun", cat:"voorgerechten", emoji:"🐟", price:5.00, spice:2, foto:"Thai fish cake tod mun",
+   th:"ทอดมันปลา", name:{nl:"Viskoekjes",en:"Thai Fish Cakes",th:"ทอดมันปลา"},
+   desc:{nl:"Pittige Thaise viskoekjes met komkommerdip. 5 stuks.",en:"Spicy Thai fish cakes with cucumber relish. 5 pieces.",th:"ทอดมันปลารสเผ็ด เสิร์ฟพร้อมอาจาด 5 ชิ้น"}},
+  {id:"gaitod", cat:"voorgerechten", emoji:"🍗", price:5.00, spice:0, foto:"Thai fried chicken gai tod",
+   th:"ไก่ทอด", name:{nl:"Thaise gefrituurde kip",en:"Thai Fried Chicken",th:"ไก่ทอด"},
+   desc:{nl:"Krokant gefrituurde kip met zoete chilisaus. 5 stuks.",en:"Crispy Thai fried chicken with sweet chilli sauce. 5 pieces.",th:"ไก่ทอดกรอบ เสิร์ฟพร้อมน้ำจิ้มหวาน 5 ชิ้น"}},
+  {id:"karipap", cat:"voorgerechten", emoji:"🥟", price:5.00, spice:1, foto:"curry puff karipap",
+   th:"กะหรี่ปั๊บ", name:{nl:"Curry puffs",en:"Curry Puffs",th:"กะหรี่ปั๊บ"},
+   desc:{nl:"Krokante deegpasteitjes gevuld met kerrie-kip. 5 stuks.",en:"Crispy pastry puffs filled with curried chicken. 5 pieces.",th:"กะหรี่ปั๊บไส้ไก่ 5 ชิ้น"}},
+  {id:"goongtod", cat:"voorgerechten", emoji:"🍤", price:5.00, spice:0, foto:"fried prawns tempura",
+   th:"กุ้งทอด", name:{nl:"Krokante garnalen",en:"Crispy Prawns",th:"กุ้งทอด"},
+   desc:{nl:"Krokant gefrituurde garnalen met zoetzure dip. 5 stuks.",en:"Crispy fried prawns with sweet & sour dip. 5 pieces.",th:"กุ้งทอดกรอบ เสิร์ฟพร้อมน้ำจิ้ม 5 ตัว"}},
+
+  // Soepen (€7)
+  {id:"tomjued", cat:"soepen", emoji:"🍲", price:7.00, spice:0, foto:"tom jued soup",
+   th:"ต้มจืด", name:{nl:"Tom Jued",en:"Tom Jued (clear soup)",th:"ต้มจืด"},
+   desc:{nl:"Milde heldere bouillon met tofu, gehakt en groente.",en:"Mild clear broth with tofu, minced pork and vegetables.",th:"ต้มจืดเต้าหู้หมูสับและผัก"}},
+  {id:"guayteow", cat:"soepen", emoji:"🍜", price:7.00, spice:1, foto:"Thai noodle soup guay teow",
+   th:"ก๋วยเตี๋ยวน้ำ", name:{nl:"Noedelsoep",en:"Noodle Soup",th:"ก๋วยเตี๋ยวน้ำ"},
+   desc:{nl:"Thaise noedelsoep met gehaktballetjes en verse kruiden.",en:"Thai noodle soup with meatballs and fresh herbs.",th:"ก๋วยเตี๋ยวน้ำลูกชิ้น ใส่สมุนไพรสด"}},
+
+  // Curry's (€15)
+  {id:"yellow", cat:"currys", emoji:"🍛", price:15.00, spice:1, foto:"Thai yellow curry",
+   th:"แกงกะหรี่", name:{nl:"Gele curry",en:"Yellow Curry",th:"แกงกะหรี่"},
+   desc:{nl:"Milde gele curry met kip, aardappel en kurkuma. Met jasmijnrijst.",en:"Mild yellow curry with chicken, potato and turmeric. With jasmine rice.",th:"แกงกะหรี่ไก่ มันฝรั่ง เสิร์ฟพร้อมข้าวหอมมะลิ"}},
+  {id:"jungle", cat:"currys", emoji:"🌶️", price:15.00, spice:3, foto:"jungle curry kaeng pa",
+   th:"แกงป่า", name:{nl:"Jungle curry",en:"Jungle Curry",th:"แกงป่า"},
+   desc:{nl:"Pittige currysoep zonder kokos, met kip en veel groente. Met rijst.",en:"Spicy coconut-free curry with chicken and plenty of vegetables. With rice.",th:"แกงป่าไก่ รสเผ็ดร้อน ไม่ใส่กะทิ เสิร์ฟพร้อมข้าว"}},
+  {id:"choochee", cat:"currys", emoji:"🐟", price:15.00, spice:2, foto:"Thai red curry fish",
+   th:"ฉู่ฉี่ปลา", name:{nl:"Choo Chee (vis)",en:"Choo Chee (fish)",th:"ฉู่ฉี่ปลา"},
+   desc:{nl:"Gebakken vis in romige, milde rode currysaus. Met jasmijnrijst.",en:"Fried fish in creamy mild red curry sauce. With jasmine rice.",th:"ฉู่ฉี่ปลา ราดน้ำพริกแกงข้น เสิร์ฟพร้อมข้าวหอมมะลิ"}},
+
+  // Wok & Noedels (€15)
+  {id:"keemao", cat:"wok", emoji:"🍜", price:15.00, spice:3, foto:"drunken noodles pad kee mao",
+   th:"ผัดขี้เมา", name:{nl:"Drunken Noodles",en:"Drunken Noodles",th:"ผัดขี้เมา"},
+   desc:{nl:"Pittige brede noedels met basilicum, chili en groente.",en:"Spicy wide noodles with basil, chilli and vegetables.",th:"ผัดขี้เมาเส้นใหญ่ รสเผ็ด ใส่ใบกะเพรา"}},
+  {id:"radna", cat:"wok", emoji:"🍜", price:15.00, spice:0, foto:"rad na noodles",
+   th:"ราดหน้า", name:{nl:"Rad Na",en:"Rad Na",th:"ราดหน้า"},
+   desc:{nl:"Brede noedels met een romige jus, vlees en Chinese broccoli.",en:"Wide noodles in a savoury gravy with meat and Chinese broccoli.",th:"ราดหน้าเส้นใหญ่ ราดน้ำข้น"}},
+  {id:"woonsen", cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"pad woon sen glass noodles",
+   th:"ผัดวุ้นเส้น", name:{nl:"Pad Woon Sen",en:"Pad Woon Sen",th:"ผัดวุ้นเส้น"},
+   desc:{nl:"Gewokte glasnoedels met ei, groente en je keuze van vlees.",en:"Stir-fried glass noodles with egg, vegetables and your choice of meat.",th:"ผัดวุ้นเส้น ใส่ไข่และผัก"}},
+  {id:"cashew", cat:"wok", emoji:"🥜", price:15.00, spice:1, foto:"cashew chicken Thai",
+   th:"ไก่ผัดเม็ดมะม่วง", name:{nl:"Kip met cashew",en:"Cashew Chicken",th:"ไก่ผัดเม็ดมะม่วง"},
+   desc:{nl:"Gewokte kip met cashewnoten, ui en milde chilijam.",en:"Stir-fried chicken with cashew nuts, onion and mild chilli jam.",th:"ไก่ผัดเม็ดมะม่วงหิมพานต์ ใส่หอมใหญ่"}},
+  {id:"khaosoi", cat:"wok", emoji:"🍜", price:15.00, spice:2, foto:"Khao soi gai",
+   th:"ข้าวซอย", name:{nl:"Khao Soi",en:"Khao Soi",th:"ข้าวซอย"},
+   desc:{nl:"Noord-Thaise currynoedelsoep met kip en knapperige noedels.",en:"Northern Thai curry noodle soup with chicken and crispy noodles.",th:"ข้าวซอยไก่ น้ำแกงกะทิ โรยเส้นกรอบ"}},
+
+  // Rijst (€15)
+  {id:"sapparod", cat:"rijst", emoji:"🍍", price:15.00, spice:1, foto:"pineapple fried rice",
+   th:"ข้าวผัดสับปะรด", name:{nl:"Ananas gebakken rijst",en:"Pineapple Fried Rice",th:"ข้าวผัดสับปะรด"},
+   desc:{nl:"Gebakken rijst met ananas, cashew, ei en kerrie. Met kip of garnaal.",en:"Fried rice with pineapple, cashew, egg and curry powder. With chicken or prawn.",th:"ข้าวผัดสับปะรด ใส่เม็ดมะม่วงและผงกะหรี่"}},
+  {id:"khamoo", cat:"rijst", emoji:"🍖", price:15.00, spice:0, foto:"khao kha moo pork rice",
+   th:"ข้าวขาหมู", name:{nl:"Khao Kha Moo",en:"Khao Kha Moo",th:"ข้าวขาหมู"},
+   desc:{nl:"Mals gestoofde varkenspoot in soja op rijst, met ei.",en:"Tender soy-braised pork leg on rice, with egg.",th:"ข้าวขาหมู เสิร์ฟพร้อมไข่ต้ม"}},
+
+  // Dessert
+  {id:"roti", cat:"dessert", emoji:"🥞", price:6.00, spice:0, foto:"roti banana Thai",
+   th:"โรตีกล้วย", name:{nl:"Roti met banaan",en:"Banana Roti",th:"โรตีกล้วย"},
+   desc:{nl:"Krokante Thaise pannenkoek met banaan en gecondenseerde melk.",en:"Crispy Thai pancake with banana and condensed milk.",th:"โรตีกล้วยราดนมข้น"}},
+  {id:"tabtim", cat:"dessert", emoji:"🍧", price:6.50, spice:0, foto:"tab tim krob dessert",
+   th:"ทับทิมกรอบ", name:{nl:"Tab Tim Krob",en:"Tab Tim Krob",th:"ทับทิมกรอบ"},
+   desc:{nl:"Knapperige waterkastanje-robijntjes in zoete kokosmelk met ijs.",en:"Crunchy water-chestnut rubies in sweet coconut milk with ice.",th:"ทับทิมกรอบ น้ำกะทิเย็น"}},
+  {id:"icecream", cat:"dessert", emoji:"🍨", price:5.00, spice:0, foto:"Thai coconut ice cream",
+   th:"ไอศกรีมกะทิ", name:{nl:"Kokosijs",en:"Coconut Ice Cream",th:"ไอศกรีมกะทิ"},
+   desc:{nl:"Romig kokosijs met pinda en zoete toppings.",en:"Creamy coconut ice cream with peanuts and sweet toppings.",th:"ไอศกรีมกะทิ โรยถั่ว"}},
+
+  // Dranken (prijzen vrij aan te passen)
+  {id:"chayen", cat:"dranken", emoji:"🧋", price:3.50, spice:0, foto:"Thai iced tea cha yen",
+   th:"ชาเย็น", name:{nl:"Thaise ijsthee",en:"Thai Iced Tea",th:"ชาเย็น"},
+   desc:{nl:"De iconische zoete oranje-roze Thaise ijsthee.",en:"The iconic sweet orange-pink Thai iced tea.",th:"ชาเย็นรสหวานหอม"}},
+  {id:"oliang", cat:"dranken", emoji:"☕", price:3.50, spice:0, foto:"Thai iced coffee oliang",
+   th:"โอเลี้ยง", name:{nl:"Thaise ijskoffie",en:"Thai Iced Coffee",th:"โอเลี้ยง"},
+   desc:{nl:"Sterke, zoete Thaise ijskoffie.",en:"Strong, sweet Thai iced coffee.",th:"โอเลี้ยงเย็น"}},
+  {id:"manao", cat:"dranken", emoji:"🥤", price:3.50, spice:0, foto:"lime soda drink",
+   th:"น้ำมะนาวโซดา", name:{nl:"Limoensoda",en:"Lime Soda",th:"น้ำมะนาวโซดา"},
+   desc:{nl:"Verfrissende verse limoensodadrank.",en:"Refreshing fresh lime soda.",th:"น้ำมะนาวโซดาสดชื่น"}},
+
+  /* ===== Isaan — authentiek Noordoost-Thais ===== */
+  {id:"somtam", cat:"isaan", emoji:"🥗", price:12.00, spice:3, foto:"som tam papaya salad",
+   th:"ส้มตำไทย", name:{nl:"Som Tam Thai",en:"Som Tam (papaya salad)",th:"ส้มตำไทย"},
+   desc:{nl:"Groene papayasalade met tomaat, sperziebonen, pinda en limoen.",en:"Green papaya salad with tomato, green beans, peanuts and lime.",th:"ส้มตำไทย ใส่มะเขือเทศ ถั่วฝักยาว ถั่วลิสง และมะนาว"}},
+  {id:"larb", cat:"isaan", emoji:"🌶️", price:13.00, spice:3, foto:"larb moo Thai",
+   th:"ลาบหมู", name:{nl:"Larb Moo",en:"Larb Moo",th:"ลาบหมู"},
+   desc:{nl:"Pittige salade van varkensgehakt met geroosterde rijst, munt en limoen.",en:"Spicy minced pork salad with toasted rice, mint and lime.",th:"ลาบหมู ใส่ข้าวคั่ว ใบสะระแหน่ และมะนาว"}},
+  {id:"namtok", cat:"isaan", emoji:"🥩", price:13.00, spice:3, foto:"nam tok moo Thai",
+   th:"น้ำตกหมู", name:{nl:"Nam Tok Moo",en:"Nam Tok Moo",th:"น้ำตกหมู"},
+   desc:{nl:"Salade van gegrild varkensvlees met geroosterde rijst, ui en chili.",en:"Grilled pork salad with toasted rice, onion and chilli.",th:"น้ำตกหมูย่าง ใส่ข้าวคั่วและหอมแดง"}},
+  {id:"gaiyang", cat:"isaan", emoji:"🍗", price:15.00, spice:1, foto:"Kai yang grilled chicken",
+   th:"ไก่ย่าง", name:{nl:"Gai Yang",en:"Gai Yang (grilled chicken)",th:"ไก่ย่าง"},
+   desc:{nl:"Gemarineerde gegrilde kip op Isaan-wijze met pittige dipsaus.",en:"Marinated Isaan-style grilled chicken with spicy dipping sauce.",th:"ไก่ย่างหมักสไตล์อีสาน เสิร์ฟพร้อมน้ำจิ้มแจ่ว"}},
+  {id:"kormoo", cat:"isaan", emoji:"🥓", price:13.00, spice:2, foto:"kor moo yang grilled pork neck",
+   th:"คอหมูย่าง", name:{nl:"Kor Moo Yang",en:"Kor Moo Yang",th:"คอหมูย่าง"},
+   desc:{nl:"Gegrilde varkensnek met pittige Isaan-dipsaus (jaew).",en:"Grilled pork neck with spicy Isaan dipping sauce (jaew).",th:"คอหมูย่าง เสิร์ฟพร้อมน้ำจิ้มแจ่ว"}},
+  {id:"mooping", cat:"isaan", emoji:"🍢", price:5.00, spice:1, foto:"Moo ping",
+   th:"หมูปิ้ง", name:{nl:"Moo Ping",en:"Moo Ping (pork skewers)",th:"หมูปิ้ง"},
+   desc:{nl:"Gegrilde gemarineerde varkensspiesjes. 5 stuks.",en:"Grilled marinated pork skewers. 5 pieces.",th:"หมูปิ้งหมักย่าง 5 ไม้"}},
+  {id:"saikrok", cat:"isaan", emoji:"🌭", price:5.00, spice:1, foto:"Sai krok Isan",
+   th:"ไส้กรอกอีสาน", name:{nl:"Sai Krok Isan",en:"Sai Krok Isan",th:"ไส้กรอกอีสาน"},
+   desc:{nl:"Licht gefermenteerde Isaan-worst met een zurig accent. 5 stuks.",en:"Lightly fermented, tangy Isaan sausage. 5 pieces.",th:"ไส้กรอกอีสานรสเปรี้ยว 5 ชิ้น"}},
+  {id:"khaoniao", cat:"isaan", emoji:"🍚", price:3.00, spice:0, foto:"Thai sticky rice basket",
+   th:"ข้าวเหนียว", name:{nl:"Khao Niao (kleefrijst)",en:"Khao Niao (sticky rice)",th:"ข้าวเหนียว"},
+   desc:{nl:"Thaise kleefrijst — het perfecte bijgerecht bij elk Isaan-gerecht.",en:"Thai sticky rice — the perfect side for any Isaan dish.",th:"ข้าวเหนียว เหมาะกับอาหารอีสานทุกจาน"}},
+
+  /* ===== Zuid-Thais — authentieke gerechten uit Zuid-Thailand ===== */
+  {id:"kuakling", cat:"zuid", emoji:"🌶️", price:15.00, spice:3, foto:"Kua kling southern Thai dry curry",
+   th:"คั่วกลิ้ง", name:{nl:"Kua Kling",en:"Kua Kling",th:"คั่วกลิ้ง"},
+   desc:{nl:"Vurige droge curry van fijngehakt vlees met citroengras, limoenblad en veel chili.",en:"Fiery dry curry of minced meat with lemongrass, kaffir lime leaf and lots of chilli.",th:"คั่วกลิ้งเนื้อสับ ใส่ตะไคร้ ใบมะกรูด และพริกจัดจ้าน"}},
+  {id:"gaengsom", cat:"zuid", emoji:"🍲", price:15.00, spice:3, foto:"Kaeng som sour curry Thai",
+   th:"แกงส้ม", name:{nl:"Gaeng Som",en:"Gaeng Som (sour curry)",th:"แกงส้ม"},
+   desc:{nl:"Heldergele, waterige Zuid-Thaise curry met vis en groenten — heerlijk zuur en pittig.",en:"Bright-yellow, brothy Southern curry with fish and vegetables — wonderfully sour and spicy.",th:"แกงส้มปักษ์ใต้ใส่ปลาและผัก รสเปรี้ยวเผ็ดจัด"}},
+  {id:"gaengtaipla", cat:"zuid", emoji:"🐟", price:15.00, spice:3, foto:"Kaeng tai pla southern Thai curry",
+   th:"แกงไตปลา", name:{nl:"Gaeng Tai Pla",en:"Gaeng Tai Pla",th:"แกงไตปลา"},
+   desc:{nl:"Rijke, hartige curry op basis van gefermenteerde vis. Intens, zuur en flink heet.",en:"Rich, savoury curry based on fermented fish. Intense, sour and seriously hot.",th:"แกงไตปลารสเข้มข้น กลมกล่อม เปรี้ยวและเผ็ดร้อน"}},
+  {id:"khaomokgai", cat:"zuid", emoji:"🍛", price:15.00, spice:1, foto:"Khao mok kai Thai chicken biryani",
+   th:"ข้าวหมกไก่", name:{nl:"Khao Mok Gai",en:"Khao Mok Gai",th:"ข้าวหมกไก่"},
+   desc:{nl:"Thaise biryani: gele kruidenrijst met malse gekruide kip, gefruite ui en frisse dipsaus.",en:"Thai biryani: yellow spiced rice with tender chicken, fried onions and a fresh dip.",th:"ข้าวหมกไก่ ข้าวเหลืองหอมเครื่องเทศ เสิร์ฟกับไก่และน้ำจิ้ม"}},
+  {id:"moohong", cat:"zuid", emoji:"🥩", price:15.00, spice:0, foto:"Moo hong braised pork belly Phuket",
+   th:"หมูฮ้อง", name:{nl:"Moo Hong",en:"Moo Hong",th:"หมูฮ้อง"},
+   desc:{nl:"Gestoofd varkensbuikspek in zoete donkere sojasaus met knoflook en peper. Smelt op de tong.",en:"Braised pork belly in sweet dark soy with garlic and pepper. Melts in the mouth.",th:"หมูฮ้อง สามชั้นตุ๋นซีอิ๊วหวาน กระเทียมและพริกไทย นุ่มละมุน"}},
+  {id:"bailiang", cat:"zuid", emoji:"🥬", price:12.00, spice:1, foto:"Pad bai liang egg southern Thai stir fry",
+   th:"ใบเหลียงผัดไข่", name:{nl:"Bai Liang Pad Kai",en:"Bai Liang Pad Kai",th:"ใบเหลียงผัดไข่"},
+   desc:{nl:"Eenvoudig roerbakgerecht van knapperige Zuid-Thaise liang-bladeren met ei.",en:"Simple stir-fry of crisp Southern liang leaves with egg.",th:"ใบเหลียงผัดไข่ เมนูผัดง่ายๆ กรอบอร่อย"}},
+  {id:"padsator", cat:"zuid", emoji:"🫛", price:15.00, spice:2, foto:"Pad sator stink beans shrimp Thai",
+   th:"ผัดสะตอ", name:{nl:"Pad Sator",en:"Pad Sator (stink beans)",th:"ผัดสะตอ"},
+   desc:{nl:"Sator-bonen met hun kenmerkende smaak, gewokt met garnalen, varkensvlees en pittige garnalenpasta.",en:"Stink beans with their signature flavour, wok-fried with shrimp, pork and spicy shrimp paste.",th:"ผัดสะตอกุ้งและหมู ใส่กะปิรสเผ็ด กลิ่นเฉพาะตัว"}},
+  {id:"khaoyam", cat:"zuid", emoji:"🥗", price:13.00, spice:1, foto:"Khao yam southern Thai rice salad",
+   th:"ข้าวยำ", name:{nl:"Khao Yam",en:"Khao Yam (rice salad)",th:"ข้าวยำ"},
+   desc:{nl:"Verfrissende Zuid-Thaise rijstsalade met kruiden, verse groenten, citroengras en budu-saus.",en:"Refreshing Southern rice salad with herbs, fresh vegetables, lemongrass and budu sauce.",th:"ข้าวยำปักษ์ใต้ ใส่สมุนไพร ผักสด ตะไคร้ ราดน้ำบูดู"}},
+  {id:"khanomjeen", cat:"zuid", emoji:"🍜", price:15.00, spice:2, foto:"Khanom chin nam ya fish curry noodles",
+   th:"ขนมจีนน้ำยา", name:{nl:"Khanom Jeen Nam Ya",en:"Khanom Jeen Nam Ya",th:"ขนมจีนน้ำยา"},
+   desc:{nl:"Dunne gefermenteerde rijstnoedels met een pittige, kruidige viscurry en verse rauwe groenten.",en:"Thin fermented rice noodles topped with a spicy fish curry and fresh raw vegetables.",th:"ขนมจีนน้ำยา เส้นหมักราดน้ำยาปลารสเผ็ด เสิร์ฟกับผักสด"}},
+];
+
+/* ---------- Opwarminstructies per type (magnetron + airfryer) ---------- */
+const REHEAT = {
+  curry:{micro:{nl:"2–3 min, halverwege roeren; scheutje water erbij.",en:"2–3 min, stir halfway; add a splash of water.",th:"2–3 นาที คนกลางทาง เติมน้ำเล็กน้อย"},air:{nl:"Minder geschikt voor saus — gebruik de magnetron of een pan.",en:"Less suitable for sauces — use the microwave or a pan.",th:"ไม่เหมาะกับแกงน้ำ ใช้ไมโครเวฟหรือกระทะ"}},
+  soup:{micro:{nl:"2–3 min, halverwege roeren.",en:"2–3 min, stir halfway.",th:"2–3 นาที คนกลางทาง"},air:{nl:"Niet geschikt — verwarm in een pan tot tegen de kook.",en:"Not suitable — heat in a pan to just below boiling.",th:"ไม่เหมาะ ใช้หม้ออุ่นจนเกือบเดือด"}},
+  fried:{micro:{nl:"Afgeraden (wordt zacht); hooguit 30 sec.",en:"Not advised (turns soft); 30 sec at most.",th:"ไม่แนะนำ (จะนิ่ม) ไม่เกิน 30 วินาที"},air:{nl:"180°C, 5–8 min — lekker knapperig.",en:"180°C, 5–8 min — nicely crispy.",th:"180°C 5–8 นาที กรอบอร่อย"}},
+  wok:{micro:{nl:"2 min, halverwege roeren; scheutje water of olie.",en:"2 min, stir halfway; a splash of water or oil.",th:"2 นาที คนกลางทาง เติมน้ำหรือน้ำมันเล็กน้อย"},air:{nl:"160°C, 4–6 min, halverwege schudden.",en:"160°C, 4–6 min, shake halfway.",th:"160°C 4–6 นาที เขย่ากลางทาง"}},
+  rice:{micro:{nl:"2 min onder een deksel; scheutje water, roer halverwege.",en:"2 min covered; a splash of water, stir halfway.",th:"2 นาที ปิดฝา เติมน้ำเล็กน้อย คนกลางทาง"},air:{nl:"160°C, 4–5 min, los geroerd.",en:"160°C, 4–5 min, loosened up.",th:"160°C 4–5 นาที พรวนข้าวให้ร่วน"}},
+  grill:{micro:{nl:"1–2 min (snel, iets minder van textuur).",en:"1–2 min (quick, slightly softer texture).",th:"1–2 นาที (เร็วแต่เนื้อสัมผัสด้อยลง)"},air:{nl:"160°C, 4–6 min — sappig en licht knapperig.",en:"160°C, 4–6 min — juicy and lightly crisp.",th:"160°C 4–6 นาที ฉ่ำและกรอบนิด"}},
+  salad:{micro:{nl:"Niet opwarmen — koud serveren.",en:"Do not reheat — serve cold.",th:"ไม่ต้องอุ่น เสิร์ฟเย็น"},air:{nl:"Niet opwarmen — koud serveren.",en:"Do not reheat — serve cold.",th:"ไม่ต้องอุ่น เสิร์ฟเย็น"}},
+  rotiwarm:{micro:{nl:"Afgeraden (wordt taai).",en:"Not advised (turns chewy).",th:"ไม่แนะนำ (จะเหนียว)"},air:{nl:"160°C, 2–3 min, of kort in een droge pan.",en:"160°C, 2–3 min, or briefly in a dry pan.",th:"160°C 2–3 นาที หรือกระทะแห้งสั้นๆ"}},
+  cold:{micro:{nl:"Niet opwarmen — koud serveren.",en:"Do not reheat — serve cold.",th:"ไม่ต้องอุ่น เสิร์ฟเย็น"},air:{nl:"Niet opwarmen — koud serveren.",en:"Do not reheat — serve cold.",th:"ไม่ต้องอุ่น เสิร์ฟเย็น"}},
+  sticky:{micro:{nl:"Kleefrijst 20–30 sec; mango koud erbij.",en:"Sticky rice 20–30 sec; serve mango cold.",th:"ข้าวเหนียว 20–30 วินาที เสิร์ฟมะม่วงเย็น"},air:{nl:"Niet geschikt — gebruik de magnetron.",en:"Not suitable — use the microwave.",th:"ไม่เหมาะ ใช้ไมโครเวฟ"}},
+  stickyplain:{micro:{nl:"30–40 sec onder vochtig keukenpapier.",en:"30–40 sec under a damp paper towel.",th:"30–40 วินาที คลุมกระดาษชื้น"},air:{nl:"Niet geschikt — stoom of magnetron.",en:"Not suitable — steam or microwave.",th:"ไม่เหมาะ ใช้นึ่งหรือไมโครเวฟ"}},
+  drink:{micro:{nl:"Niet opwarmen — koud met ijs.",en:"Do not heat — cold over ice.",th:"ไม่ต้องอุ่น เสิร์ฟเย็นใส่น้ำแข็ง"},air:{nl:"Niet opwarmen — koud met ijs.",en:"Do not heat — cold over ice.",th:"ไม่ต้องอุ่น เสิร์ฟเย็นใส่น้ำแข็ง"}}
+};
+const RH = {
+  popia:"fried", satay:"grill", toast:"fried", todmun:"fried", gaitod:"fried", karipap:"fried", goongtod:"fried",
+  tomyum:"soup", tomkha:"soup", tomjued:"soup", guayteow:"soup", khaosoi:"soup",
+  green:"curry", red:"curry", massaman:"curry", panang:"curry", yellow:"curry", jungle:"curry", choochee:"curry",
+  padthai:"wok", padseeew:"wok", krapow:"wok", keemao:"wok", radna:"wok", woonsen:"wok", cashew:"wok",
+  khaopad:"rice", khaomungai:"rice", sapparod:"rice", khamoo:"rice",
+  somtam:"salad", larb:"salad", namtok:"salad", gaiyang:"grill", kormoo:"grill", mooping:"grill", saikrok:"grill", khaoniao:"stickyplain",
+  mango:"sticky", banana:"fried", roti:"rotiwarm", tabtim:"cold", icecream:"cold",
+  kuakling:"wok", gaengsom:"curry", gaengtaipla:"curry", khaomokgai:"rice", moohong:"curry", bailiang:"wok", padsator:"wok", khaoyam:"salad", khanomjeen:"curry",
+  chayen:"drink", oliang:"drink", manao:"drink"
+};
+
+/* ---------- State + opslag ---------- */
+const cart = {};
+const PHOTO = {};
+const HIDDEN = new Set();
+let EXTRA = [];
+const PRICES = {};
+const GH_REPO = "hansstobbe2812/thai-take-away";
+const RH_LABELS = {curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"};
+const BEHEER = new URLSearchParams(location.search).has("beheer");
+let LANG = "nl";
+const T = () => I18N[LANG];
+const fmt = n => "€ " + n.toFixed(2).replace(".", ",");
+const byId = id => MENU.find(m => m.id === id);
+function loadJSON(k){ try{ return JSON.parse(localStorage.getItem(k)||"{}"); }catch(e){ return {}; } }
+function saveJSON(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function loadStr(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+const store = { save(){ saveJSON("tta_cart", cart); }, load(){ return loadJSON("tta_cart"); } };
+function goTo(id){ const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
+function esc(s){ return (s||"").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function pad(t){ const [h,m]=t.split(":").map(Number); return h*60+m; }
+
+/* ---------- Afhaaldatum + tijden ---------- */
+function nextPickupDate(){
+  const d = new Date(), day = d.getDay();
+  let add = (CONFIG.afhaal.dag - day + 7) % 7;
+  if(day === CONFIG.afhaal.dag){ const nowm=d.getHours()*60+d.getMinutes(); add = nowm < pad(CONFIG.afhaal.tot) ? 0 : 7; }
+  const s = new Date(d); s.setDate(d.getDate()+add); s.setHours(0,0,0,0); return s;
+}
+function pickupSlots(){
+  const out=[]; for(let m=pad(CONFIG.afhaal.van); m<=pad(CONFIG.afhaal.tot); m+=CONFIG.afhaal.slotMin)
+    out.push(`${String(Math.floor(m/60)).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`);
+  return out;
+}
+function pickupDateLabel(){ const d=nextPickupDate(); return `${T().zaterdag} ${d.getDate()}-${d.getMonth()+1}`; }
+
+/* ---------- Wikimedia Commons foto's ---------- */
+async function commonsSearch(term, limit){
+  const api = "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*"
+    + "&generator=search&gsrsearch=" + encodeURIComponent(term)
+    + "&gsrnamespace=6&gsrlimit=" + (limit||10)
+    + "&prop=imageinfo&iiprop=url|mime&iiurlwidth=800";
+  const r = await fetch(api); const d = await r.json();
+  if(!d.query || !d.query.pages) return [];
+  return Object.values(d.query.pages).sort((a,b)=>(a.index||0)-(b.index||0))
+    .filter(p => p.imageinfo && ["image/jpeg","image/png"].includes(p.imageinfo[0].mime))
+    .map(p => ({ title:p.title.replace(/^File:/,""), url:p.imageinfo[0].thumburl || p.imageinfo[0].url }));
+}
+function setPhoto(id, url, onFail){
+  PHOTO[id] = url;
+  document.querySelectorAll(`img[data-photo="${id}"]`).forEach(img => {
+    img.onload = () => img.classList.add("loaded");
+    img.onerror = () => { img.classList.remove("loaded"); img.removeAttribute("src"); if(onFail){ const f=onFail; onFail=null; f(); } };
+    img.src = url;
+  });
+  document.querySelectorAll(`img[data-cphoto="${id}"]`).forEach(img => { img.onerror = () => img.remove(); img.src = url; });
+}
+function reapplyPhotos(){ Object.keys(PHOTO).forEach(id => setPhoto(id, PHOTO[id])); }
+
+/* ---------- Menu bouwen ---------- */
+const catnav = document.getElementById("catnav");
+const menuEl = document.getElementById("menu");
+let spy = null;
+function buildMenu(){
+  catnav.innerHTML = ""; menuEl.innerHTML = "";
+  CATS.forEach(c => {
+    const items = MENU.filter(m => m.cat === c.id && (BEHEER || !HIDDEN.has(m.id)));
+    if(!items.length) return;
+    const link = document.createElement("button");
+    link.type = "button"; link.className = "cat-link";
+    link.textContent = c.emoji + " " + c.nm[LANG]; link.dataset.cat = c.id;
+    link.onclick = () => goTo(c.id);
+    catnav.appendChild(link);
+    const sec = document.createElement("section");
+    sec.className = "section"; sec.id = c.id;
+    const subTh = LANG==="th" ? "" : `<span class="th">${c.th}</span>`;
+    sec.innerHTML = `<div class="section-head"><h2>${c.nm[LANG]}</h2>${subTh}<span class="rule"></span></div><div class="grid"></div>`;
+    const grid = sec.querySelector(".grid");
+    items.forEach(m => grid.appendChild(card(m)));
+    menuEl.appendChild(sec);
+  });
+  setupSpy();
+  reapplyPhotos();
+}
+function spiceLabel(n){ if(n===0) return ""; const lbl=T().spice[n>=3?2:n-1]; return `<span class="badge-spice">${"🌶️".repeat(n)} ${lbl}</span>`; }
+function card(m){
+  const sub = LANG==="th" ? (m.name.en||"") : m.th;
+  const hidden = BEHEER && HIDDEN.has(m.id);
+  const A = T().adm;
+  const el = document.createElement("article");
+  el.className = "card" + (hidden ? " hidden-dish" : "");
+  el.innerHTML = `
+    <div class="thumb">${spiceLabel(m.spice)}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
+    <div class="card-body">
+      <div class="card-title"><span class="nm">${m.name[LANG]}</span><span class="sub">${sub}</span></div>
+      <p class="card-desc">${m.desc[LANG]}</p>
+      <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p><b>${T().micLabel}:</b> ${REHEAT[m.rh||RH[m.id]||"wok"].micro[LANG]}<br><b>${T().airLabel}:</b> ${REHEAT[m.rh||RH[m.id]||"wok"].air[LANG]}</p></details>
+      <div class="card-foot"><span class="price">${fmt(m.price)}</span><div class="ctl" data-ctl="${m.id}"></div></div>
+    </div>
+    <div class="fotopick">
+      <div class="pickrow pricerow"><span class="eur">€</span><input type="number" step="0.50" min="0" data-price="${m.id}" value="${m.price.toFixed(2)}"><button data-saveprice="${m.id}">${A.savePrice}</button></div>
+      <div class="pickrow"><input type="text" data-term="${m.id}" value="${esc(m.foto)}" placeholder="${A.phTerm}"><button data-search="${m.id}">${A.search}</button></div>
+      <div class="pickresults" data-results="${m.id}"></div>
+      <div class="pickrow"><input type="text" data-url="${m.id}" placeholder="${A.phUrl}"><button data-seturl="${m.id}">${A.setUrl}</button></div>
+      <div class="pickrow"><label class="filebtn">${A.ownPhoto}<input type="file" accept="image/*" data-file="${m.id}" hidden></label></div>
+      <div class="pickrow"><button class="toggle-dish" data-toggle="${m.id}">${hidden ? A.makeShown : A.makeHidden}</button></div>
+      ${m.custom ? `<div class="pickrow"><button class="del-dish" data-del="${m.id}">${A.del}</button></div>` : ""}
+      <span class="pickhint">${A.pickHint}</span>
+    </div>`;
+  renderCtl(el.querySelector(`[data-ctl="${m.id}"]`), m.id);
+  if(BEHEER){
+    el.querySelector(`[data-saveprice="${m.id}"]`).onclick = (e) => savePrice(m.id, el.querySelector(`[data-price="${m.id}"]`).value, e.currentTarget);
+    el.querySelector(`[data-price="${m.id}"]`).onchange = (e) => { if(parseFloat(e.target.value)!==m.price) savePrice(m.id, e.target.value, el.querySelector(`[data-saveprice="${m.id}"]`)); };
+    el.querySelector(`[data-search="${m.id}"]`).onclick = () => doSearch(m.id);
+    el.querySelector(`[data-seturl="${m.id}"]`).onclick = () => { const u=el.querySelector(`[data-url="${m.id}"]`).value.trim(); if(u) choose(m.id,u); };
+    el.querySelector(`[data-file="${m.id}"]`).onchange = (e) => { if(e.target.files[0]) handleFile(m.id, e.target.files[0]); e.target.value=""; };
+    el.querySelector(`[data-toggle="${m.id}"]`).onclick = () => toggleHidden(m.id);
+    const delBtn = el.querySelector(`[data-del="${m.id}"]`);
+    if(delBtn) delBtn.onclick = () => deleteDish(m.id);
+  }
+  return el;
+}
+function renderCtl(node, id){
+  if(BEHEER){ node.innerHTML = ""; return; }
+  const q = cart[id] || 0;
+  if(q === 0){
+    node.innerHTML = `<button class="add">${T().add}</button>`;
+    node.querySelector("button").onclick = () => change(id, 1);
+  } else {
+    node.innerHTML = `<div class="stepper"><button aria-label="-">−</button><span class="q">${q}</span><button aria-label="+">+</button></div>`;
+    node.querySelectorAll("button")[0].onclick = () => change(id,-1);
+    node.querySelectorAll("button")[1].onclick = () => change(id, 1);
+  }
+}
+function change(id, delta){
+  cart[id] = Math.max(0, (cart[id]||0) + delta);
+  if(cart[id] === 0) delete cart[id];
+  const ctl = document.querySelector(`[data-ctl="${id}"]`);
+  if(ctl) renderCtl(ctl, id);
+  store.save(); updateBars();
+  if(sheet.classList.contains("open")) renderSheet();
+}
+function setupSpy(){
+  if(spy) spy.disconnect();
+  const links = [...document.querySelectorAll(".cat-link")];
+  spy = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) links.forEach(l => l.classList.toggle("active", l.dataset.cat===e.target.id)); }), {rootMargin:"-120px 0px -65% 0px"});
+  CATS.map(c=>document.getElementById(c.id)).filter(Boolean).forEach(s => spy.observe(s));
+}
+
+/* ---------- Totalen ---------- */
+function totals(){ let count=0,sum=0; for(const id in cart){ count+=cart[id]; sum+=cart[id]*byId(id).price; } return {count,sum}; }
+function updateBars(){
+  const {count, sum} = totals();
+  document.getElementById("hdrCount").textContent = count;
+  document.getElementById("fbCount").textContent = T().items(count);
+  document.getElementById("fbTotal").textContent = fmt(sum);
+  document.getElementById("floatbar").classList.toggle("show", count>0 && !BEHEER);
+}
+
+/* ---------- Mandje ---------- */
+const overlay = document.getElementById("overlay");
+const sheet = document.getElementById("sheet");
+const sheetBody = document.getElementById("sheetBody");
+const sheetFoot = document.getElementById("sheetFoot");
+function openSheet(){ renderSheet(); overlay.classList.add("open"); sheet.classList.add("open"); }
+function closeSheet(){ overlay.classList.remove("open"); sheet.classList.remove("open"); }
+document.getElementById("cartBtn").onclick = openSheet;
+document.getElementById("fbGo").onclick = openSheet;
+document.getElementById("closeBtn").onclick = closeSheet;
+overlay.onclick = closeSheet;
+const form = { naam:"", email:"", tel:"", slot:"", note:"" };
+
+function renderSheet(){
+  const ids = Object.keys(cart);
+  document.getElementById("sheetTitle").textContent = T().yourOrder;
+  if(!ids.length){
+    sheetBody.innerHTML = `<div class="empty"><div class="big">🧺</div><p>${T().empty}</p></div>`;
+    sheetFoot.style.display = "none"; return;
+  }
+  let html = "";
+  ids.forEach(id => {
+    const m = byId(id);
+    const ph = PHOTO[id] ? `<img data-cphoto="${id}" src="${PHOTO[id]}" alt="" onerror="this.remove()">` : "";
+    html += `<div class="line"><div class="lthumb">${m.emoji}${ph}</div>
+      <div class="ldetail"><div class="ln">${m.name[LANG]}</div><div class="lp">${fmt(m.price)} ${cart[id]>1?"· "+fmt(m.price*cart[id]):""}</div></div>
+      <div class="lstep"><button data-m="${id}">−</button><span class="q">${cart[id]}</span><button data-p="${id}">+</button></div></div>`;
+  });
+  const slots = pickupSlots().map(s => `<option value="${s}" ${form.slot===s?"selected":""}>${s}</option>`).join("");
+  html += `<div class="pickupbox">${T().pickupNotice(pickupDateLabel()+" · "+CONFIG.afhaal.van+"–"+CONFIG.afhaal.tot)}</div>
+    <div class="fields">
+      <div class="field"><label for="fName">${T().labelName} <span class="req">*</span></label><input id="fName" type="text" placeholder="${T().phName}" autocomplete="name" value="${esc(form.naam)}"></div>
+      <div class="field"><label for="fPhone">${T().labelPhone} <span class="req">*</span></label><input id="fPhone" type="tel" placeholder="06 ..." autocomplete="tel" value="${esc(form.tel)}"></div>
+      <div class="field"><label for="fSlot">${T().labelSlot}</label><select id="fSlot">${slots}</select></div>
+      <div class="field"><label for="fEmail">${T().labelEmail} <span class="req">*</span></label><input id="fEmail" type="email" placeholder="${T().phEmail}" autocomplete="email" value="${esc(form.email)}"></div>
+      <div class="field"><label for="fNote">${T().labelNote}</label><textarea id="fNote" placeholder="${T().phNote}">${esc(form.note)}</textarea></div>
+      <div class="field"><label>${T().payLabel}</label>
+        <div class="payopts">
+          <button type="button" class="payopt ${form.pay!=="contant"?"active":""}" data-pay="tikkie">💳 ${T().payOptTikkie}</button>
+          <button type="button" class="payopt ${form.pay==="contant"?"active":""}" data-pay="contant">💵 ${T().payOptCash}</button>
+        </div>
+      </div>
+    </div>`;
+  sheetBody.innerHTML = html;
+  sheetBody.querySelectorAll("[data-m]").forEach(b => b.onclick = () => change(b.dataset.m, -1));
+  sheetBody.querySelectorAll("[data-p]").forEach(b => b.onclick = () => change(b.dataset.p, 1));
+  const map={fName:"naam",fPhone:"tel",fEmail:"email",fNote:"note",fSlot:"slot"};
+  ["fName","fPhone","fEmail","fNote","fSlot"].forEach(idf => { const el=document.getElementById(idf); const ev = idf==="fSlot"?"onchange":"oninput"; el[ev]=e=>form[map[idf]]=e.target.value; });
+  if(!form.slot) form.slot = pickupSlots()[0];
+  if(!form.pay) form.pay = "contant";
+  sheetBody.querySelectorAll(".payopt").forEach(b => b.onclick = () => {
+    form.pay = b.dataset.pay;
+    sheetBody.querySelectorAll(".payopt").forEach(x => x.classList.toggle("active", x.dataset.pay===form.pay));
+    document.getElementById("payNotice").innerHTML = T()[form.pay==="contant"?"payMsgCash":"payMsgTikkie"](fmt(totals().sum));
+  });
+  document.getElementById("orderMsg").textContent = "";
+  document.getElementById("lblSub").textContent = T().subtotal;
+  document.getElementById("lblTot").textContent = T().total;
+  document.getElementById("waBtnLabel").textContent = T().placeOrder;
+  document.getElementById("orderNote").textContent = T().note;
+  const {sum} = totals();
+  document.getElementById("subTotal").textContent = fmt(sum);
+  document.getElementById("grandTotal").textContent = fmt(sum);
+  document.getElementById("payNotice").innerHTML = T()[form.pay==="contant"?"payMsgCash":"payMsgTikkie"](fmt(sum));
+  sheetFoot.style.display = "block";
+}
+function buildOrder(){
+  const ids = Object.keys(cart); let lines=[], sum=0;
+  ids.forEach(id => { const m=byId(id), q=cart[id]; sum+=m.price*q; lines.push(`${q}× ${m.name.nl} — ${fmt(m.price*q)}`); });
+  return {lines, sum};
+}
+document.getElementById("waBtn").onclick = () => {
+  if(!Object.keys(cart).length) return;
+  const naam=(document.getElementById("fName")?.value||"").trim();
+  const tel =(document.getElementById("fPhone")?.value||"").trim();
+  const email=(document.getElementById("fEmail")?.value||"").trim();
+  const slot= document.getElementById("fSlot")?.value || pickupSlots()[0];
+  const note=(document.getElementById("fNote")?.value||"").trim();
+  const msg = document.getElementById("orderMsg");
+  const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  let bad = !naam ? "fName" : !tel ? "fPhone" : !emailOk ? "fEmail" : null;
+  document.querySelectorAll(".field input").forEach(i=>i.classList.remove("invalid"));
+  if(bad){ const f=document.getElementById(bad); f.classList.add("invalid"); f.focus(); msg.className="order-msg err"; msg.textContent=T().orderErr; return; }
+  const {lines, sum} = buildOrder();
+  const afhaal = `${pickupDateLabel()} ${slot}`;
+  const cash = form.pay === "contant";
+  const betaling = cash ? `Contant bij ophalen (${fmt(sum)})` : `Tikkie sturen naar ${tel} (${fmt(sum)})`;
+  const wa = [`*Nieuwe bestelling — ${CONFIG.naam}*`, "", ...lines, "", `*Totaal: ${fmt(sum)}*`, "",
+              `Naam: ${naam}`, `Telefoon: ${tel}`, `Afhalen: ${afhaal}`, `Betaling: ${betaling}`];
+  if(note) wa.push(`Opmerking: ${note}`);
+  const waText = encodeURIComponent(wa.join("\n"));
+  try{
+    fetch(`https://formsubmit.co/ajax/${encodeURIComponent(CONFIG.email)}`, {
+      method:"POST", keepalive:true, headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body: JSON.stringify({ _subject:`Nieuwe bestelling — ${CONFIG.naam} (${afhaal})`, _template:"table",
+        _autoresponse:`Bedankt voor je bestelling bij ${CONFIG.naam}! Afhalen op ${afhaal} bij ${CONFIG.adres}. ${cash?`Je betaalt ${fmt(sum)} contant bij het ophalen.`:`Je ontvangt nog een Tikkie-betaalverzoek voor ${fmt(sum)}.`} Tot dan!`,
+        Naam:naam, Telefoon:tel, email:email, Afhalen:afhaal, Bestelling:lines.join(" | "), Totaal:fmt(sum), Betaling:betaling, Opmerking:note||"—" })
+    }).catch(()=>{});
+  }catch(e){}
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${waText}`, "_blank");
+  msg.className="order-msg ok"; msg.textContent=T().orderOk;
+};
+
+/* ---------- Teksten + config toepassen ---------- */
+function applyLang(){
+  document.documentElement.lang = LANG;
+  document.getElementById("eyebrow").textContent = T().eyebrow;
+  document.getElementById("heroTitle").innerHTML = T().heroTitle;
+  document.getElementById("heroP").textContent = T().heroP;
+  document.getElementById("chipPickup").textContent = T().chipPickup;
+  document.getElementById("chipOrder").textContent = T().chipOrder;
+  document.getElementById("heroCta").textContent = T().heroCta;
+  document.getElementById("cartLabel").textContent = T().cart;
+  document.getElementById("fbGo").textContent = T().viewOrder;
+  document.getElementById("footPickupHead").textContent = T().footPickupHead;
+  document.getElementById("footPickup").textContent = `${T().zaterdag} · ${CONFIG.afhaal.van}–${CONFIG.afhaal.tot}`;
+  document.getElementById("footOrder").textContent = T().footOrder;
+  document.getElementById("footFindHead").textContent = T().footFindHead;
+  document.getElementById("footTagline").textContent = T().footTagline;
+  [...document.querySelectorAll("#langsw button")].forEach(b => b.classList.toggle("on", b.dataset.lang===LANG));
+}
+function applyConfig(){
+  document.querySelectorAll(".brandname").forEach(n => { if(n.firstChild) n.firstChild.textContent = CONFIG.naam; });
+  document.getElementById("cfgAdres").textContent  = CONFIG.adres;
+  document.getElementById("cfgAdres2").textContent = CONFIG.adres;
+  document.getElementById("cfgTel").textContent    = CONFIG.telefoon;
+  document.getElementById("year").textContent = new Date().getFullYear();
+}
+
+/* ---------- Foto's laden (online, met brede fallback) ---------- */
+const GENERIC = {
+  voorgerechten:["Thai appetizer","Thai street food"], soepen:["Thai soup","Thai food soup"],
+  currys:["Thai curry","Thai curry rice"], wok:["Thai stir fry noodles","Thai noodles"],
+  rijst:["Thai fried rice","Thai rice dish"], isaan:["Isan Thai food","Thai grilled food"],
+  dessert:["Thai dessert","Thai sweet"], dranken:["Thai drink","Thai iced tea"]
+};
+async function pickPhoto(m){
+  const terms = [m.foto, ...(GENERIC[m.cat]||[]), "Thai food"];
+  for(const t of terms){
+    try{ const res = await commonsSearch(t, 5); if(res[0]) return res[0].url; }catch(e){}
+  }
+  return null;
+}
+async function resolvePhotos(){
+  let fixed = {};
+  try{ const r = await fetch("fotos.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok) fixed = await r.json(); }catch(e){}
+  const cache = loadJSON("tta_photo_cache");
+  for(const m of MENU){
+    if(fixed[m.id]){ setPhoto(m.id, fixed[m.id], () => pickPhoto(m).then(u => { if(u){ setPhoto(m.id, u); cache[m.id]=u; saveJSON("tta_photo_cache", cache); } })); continue; }
+    if(cache[m.id]){ setPhoto(m.id, cache[m.id]); continue; }
+    pickPhoto(m).then(url => { if(url){ setPhoto(m.id, url); cache[m.id]=url; saveJSON("tta_photo_cache", cache); } });
+  }
+}
+
+/* ---------- Beheermodus ---------- */
+let chosen = {};
+function applyBeheerLang(){
+  const A = T().adm;
+  document.getElementById("bTitle").textContent = A.title;
+  document.getElementById("bAdd").textContent = A.add;
+  document.getElementById("bToken").textContent = A.tokenBtn;
+  document.getElementById("bPublish").textContent = A.publish;
+  document.getElementById("bSluit").textContent = A.sluit;
+  updateBeheerCount();
+}
+async function initBeheer(){
+  document.body.classList.add("beheer");
+  const _cb = document.getElementById("cartBtn"); if(_cb) _cb.style.display = "none";
+  try{ const r = await fetch("fotos.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok) chosen = {...await r.json()}; }catch(e){}
+  Object.assign(chosen, loadJSON("tta_fotos"));
+  const localHidden = loadJSON("tta_hidden");
+  if(localHidden && Array.isArray(localHidden.ids)){ HIDDEN.clear(); localHidden.ids.forEach(id => HIDDEN.add(id)); }
+  buildMenu();
+  for(const m of MENU){
+    if(chosen[m.id]) setPhoto(m.id, chosen[m.id]);
+    else pickPhoto(m).then(url => { if(url){ setPhoto(m.id, url); updateBeheerCount(); } });
+  }
+  updateBeheerCount();
+  document.getElementById("bAdd").onclick = openAddModal;
+  document.getElementById("bToken").onclick = askToken;
+  document.getElementById("bPublish").onclick = publishAll;
+  document.getElementById("fCancel").onclick = () => document.getElementById("addModal").classList.remove("open");
+  document.getElementById("fSave").onclick = saveNewDish;
+  document.getElementById("bSluit").onclick = () => location.href = location.pathname;
+  applyBeheerLang();
+}
+async function doSearch(id){
+  const term = document.querySelector(`[data-term="${id}"]`).value.trim() || byId(id).foto;
+  const box = document.querySelector(`[data-results="${id}"]`);
+  box.innerHTML = `<span class='pickhint'>${T().searching}</span>`;
+  try{
+    const res = await commonsSearch(term, 12);
+    if(!res.length){ box.innerHTML = "<span class='pickhint'>Niets gevonden.</span>"; return; }
+    box.innerHTML = "";
+    res.forEach(p => { const im=document.createElement("img"); im.src=p.url; im.alt=p.title; im.title=p.title; im.onclick=()=>choose(id,p.url); box.appendChild(im); });
+  }catch(e){ box.innerHTML = "<span class='pickhint'>Zoeken mislukt.</span>"; }
+}
+function choose(id, url){ chosen[id]=url; saveJSON("tta_fotos", chosen); setPhoto(id, url); updateBeheerCount(); livePush("fotos.json", currentFotos, "Foto bijgewerkt"); }
+function toggleHidden(id){
+  if(HIDDEN.has(id)) HIDDEN.delete(id); else HIDDEN.add(id);
+  saveJSON("tta_hidden", {ids:[...HIDDEN]});
+  buildMenu(); reapplyPhotos();
+  livePush("verborgen.json", ()=>[...HIDDEN], "Zichtbaarheid bijgewerkt");
+}
+function exportHidden(){
+  const blob=new Blob([JSON.stringify([...HIDDEN],null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="verborgen.json"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+const val = id => document.getElementById(id).value;
+function openAddModal(){
+  const A = T().adm;
+  document.getElementById("amTitle").textContent = A.addTitle;
+  document.getElementById("amHint").textContent = A.addHint;
+  document.getElementById("amLName").textContent = A.lName + " (NL) *";
+  document.getElementById("amLCat").textContent = A.lCat + " *";
+  document.getElementById("amLPrice").textContent = A.lPrice + " *";
+  document.getElementById("amLSpice").textContent = A.lSpice;
+  document.getElementById("amLRh").textContent = A.lRh;
+  document.getElementById("amLDesc").textContent = `${A.lDesc} (NL) — ${A.opt}`;
+  document.getElementById("amLTh").textContent = `${A.lTh} — ${A.opt}`;
+  document.getElementById("amLNameEn").textContent = `${A.lName} (EN) — ${A.opt}`;
+  document.getElementById("amLNameTh").textContent = `${A.lName} (TH) — ${A.opt}`;
+  document.getElementById("amLEmoji").textContent = `${A.lEmoji} — ${A.opt}`;
+  document.getElementById("fCancel").textContent = A.cancel;
+  document.getElementById("fSave").textContent = A.addBtn;
+  document.getElementById("fCat").innerHTML = CATS.map(c=>`<option value="${c.id}">${c.nm[LANG]}</option>`).join("");
+  document.getElementById("fSpice").innerHTML = A.spiceOpts.map((s,i)=>`<option value="${i}">${s}</option>`).join("");
+  document.getElementById("fRh").innerHTML = Object.keys(REHEAT).map(k=>`<option value="${k}">${A.rhLabels[k]||k}</option>`).join("");
+  ["fNaam","fPrijs","fDesc","fTh","fNaamEn","fNaamTh","fEmoji"].forEach(i=>document.getElementById(i).value="");
+  document.getElementById("fSpice").value="0"; document.getElementById("fRh").value="wok";
+  document.getElementById("addModal").classList.add("open");
+}
+function saveNewDish(){
+  const naam = val("fNaam").trim(); const prijs = parseFloat(val("fPrijs"));
+  if(!naam){ alert(T().adm.aNaam); return; }
+  if(isNaN(prijs) || prijs < 0){ alert(T().adm.aPrijs); return; }
+  const en = val("fNaamEn").trim() || naam, th = val("fNaamTh").trim() || naam, desc = val("fDesc").trim();
+  const dish = {
+    id: "x" + Date.now().toString(36), cat: val("fCat"),
+    emoji: val("fEmoji").trim() || "🍽️", price: prijs, spice: parseInt(val("fSpice"))||0,
+    foto: en + " thai food", th: val("fTh").trim(),
+    name: {nl:naam, en, th}, desc: {nl:desc, en:desc, th:desc}, rh: val("fRh"), custom: true
+  };
+  EXTRA.push(dish); saveJSON("tta_extra", {items:EXTRA});
+  if(!byId(dish.id)) MENU.push(dish);
+  document.getElementById("addModal").classList.remove("open");
+  buildMenu();
+  pickPhoto(dish).then(url => { if(url){ setPhoto(dish.id, url); } updateBeheerCount(); });
+  updateBeheerCount();
+  livePush("extra.json", ()=>EXTRA, `Gerecht toegevoegd: ${dish.name.nl}`);
+  setTimeout(()=>{ const c=document.querySelector(`[data-photo="${dish.id}"]`); if(c) c.scrollIntoView({behavior:"smooth",block:"center"}); }, 120);
+}
+function deleteDish(id){
+  if(!confirm(T().adm.cDel)) return;
+  const i = EXTRA.findIndex(d=>d.id===id); if(i>=0) EXTRA.splice(i,1);
+  const j = MENU.findIndex(d=>d.id===id); if(j>=0) MENU.splice(j,1);
+  HIDDEN.delete(id); saveJSON("tta_extra", {items:EXTRA}); saveJSON("tta_hidden", {ids:[...HIDDEN]});
+  buildMenu(); updateBeheerCount();
+  livePush("extra.json", ()=>EXTRA, "Gerecht verwijderd");
+}
+function exportExtra(){
+  const blob=new Blob([JSON.stringify(EXTRA,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="extra.json"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function ghToken(){ return localStorage.getItem("tta_ghtoken") || ""; }
+async function askToken(){
+  const t = prompt(T().adm.tokenAsk, ghToken());
+  if(t===null) return;
+  const tok = t.trim();
+  localStorage.setItem("tta_ghtoken", tok);
+  if(!tok) return;
+  showToast(T().adm.saving, null);
+  try{
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}?t=`+Date.now(), {headers:{Authorization:"token "+tok}});
+    showToast(r.ok ? T().adm.tokenOk : T().adm.tokenBad + " (" + r.status + ")", r.ok);
+  }catch(e){ showToast(T().adm.tokenBad, false); }
+}
+async function ghPut(path, obj, message){
+  const token = ghToken(); if(!token) throw new Error("no-token");
+  let sha;
+  try{ const g = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?t=`+Date.now(), {headers:{Authorization:"token "+token}}); if(g.ok){ sha = (await g.json()).sha; } }catch(e){}
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));
+  const body = {message, content, branch:"main"}; if(sha) body.sha = sha;
+  const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
+    method:"PUT", headers:{Authorization:"token "+token, "Content-Type":"application/json"}, body: JSON.stringify(body) });
+  if(!r.ok) throw new Error("push-"+r.status);
+  return true;
+}
+let _toastT;
+function showToast(msg, ok){
+  let t = document.getElementById("beheerToast");
+  if(!t){ t = document.createElement("div"); t.id = "beheerToast"; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.className = "toast show" + (ok===true?" ok":ok===false?" err":"");
+  clearTimeout(_toastT);
+  if(ok!==null) _toastT = setTimeout(()=> t.classList.remove("show"), 1800);
+}
+let _pushGuard = false;
+function needToken(){
+  if(ghToken()) return true;
+  if(!_pushGuard){ _pushGuard = true; alert(T().adm.tokenNeed); askToken(); setTimeout(()=>_pushGuard=false, 500); }
+  return false;
+}
+const _q = {}, _dbt = {};
+function queuePush(path, obj, msg){
+  const prev = _q[path] || Promise.resolve();
+  const cur = prev.catch(()=>{}).then(()=> ghPut(path, obj, msg));
+  _q[path] = cur; return cur;
+}
+function livePush(path, getObj, msg){
+  if(!BEHEER || !needToken()) return;
+  showToast(T().adm.saving, null);
+  clearTimeout(_dbt[path]);
+  _dbt[path] = setTimeout(()=>{
+    queuePush(path, getObj(), msg)
+      .then(()=> showToast(T().adm.pushOk, true))
+      .catch(e=>{ if(e.message!=="no-token") showToast(T().adm.pushErr + " (" + e.message + ")", false); });
+  }, 900);
+}
+function currentFotos(){ const d={}; MENU.forEach(m=>{ const u = chosen[m.id]||PHOTO[m.id]; if(u) d[m.id]=u; }); return d; }
+async function publishAll(){
+  if(!needToken()) return;
+  showToast(T().adm.saving, null);
+  try{
+    await ghPut("fotos.json", currentFotos(), "Foto's publiceren");
+    await ghPut("prijzen.json", PRICES, "Prijzen publiceren");
+    await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
+    await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
+    showToast(T().adm.publishOk, true);
+  }catch(e){ if(e.message!=="no-token") showToast(T().adm.pushErr + " (" + e.message + ")", false); }
+}
+async function savePrice(id, value, btn){
+  const A = T().adm;
+  const p = Math.round(parseFloat(value)*100)/100;
+  if(isNaN(p) || p < 0){ alert(A.priceErr); return; }
+  const m = byId(id); if(!m) return;
+  m.price = p; PRICES[id] = p;
+  if(!ghToken()){ alert(A.tokenNeed); askToken(); }
+  const label = btn ? btn.textContent : "";
+  if(btn){ btn.disabled = true; btn.textContent = "…"; }
+  try{
+    await ghPut("prijzen.json", PRICES, `Prijs ${m.name.nl} → €${p.toFixed(2)}`);
+    if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
+    if(sheet.classList.contains("open")) renderSheet();
+  }catch(e){
+    if(btn){ btn.textContent = label; btn.disabled=false; }
+    if(e.message!=="no-token") showToast(A.pushErr + " (" + e.message + ")", false);
+  }
+}
+function handleFile(id, file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 900;
+      let w = img.width, h = img.height;
+      if(w > max){ h = Math.round(h * max / w); w = max; }
+      const cv = document.createElement("canvas");
+      cv.width = w; cv.height = h;
+      cv.getContext("2d").drawImage(img, 0, 0, w, h);
+      try{ choose(id, cv.toDataURL("image/jpeg", 0.82)); }
+      catch(e){ alert(T().adm.aImgProc); }
+    };
+    img.onerror = () => alert(T().adm.aImg);
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+function updateBeheerCount(){ const n=MENU.filter(m=>chosen[m.id]||PHOTO[m.id]).length; document.getElementById("bCount").textContent = T().adm.count(n, MENU.length); }
+function exportFotos(){
+  const data={}; MENU.forEach(m => { const url = chosen[m.id] || PHOTO[m.id]; if(url) data[m.id]=url; });
+  const n = Object.keys(data).length;
+  if(n < MENU.length && !confirm(T().adm.cExport(n, MENU.length))) return;
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="fotos.json"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+/* ---------- Taalwissel ---------- */
+function setLang(l){
+  if(!I18N[l]) return;
+  LANG = l; saveJSON("tta_lang_v", {l});
+  applyLang(); buildMenu(); applyConfig(); updateBars();
+  if(BEHEER) applyBeheerLang();
+  if(sheet.classList.contains("open")) renderSheet();
+}
+document.querySelectorAll("#langsw button").forEach(b => b.onclick = () => setLang(b.dataset.lang));
+
+/* ---------- Init ---------- */
+async function loadHidden(){
+  try{ const r = await fetch("verborgen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) a.forEach(id => HIDDEN.add(id)); } }catch(e){}
+}
+async function loadExtra(){
+  let items = [];
+  try{ const r = await fetch("extra.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) items = a; } }catch(e){}
+  if(BEHEER){ const local = loadJSON("tta_extra"); if(local && Array.isArray(local.items)) items = local.items; }
+  EXTRA = items;
+  EXTRA.forEach(m => { if(m && m.id && !byId(m.id)) MENU.push(m); });
+}
+async function loadPrijzen(){
+  try{ const r = await fetch("prijzen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(PRICES, p); } }catch(e){}
+  for(const id in PRICES){ const m = byId(id); if(m && typeof PRICES[id]==="number") m.price = PRICES[id]; }
+}
+(async function init(){
+  const savedLang = loadJSON("tta_lang_v").l;
+  if(savedLang && I18N[savedLang]) LANG = savedLang;
+  document.getElementById("heroCta").onclick = () => goTo("voorgerechten");
+  await loadExtra();
+  await loadPrijzen();
+  if(!BEHEER) await loadHidden();
+  Object.entries(store.load()).forEach(([id,q]) => { if(byId(id) && q>0 && !HIDDEN.has(id)) cart[id]=q; });
+  applyLang();
+  buildMenu();
+  applyConfig();
+  updateBars();
+  if(BEHEER) initBeheer(); else resolvePhotos();
+})();
+</script>
+</body>
+</html>
