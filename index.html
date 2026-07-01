@@ -160,6 +160,9 @@
   .mgmt-badge{display:none}
   .suggest-btn{float:right;margin-top:-2px;background:var(--amber);color:#fff;border:none;border-radius:8px;padding:4px 12px;font-size:.78rem;font-weight:700;cursor:pointer}
   .suggest-btn:active{transform:scale(.96)}
+  .translate-btn{display:block;width:100%;margin:6px 0 4px;background:var(--forest);color:#fff;border:none;border-radius:10px;padding:11px;font-size:.9rem;font-weight:700;cursor:pointer}
+  .translate-btn:active{transform:scale(.98)}
+  .translate-btn:disabled{opacity:.6}
   body.beheer .mgmt-badge{display:inline-block;margin-left:10px;padding:3px 10px;border-radius:999px;background:var(--amber);color:#fff;font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle}
   #beheerbar .bstat{flex-basis:100%;text-align:center;font-size:.82rem;font-weight:700;margin:0}
   #beheerbar .bstat small{color:rgba(255,255,255,.6);font-weight:500}
@@ -319,6 +322,7 @@
       <div><label id="amLNameTh">Naam (TH)</label><input id="fNaamTh" type="text"></div>
     </div>
     <label id="amLEmoji">Emoji</label><input id="fEmoji" type="text" maxlength="4" placeholder="🍽️">
+    <button type="button" class="translate-btn" id="fTranslate">🌐 Vertaal Thais → NL/EN</button>
     <div class="actions"><button class="cancel" id="fCancel">Annuleren</button><button class="save" id="fSave">Toevoegen</button></div>
   </div>
 </div>
@@ -399,7 +403,7 @@ const I18N = {
       makeHidden:"🚫 Niet bestelbaar maken", makeShown:"✅ Weer bestelbaar maken", del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
       addTitle:"Gerecht toevoegen", addHint:"Velden met * zijn verplicht. Engels/Thais is optioneel — laat je het leeg, dan wordt de Nederlandse tekst gebruikt.",
-      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"},
+      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"}, translateBtn:"🌐 Translate Thai → NL/EN", trBusy:"Translating…", trFail:"Translation failed — try again or fill in manually.", trEmpty:"Enter the Thai name or description first.", translateBtn:"🌐 Vertaal Thais → NL/EN", trBusy:"Bezig met vertalen…", trFail:"Vertalen mislukt — probeer opnieuw of vul handmatig in.", trEmpty:"Vul eerst de Thaise naam of beschrijving in.",
       spiceOpts:["Niet pittig","Mild","Pittig","Heel pittig"], cancel:"Annuleren", addBtn:"Toevoegen",
       rhLabels:{curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"},
       aNaam:"Vul een naam in.", aPrijs:"Vul een geldige prijs in.", aImg:"Dit bestand is geen geldige afbeelding.", aImgProc:"Foto kon niet verwerkt worden.",
@@ -477,7 +481,7 @@ const I18N = {
       makeHidden:"🚫 ปิดการสั่งซื้อ", makeShown:"✅ เปิดการสั่งซื้ออีกครั้ง", del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
       addTitle:"เพิ่มเมนู", addHint:"ช่องที่มี * ต้องกรอก ภาษาอังกฤษ/ไทยไม่บังคับ ถ้าเว้นว่างจะใช้ข้อความภาษาดัตช์",
-      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"},
+      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"}, translateBtn:"🌐 แปลไทย → NL/EN", trBusy:"กำลังแปล…", trFail:"แปลไม่สำเร็จ ลองใหม่หรือกรอกเอง", trEmpty:"กรุณากรอกชื่อหรือคำอธิบายภาษาไทยก่อน",
       spiceOpts:["ไม่เผ็ด","เผ็ดน้อย","เผ็ด","เผ็ดมาก"], cancel:"ยกเลิก", addBtn:"เพิ่ม",
       rhLabels:{curry:"แกง / ซอส",soup:"ซุป",fried:"ทอด / กรอบ",wok:"ผัด",rice:"ข้าว",grill:"เนื้อย่าง",salad:"ยำ (เย็น)",rotiwarm:"โรตี / อุ่นกระทะ",cold:"เย็น (ไอศกรีม/ของหวาน)",sticky:"ข้าวเหนียวมะม่วง",stickyplain:"ข้าวเหนียว",drink:"เครื่องดื่ม"},
       aNaam:"กรุณากรอกชื่อ", aPrijs:"กรุณากรอกราคาที่ถูกต้อง", aImg:"ไฟล์นี้ไม่ใช่รูปภาพที่ถูกต้อง", aImgProc:"ไม่สามารถประมวลผลรูปได้",
@@ -1061,6 +1065,7 @@ async function initBeheer(){
   document.getElementById("fCancel").onclick = () => document.getElementById("addModal").classList.remove("open");
   document.getElementById("fSave").onclick = saveNewDish;
   document.getElementById("fSuggest").onclick = suggestDesc;
+  document.getElementById("fTranslate").onclick = translateFromThai;
   document.getElementById("bSluit").onclick = () => location.href = location.pathname;
   applyBeheerLang();
 }
@@ -1107,12 +1112,43 @@ function openAddModal(){
   document.getElementById("amLEmoji").textContent = `${A.lEmoji} — ${A.opt}`;
   document.getElementById("fCancel").textContent = A.cancel;
   document.getElementById("fSave").textContent = A.addBtn;
+  document.getElementById("fTranslate").textContent = A.translateBtn;
   document.getElementById("fCat").innerHTML = CATS.map(c=>`<option value="${c.id}">${c.nm[LANG]}</option>`).join("");
   document.getElementById("fSpice").innerHTML = A.spiceOpts.map((s,i)=>`<option value="${i}">${s}</option>`).join("");
   document.getElementById("fRh").innerHTML = Object.keys(REHEAT).map(k=>`<option value="${k}">${A.rhLabels[k]||k}</option>`).join("");
   ["fNaam","fPrijs","fDesc","fDescEn","fDescTh","fTh","fNaamEn","fNaamTh","fEmoji"].forEach(i=>document.getElementById(i).value="");
   document.getElementById("fSpice").value="0"; document.getElementById("fRh").value="wok";
   document.getElementById("addModal").classList.add("open");
+}
+async function mmTranslate(text, to){
+  const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=th|${to}`);
+  if(!r.ok) throw new Error("net");
+  const d = await r.json();
+  const t = d && d.responseData && d.responseData.translatedText;
+  if(!t) throw new Error("empty");
+  return t;
+}
+async function translateFromThai(){
+  const A = T().adm;
+  const nameTh = val("fNaamTh").trim();
+  const descTh = val("fDescTh").trim();
+  if(!nameTh && !descTh){ alert(A.trEmpty); return; }
+  const btn = document.getElementById("fTranslate");
+  const orig = btn.textContent; btn.textContent = A.trBusy; btn.disabled = true;
+  try {
+    if(nameTh){
+      const nl = await mmTranslate(nameTh,"nl"); const en = await mmTranslate(nameTh,"en");
+      document.getElementById("fNaam").value = nl;
+      document.getElementById("fNaamEn").value = en;
+      if(!val("fTh").trim()) document.getElementById("fTh").value = nameTh;
+    }
+    if(descTh){
+      const nl = await mmTranslate(descTh,"nl"); const en = await mmTranslate(descTh,"en");
+      document.getElementById("fDesc").value = nl;
+      document.getElementById("fDescEn").value = en;
+    }
+  } catch(e){ alert(A.trFail); }
+  btn.textContent = orig; btn.disabled = false;
 }
 function suggestDesc(){
   const type = val("fRh");
