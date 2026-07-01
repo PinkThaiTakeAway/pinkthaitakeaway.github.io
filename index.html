@@ -115,6 +115,10 @@
   .add{background:var(--amber);color:var(--ink);font-weight:800;font-size:.9rem;padding:9px 16px;border-radius:999px;transition:transform .12s,background .2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
   .add:hover{background:var(--amber-deep)}
   .add:active{transform:scale(.95)}
+  .optctl{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+  .optrow{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+  .optlbl{font-size:.82rem;font-weight:700;color:var(--forest);white-space:nowrap}
+  .optctl .add{padding:6px 12px;font-size:.82rem}
   .stepper{display:flex;align-items:center;background:var(--forest);border-radius:999px;color:#fff}
   .stepper button{color:#fff;font-size:1.2rem;font-weight:700;width:38px;height:38px;display:grid;place-items:center;border-radius:999px}
   .stepper button:active{background:var(--forest-2)}
@@ -387,7 +391,7 @@ const I18N = {
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
     yourOrder:"Jouw bestelling", empty:"Je mandje is nog leeg.\nKies iets lekkers uit het menu.",
-    add:"+ Toevoegen",
+    add:"+ Toevoegen", opt:{kip:"Kip",garnaal:"Garnalen"},
     pickupNotice:p=>`Afhalen op <b>${p}</b>. Bestel uiterlijk vrijdag.`,
     payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
     payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
@@ -426,7 +430,7 @@ const I18N = {
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
     yourOrder:"Your order", empty:"Your basket is empty.\nPick something tasty from the menu.",
-    add:"+ Add",
+    add:"+ Add", opt:{kip:"Chicken",garnaal:"Prawn"},
     pickupNotice:p=>`Pickup on <b>${p}</b>. Order by Friday at the latest.`,
     payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
     payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
@@ -465,7 +469,7 @@ const I18N = {
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
     yourOrder:"คำสั่งซื้อของคุณ", empty:"ตะกร้าของคุณว่างเปล่า\nเลือกเมนูอร่อยๆ ได้เลย",
-    add:"+ เพิ่ม",
+    add:"+ เพิ่ม", opt:{kip:"ไก่",garnaal:"กุ้ง"},
     pickupNotice:p=>`รับสินค้า <b>${p}</b> · กรุณาสั่งภายในวันศุกร์`,
     payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
     payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
@@ -540,7 +544,7 @@ const MENU = [
    th:"พะแนง", name:{nl:"Panang curry",en:"Panang Curry",th:"พะแนง"},
    desc:{nl:"Romige, iets dikkere curry met kip en kaffirlimoenblad. Met jasmijnrijst.",en:"Creamy, slightly thicker curry with chicken and kaffir lime leaf. With jasmine rice.",th:"พะแนงไก่ น้ำแกงข้นรสกลมกล่อม ใส่ใบมะกรูด เสิร์ฟพร้อมข้าวหอมมะลิ"}},
 
-  {id:"padthai", cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"Pad thai",
+  {id:"padthai", opts:["kip","garnaal"], cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"Pad thai",
    th:"ผัดไทย", name:{nl:"Pad Thai",en:"Pad Thai",th:"ผัดไทย"},
    desc:{nl:"Woknoedels met ei, taugé, geroosterde pinda en tamarinde. Met kip of garnaal.",en:"Wok noodles with egg, bean sprouts, peanuts and tamarind. With chicken or prawn.",th:"ก๋วยเตี๋ยวผัดไทย ใส่ไข่ ถั่วงอก ถั่วลิสง และน้ำมะขาม เลือกไก่หรือกุ้ง"}},
   {id:"padseeew", cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"Pad see ew",
@@ -550,7 +554,7 @@ const MENU = [
    th:"ผัดกะเพรา", name:{nl:"Pad Krapow Moo",en:"Pad Krapow (Basil Pork)",th:"ผัดกะเพราหมู"},
    desc:{nl:"Gewokt varkensgehakt met heilige basilicum en chili, gebakken ei erbovenop.",en:"Wok-fried minced pork with holy basil and chilli, topped with a fried egg.",th:"ผัดกะเพราหมูสับ ใส่พริกและใบกะเพรา ราดไข่ดาว"}},
 
-  {id:"khaopad", cat:"rijst", emoji:"🍚", price:15.00, spice:0, foto:"Thai fried rice",
+  {id:"khaopad", opts:["kip","garnaal"], cat:"rijst", emoji:"🍚", price:15.00, spice:0, foto:"Thai fried rice",
    th:"ข้าวผัด", name:{nl:"Thaise gebakken rijst",en:"Thai Fried Rice",th:"ข้าวผัด"},
    desc:{nl:"Gebakken jasmijnrijst met ei, ui en tomaat. Met kip of garnaal.",en:"Fried jasmine rice with egg, onion and tomato. With chicken or prawn.",th:"ข้าวผัดใส่ไข่ หอมใหญ่ และมะเขือเทศ เลือกไก่หรือกุ้ง"}},
   {id:"khaomungai", cat:"rijst", emoji:"🍗", price:15.00, spice:1, foto:"Khao man kai",
@@ -616,9 +620,9 @@ const MENU = [
    desc:{nl:"Noord-Thaise currynoedelsoep met kip en knapperige noedels.",en:"Northern Thai curry noodle soup with chicken and crispy noodles.",th:"ข้าวซอยไก่ น้ำแกงกะทิ โรยเส้นกรอบ"}},
 
   // Rijst (€15)
-  {id:"sapparod", cat:"rijst", emoji:"🍍", price:15.00, spice:1, foto:"pineapple fried rice",
+  {id:"sapparod", opts:["kip","garnaal"], cat:"rijst", emoji:"🍍", price:15.00, spice:1, foto:"pineapple fried rice",
    th:"ข้าวผัดสับปะรด", name:{nl:"Ananas gebakken rijst",en:"Pineapple Fried Rice",th:"ข้าวผัดสับปะรด"},
-   desc:{nl:"Gebakken rijst met ananas, cashew, ei en kerrie. Met kip of garnaal.",en:"Fried rice with pineapple, cashew, egg and curry powder. With chicken or prawn.",th:"ข้าวผัดสับปะรด ใส่เม็ดมะม่วงและผงกะหรี่"}},
+   desc:{nl:"Gebakken rijst met ananas, cashew, ei en kerrie. Met kip of garnaal.",en:"Fried rice with pineapple, cashew, egg and curry powder. With chicken or prawn.",th:"ข้าวผัดสับปะรด ใส่เม็ดมะม่วงและผงกะหรี่ เลือกไก่หรือกุ้ง"}},
   {id:"khamoo", cat:"rijst", emoji:"🍖", price:15.00, spice:0, foto:"khao kha moo pork rice",
    th:"ข้าวขาหมู", name:{nl:"Khao Kha Moo",en:"Khao Kha Moo",th:"ข้าวขาหมู"},
    desc:{nl:"Mals gestoofde varkenspoot in soja op rijst, met ei.",en:"Tender soy-braised pork leg on rice, with egg.",th:"ข้าวขาหมู เสิร์ฟพร้อมไข่ต้ม"}},
@@ -860,23 +864,40 @@ function card(m){
   }
   return el;
 }
+function baseId(key){ return String(key).split("|")[0]; }
+function variantKey(key){ return String(key).split("|")[1] || ""; }
+function variantLabel(key){ const v=variantKey(key); return v ? " · " + ((T().opt && T().opt[v]) || v) : ""; }
+function variantNL(key){ const v=variantKey(key); const nl={kip:"Kip",garnaal:"Garnalen"}; return v ? " ("+(nl[v]||v)+")" : ""; }
+function stepperHTML(key,q){ return `<div class="stepper"><button data-mk="${key}" aria-label="-">−</button><span class="q">${q}</span><button data-pk="${key}" aria-label="+">+</button></div>`; }
 function renderCtl(node, id){
   if(BEHEER){ node.innerHTML = ""; return; }
+  const m = byId(id);
+  if(m && m.opts && m.opts.length){
+    node.innerHTML = `<div class="optctl">` + m.opts.map(opt => {
+      const key = id+"|"+opt, q = cart[key]||0, label = (T().opt && T().opt[opt]) || opt;
+      const ctl = q===0 ? `<button class="add optadd" data-key="${key}">${T().add}</button>` : stepperHTML(key,q);
+      return `<div class="optrow"><span class="optlbl">${label}</span>${ctl}</div>`;
+    }).join("") + `</div>`;
+    node.querySelectorAll(".optadd").forEach(b => b.onclick = () => change(b.dataset.key, 1));
+    node.querySelectorAll("[data-mk]").forEach(b => b.onclick = () => change(b.dataset.mk, -1));
+    node.querySelectorAll("[data-pk]").forEach(b => b.onclick = () => change(b.dataset.pk, 1));
+    return;
+  }
   const q = cart[id] || 0;
   if(q === 0){
     node.innerHTML = `<button class="add">${T().add}</button>`;
     node.querySelector("button").onclick = () => change(id, 1);
   } else {
-    node.innerHTML = `<div class="stepper"><button aria-label="-">−</button><span class="q">${q}</span><button aria-label="+">+</button></div>`;
-    node.querySelectorAll("button")[0].onclick = () => change(id,-1);
-    node.querySelectorAll("button")[1].onclick = () => change(id, 1);
+    node.innerHTML = stepperHTML(id,q);
+    node.querySelector("[data-mk]").onclick = () => change(id,-1);
+    node.querySelector("[data-pk]").onclick = () => change(id, 1);
   }
 }
-function change(id, delta){
-  cart[id] = Math.max(0, (cart[id]||0) + delta);
-  if(cart[id] === 0) delete cart[id];
-  const ctl = document.querySelector(`[data-ctl="${id}"]`);
-  if(ctl) renderCtl(ctl, id);
+function change(key, delta){
+  cart[key] = Math.max(0, (cart[key]||0) + delta);
+  if(cart[key] === 0) delete cart[key];
+  const ctl = document.querySelector(`[data-ctl="${baseId(key)}"]`);
+  if(ctl) renderCtl(ctl, baseId(key));
   store.save(); updateBars();
   if(sheet.classList.contains("open")) renderSheet();
 }
@@ -888,7 +909,7 @@ function setupSpy(){
 }
 
 /* ---------- Totalen ---------- */
-function totals(){ let count=0,sum=0; for(const id in cart){ count+=cart[id]; sum+=cart[id]*byId(id).price; } return {count,sum}; }
+function totals(){ let count=0,sum=0; for(const id in cart){ count+=cart[id]; sum+=cart[id]*byId(baseId(id)).price; } return {count,sum}; }
 function updateBars(){
   const {count, sum} = totals();
   document.getElementById("hdrCount").textContent = count;
@@ -919,10 +940,10 @@ function renderSheet(){
   }
   let html = "";
   ids.forEach(id => {
-    const m = byId(id);
-    const ph = PHOTO[id] ? `<img data-cphoto="${id}" src="${PHOTO[id]}" alt="" onerror="this.remove()">` : "";
+    const m = byId(baseId(id));
+    const ph = PHOTO[baseId(id)] ? `<img data-cphoto="${baseId(id)}" src="${PHOTO[baseId(id)]}" alt="" onerror="this.remove()">` : "";
     html += `<div class="line"><div class="lthumb">${m.emoji}${ph}</div>
-      <div class="ldetail"><div class="ln">${m.name[LANG]}</div><div class="lp">${fmt(m.price)} ${cart[id]>1?"· "+fmt(m.price*cart[id]):""}</div></div>
+      <div class="ldetail"><div class="ln">${m.name[LANG]}${variantLabel(id)}</div><div class="lp">${fmt(m.price)} ${cart[id]>1?"· "+fmt(m.price*cart[id]):""}</div></div>
       <div class="lstep"><button data-m="${id}">−</button><span class="q">${cart[id]}</span><button data-p="${id}">+</button></div></div>`;
   });
   const slots = pickupSlots().map(s => `<option value="${s}" ${form.slot===s?"selected":""}>${s}</option>`).join("");
@@ -965,7 +986,7 @@ function renderSheet(){
 }
 function buildOrder(){
   const ids = Object.keys(cart); let lines=[], sum=0;
-  ids.forEach(id => { const m=byId(id), q=cart[id]; sum+=m.price*q; lines.push(`${q}× ${m.name.nl} — ${fmt(m.price*q)}`); });
+  ids.forEach(id => { const m=byId(baseId(id)), q=cart[id]; sum+=m.price*q; lines.push(`${q}× ${m.name.nl}${variantNL(id)} — ${fmt(m.price*q)}`); });
   return {lines, sum};
 }
 document.getElementById("waBtn").onclick = () => {
@@ -1388,7 +1409,7 @@ async function loadRecepten(){
   await loadPrijzen();
   if(BEHEER) await loadRecepten();
   if(!BEHEER) await loadHidden();
-  Object.entries(store.load()).forEach(([id,q]) => { if(byId(id) && q>0 && !HIDDEN.has(id)) cart[id]=q; });
+  Object.entries(store.load()).forEach(([id,q]) => { if(byId(baseId(id)) && q>0 && !HIDDEN.has(baseId(id))) cart[id]=q; });
   applyLang();
   buildMenu();
   applyConfig();
