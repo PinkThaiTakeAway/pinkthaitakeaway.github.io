@@ -311,6 +311,8 @@
       <div><label id="amLRh">Serveertip-type</label><select id="fRh"></select></div>
     </div>
     <label id="amLDesc">Beschrijving (NL)</label><button type="button" class="suggest-btn" id="fSuggest">✨ Voorstel</button><textarea id="fDesc"></textarea>
+    <label id="amLDescEn">Beschrijving (EN)</label><textarea id="fDescEn"></textarea>
+    <label id="amLDescTh">Beschrijving (TH)</label><textarea id="fDescTh"></textarea>
     <label id="amLTh">Thais schrift</label><input id="fTh" type="text" placeholder="ปลาหมึกทอด">
     <div class="row2">
       <div><label id="amLNameEn">Naam (EN)</label><input id="fNaamEn" type="text"></div>
@@ -1096,6 +1098,8 @@ function openAddModal(){
   document.getElementById("amLSpice").textContent = A.lSpice;
   document.getElementById("amLRh").textContent = A.lRh;
   document.getElementById("amLDesc").textContent = `${A.lDesc} (NL) — ${A.opt}`;
+  document.getElementById("amLDescEn").textContent = `${A.lDesc} (EN) — ${A.opt}`;
+  document.getElementById("amLDescTh").textContent = `${A.lDesc} (TH) — ${A.opt}`;
   document.getElementById("amLTh").textContent = `${A.lTh} — ${A.opt}`;
   document.getElementById("amLNameEn").textContent = `${A.lName} (EN) — ${A.opt}`;
   document.getElementById("amLNameTh").textContent = `${A.lName} (TH) — ${A.opt}`;
@@ -1105,7 +1109,7 @@ function openAddModal(){
   document.getElementById("fCat").innerHTML = CATS.map(c=>`<option value="${c.id}">${c.nm[LANG]}</option>`).join("");
   document.getElementById("fSpice").innerHTML = A.spiceOpts.map((s,i)=>`<option value="${i}">${s}</option>`).join("");
   document.getElementById("fRh").innerHTML = Object.keys(REHEAT).map(k=>`<option value="${k}">${A.rhLabels[k]||k}</option>`).join("");
-  ["fNaam","fPrijs","fDesc","fTh","fNaamEn","fNaamTh","fEmoji"].forEach(i=>document.getElementById(i).value="");
+  ["fNaam","fPrijs","fDesc","fDescEn","fDescTh","fTh","fNaamEn","fNaamTh","fEmoji"].forEach(i=>document.getElementById(i).value="");
   document.getElementById("fSpice").value="0"; document.getElementById("fRh").value="wok";
   document.getElementById("addModal").classList.add("open");
 }
@@ -1135,11 +1139,12 @@ function saveNewDish(){
   if(!naam){ alert(T().adm.aNaam); return; }
   if(isNaN(prijs) || prijs < 0){ alert(T().adm.aPrijs); return; }
   const en = val("fNaamEn").trim() || naam, th = val("fNaamTh").trim() || naam, desc = val("fDesc").trim();
+  const descEn = val("fDescEn").trim() || desc, descTh = val("fDescTh").trim() || desc;
   const dish = {
     id: "x" + Date.now().toString(36), cat: val("fCat"),
     emoji: val("fEmoji").trim() || "🍽️", price: prijs, spice: parseInt(val("fSpice"))||0,
     foto: en + " thai food", th: val("fTh").trim(),
-    name: {nl:naam, en, th}, desc: {nl:desc, en:desc, th:desc}, rh: val("fRh"), custom: true
+    name: {nl:naam, en, th}, desc: {nl:desc, en:descEn, th:descTh}, rh: val("fRh"), custom: true
   };
   EXTRA.push(dish); saveJSON("tta_extra", {items:EXTRA});
   if(!byId(dish.id)) MENU.push(dish);
