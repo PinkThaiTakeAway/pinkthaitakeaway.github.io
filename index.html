@@ -131,7 +131,16 @@
   .spicerow{display:flex;align-items:center;gap:8px}
   .spicerow .spicelbl{font-size:.8rem;font-weight:700;color:var(--forest)}
   .spicerow .spicesel{flex:1;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;font-size:.85rem;background:#fff}
-  .recipe-edit,.name-edit,.desc-edit{border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
+  .serve-edit{border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
+  .serve-edit summary{cursor:pointer;font-weight:700;font-size:.85rem;color:var(--forest);padding:4px 0}
+  .serverow{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:5px 0}
+  .serverow .sv-m{flex:1 1 44%;min-width:120px;border:1px solid var(--line);border-radius:8px;padding:7px;font:inherit;font-size:.82rem;background:#fff}
+  .serverow .sv-t{width:58px;border:1px solid var(--line);border-radius:8px;padding:7px;font:inherit;font-size:.82rem}
+  .serverow .sv-p{width:76px;border:1px solid var(--line);border-radius:8px;padding:7px;font:inherit;font-size:.82rem}
+  .serverow .sv-n{flex:1 1 100%;border:1px solid var(--line);border-radius:8px;padding:7px;font:inherit;font-size:.82rem;box-sizing:border-box}
+  .serverow .sv-del{width:32px;border:1px solid var(--chili);background:#fff;color:var(--chili);border-radius:8px;padding:6px;font-weight:700;cursor:pointer}
+  .serveadd{margin:6px 0;background:#fff;border:1px solid var(--forest);color:var(--forest);border-radius:8px;padding:8px 14px;font-weight:700;font-size:.82rem;cursor:pointer;display:block;width:100%}
+    .recipe-edit,.name-edit,.desc-edit{border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
   .desc-edit summary{cursor:pointer;font-weight:700;font-size:.85rem;color:var(--forest);padding:4px 0}
   .desc-edit .reclabel{display:block;font-size:.75rem;font-weight:700;color:var(--muted,#6b7280);margin:6px 0 2px}
   .desc-edit .recta{width:100%;min-height:52px;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;font-size:.85rem;resize:vertical;box-sizing:border-box}
@@ -432,7 +441,7 @@ const I18N = {
       makeHidden:"🚫 Niet bestelbaar maken", makeShown:"✅ Weer bestelbaar maken", del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
       addTitle:"Gerecht toevoegen", addHint:"Velden met * zijn verplicht. Engels/Thais is optioneel — laat je het leeg, dan wordt de Nederlandse tekst gebruikt.",
-      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"}, translateBtn:"🌐 Translate Thai → NL/EN", trBusy:"Translating…", trFail:"Translation failed — try again or fill in manually.", trEmpty:"Enter the Thai name or description first.", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipePrep:"Preparation (steps)", recipeSave:"Save recipe", nameEdit:"Edit name", nameSave:"Save name", descEdit:"Edit description", descSave:"Save description", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", translateBtn:"🌐 Vertaal Thais → NL/EN", trBusy:"Bezig met vertalen…", trFail:"Vertalen mislukt — probeer opnieuw of vul handmatig in.", trEmpty:"Vul eerst de Thaise naam of beschrijving in.", recipeTitle:"Recept / bereiding (intern)", recipeNeed:"Nodig (ingrediënten)", recipePrep:"Bereiding (stappen)", recipeSave:"Recept opslaan", nameEdit:"Naam wijzigen", nameSave:"Naam opslaan", descEdit:"Omschrijving wijzigen", descSave:"Omschrijving opslaan", recipeNeedPh:"bijv. 200g kip, 2 tenen knoflook, vissaus…", recipePrepPh:"bijv. 1) Wok verhitten 2) Kip bakken…",
+      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"}, translateBtn:"🌐 Translate Thai → NL/EN", trBusy:"Translating…", trFail:"Translation failed — try again or fill in manually.", trEmpty:"Enter the Thai name or description first.", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipePrep:"Preparation (steps)", recipeSave:"Save recipe", nameEdit:"Edit name", nameSave:"Save name", descEdit:"Edit description", descSave:"Save description", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", translateBtn:"🌐 Vertaal Thais → NL/EN", trBusy:"Bezig met vertalen…", trFail:"Vertalen mislukt — probeer opnieuw of vul handmatig in.", trEmpty:"Vul eerst de Thaise naam of beschrijving in.", recipeTitle:"Recept / bereiding (intern)", recipeNeed:"Nodig (ingrediënten)", recipePrep:"Bereiding (stappen)", recipeSave:"Recept opslaan", nameEdit:"Naam wijzigen", nameSave:"Naam opslaan", descEdit:"Omschrijving wijzigen", descSave:"Omschrijving opslaan", serveEdit:"Serveertip wijzigen", serveAddRow:"＋ Methode toevoegen", serveSave:"Serveertip opslaan", serveNotePh:"opmerking (optioneel)", recipeNeedPh:"bijv. 200g kip, 2 tenen knoflook, vissaus…", recipePrepPh:"bijv. 1) Wok verhitten 2) Kip bakken…",
       spiceOpts:["Niet pittig","Mild","Pittig","Heel pittig"], cancel:"Annuleren", addBtn:"Toevoegen",
       rhLabels:{curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"},
       aNaam:"Vul een naam in.", aPrijs:"Vul een geldige prijs in.", aImg:"Dit bestand is geen geldige afbeelding.", aImgProc:"Foto kon niet verwerkt worden.",
@@ -510,7 +519,7 @@ const I18N = {
       makeHidden:"🚫 ปิดการสั่งซื้อ", makeShown:"✅ เปิดการสั่งซื้ออีกครั้ง", del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
       addTitle:"เพิ่มเมนู", addHint:"ช่องที่มี * ต้องกรอก ภาษาอังกฤษ/ไทยไม่บังคับ ถ้าเว้นว่างจะใช้ข้อความภาษาดัตช์",
-      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"}, translateBtn:"🌐 แปลไทย → NL/EN", trBusy:"กำลังแปล…", trFail:"แปลไม่สำเร็จ ลองใหม่หรือกรอกเอง", trEmpty:"กรุณากรอกชื่อหรือคำอธิบายภาษาไทยก่อน", recipeTitle:"สูตร / วิธีทำ (ภายใน)", recipeNeed:"วัตถุดิบที่ต้องใช้", recipePrep:"วิธีทำ (ขั้นตอน)", recipeSave:"บันทึกสูตร", nameEdit:"แก้ไขชื่อ", nameSave:"บันทึกชื่อ", descEdit:"แก้ไขคำอธิบาย", descSave:"บันทึกคำอธิบาย", recipeNeedPh:"เช่น ไก่ 200 กรัม กระเทียม 2 กลีบ น้ำปลา…", recipePrepPh:"เช่น 1) ตั้งกระทะ 2) ผัดไก่…",
+      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"}, translateBtn:"🌐 แปลไทย → NL/EN", trBusy:"กำลังแปล…", trFail:"แปลไม่สำเร็จ ลองใหม่หรือกรอกเอง", trEmpty:"กรุณากรอกชื่อหรือคำอธิบายภาษาไทยก่อน", recipeTitle:"สูตร / วิธีทำ (ภายใน)", recipeNeed:"วัตถุดิบที่ต้องใช้", recipePrep:"วิธีทำ (ขั้นตอน)", recipeSave:"บันทึกสูตร", nameEdit:"แก้ไขชื่อ", nameSave:"บันทึกชื่อ", descEdit:"แก้ไขคำอธิบาย", descSave:"บันทึกคำอธิบาย", serveEdit:"แก้ไขวิธีอุ่น", serveAddRow:"＋ เพิ่มวิธี", serveSave:"บันทึกวิธีอุ่น", serveNotePh:"หมายเหตุ (ถ้ามี)", recipeNeedPh:"เช่น ไก่ 200 กรัม กระเทียม 2 กลีบ น้ำปลา…", recipePrepPh:"เช่น 1) ตั้งกระทะ 2) ผัดไก่…",
       spiceOpts:["ไม่เผ็ด","เผ็ดน้อย","เผ็ด","เผ็ดมาก"], cancel:"ยกเลิก", addBtn:"เพิ่ม",
       rhLabels:{curry:"แกง / ซอส",soup:"ซุป",fried:"ทอด / กรอบ",wok:"ผัด",rice:"ข้าว",grill:"เนื้อย่าง",salad:"ยำ (เย็น)",rotiwarm:"โรตี / อุ่นกระทะ",cold:"เย็น (ไอศกรีม/ของหวาน)",sticky:"ข้าวเหนียวมะม่วง",stickyplain:"ข้าวเหนียว",drink:"เครื่องดื่ม"},
       aNaam:"กรุณากรอกชื่อ", aPrijs:"กรุณากรอกราคาที่ถูกต้อง", aImg:"ไฟล์นี้ไม่ใช่รูปภาพที่ถูกต้อง", aImgProc:"ไม่สามารถประมวลผลรูปได้",
@@ -803,6 +812,7 @@ const RECIPES = {};
 const NAMES = {};
 const DESCS = {};
 const SPICES = {};
+const SERVE_EDITS = {};
 const GH_REPO = "PinkThaiTakeAway/pinkthaitakeaway.github.io";
 const RH_LABELS = {curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"};
 const BEHEER = new URLSearchParams(location.search).has("beheer");
@@ -933,6 +943,12 @@ function card(m){
         <textarea class="recta" data-rprep="${m.id}" placeholder="${A.recipePrepPh}">${esc((RECIPES[m.id]||{}).bereiding||"")}</textarea>
         <button class="recsave" data-rsave="${m.id}">${A.recipeSave}</button>
       </details>
+      <details class="serve-edit" data-serveedit="${m.id}">
+        <summary>🍽️ ${A.serveEdit}</summary>
+        <div class="serverows" data-serverows="${m.id}"></div>
+        <button class="serveadd" data-serveadd="${m.id}">${A.serveAddRow}</button>
+        <button class="recsave" data-servesave="${m.id}">${A.serveSave}</button>
+      </details>
     </div>`;
   renderCtl(el.querySelector(`[data-ctl="${m.id}"]`), m.id);
   if(BEHEER){
@@ -952,6 +968,18 @@ function card(m){
     if(nmsave) nmsave.onclick = (e) => saveName(m.id, el.querySelector(`[data-nm-nl="${m.id}"]`).value, el.querySelector(`[data-nm-en="${m.id}"]`).value, el.querySelector(`[data-nm-th="${m.id}"]`).value, e.currentTarget);
     const dssave = el.querySelector(`[data-dssave="${m.id}"]`);
     if(dssave) dssave.onclick = (e) => saveDesc(m.id, el.querySelector(`[data-ds-nl="${m.id}"]`).value, el.querySelector(`[data-ds-en="${m.id}"]`).value, el.querySelector(`[data-ds-th="${m.id}"]`).value, e.currentTarget);
+    const sdet = el.querySelector(`[data-serveedit="${m.id}"]`);
+    const srows = el.querySelector(`[data-serverows="${m.id}"]`);
+    if(sdet && srows){
+      sdet.addEventListener("toggle", () => {
+        if(sdet.open && !srows.dataset.filled){
+          (SERVE_EDITS[m.id] || SERVE[m.id] || []).forEach(s => srows.appendChild(makeServeRow({m:s.m, t:(s.t==null?"":s.t), p:s.p||"", n:(s.n?(typeof s.n==="string"?s.n:(s.n.nl||"")):"")})));
+          srows.dataset.filled = "1";
+        }
+      });
+      el.querySelector(`[data-serveadd="${m.id}"]`).onclick = () => { srows.dataset.filled="1"; srows.appendChild(makeServeRow({m:"micro",t:"",p:"",n:""})); };
+      el.querySelector(`[data-servesave="${m.id}"]`).onclick = (e) => saveServe(m.id, srows, e.currentTarget);
+    }
   }
   return el;
 }
@@ -962,13 +990,13 @@ function variantNL(key){ const v=variantKey(key); const nl={kip:"Kip",garnaal:"G
 function stepperHTML(key,q){ return `<div class="stepper"><button data-mk="${key}" aria-label="-">−</button><span class="q">${q}</span><button data-pk="${key}" aria-label="+">+</button></div>`; }
 function serveTip(m){
   const L = LANG;
-  const rows = SERVE[m.id];
+  const rows = SERVE_EDITS[m.id] || SERVE[m.id];
   if(rows && rows.length){
     return rows.map(s => {
       const label = (MTH[s.m] && MTH[s.m][L]) || s.m;
-      const meta = [s.t!=null ? s.t+" "+MIN[L] : "", s.p||""].filter(Boolean).join(" · ");
+      const meta = [(s.t!=null && s.t!=="") ? s.t+" "+MIN[L] : "", s.p||""].filter(Boolean).join(" · ");
       const head = meta ? label+" · "+meta : label;
-      const note = s.n ? (s.n[L]||s.n.nl) : "";
+      const note = s.n ? (typeof s.n==="string" ? s.n : (s.n[L]||s.n.nl||"")) : "";
       return `<b>${head}${note?":":""}</b>${note?" "+note:""}`;
     }).join("<br>");
   }
@@ -1438,6 +1466,7 @@ async function publishAll(){
     await ghPut("omschrijvingen.json", DESCS, "Omschrijvingen publiceren");
     await ghPut("pittigheid.json", SPICES, "Pittigheid publiceren");
     await ghPut("verwijderd.json", [...DELETED], "Verwijderde gerechten publiceren");
+    await ghPut("serveertips.json", SERVE_EDITS, "Serveertips publiceren");
     await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
     await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
     showToast(T().adm.publishOk, true);
@@ -1498,6 +1527,46 @@ async function saveName(id, nl, en, th, btn){
     await ghPut("namen.json", NAMES, `Naam ${m.name.nl} bijgewerkt`);
     if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
     if(sheet.classList.contains("open")) renderSheet();
+  }catch(e){
+    if(btn){ btn.textContent = label; btn.disabled=false; }
+    if(e.message!=="no-token") showToast(A.pushErr + " (" + e.message + ")", false);
+  }
+}
+function makeServeRow(r){
+  const A = T().adm;
+  const div = document.createElement("div"); div.className = "serverow";
+  const opts = Object.keys(MTH).map(k => `<option value="${k}"${r.m===k?" selected":""}>${MTH[k][LANG]}</option>`).join("");
+  div.innerHTML =
+      `<select class="sv-m">${opts}</select>`
+    + `<input class="sv-t" type="number" min="0" step="1" placeholder="min" value="${r.t===""||r.t==null?"":r.t}">`
+    + `<input class="sv-p" type="text" placeholder="°C / W" value="${esc(r.p||"")}">`
+    + `<input class="sv-n" type="text" placeholder="${A.serveNotePh}" value="${esc(r.n||"")}">`
+    + `<button class="sv-del" title="verwijder" aria-label="verwijder">✕</button>`;
+  div.querySelector(".sv-del").onclick = () => div.remove();
+  return div;
+}
+async function saveServe(id, container, btn){
+  const A = T().adm;
+  const m = byId(id); if(!m) return;
+  const rows = [...container.querySelectorAll(".serverow")].map(div => {
+    const o = { m: div.querySelector(".sv-m").value };
+    const t = div.querySelector(".sv-t").value.trim();
+    const p = div.querySelector(".sv-p").value.trim();
+    const n = div.querySelector(".sv-n").value.trim();
+    if(t!=="" && !isNaN(parseInt(t,10))) o.t = parseInt(t,10);
+    if(p) o.p = p;
+    if(n) o.n = n;
+    return o;
+  }).filter(o => o.m);
+  if(rows.length) SERVE_EDITS[id] = rows; else delete SERVE_EDITS[id];
+  if(!ghToken()){ alert(A.tokenNeed); askToken(); }
+  const card = btn ? btn.closest(".card") : null;
+  if(card){ const p = card.querySelector(".reheat p"); if(p) p.innerHTML = serveTip(m); }
+  const label = btn ? btn.textContent : "";
+  if(btn){ btn.disabled = true; btn.textContent = "…"; }
+  try{
+    await ghPut("serveertips.json", SERVE_EDITS, `Serveertip ${m.name.nl} bijgewerkt`);
+    if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
   }catch(e){
     if(btn){ btn.textContent = label; btn.disabled=false; }
     if(e.message!=="no-token") showToast(A.pushErr + " (" + e.message + ")", false);
@@ -1609,6 +1678,9 @@ async function loadVerwijderd(){
   if(local && Array.isArray(local.ids)) local.ids.forEach(id => DELETED.add(id));
   try{ const r = await fetch("verwijderd.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) a.forEach(id => DELETED.add(id)); } }catch(e){}
 }
+async function loadServetips(){
+  try{ const r = await fetch("serveertips.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(SERVE_EDITS, p); } }catch(e){}
+}
 (async function init(){
   const savedLang = loadJSON("tta_lang_v").l;
   if(savedLang && I18N[savedLang]) LANG = savedLang;
@@ -1619,6 +1691,7 @@ async function loadVerwijderd(){
   await loadOmschrijvingen();
   await loadPittigheid();
   await loadVerwijderd();
+  await loadServetips();
   if(BEHEER) await loadRecepten();
   if(!BEHEER) await loadHidden();
   Object.entries(store.load()).forEach(([id,q]) => { if(byId(baseId(id)) && q>0 && !HIDDEN.has(baseId(id))) cart[id]=q; });
