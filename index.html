@@ -126,6 +126,8 @@
 
   .fotopick{display:none;border-top:1px dashed var(--line);padding:12px 16px;background:#fff;flex-direction:column;gap:8px}
   body.beheer .fotopick{display:flex}
+  .trashrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+  .restore-btn{font-weight:700;font-size:.8rem;padding:7px 12px;border-radius:8px;border:1px solid var(--forest);background:#fff;color:var(--forest);cursor:pointer;white-space:nowrap}
   .spicerow{display:flex;align-items:center;gap:8px}
   .spicerow .spicelbl{font-size:.8rem;font-weight:700;color:var(--forest)}
   .spicerow .spicesel{flex:1;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;font-size:.85rem;background:#fff}
@@ -313,6 +315,7 @@
 <div id="beheerbar">
   <span class="bstat"><span id="bTitle">Beheermodus</span> · <small id="bCount">0 / 0</small></span>
   <button class="sl" id="bAdd">➕ Gerecht</button>
+  <button class="sl" id="bTrash">🗑️ Prullenbak</button>
   <button class="sl" id="bToken">🔑 Token</button>
   <button class="exp" id="bPublish">⬆ Publiceren</button>
   <button class="sl" id="bSluit">Sluiten</button>
@@ -342,6 +345,14 @@
     <label id="amLEmoji">Emoji</label><input id="fEmoji" type="text" maxlength="4" placeholder="🍽️">
     <button type="button" class="translate-btn" id="fTranslate">🌐 Vertaal Thais → NL/EN</button>
     <div class="actions"><button class="cancel" id="fCancel">Annuleren</button><button class="save" id="fSave">Toevoegen</button></div>
+  </div>
+</div>
+<div class="addmodal" id="trashModal">
+  <div class="box">
+    <h3 id="tmTitle">Verwijderde gerechten</h3>
+    <p class="pickhint" id="tmHint">Zet een gerecht terug in het menu.</p>
+    <div id="trashList"></div>
+    <div class="actions"><button class="cancel" id="tmClose">Sluiten</button></div>
   </div>
 </div>
 
@@ -425,7 +436,7 @@ const I18N = {
       spiceOpts:["Niet pittig","Mild","Pittig","Heel pittig"], cancel:"Annuleren", addBtn:"Toevoegen",
       rhLabels:{curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"},
       aNaam:"Vul een naam in.", aPrijs:"Vul een geldige prijs in.", aImg:"Dit bestand is geen geldige afbeelding.", aImgProc:"Foto kon niet verwerkt worden.",
-      cDel:"Dit toegevoegde gerecht definitief verwijderen?", cWis:"Lokale fotokeuzes wissen?",
+      cDel:"Dit gerecht uit het menu halen? Je kunt het terugzetten via de prullenbak.", trash:"Prullenbak", trashTitle:"Verwijderde gerechten", trashEmpty:"De prullenbak is leeg.", restore:"↩️ Terugzetten", cWis:"Lokale fotokeuzes wissen?",
       cExport:(n,t)=>`${n} van de ${t} gerechten heeft een foto. Sommige foto's zijn misschien nog aan het laden. Toch exporteren?`,
       savePrice:"Prijs opslaan", priceErr:"Ongeldige prijs.", pushOk:"✓ Opgeslagen", pushErr:"Opslaan mislukt — controleer token/internet.",
       tokenBtn:"🔑 Token", tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", tokenSaved:"Token opgeslagen. Sla je prijs nu opnieuw op.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publish:"⬆ Publiceren", publishOk:"Alles gepubliceerd ✓"}
@@ -464,7 +475,7 @@ const I18N = {
       spiceOpts:["Not spicy","Mild","Spicy","Very spicy"], cancel:"Cancel", addBtn:"Add",
       rhLabels:{curry:"Curry / sauce",soup:"Soup",fried:"Fried / crispy",wok:"Wok / stir-fried",rice:"Rice dish",grill:"Grilled meat",salad:"Salad (cold)",rotiwarm:"Roti / pan-warm",cold:"Cold (ice/dessert)",sticky:"Mango sticky rice",stickyplain:"Sticky rice",drink:"Drink"},
       aNaam:"Please enter a name.", aPrijs:"Please enter a valid price.", aImg:"This file is not a valid image.", aImgProc:"The photo could not be processed.",
-      cDel:"Permanently delete this added dish?", cWis:"Clear local photo choices?",
+      cDel:"Remove this dish from the menu? You can restore it from the trash.", trash:"Trash", trashTitle:"Deleted dishes", trashEmpty:"The trash is empty.", restore:"↩️ Restore", cWis:"Clear local photo choices?",
       cExport:(n,t)=>`${n} of ${t} dishes have a photo. Some may still be loading. Export anyway?`,
       savePrice:"Save price", priceErr:"Invalid price.", pushOk:"✓ Saved", pushErr:"Save failed — check token/internet.",
       tokenBtn:"🔑 Token", tokenAsk:"Paste your GitHub token (stored only on this device, not online):", tokenSaved:"Token saved. Save your price again now.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publish:"⬆ Publish", publishOk:"All published ✓"}
@@ -503,7 +514,7 @@ const I18N = {
       spiceOpts:["ไม่เผ็ด","เผ็ดน้อย","เผ็ด","เผ็ดมาก"], cancel:"ยกเลิก", addBtn:"เพิ่ม",
       rhLabels:{curry:"แกง / ซอส",soup:"ซุป",fried:"ทอด / กรอบ",wok:"ผัด",rice:"ข้าว",grill:"เนื้อย่าง",salad:"ยำ (เย็น)",rotiwarm:"โรตี / อุ่นกระทะ",cold:"เย็น (ไอศกรีม/ของหวาน)",sticky:"ข้าวเหนียวมะม่วง",stickyplain:"ข้าวเหนียว",drink:"เครื่องดื่ม"},
       aNaam:"กรุณากรอกชื่อ", aPrijs:"กรุณากรอกราคาที่ถูกต้อง", aImg:"ไฟล์นี้ไม่ใช่รูปภาพที่ถูกต้อง", aImgProc:"ไม่สามารถประมวลผลรูปได้",
-      cDel:"ลบเมนูที่เพิ่มนี้ถาวรหรือไม่?", cWis:"ล้างการเลือกรูปในเครื่องหรือไม่?",
+      cDel:"นำเมนูนี้ออกจากเมนูหรือไม่? กู้คืนได้จากถังขยะ", trash:"ถังขยะ", trashTitle:"เมนูที่ลบ", trashEmpty:"ถังขยะว่างเปล่า", restore:"↩️ กู้คืน", cWis:"ล้างการเลือกรูปในเครื่องหรือไม่?",
       cExport:(n,t)=>`มีรูป ${n} จาก ${t} เมนู บางรูปอาจกำลังโหลด ส่งออกเลยหรือไม่?`,
       savePrice:"บันทึกราคา", priceErr:"ราคาไม่ถูกต้อง", pushOk:"✓ บันทึกแล้ว", pushErr:"บันทึกไม่สำเร็จ — ตรวจสอบโทเคน/อินเทอร์เน็ต",
       tokenBtn:"🔑 โทเคน", tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", tokenSaved:"บันทึกโทเคนแล้ว บันทึกราคาอีกครั้ง", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publish:"⬆ เผยแพร่", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓"}
@@ -785,6 +796,7 @@ const RH = {
 const cart = {};
 const PHOTO = {};
 const HIDDEN = new Set();
+const DELETED = new Set();
 let EXTRA = [];
 const PRICES = {};
 const RECIPES = {};
@@ -850,7 +862,7 @@ let spy = null;
 function buildMenu(){
   catnav.innerHTML = ""; menuEl.innerHTML = "";
   CATS.forEach(c => {
-    const items = MENU.filter(m => m.cat === c.id && (BEHEER || !HIDDEN.has(m.id)));
+    const items = MENU.filter(m => m.cat === c.id && !DELETED.has(m.id) && (BEHEER || !HIDDEN.has(m.id)));
     if(!items.length) return;
     const link = document.createElement("button");
     link.type = "button"; link.className = "cat-link";
@@ -891,7 +903,7 @@ function card(m){
       <div class="pickrow"><input type="text" data-url="${m.id}" placeholder="${A.phUrl}"><button data-seturl="${m.id}">${A.setUrl}</button></div>
       <div class="pickrow"><label class="filebtn">${A.ownPhoto}<input type="file" accept="image/*" data-file="${m.id}" hidden></label></div>
       <div class="pickrow"><button class="toggle-dish" data-toggle="${m.id}">${hidden ? A.makeShown : A.makeHidden}</button></div>
-      ${m.custom ? `<div class="pickrow"><button class="del-dish" data-del="${m.id}">${A.del}</button></div>` : ""}
+      <div class="pickrow"><button class="del-dish" data-del="${m.id}">${A.del}</button></div>
       <span class="pickhint">${A.pickHint}</span>
       <details class="name-edit">
         <summary>✏️ ${A.nameEdit}</summary>
@@ -1191,6 +1203,9 @@ async function initBeheer(){
   }
   updateBeheerCount();
   document.getElementById("bAdd").onclick = openAddModal;
+  document.getElementById("bTrash").onclick = openTrash;
+  document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
+  updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
   document.getElementById("bPublish").onclick = publishAll;
   document.getElementById("fCancel").onclick = () => document.getElementById("addModal").classList.remove("open");
@@ -1325,12 +1340,32 @@ function saveNewDish(){
 }
 function deleteDish(id){
   if(!confirm(T().adm.cDel)) return;
-  const i = EXTRA.findIndex(d=>d.id===id); if(i>=0) EXTRA.splice(i,1);
-  const j = MENU.findIndex(d=>d.id===id); if(j>=0) MENU.splice(j,1);
-  HIDDEN.delete(id); saveJSON("tta_extra", {items:EXTRA}); saveJSON("tta_hidden", {ids:[...HIDDEN]});
-  buildMenu(); updateBeheerCount();
-  livePush("extra.json", ()=>EXTRA, "Gerecht verwijderd");
+  DELETED.add(id);
+  saveJSON("tta_deleted", {ids:[...DELETED]});
+  buildMenu(); updateBeheerCount(); updateTrashCount();
+  livePush("verwijderd.json", ()=>[...DELETED], "Gerecht verwijderd");
 }
+function restoreDish(id){
+  DELETED.delete(id);
+  saveJSON("tta_deleted", {ids:[...DELETED]});
+  buildMenu(); reapplyPhotos(); updateBeheerCount(); updateTrashCount(); renderTrash();
+  livePush("verwijderd.json", ()=>[...DELETED], "Gerecht teruggezet");
+}
+function updateTrashCount(){
+  const b = document.getElementById("bTrash"); if(!b) return;
+  const n = DELETED.size;
+  b.textContent = n ? `🗑️ ${T().adm.trash} (${n})` : `🗑️ ${T().adm.trash}`;
+}
+function renderTrash(){
+  const box = document.getElementById("trashList"); if(!box) return;
+  const items = [...DELETED].map(id => byId(id)).filter(Boolean);
+  if(!items.length){ box.innerHTML = `<p class="pickhint">${T().adm.trashEmpty}</p>`; return; }
+  box.innerHTML = items.map(m =>
+    `<div class="trashrow"><span>${m.emoji} ${esc(m.name[LANG])}</span><button class="restore-btn" data-restore="${m.id}">${T().adm.restore}</button></div>`
+  ).join("");
+  box.querySelectorAll("[data-restore]").forEach(b => b.onclick = () => restoreDish(b.dataset.restore));
+}
+function openTrash(){ document.getElementById("tmTitle").textContent = T().adm.trashTitle; renderTrash(); document.getElementById("trashModal").classList.add("open"); }
 function exportExtra(){
   const blob=new Blob([JSON.stringify(EXTRA,null,2)],{type:"application/json"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="extra.json"; a.click();
@@ -1402,6 +1437,7 @@ async function publishAll(){
     await ghPut("namen.json", NAMES, "Namen publiceren");
     await ghPut("omschrijvingen.json", DESCS, "Omschrijvingen publiceren");
     await ghPut("pittigheid.json", SPICES, "Pittigheid publiceren");
+    await ghPut("verwijderd.json", [...DELETED], "Verwijderde gerechten publiceren");
     await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
     await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
     showToast(T().adm.publishOk, true);
@@ -1568,6 +1604,11 @@ async function loadPittigheid(){
   try{ const r = await fetch("pittigheid.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(SPICES, p); } }catch(e){}
   for(const id in SPICES){ const m = byId(id); if(m && typeof SPICES[id]==="number") m.spice = SPICES[id]; }
 }
+async function loadVerwijderd(){
+  const local = loadJSON("tta_deleted");
+  if(local && Array.isArray(local.ids)) local.ids.forEach(id => DELETED.add(id));
+  try{ const r = await fetch("verwijderd.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) a.forEach(id => DELETED.add(id)); } }catch(e){}
+}
 (async function init(){
   const savedLang = loadJSON("tta_lang_v").l;
   if(savedLang && I18N[savedLang]) LANG = savedLang;
@@ -1577,6 +1618,7 @@ async function loadPittigheid(){
   await loadNamen();
   await loadOmschrijvingen();
   await loadPittigheid();
+  await loadVerwijderd();
   if(BEHEER) await loadRecepten();
   if(!BEHEER) await loadHidden();
   Object.entries(store.load()).forEach(([id,q]) => { if(byId(baseId(id)) && q>0 && !HIDDEN.has(baseId(id))) cart[id]=q; });
