@@ -969,16 +969,10 @@ function card(m){
     if(nmsave) nmsave.onclick = (e) => saveName(m.id, el.querySelector(`[data-nm-nl="${m.id}"]`).value, el.querySelector(`[data-nm-en="${m.id}"]`).value, el.querySelector(`[data-nm-th="${m.id}"]`).value, e.currentTarget);
     const dssave = el.querySelector(`[data-dssave="${m.id}"]`);
     if(dssave) dssave.onclick = (e) => saveDesc(m.id, el.querySelector(`[data-ds-nl="${m.id}"]`).value, el.querySelector(`[data-ds-en="${m.id}"]`).value, el.querySelector(`[data-ds-th="${m.id}"]`).value, e.currentTarget);
-    const sdet = el.querySelector(`[data-serveedit="${m.id}"]`);
     const srows = el.querySelector(`[data-serverows="${m.id}"]`);
-    if(sdet && srows){
-      sdet.addEventListener("toggle", () => {
-        if(sdet.open && !srows.dataset.filled){
-          (SERVE_EDITS[m.id] || SERVE[m.id] || []).forEach(s => srows.appendChild(makeServeRow({m:s.m, t:(s.t==null?"":s.t), p:s.p||"", n:(s.n?(typeof s.n==="string"?s.n:(s.n.nl||"")):"")})));
-          srows.dataset.filled = "1";
-        }
-      });
-      el.querySelector(`[data-serveadd="${m.id}"]`).onclick = () => { srows.dataset.filled="1"; srows.appendChild(makeServeRow({m:"micro",t:"",p:"",n:""})); };
+    if(srows){
+      currentServeRows(m).forEach(s => srows.appendChild(makeServeRow({m:s.m, t:(s.t==null?"":s.t), p:s.p||"", n:(s.n?(typeof s.n==="string"?s.n:(s.n.nl||"")):"")})));
+      el.querySelector(`[data-serveadd="${m.id}"]`).onclick = () => srows.appendChild(makeServeRow({m:"micro",t:"",p:"",n:""}));
       el.querySelector(`[data-servesave="${m.id}"]`).onclick = (e) => saveServe(m.id, srows, e.currentTarget);
     }
   }
@@ -1532,6 +1526,12 @@ async function saveName(id, nl, en, th, btn){
     if(btn){ btn.textContent = label; btn.disabled=false; }
     if(e.message!=="no-token") showToast(A.pushErr + " (" + e.message + ")", false);
   }
+}
+function currentServeRows(m){
+  if(SERVE_EDITS[m.id] && SERVE_EDITS[m.id].length) return SERVE_EDITS[m.id];
+  if(SERVE[m.id] && SERVE[m.id].length) return SERVE[m.id];
+  const t = REHEAT[m.rh||RH[m.id]||"wok"];
+  return [{m:"micro", n:t.micro.nl}, {m:"air", n:t.air.nl}];
 }
 function makeServeRow(r){
   const A = T().adm;
