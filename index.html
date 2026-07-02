@@ -126,7 +126,10 @@
 
   .fotopick{display:none;border-top:1px dashed var(--line);padding:12px 16px;background:#fff;flex-direction:column;gap:8px}
   body.beheer .fotopick{display:flex}
-  .recipe-edit,.name-edit{border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
+  .recipe-edit,.name-edit,.desc-edit{border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
+  .desc-edit summary{cursor:pointer;font-weight:700;font-size:.85rem;color:var(--forest);padding:4px 0}
+  .desc-edit .reclabel{display:block;font-size:.75rem;font-weight:700;color:var(--muted,#6b7280);margin:6px 0 2px}
+  .desc-edit .recta{width:100%;min-height:52px;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;font-size:.85rem;resize:vertical;box-sizing:border-box}
   .name-edit summary{cursor:pointer;font-weight:700;font-size:.85rem;color:var(--forest);padding:4px 0}
   .name-edit .reclabel{display:block;font-size:.75rem;font-weight:700;color:var(--muted,#6b7280);margin:6px 0 2px}
   .name-edit .nameinput{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;font-size:.85rem;box-sizing:border-box}
@@ -415,7 +418,7 @@ const I18N = {
       makeHidden:"🚫 Niet bestelbaar maken", makeShown:"✅ Weer bestelbaar maken", del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
       addTitle:"Gerecht toevoegen", addHint:"Velden met * zijn verplicht. Engels/Thais is optioneel — laat je het leeg, dan wordt de Nederlandse tekst gebruikt.",
-      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"}, translateBtn:"🌐 Translate Thai → NL/EN", trBusy:"Translating…", trFail:"Translation failed — try again or fill in manually.", trEmpty:"Enter the Thai name or description first.", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipePrep:"Preparation (steps)", recipeSave:"Save recipe", nameEdit:"Edit name", nameSave:"Save name", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", translateBtn:"🌐 Vertaal Thais → NL/EN", trBusy:"Bezig met vertalen…", trFail:"Vertalen mislukt — probeer opnieuw of vul handmatig in.", trEmpty:"Vul eerst de Thaise naam of beschrijving in.", recipeTitle:"Recept / bereiding (intern)", recipeNeed:"Nodig (ingrediënten)", recipePrep:"Bereiding (stappen)", recipeSave:"Recept opslaan", nameEdit:"Naam wijzigen", nameSave:"Naam opslaan", recipeNeedPh:"bijv. 200g kip, 2 tenen knoflook, vissaus…", recipePrepPh:"bijv. 1) Wok verhitten 2) Kip bakken…",
+      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"}, translateBtn:"🌐 Translate Thai → NL/EN", trBusy:"Translating…", trFail:"Translation failed — try again or fill in manually.", trEmpty:"Enter the Thai name or description first.", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipePrep:"Preparation (steps)", recipeSave:"Save recipe", nameEdit:"Edit name", nameSave:"Save name", descEdit:"Edit description", descSave:"Save description", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", translateBtn:"🌐 Vertaal Thais → NL/EN", trBusy:"Bezig met vertalen…", trFail:"Vertalen mislukt — probeer opnieuw of vul handmatig in.", trEmpty:"Vul eerst de Thaise naam of beschrijving in.", recipeTitle:"Recept / bereiding (intern)", recipeNeed:"Nodig (ingrediënten)", recipePrep:"Bereiding (stappen)", recipeSave:"Recept opslaan", nameEdit:"Naam wijzigen", nameSave:"Naam opslaan", descEdit:"Omschrijving wijzigen", descSave:"Omschrijving opslaan", recipeNeedPh:"bijv. 200g kip, 2 tenen knoflook, vissaus…", recipePrepPh:"bijv. 1) Wok verhitten 2) Kip bakken…",
       spiceOpts:["Niet pittig","Mild","Pittig","Heel pittig"], cancel:"Annuleren", addBtn:"Toevoegen",
       rhLabels:{curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"},
       aNaam:"Vul een naam in.", aPrijs:"Vul een geldige prijs in.", aImg:"Dit bestand is geen geldige afbeelding.", aImgProc:"Foto kon niet verwerkt worden.",
@@ -493,7 +496,7 @@ const I18N = {
       makeHidden:"🚫 ปิดการสั่งซื้อ", makeShown:"✅ เปิดการสั่งซื้ออีกครั้ง", del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
       addTitle:"เพิ่มเมนู", addHint:"ช่องที่มี * ต้องกรอก ภาษาอังกฤษ/ไทยไม่บังคับ ถ้าเว้นว่างจะใช้ข้อความภาษาดัตช์",
-      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"}, translateBtn:"🌐 แปลไทย → NL/EN", trBusy:"กำลังแปล…", trFail:"แปลไม่สำเร็จ ลองใหม่หรือกรอกเอง", trEmpty:"กรุณากรอกชื่อหรือคำอธิบายภาษาไทยก่อน", recipeTitle:"สูตร / วิธีทำ (ภายใน)", recipeNeed:"วัตถุดิบที่ต้องใช้", recipePrep:"วิธีทำ (ขั้นตอน)", recipeSave:"บันทึกสูตร", nameEdit:"แก้ไขชื่อ", nameSave:"บันทึกชื่อ", recipeNeedPh:"เช่น ไก่ 200 กรัม กระเทียม 2 กลีบ น้ำปลา…", recipePrepPh:"เช่น 1) ตั้งกระทะ 2) ผัดไก่…",
+      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"}, translateBtn:"🌐 แปลไทย → NL/EN", trBusy:"กำลังแปล…", trFail:"แปลไม่สำเร็จ ลองใหม่หรือกรอกเอง", trEmpty:"กรุณากรอกชื่อหรือคำอธิบายภาษาไทยก่อน", recipeTitle:"สูตร / วิธีทำ (ภายใน)", recipeNeed:"วัตถุดิบที่ต้องใช้", recipePrep:"วิธีทำ (ขั้นตอน)", recipeSave:"บันทึกสูตร", nameEdit:"แก้ไขชื่อ", nameSave:"บันทึกชื่อ", descEdit:"แก้ไขคำอธิบาย", descSave:"บันทึกคำอธิบาย", recipeNeedPh:"เช่น ไก่ 200 กรัม กระเทียม 2 กลีบ น้ำปลา…", recipePrepPh:"เช่น 1) ตั้งกระทะ 2) ผัดไก่…",
       spiceOpts:["ไม่เผ็ด","เผ็ดน้อย","เผ็ด","เผ็ดมาก"], cancel:"ยกเลิก", addBtn:"เพิ่ม",
       rhLabels:{curry:"แกง / ซอส",soup:"ซุป",fried:"ทอด / กรอบ",wok:"ผัด",rice:"ข้าว",grill:"เนื้อย่าง",salad:"ยำ (เย็น)",rotiwarm:"โรตี / อุ่นกระทะ",cold:"เย็น (ไอศกรีม/ของหวาน)",sticky:"ข้าวเหนียวมะม่วง",stickyplain:"ข้าวเหนียว",drink:"เครื่องดื่ม"},
       aNaam:"กรุณากรอกชื่อ", aPrijs:"กรุณากรอกราคาที่ถูกต้อง", aImg:"ไฟล์นี้ไม่ใช่รูปภาพที่ถูกต้อง", aImgProc:"ไม่สามารถประมวลผลรูปได้",
@@ -783,6 +786,7 @@ let EXTRA = [];
 const PRICES = {};
 const RECIPES = {};
 const NAMES = {};
+const DESCS = {};
 const GH_REPO = "PinkThaiTakeAway/pinkthaitakeaway.github.io";
 const RH_LABELS = {curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"};
 const BEHEER = new URLSearchParams(location.search).has("beheer");
@@ -894,6 +898,16 @@ function card(m){
         <input type="text" class="nameinput" data-nm-th="${m.id}" value="${esc(m.name.th)}">
         <button class="recsave" data-nmsave="${m.id}">${A.nameSave}</button>
       </details>
+      <details class="desc-edit">
+        <summary>📝 ${A.descEdit}</summary>
+        <label class="reclabel">${A.langLabels.nl}</label>
+        <textarea class="recta" data-ds-nl="${m.id}">${esc(m.desc.nl)}</textarea>
+        <label class="reclabel">${A.langLabels.en}</label>
+        <textarea class="recta" data-ds-en="${m.id}">${esc(m.desc.en)}</textarea>
+        <label class="reclabel">${A.langLabels.th}</label>
+        <textarea class="recta" data-ds-th="${m.id}">${esc(m.desc.th)}</textarea>
+        <button class="recsave" data-dssave="${m.id}">${A.descSave}</button>
+      </details>
       <details class="recipe-edit">
         <summary>📋 ${A.recipeTitle}</summary>
         <label class="reclabel">${A.recipeNeed}</label>
@@ -917,6 +931,8 @@ function card(m){
     if(rsave) rsave.onclick = (e) => saveRecipe(m.id, el.querySelector(`[data-ring="${m.id}"]`).value, el.querySelector(`[data-rprep="${m.id}"]`).value, e.currentTarget);
     const nmsave = el.querySelector(`[data-nmsave="${m.id}"]`);
     if(nmsave) nmsave.onclick = (e) => saveName(m.id, el.querySelector(`[data-nm-nl="${m.id}"]`).value, el.querySelector(`[data-nm-en="${m.id}"]`).value, el.querySelector(`[data-nm-th="${m.id}"]`).value, e.currentTarget);
+    const dssave = el.querySelector(`[data-dssave="${m.id}"]`);
+    if(dssave) dssave.onclick = (e) => saveDesc(m.id, el.querySelector(`[data-ds-nl="${m.id}"]`).value, el.querySelector(`[data-ds-en="${m.id}"]`).value, el.querySelector(`[data-ds-th="${m.id}"]`).value, e.currentTarget);
   }
   return el;
 }
@@ -1377,6 +1393,7 @@ async function publishAll(){
     await ghPut("prijzen.json", PRICES, "Prijzen publiceren");
     await ghPut("recepten.json", RECIPES, "Recepten publiceren");
     await ghPut("namen.json", NAMES, "Namen publiceren");
+    await ghPut("omschrijvingen.json", DESCS, "Omschrijvingen publiceren");
     await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
     await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
     showToast(T().adm.publishOk, true);
@@ -1392,6 +1409,25 @@ async function saveRecipe(id, ing, prep, btn){
   if(btn){ btn.disabled = true; btn.textContent = "…"; }
   try{
     await ghPut("recepten.json", RECIPES, `Recept ${m.name.nl} bijgewerkt`);
+    if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
+  }catch(e){
+    if(btn){ btn.textContent = label; btn.disabled=false; }
+    if(e.message!=="no-token") showToast(A.pushErr + " (" + e.message + ")", false);
+  }
+}
+async function saveDesc(id, nl, en, th, btn){
+  const A = T().adm;
+  const m = byId(id); if(!m) return;
+  nl=(nl||"").trim(); en=(en||"").trim(); th=(th||"").trim();
+  const desc = { nl: nl||m.desc.nl, en: en||m.desc.en, th: th||m.desc.th };
+  m.desc = desc; DESCS[id] = desc;
+  if(!ghToken()){ alert(A.tokenNeed); askToken(); }
+  const card = btn ? btn.closest(".card") : null;
+  if(card){ const d = card.querySelector(".card-desc"); if(d) d.textContent = m.desc[LANG]; }
+  const label = btn ? btn.textContent : "";
+  if(btn){ btn.disabled = true; btn.textContent = "…"; }
+  try{
+    await ghPut("omschrijvingen.json", DESCS, `Omschrijving ${m.name.nl} bijgewerkt`);
     if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
   }catch(e){
     if(btn){ btn.textContent = label; btn.disabled=false; }
@@ -1502,6 +1538,10 @@ async function loadNamen(){
   try{ const r = await fetch("namen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(NAMES, p); } }catch(e){}
   for(const id in NAMES){ const m = byId(id); if(m && NAMES[id] && typeof NAMES[id]==="object") m.name = Object.assign({}, m.name, NAMES[id]); }
 }
+async function loadOmschrijvingen(){
+  try{ const r = await fetch("omschrijvingen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(DESCS, p); } }catch(e){}
+  for(const id in DESCS){ const m = byId(id); if(m && DESCS[id] && typeof DESCS[id]==="object") m.desc = Object.assign({}, m.desc, DESCS[id]); }
+}
 (async function init(){
   const savedLang = loadJSON("tta_lang_v").l;
   if(savedLang && I18N[savedLang]) LANG = savedLang;
@@ -1509,6 +1549,7 @@ async function loadNamen(){
   await loadExtra();
   await loadPrijzen();
   await loadNamen();
+  await loadOmschrijvingen();
   if(BEHEER) await loadRecepten();
   if(!BEHEER) await loadHidden();
   Object.entries(store.load()).forEach(([id,q]) => { if(byId(baseId(id)) && q>0 && !HIDDEN.has(baseId(id))) cart[id]=q; });
