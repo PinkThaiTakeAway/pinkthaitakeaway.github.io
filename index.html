@@ -196,6 +196,7 @@
   #beheerbar .bstat{flex-basis:100%;text-align:center;font-size:.82rem;font-weight:700;margin:0}
   #beheerbar .bstat small{color:rgba(255,255,255,.6);font-weight:500}
   #beheerbar button{font-weight:700;font-size:.85rem;padding:10px 18px;border-radius:9px;border:none}
+  #bAdd::before{content:"+";display:inline-block;color:#fff;font-weight:800;font-size:1.25em;line-height:1;margin-right:7px;vertical-align:-1px}
   #beheerbar .exp{background:var(--amber);color:var(--ink)}
   #beheerbar .sl{background:var(--forest-2);color:#fff}
 
@@ -323,7 +324,7 @@
 
 <div id="beheerbar">
   <span class="bstat"><span id="bTitle">Beheermodus</span> · <small id="bCount">0 / 0</small></span>
-  <button class="sl" id="bAdd">➕ Gerecht</button>
+  <button class="sl" id="bAdd">Gerecht</button>
   <button class="sl" id="bTrash">🗑️ Prullenbak</button>
   <button class="sl" id="bToken">🔑 Token</button>
   <button class="exp" id="bPublish">⬆ Publiceren</button>
@@ -435,7 +436,7 @@ const I18N = {
     footPickupHead:"Afhalen", footOrder:"Bestellen t/m vrijdag",
     footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
-    adm:{title:"Beheermodus", add:"➕ Gerecht", expF:"⬇ foto's", expH:"⬇ verborgen", expE:"⬇ extra", wis:"Wis keuzes", sluit:"Sluiten",
+    adm:{title:"Beheermodus", add:"Gerecht", expF:"⬇ foto's", expH:"⬇ verborgen", expE:"⬇ extra", wis:"Wis keuzes", sluit:"Sluiten",
       count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN",
       phTerm:"Zoekterm", search:"🔍 Zoek", phUrl:"of plak een eigen foto-URL", setUrl:"Zet", ownPhoto:"📷 Eigen foto van je toestel",
       makeHidden:"🚫 Niet bestelbaar maken", makeShown:"✅ Weer bestelbaar maken", del:"🗑️ Dit gerecht verwijderen",
@@ -474,7 +475,7 @@ const I18N = {
     footPickupHead:"Pickup", footOrder:"Order until Friday",
     footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.",
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
-    adm:{title:"Admin mode", add:"➕ Dish", expF:"⬇ photos", expH:"⬇ hidden", expE:"⬇ extra", wis:"Clear choices", sluit:"Close",
+    adm:{title:"Admin mode", add:"Dish", expF:"⬇ photos", expH:"⬇ hidden", expE:"⬇ extra", wis:"Clear choices", sluit:"Close",
       count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN",
       phTerm:"Search term", search:"🔍 Search", phUrl:"or paste your own photo URL", setUrl:"Set", ownPhoto:"📷 Your own photo",
       makeHidden:"🚫 Make unavailable", makeShown:"✅ Make available again", del:"🗑️ Delete this dish",
@@ -513,7 +514,7 @@ const I18N = {
     footPickupHead:"รับสินค้า", footOrder:"สั่งได้ถึงวันศุกร์",
     footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
-    adm:{title:"โหมดผู้ดูแล", add:"➕ เมนู", expF:"⬇ รูปภาพ", expH:"⬇ ที่ซ่อน", expE:"⬇ เพิ่มเติม", wis:"ล้างที่เลือก", sluit:"ปิด",
+    adm:{title:"โหมดผู้ดูแล", add:"เมนู", expF:"⬇ รูปภาพ", expH:"⬇ ที่ซ่อน", expE:"⬇ เพิ่มเติม", wis:"ล้างที่เลือก", sluit:"ปิด",
       count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่",
       phTerm:"คำค้นหา", search:"🔍 ค้นหา", phUrl:"หรือวางลิงก์รูปภาพเอง", setUrl:"ตั้ง", ownPhoto:"📷 รูปจากเครื่องของคุณ",
       makeHidden:"🚫 ปิดการสั่งซื้อ", makeShown:"✅ เปิดการสั่งซื้ออีกครั้ง", del:"🗑️ ลบเมนูนี้",
