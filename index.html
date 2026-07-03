@@ -98,6 +98,7 @@
   .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s}
   .thumb img.loaded{opacity:1}
   .badge-spice{position:absolute;top:10px;left:10px;z-index:2;background:rgba(26,20,16,.62);backdrop-filter:blur(4px);color:#fff;font-size:.72rem;font-weight:700;padding:5px 9px;border-radius:999px;display:flex;align-items:center;gap:4px}
+  .badge-nr{position:absolute;bottom:10px;right:10px;z-index:2;background:var(--amber);color:#fff;font-size:.8rem;font-weight:800;padding:5px 11px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
   .card-body{padding:15px 16px 16px;display:flex;flex-direction:column;flex:1}
   .card-title{display:flex;flex-direction:column;gap:1px}
   .card-title .dishnr{color:var(--amber);font-weight:800;margin-left:6px;font-size:.9em;white-space:nowrap}
@@ -918,9 +919,9 @@ function card(m){
   const el = document.createElement("article");
   el.className = "card" + (hidden ? " hidden-dish" : "");
   el.innerHTML = `
-    <div class="thumb">${spiceLabel(m.spice)}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
+    <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
     <div class="card-body">
-      <div class="card-title"><span class="nm">${m.name[LANG]}${m.nr?` <b class="dishnr">#${m.nr}</b>`:""}</span><span class="sub">${sub}</span></div>
+      <div class="card-title"><span class="nm">${m.name[LANG]}</span><span class="sub">${sub}</span></div>
       <p class="card-desc">${m.desc[LANG]}</p>
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
       <div class="card-foot"><span class="price">${fmt(m.price)}</span><div class="ctl" data-ctl="${m.id}"></div></div>
@@ -1622,8 +1623,8 @@ async function saveNummer(id, value, btn){
   if(!ghToken()){ alert(A.tokenNeed); askToken(); }
   const card = btn ? btn.closest(".card") : null;
   if(card){
-    const nm = card.querySelector(".nm");
-    if(nm){ const d = nm.querySelector(".dishnr"); if(d) d.textContent = "#"+n; else nm.insertAdjacentHTML("beforeend", ` <b class="dishnr">#${n}</b>`); }
+    const thumb = card.querySelector(".thumb");
+    if(thumb){ const b = thumb.querySelector(".badge-nr"); if(b) b.textContent = "#"+n; else thumb.insertAdjacentHTML("afterbegin", `<span class="badge-nr">#${n}</span>`); }
   }
   const label = btn ? btn.textContent : "";
   if(btn){ btn.disabled = true; btn.textContent = "…"; }
