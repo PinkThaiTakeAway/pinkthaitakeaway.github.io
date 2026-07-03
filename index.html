@@ -100,6 +100,7 @@
   .badge-spice{position:absolute;top:10px;left:10px;z-index:2;background:rgba(26,20,16,.62);backdrop-filter:blur(4px);color:#fff;font-size:.72rem;font-weight:700;padding:5px 9px;border-radius:999px;display:flex;align-items:center;gap:4px}
   .card-body{padding:15px 16px 16px;display:flex;flex-direction:column;flex:1}
   .card-title{display:flex;flex-direction:column;gap:1px}
+  .card-title .dishnr{color:var(--amber);font-weight:800}
   .card-title .nm{font-family:'Fraunces',serif;font-weight:600;font-size:1.18rem;line-height:1.15}
   :lang(th) .card-title .nm{font-family:'Noto Sans Thai',serif;font-weight:700}
   .card-title .sub{font-size:.82rem;color:var(--amber);font-weight:700;font-family:'Noto Sans Thai',sans-serif}
@@ -873,6 +874,9 @@ const menuEl = document.getElementById("menu");
 let spy = null;
 function buildMenu(){
   catnav.innerHTML = ""; menuEl.innerHTML = "";
+  MENU.forEach(m => m.nr = null);
+  let _nr = 0;
+  CATS.forEach(c => { MENU.filter(m => m.cat===c.id && !DELETED.has(m.id) && !HIDDEN.has(m.id)).forEach(m => m.nr = ++_nr); });
   CATS.forEach(c => {
     const items = MENU.filter(m => m.cat === c.id && !DELETED.has(m.id) && (BEHEER || !HIDDEN.has(m.id)));
     if(!items.length) return;
@@ -902,7 +906,7 @@ function card(m){
   el.innerHTML = `
     <div class="thumb">${spiceLabel(m.spice)}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
     <div class="card-body">
-      <div class="card-title"><span class="nm">${m.name[LANG]}</span><span class="sub">${sub}</span></div>
+      <div class="card-title"><span class="nm">${m.nr?`<b class="dishnr">${m.nr}.</b> `:""}${m.name[LANG]}</span><span class="sub">${sub}</span></div>
       <p class="card-desc">${m.desc[LANG]}</p>
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
       <div class="card-foot"><span class="price">${fmt(m.price)}</span><div class="ctl" data-ctl="${m.id}"></div></div>
@@ -1073,7 +1077,7 @@ function renderSheet(){
     const m = byId(baseId(id));
     const ph = PHOTO[baseId(id)] ? `<img data-cphoto="${baseId(id)}" src="${PHOTO[baseId(id)]}" alt="" onerror="this.remove()">` : "";
     html += `<div class="line"><div class="lthumb">${m.emoji}${ph}</div>
-      <div class="ldetail"><div class="ln">${m.name[LANG]}${variantLabel(id)}</div><div class="lp">${fmt(m.price)} ${cart[id]>1?"· "+fmt(m.price*cart[id]):""}</div></div>
+      <div class="ldetail"><div class="ln">${m.nr?`#${m.nr} `:""}${m.name[LANG]}${variantLabel(id)}</div><div class="lp">${fmt(m.price)} ${cart[id]>1?"· "+fmt(m.price*cart[id]):""}</div></div>
       <div class="lstep"><button data-m="${id}">−</button><span class="q">${cart[id]}</span><button data-p="${id}">+</button></div></div>`;
   });
   const slots = pickupSlots().map(s => `<option value="${s}" ${form.slot===s?"selected":""}>${s}</option>`).join("");
@@ -1116,7 +1120,7 @@ function renderSheet(){
 }
 function buildOrder(){
   const ids = Object.keys(cart); let lines=[], sum=0;
-  ids.forEach(id => { const m=byId(baseId(id)), q=cart[id]; sum+=m.price*q; lines.push(`${q}× ${m.name.nl}${variantNL(id)} — ${fmt(m.price*q)}`); });
+  ids.forEach(id => { const m=byId(baseId(id)), q=cart[id]; sum+=m.price*q; lines.push(`${q}× ${m.nr?"#"+m.nr+" ":""}${m.name.nl}${variantNL(id)} — ${fmt(m.price*q)}`); });
   return {lines, sum};
 }
 document.getElementById("waBtn").onclick = () => {
