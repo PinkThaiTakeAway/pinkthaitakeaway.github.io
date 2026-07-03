@@ -269,6 +269,7 @@
   .order-msg{font-size:.85rem;text-align:center;margin-top:10px;font-weight:600;min-height:1em}
   .order-msg.ok{color:var(--ok)}
   .order-msg.err{color:var(--chili)}
+  .empty .ordernr{margin-top:12px;font-weight:800;color:var(--amber);font-size:1.15rem}
   .note{font-size:.74rem;color:var(--muted);text-align:center;margin-top:9px}
 
   footer{background:var(--forest);color:rgba(251,246,236,.85);margin-top:30px}
@@ -437,7 +438,7 @@ const I18N = {
     labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd",
     phName:"Voor- en achternaam", phEmail:"voor je bevestiging", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is per e-mail naar het restaurant gestuurd. Heb je een e-mail ingevuld, dan krijg je ook een bevestiging.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.",
+    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is per e-mail naar het restaurant gestuurd. Heb je een e-mail ingevuld, dan krijg je ook een bevestiging.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer",
     orderErr:"Vul je naam en telefoon in (e-mail is optioneel).",
     note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
     spice:["Mild pittig","Kruidig","Pittig"],
@@ -476,7 +477,7 @@ const I18N = {
     labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time",
     phName:"Full name", phEmail:"for your confirmation", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order sent! 🌸 Your order has been emailed to the restaurant. If you entered an email, you'll also get a confirmation.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.",
+    orderOk:"Order sent! 🌸 Your order has been emailed to the restaurant. If you entered an email, you'll also get a confirmation.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number",
     orderErr:"Please enter your name and phone (email is optional).",
     note:"Your order is sent to the restaurant by email.",
     spice:["Mild","Spicy","Hot"],
@@ -515,7 +516,7 @@ const I18N = {
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ",
     phName:"ชื่อ-นามสกุล", phEmail:"สำหรับการยืนยัน", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อทางอีเมลให้ร้านแล้ว ถ้ากรอกอีเมลไว้ จะได้รับอีเมลยืนยันด้วย", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่",
+    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อทางอีเมลให้ร้านแล้ว ถ้ากรอกอีเมลไว้ จะได้รับอีเมลยืนยันด้วย", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ",
     orderErr:"กรุณากรอกชื่อและเบอร์โทร (อีเมลไม่บังคับ)",
     note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
@@ -1157,8 +1158,10 @@ document.getElementById("waBtn").onclick = async () => {
   const afhaal = `${pickupDateLabel()} ${slot}`;
   const cash = form.pay === "contant";
   const betaling = cash ? `Contant bij ophalen (${fmt(sum)})` : `Tikkie sturen naar ${tel} (${fmt(sum)})`;
+  const orderId = Math.floor(10000 + Math.random()*90000);
   const confirmLines = [
     `🌸 ${CONFIG.naam} 🌸`, ``,
+    `Bestelnummer: #${orderId}`, ``,
     `Bedankt voor je bestelling, ${naam}!`, ``,
     `Je bestelling:`, ...lines, ``,
     `Totaal: ${fmt(sum)}`,
@@ -1174,16 +1177,16 @@ document.getElementById("waBtn").onclick = async () => {
   try{
     const r = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(CONFIG.email)}`, {
       method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"},
-      body: JSON.stringify({ _subject:`Nieuwe bestelling — ${CONFIG.naam} (${afhaal})`, _template:"table",
-        _autoresponse: confirmText,
-        Naam:naam, Telefoon:tel, email:email, Afhalen:afhaal, Bestelling:lines.join(" | "), Totaal:fmt(sum), Betaling:betaling, Opmerking:note||"—" })
+      body: JSON.stringify({ _subject:`Nieuwe bestelling #${orderId} — ${CONFIG.naam} (${afhaal})`, _template:"table",
+        _autoresponse: confirmText, _replyto: email,
+        Bestelnummer:"#"+orderId, Naam:naam, Telefoon:tel, email:email, Afhalen:afhaal, Bestelling:lines.join(" | "), Totaal:fmt(sum), Betaling:betaling, Opmerking:note||"—" })
     });
     if(r.ok){
       Object.keys(cart).forEach(k => delete cart[k]);
       store.save();
       form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
       buildMenu(); updateBars();
-      sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p></div>`;
+      sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p></div>`;
       sheetFoot.style.display = "none";
     } else {
       msg.className="order-msg err"; msg.textContent=T().orderFail;
