@@ -816,6 +816,8 @@ const NAMES = {};
 const DESCS = {};
 const SPICES = {};
 const SERVE_EDITS = {};
+const NUMS = {};
+let _numsDirty = false;
 const GH_REPO = "PinkThaiTakeAway/pinkthaitakeaway.github.io";
 const RH_LABELS = {curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"};
 const BEHEER = new URLSearchParams(location.search).has("beheer");
@@ -872,11 +874,18 @@ function reapplyPhotos(){ Object.keys(PHOTO).forEach(id => setPhoto(id, PHOTO[id
 const catnav = document.getElementById("catnav");
 const menuEl = document.getElementById("menu");
 let spy = null;
+function assignNumbers(){
+  let max = 0;
+  for(const id in NUMS){ if(typeof NUMS[id]==="number" && NUMS[id]>max) max = NUMS[id]; }
+  CATS.forEach(c => { MENU.filter(m => m.cat===c.id && !DELETED.has(m.id)).forEach(m => { if(NUMS[m.id]==null){ NUMS[m.id] = ++max; _numsDirty = true; } }); });
+  MENU.forEach(m => m.nr = (NUMS[m.id]!=null ? NUMS[m.id] : null));
+}
+function pushNumbersIfNeeded(){
+  if(_numsDirty && BEHEER && ghToken()){ _numsDirty = false; livePush("nummers.json", () => NUMS, "Bestelnummers bijgewerkt"); }
+}
 function buildMenu(){
   catnav.innerHTML = ""; menuEl.innerHTML = "";
-  MENU.forEach(m => m.nr = null);
-  let _nr = 0;
-  CATS.forEach(c => { MENU.filter(m => m.cat===c.id && !DELETED.has(m.id) && !HIDDEN.has(m.id)).forEach(m => m.nr = ++_nr); });
+  assignNumbers();
   CATS.forEach(c => {
     const items = MENU.filter(m => m.cat === c.id && !DELETED.has(m.id) && (BEHEER || !HIDDEN.has(m.id)));
     if(!items.length) return;
@@ -1365,6 +1374,7 @@ function saveNewDish(){
   pickPhoto(dish).then(url => { if(url){ setPhoto(dish.id, url); } updateBeheerCount(); });
   updateBeheerCount();
   livePush("extra.json", ()=>EXTRA, `Gerecht toegevoegd: ${dish.name.nl}`);
+  pushNumbersIfNeeded();
   setTimeout(()=>{ const c=document.querySelector(`[data-photo="${dish.id}"]`); if(c) c.scrollIntoView({behavior:"smooth",block:"center"}); }, 120);
 }
 function deleteDish(id){
@@ -1468,6 +1478,7 @@ async function publishAll(){
     await ghPut("pittigheid.json", SPICES, "Pittigheid publiceren");
     await ghPut("verwijderd.json", [...DELETED], "Verwijderde gerechten publiceren");
     await ghPut("serveertips.json", SERVE_EDITS, "Serveertips publiceren");
+    await ghPut("nummers.json", NUMS, "Bestelnummers publiceren");
     await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
     await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
     showToast(T().adm.publishOk, true);
@@ -1644,7 +1655,7 @@ function exportFotos(){
 function setLang(l){
   if(!I18N[l]) return;
   LANG = l; saveJSON("tta_lang_v", {l});
-  applyLang(); buildMenu(); applyConfig(); updateBars();
+  applyLang(); buildMenu(); applyConfig(); updateBars(); pushNumbersIfNeeded();
   if(BEHEER) applyBeheerLang();
   if(sheet.classList.contains("open")) renderSheet();
 }
@@ -1688,6 +1699,9 @@ async function loadVerwijderd(){
 async function loadServetips(){
   try{ const r = await fetch("serveertips.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(SERVE_EDITS, p); } }catch(e){}
 }
+async function loadNummers(){
+  try{ const r = await fetch("nummers.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(NUMS, p); } }catch(e){}
+}
 (async function init(){
   const savedLang = loadJSON("tta_lang_v").l;
   if(savedLang && I18N[savedLang]) LANG = savedLang;
@@ -1699,6 +1713,7 @@ async function loadServetips(){
   await loadPittigheid();
   await loadVerwijderd();
   await loadServetips();
+  await loadNummers();
   if(BEHEER) await loadRecepten();
   if(!BEHEER) await loadHidden();
   Object.entries(store.load()).forEach(([id,q]) => { if(byId(baseId(id)) && q>0 && !HIDDEN.has(baseId(id))) cart[id]=q; });
