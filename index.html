@@ -236,7 +236,8 @@
   .pickupbox b{color:var(--forest)}
   .fields{margin-top:14px;display:flex;flex-direction:column;gap:12px}
   .field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:5px}
-  .field label .req{color:var(--chili)}
+  .field label .opt{color:var(--muted,#9aa0a6);font-weight:600;font-size:.85em}
+  .req{color:var(--chili)}
   .field input,.field select,.field textarea{width:100%;font-family:inherit;font-size:.95rem;color:var(--ink);padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fff}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--amber)}
   .field input.invalid{border-color:var(--chili);background:#fdf3f1}
@@ -432,7 +433,7 @@ const I18N = {
     payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
     payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
     payMsgCash:t=>`💵 Je betaalt <b>${t}</b> <b>contant</b> bij het ophalen. Gepast betalen wordt gewaardeerd.`,
-    labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd",
+    labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd",
     phName:"Voor- en achternaam", phEmail:"voor je bevestiging", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
     orderOk:"Bestelling verstuurd! WhatsApp is geopend en je krijgt een e-mailbevestiging. Je ontvangt nog een Tikkie voor het totaalbedrag.",
@@ -471,7 +472,7 @@ const I18N = {
     payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
     payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
     payMsgCash:t=>`💵 You'll pay <b>${t}</b> in <b>cash</b> on pickup. Exact change appreciated.`,
-    labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", labelNote:"Note (optional)", labelSlot:"Pickup time",
+    labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time",
     phName:"Full name", phEmail:"for your confirmation", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
     orderOk:"Order sent! WhatsApp has opened and you'll receive an email confirmation. You'll also get a Tikkie payment request for the total.",
@@ -510,7 +511,7 @@ const I18N = {
     payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
     payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
     payMsgCash:t=>`💵 ชำระ <b>${t}</b> <b>เงินสด</b> ตอนรับอาหาร`,
-    labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ",
+    labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ",
     phName:"ชื่อ-นามสกุล", phEmail:"สำหรับการยืนยัน", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
     orderOk:"ส่งคำสั่งซื้อแล้ว! เปิด WhatsApp และคุณจะได้รับอีเมลยืนยัน เราจะส่งคำขอชำระเงิน (Tikkie) ตามยอดรวม",
@@ -1102,7 +1103,7 @@ function renderSheet(){
       <div class="field"><label for="fName">${T().labelName} <span class="req">*</span></label><input id="fName" type="text" placeholder="${T().phName}" autocomplete="name" value="${esc(form.naam)}"></div>
       <div class="field"><label for="fPhone">${T().labelPhone} <span class="req">*</span></label><input id="fPhone" type="tel" placeholder="06 ..." autocomplete="tel" value="${esc(form.tel)}"></div>
       <div class="field"><label for="fSlot">${T().labelSlot}</label><select id="fSlot">${slots}</select></div>
-      <div class="field"><label for="fEmail">${T().labelEmail} <span class="req">*</span></label><input id="fEmail" type="email" placeholder="${T().phEmail}" autocomplete="email" value="${esc(form.email)}"></div>
+      <div class="field"><label for="fEmail">${T().labelEmail} <span class="opt">${T().optNote}</span></label><input id="fEmail" type="email" placeholder="${T().phEmail}" autocomplete="email" value="${esc(form.email)}"></div>
       <div class="field"><label for="fNote">${T().labelNote}</label><textarea id="fNote" placeholder="${T().phNote}">${esc(form.note)}</textarea></div>
       <div class="field"><label>${T().payLabel}</label>
         <div class="payopts">
@@ -1147,14 +1148,26 @@ document.getElementById("waBtn").onclick = () => {
   const slot= document.getElementById("fSlot")?.value || pickupSlots()[0];
   const note=(document.getElementById("fNote")?.value||"").trim();
   const msg = document.getElementById("orderMsg");
-  const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
-  let bad = !naam ? "fName" : !tel ? "fPhone" : !emailOk ? "fEmail" : null;
+  const emailOk = !email || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  let bad = !naam ? "fName" : !tel ? "fPhone" : (email && !emailOk) ? "fEmail" : null;
   document.querySelectorAll(".field input").forEach(i=>i.classList.remove("invalid"));
   if(bad){ const f=document.getElementById(bad); f.classList.add("invalid"); f.focus(); msg.className="order-msg err"; msg.textContent=T().orderErr; return; }
   const {lines, sum} = buildOrder();
   const afhaal = `${pickupDateLabel()} ${slot}`;
   const cash = form.pay === "contant";
   const betaling = cash ? `Contant bij ophalen (${fmt(sum)})` : `Tikkie sturen naar ${tel} (${fmt(sum)})`;
+  const confirmLines = [
+    `🌸 ${CONFIG.naam} 🌸`, ``,
+    `Bedankt voor je bestelling, ${naam}!`, ``,
+    `Je bestelling:`, ...lines, ``,
+    `Totaal: ${fmt(sum)}`,
+    `Afhalen: ${afhaal}`,
+    `Adres: ${CONFIG.adres}`,
+    `Betaling: ${betaling}`
+  ];
+  if(note) confirmLines.push(``, `Opmerking: ${note}`);
+  confirmLines.push(``, `Tot snel! 🥢`);
+  const confirmText = confirmLines.join("\n");
   const wa = [`*Nieuwe bestelling — ${CONFIG.naam}*`, "", ...lines, "", `*Totaal: ${fmt(sum)}*`, "",
               `Naam: ${naam}`, `Telefoon: ${tel}`, `Afhalen: ${afhaal}`, `Betaling: ${betaling}`];
   if(note) wa.push(`Opmerking: ${note}`);
@@ -1163,7 +1176,7 @@ document.getElementById("waBtn").onclick = () => {
     fetch(`https://formsubmit.co/ajax/${encodeURIComponent(CONFIG.email)}`, {
       method:"POST", keepalive:true, headers:{"Content-Type":"application/json","Accept":"application/json"},
       body: JSON.stringify({ _subject:`Nieuwe bestelling — ${CONFIG.naam} (${afhaal})`, _template:"table",
-        _autoresponse:`Bedankt voor je bestelling bij ${CONFIG.naam}! Afhalen op ${afhaal} bij ${CONFIG.adres}. ${cash?`Je betaalt ${fmt(sum)} contant bij het ophalen.`:`Je ontvangt nog een Tikkie-betaalverzoek voor ${fmt(sum)}.`} Tot dan!`,
+        _autoresponse: confirmText,
         Naam:naam, Telefoon:tel, email:email, Afhalen:afhaal, Bestelling:lines.join(" | "), Totaal:fmt(sum), Betaling:betaling, Opmerking:note||"—" })
     }).catch(()=>{});
   }catch(e){}
