@@ -100,7 +100,7 @@
   .badge-spice{position:absolute;top:10px;left:10px;z-index:2;background:rgba(26,20,16,.62);backdrop-filter:blur(4px);color:#fff;font-size:.72rem;font-weight:700;padding:5px 9px;border-radius:999px;display:flex;align-items:center;gap:4px}
   .card-body{padding:15px 16px 16px;display:flex;flex-direction:column;flex:1}
   .card-title{display:flex;flex-direction:column;gap:1px}
-  .card-title .dishnr{color:var(--amber);font-weight:800}
+  .card-title .dishnr{color:var(--amber);font-weight:800;margin-left:6px;font-size:.9em;white-space:nowrap}
   .card-title .nm{font-family:'Fraunces',serif;font-weight:600;font-size:1.18rem;line-height:1.15}
   :lang(th) .card-title .nm{font-family:'Noto Sans Thai',serif;font-weight:700}
   .card-title .sub{font-size:.82rem;color:var(--amber);font-weight:700;font-family:'Noto Sans Thai',sans-serif}
@@ -920,7 +920,7 @@ function card(m){
   el.innerHTML = `
     <div class="thumb">${spiceLabel(m.spice)}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
     <div class="card-body">
-      <div class="card-title"><span class="nm">${m.nr?`<b class="dishnr">${m.nr}.</b> `:""}${m.name[LANG]}</span><span class="sub">${sub}</span></div>
+      <div class="card-title"><span class="nm">${m.name[LANG]}${m.nr?` <b class="dishnr">#${m.nr}</b>`:""}</span><span class="sub">${sub}</span></div>
       <p class="card-desc">${m.desc[LANG]}</p>
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
       <div class="card-foot"><span class="price">${fmt(m.price)}</span><div class="ctl" data-ctl="${m.id}"></div></div>
@@ -1623,7 +1623,7 @@ async function saveNummer(id, value, btn){
   const card = btn ? btn.closest(".card") : null;
   if(card){
     const nm = card.querySelector(".nm");
-    if(nm){ const d = nm.querySelector(".dishnr"); if(d) d.textContent = n+"."; else nm.insertAdjacentHTML("afterbegin", `<b class="dishnr">${n}.</b> `); }
+    if(nm){ const d = nm.querySelector(".dishnr"); if(d) d.textContent = "#"+n; else nm.insertAdjacentHTML("beforeend", ` <b class="dishnr">#${n}</b>`); }
   }
   const label = btn ? btn.textContent : "";
   if(btn){ btn.disabled = true; btn.textContent = "…"; }
