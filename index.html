@@ -1178,12 +1178,21 @@ document.getElementById("waBtn").onclick = async () => {
         _autoresponse: confirmText,
         Naam:naam, Telefoon:tel, email:email, Afhalen:afhaal, Bestelling:lines.join(" | "), Totaal:fmt(sum), Betaling:betaling, Opmerking:note||"—" })
     });
-    if(r.ok){ msg.className="order-msg ok"; msg.textContent=T().orderOk; }
-    else { msg.className="order-msg err"; msg.textContent=T().orderFail; }
+    if(r.ok){
+      Object.keys(cart).forEach(k => delete cart[k]);
+      store.save();
+      form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
+      buildMenu(); updateBars();
+      sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p></div>`;
+      sheetFoot.style.display = "none";
+    } else {
+      msg.className="order-msg err"; msg.textContent=T().orderFail;
+      btn.disabled = false;
+    }
   }catch(e){
     msg.className="order-msg err"; msg.textContent=T().orderFail;
+    btn.disabled = false;
   }
-  btn.disabled = false;
 };
 
 /* ---------- Teksten + config toepassen ---------- */
