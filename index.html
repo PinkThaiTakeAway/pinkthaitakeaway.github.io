@@ -1169,7 +1169,9 @@ document.getElementById("waBtn").onclick = () => {
   confirmLines.push(``, `Tot snel! 🥢`);
   const confirmText = confirmLines.join("\n");
   const wa = [`*Nieuwe bestelling — ${CONFIG.naam}*`, "", ...lines, "", `*Totaal: ${fmt(sum)}*`, "",
-              `Naam: ${naam}`, `Telefoon: ${tel}`, `Afhalen: ${afhaal}`, `Betaling: ${betaling}`];
+              `Naam: ${naam}`, `Telefoon: ${tel}`];
+  if(email) wa.push(`E-mail: ${email}`);
+  wa.push(`Afhalen: ${afhaal}`, `Betaling: ${betaling}`);
   if(note) wa.push(`Opmerking: ${note}`);
   const waText = encodeURIComponent(wa.join("\n"));
   try{
