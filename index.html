@@ -427,7 +427,7 @@ const CONFIG = {
   afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
   emailjs: { serviceId:"service_2l06o1e", templateId:"template_5r324xm", publicKey:"u3yNoV14VAK-yfq19" },
   agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec",
-  bestel: { dagen:[0,1,2,3,4,5,6], van:"09:00", tot:"21:00" }   // dagen 0=zo..6=za; bestellen open binnen dit venster
+  bestel: { dagen:[0,1,2,3,4,5,6], van:"00:00", tot:"23:59" }   // dagen 0=zo..6=za; hele dag open (pauze via vrijdag-cutoff/handmatig)
 };
 
 /* ===================================================================
@@ -829,7 +829,7 @@ const cart = {};
 const PHOTO = {};
 const HIDDEN = new Set();
 let TIKKIE_ON = true;
-let ORDER_PAUSED = false;
+let ORDER_STATE = { openedAt: 0, manualPause: false };
 const DELETED = new Set();
 let EXTRA = [];
 const PRICES = {};
@@ -1349,14 +1349,16 @@ function updateTikkieBtn(){
   if(b) b.textContent = TIKKIE_ON ? "💳 Tikkie: aan" : "💳 Tikkie: uit";
 }
 function updatePauzeBtn(){
-  const b = document.getElementById("bPauze");
-  if(b) b.textContent = ORDER_PAUSED ? "🔴 Bestellen: gepauzeerd" : "🟢 Bestellen: open";
+  const b = document.getElementById("bPauze"); if(!b) return;
+  b.textContent = orderStatus().open ? "🟢 Bestellen: open" : "🔴 Bestellen: dicht";
 }
 function togglePauze(){
-  ORDER_PAUSED = !ORDER_PAUSED;
+  const st = orderStatus();
+  if(st.open){ ORDER_STATE.manualPause = true; }          // nu open → sluiten
+  else { ORDER_STATE.manualPause = false; ORDER_STATE.openedAt = Date.now(); }  // nu dicht → openen + weekteller resetten
   updatePauzeBtn();
   if(sheet.classList.contains("open")) renderSheet();
-  livePush("bestelpauze.json", ()=>({paused:ORDER_PAUSED}), ORDER_PAUSED ? "Bestellen gepauzeerd" : "Bestellen heropend");
+  livePush("bestelpauze.json", ()=>ORDER_STATE, st.open ? "Bestellen gepauzeerd" : "Bestellen heropend");
 }
 function toggleTikkie(){
   TIKKIE_ON = !TIKKIE_ON;
@@ -1583,7 +1585,7 @@ async function publishAll(){
     await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
     await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
     await ghPut("tikkie.json", {enabled:TIKKIE_ON}, "Tikkie-instelling publiceren");
-    await ghPut("bestelpauze.json", {paused:ORDER_PAUSED}, "Bestelpauze publiceren");
+    await ghPut("bestelpauze.json", ORDER_STATE, "Bestelpauze publiceren");
     showToast(T().adm.publishOk, true);
   }catch(e){ if(e.message!=="no-token") showToast(T().adm.pushErr + " (" + e.message + ")", false); }
 }
@@ -1833,18 +1835,34 @@ async function loadTikkie(){
   try{ const r = await fetch("tikkie.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object" && typeof p.enabled==="boolean") TIKKIE_ON = p.enabled; } }catch(e){}
 }
 async function loadPauze(){
-  try{ const r = await fetch("bestelpauze.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object" && typeof p.paused==="boolean") ORDER_PAUSED = p.paused; } }catch(e){}
+  try{ const r = await fetch("bestelpauze.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object"){
+    if(typeof p.openedAt==="number") ORDER_STATE.openedAt = p.openedAt;
+    if(typeof p.manualPause==="boolean") ORDER_STATE.manualPause = p.manualPause;
+    if(typeof p.paused==="boolean") ORDER_STATE.manualPause = p.paused; // oud formaat
+  } } }catch(e){}
+}
+// Eerstvolgende vrijdag 21:00 strikt ná tijdstip ts (ms)
+function nextFridayCutoffAfter(ts){
+  const c = new Date(ts); c.setHours(21,0,0,0);
+  let add = (5 - c.getDay() + 7) % 7;  // 5 = vrijdag
+  c.setDate(c.getDate() + add);
+  if(c.getTime() <= ts) c.setDate(c.getDate() + 7);
+  return c.getTime();
 }
 function orderStatus(){
-  if(ORDER_PAUSED) return {open:false, reason:"paused"};
+  if(ORDER_STATE.manualPause) return {open:false, reason:"paused"};
   const now = new Date(), day = now.getDay(), nowm = now.getHours()*60 + now.getMinutes();
-  if(!CONFIG.bestel.dagen.includes(day)) return {open:false, reason:"closed"};
-  if(nowm < pad(CONFIG.bestel.van) || nowm > pad(CONFIG.bestel.tot)) return {open:false, reason:"closed"};
+  if(!CONFIG.bestel.dagen.includes(day) || nowm < pad(CONFIG.bestel.van) || nowm > pad(CONFIG.bestel.tot))
+    return {open:false, reason:"closed"};
+  // Wekelijkse vrijdag-21:00 cutoff sinds de laatste handmatige heropening
+  if(ORDER_STATE.openedAt && Date.now() >= nextFridayCutoffAfter(ORDER_STATE.openedAt))
+    return {open:false, reason:"weekly"};
   return {open:true};
 }
 function orderClosedMsg(st){
   const A = T();
-  return st.reason==="paused" ? A.orderPausedMsg : A.orderClosedHours(CONFIG.bestel.van, CONFIG.bestel.tot);
+  if(st.reason==="closed") return A.orderClosedHours(CONFIG.bestel.van, CONFIG.bestel.tot);
+  return A.orderPausedMsg; // paused of weekly
 }
 (async function init(){
   const savedLang = loadJSON("tta_lang_v").l;
