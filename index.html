@@ -427,7 +427,7 @@ const CONFIG = {
   afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
   emailjs: { serviceId:"service_2l06o1e", templateId:"template_5r324xm", publicKey:"u3yNoV14VAK-yfq19" },
   agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec",
-  bestel: { dagen:[0,1,2,3,4,5,6], van:"00:00", tot:"23:59" }   // dagen 0=zo..6=za; hele dag open (pauze via vrijdag-cutoff/handmatig)
+  bestel: { dagen:[0,1,2,3,4,5,6], van:"00:00", tot:"23:59", cutoffDag:5, cutoffUur:23 }   // hele dag open; auto-pauze op cutoffDag (5=vr) om cutoffUur
 };
 
 /* ===================================================================
@@ -1841,10 +1841,10 @@ async function loadPauze(){
     if(typeof p.paused==="boolean") ORDER_STATE.manualPause = p.paused; // oud formaat
   } } }catch(e){}
 }
-// Eerstvolgende vrijdag 21:00 strikt ná tijdstip ts (ms)
+// Eerstvolgende cutoff (bijv. vrijdag 23:00) strikt ná tijdstip ts (ms)
 function nextFridayCutoffAfter(ts){
-  const c = new Date(ts); c.setHours(21,0,0,0);
-  let add = (5 - c.getDay() + 7) % 7;  // 5 = vrijdag
+  const c = new Date(ts); c.setHours(CONFIG.bestel.cutoffUur,0,0,0);
+  let add = (CONFIG.bestel.cutoffDag - c.getDay() + 7) % 7;
   c.setDate(c.getDate() + add);
   if(c.getTime() <= ts) c.setDate(c.getDate() + 7);
   return c.getTime();
