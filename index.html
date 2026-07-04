@@ -335,6 +335,7 @@
   <span class="bstat"><span id="bTitle">Beheermodus</span> · <small id="bCount">0 / 0</small></span>
   <button class="sl" id="bAdd">Gerecht</button>
   <button class="sl" id="bTrash">🗑️ Prullenbak</button>
+  <button class="sl" id="bTikkie">💳 Tikkie</button>
   <button class="sl" id="bToken">🔑 Token</button>
   <button class="exp" id="bPublish">⬆ Publiceren</button>
   <button class="sl" id="bSluit">Sluiten</button>
@@ -817,6 +818,7 @@ const RH = {
 const cart = {};
 const PHOTO = {};
 const HIDDEN = new Set();
+let TIKKIE_ON = true;
 const DELETED = new Set();
 let EXTRA = [];
 const PRICES = {};
@@ -1111,7 +1113,7 @@ function renderSheet(){
       <div class="field"><label for="fNote">${T().labelNote}</label><textarea id="fNote" placeholder="${T().phNote}">${esc(form.note)}</textarea></div>
       <div class="field"><label>${T().payLabel}</label>
         <div class="payopts">
-          <button type="button" class="payopt ${form.pay!=="contant"?"active":""}" data-pay="tikkie">💳 ${T().payOptTikkie}</button>
+          ${TIKKIE_ON ? `<button type="button" class="payopt ${form.pay!=="contant"?"active":""}" data-pay="tikkie">💳 ${T().payOptTikkie}</button>` : ""}
           <button type="button" class="payopt ${form.pay==="contant"?"active":""}" data-pay="contant">💵 ${T().payOptCash}</button>
         </div>
       </div>
@@ -1122,7 +1124,7 @@ function renderSheet(){
   const map={fName:"naam",fPhone:"tel",fEmail:"email",fNote:"note",fSlot:"slot"};
   ["fName","fPhone","fEmail","fNote","fSlot"].forEach(idf => { const el=document.getElementById(idf); const ev = idf==="fSlot"?"onchange":"oninput"; el[ev]=e=>form[map[idf]]=e.target.value; });
   if(!form.slot) form.slot = pickupSlots()[0];
-  if(!form.pay) form.pay = "contant";
+  if(!form.pay || (!TIKKIE_ON && form.pay==="tikkie")) form.pay = "contant";
   sheetBody.querySelectorAll(".payopt").forEach(b => b.onclick = () => {
     form.pay = b.dataset.pay;
     sheetBody.querySelectorAll(".payopt").forEach(x => x.classList.toggle("active", x.dataset.pay===form.pay));
@@ -1269,6 +1271,8 @@ async function initBeheer(){
   updateBeheerCount();
   document.getElementById("bAdd").onclick = openAddModal;
   document.getElementById("bTrash").onclick = openTrash;
+  document.getElementById("bTikkie").onclick = toggleTikkie;
+  updateTikkieBtn();
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
@@ -1292,6 +1296,17 @@ async function doSearch(id){
   }catch(e){ box.innerHTML = "<span class='pickhint'>Zoeken mislukt.</span>"; }
 }
 function choose(id, url){ chosen[id]=url; saveJSON("tta_fotos", chosen); setPhoto(id, url); updateBeheerCount(); livePush("fotos.json", currentFotos, "Foto bijgewerkt"); }
+function updateTikkieBtn(){
+  const b = document.getElementById("bTikkie");
+  if(b) b.textContent = TIKKIE_ON ? "💳 Tikkie: aan" : "💳 Tikkie: uit";
+}
+function toggleTikkie(){
+  TIKKIE_ON = !TIKKIE_ON;
+  if(!TIKKIE_ON && form.pay==="tikkie") form.pay = "contant";
+  updateTikkieBtn();
+  if(sheet.classList.contains("open")) renderSheet();
+  livePush("tikkie.json", ()=>({enabled:TIKKIE_ON}), "Tikkie-optie " + (TIKKIE_ON?"aangezet":"uitgezet"));
+}
 function toggleHidden(id){
   if(HIDDEN.has(id)) HIDDEN.delete(id); else HIDDEN.add(id);
   saveJSON("tta_hidden", {ids:[...HIDDEN]});
@@ -1509,6 +1524,7 @@ async function publishAll(){
     await ghPut("nummers.json", NUMS, "Bestelnummers publiceren");
     await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
     await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
+    await ghPut("tikkie.json", {enabled:TIKKIE_ON}, "Tikkie-instelling publiceren");
     showToast(T().adm.publishOk, true);
   }catch(e){ if(e.message!=="no-token") showToast(T().adm.pushErr + " (" + e.message + ")", false); }
 }
@@ -1754,6 +1770,9 @@ async function loadServetips(){
 async function loadNummers(){
   try{ const r = await fetch("nummers.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(NUMS, p); } }catch(e){}
 }
+async function loadTikkie(){
+  try{ const r = await fetch("tikkie.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object" && typeof p.enabled==="boolean") TIKKIE_ON = p.enabled; } }catch(e){}
+}
 (async function init(){
   const savedLang = loadJSON("tta_lang_v").l;
   if(savedLang && I18N[savedLang]) LANG = savedLang;
@@ -1766,6 +1785,7 @@ async function loadNummers(){
   await loadVerwijderd();
   await loadServetips();
   await loadNummers();
+  await loadTikkie();
   if(BEHEER) await loadRecepten();
   if(!BEHEER) await loadHidden();
   Object.entries(store.load()).forEach(([id,q]) => { if(byId(baseId(id)) && q>0 && !HIDDEN.has(baseId(id))) cart[id]=q; });
