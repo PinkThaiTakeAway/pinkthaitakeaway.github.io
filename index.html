@@ -1101,9 +1101,12 @@ function updateBars(){
 }
 function refreshOrderingUI(){
   const closed = !orderStatus().open;
-  document.body.classList.toggle("ordering-closed", closed && !BEHEER);
+  const hide = closed && !BEHEER;
+  document.body.classList.toggle("ordering-closed", hide);
   const b = document.getElementById("closedBanner");
-  if(b){ b.classList.toggle("show", closed && !BEHEER); b.textContent = T().closedBanner; }
+  if(b){ b.classList.toggle("show", hide); b.textContent = T().closedBanner; }
+  const cb = document.getElementById("cartBtn");
+  if(cb) cb.style.display = hide ? "none" : "";
   updateBars();
 }
 
