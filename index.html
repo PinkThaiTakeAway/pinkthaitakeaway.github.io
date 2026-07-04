@@ -296,6 +296,12 @@
     .bar{gap:8px;padding:10px 14px}
   }
   @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+  .closed-banner{display:none;background:var(--amber);color:#fff;text-align:center;padding:13px 16px;font-weight:800;font-size:.95rem;line-height:1.4}
+  .closed-banner.show{display:block}
+  body.ordering-closed .add,
+  body.ordering-closed .optctl button[data-pk],
+  body.ordering-closed .optadd,
+  body.ordering-closed .stepper [data-pk]{opacity:.35;pointer-events:none;filter:grayscale(.4)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -329,6 +335,7 @@
 
 <nav class="catnav" aria-label="menu"><div class="catnav-inner" id="catnav"></div></nav>
 
+<div id="closedBanner" class="closed-banner"></div>
 <main id="menu"></main>
 
 <div class="floatbar" id="floatbar">
@@ -451,7 +458,7 @@ const I18N = {
     labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd",
     phName:"Voor- en achternaam", phEmail:"voor je bevestiging", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is naar het restaurant gestuurd en er is een bevestiging naar je e-mail onderweg.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
+    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is naar het restaurant gestuurd en er is een bevestiging naar je e-mail onderweg.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is momenteel gesloten — je kunt wel het menu bekijken.", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
     note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
     spice:["Mild pittig","Kruidig","Pittig"],
@@ -490,7 +497,7 @@ const I18N = {
     labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time",
     phName:"Full name", phEmail:"for your confirmation", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order sent! 🌸 Your order has been sent to the restaurant and a confirmation is on its way to your email.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
+    orderOk:"Order sent! 🌸 Your order has been sent to the restaurant and a confirmation is on its way to your email.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering is currently closed — you can still browse the menu.", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
     orderErr:"Please enter your name, phone and a valid email address.",
     note:"Your order is sent to the restaurant by email.",
     spice:["Mild","Spicy","Hot"],
@@ -529,7 +536,7 @@ const I18N = {
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ",
     phName:"ชื่อ-นามสกุล", phEmail:"สำหรับการยืนยัน", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อให้ร้านแล้ว และกำลังส่งอีเมลยืนยันไปให้คุณ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
+    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อให้ร้านแล้ว และกำลังส่งอีเมลยืนยันไปให้คุณ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ขณะนี้ปิดรับออเดอร์ — ยังสามารถดูเมนูได้", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
     note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
@@ -1068,6 +1075,7 @@ function renderCtl(node, id){
   }
 }
 function change(key, delta){
+  if(delta > 0 && !orderStatus().open) return;   // bestellen dicht: niets toevoegen
   cart[key] = Math.max(0, (cart[key]||0) + delta);
   if(cart[key] === 0) delete cart[key];
   const ctl = document.querySelector(`[data-ctl="${baseId(key)}"]`);
@@ -1089,7 +1097,14 @@ function updateBars(){
   document.getElementById("hdrCount").textContent = count;
   document.getElementById("fbCount").textContent = T().items(count);
   document.getElementById("fbTotal").textContent = fmt(sum);
-  document.getElementById("floatbar").classList.toggle("show", count>0 && !BEHEER);
+  document.getElementById("floatbar").classList.toggle("show", count>0 && !BEHEER && orderStatus().open);
+}
+function refreshOrderingUI(){
+  const closed = !orderStatus().open;
+  document.body.classList.toggle("ordering-closed", closed && !BEHEER);
+  const b = document.getElementById("closedBanner");
+  if(b){ b.classList.toggle("show", closed && !BEHEER); b.textContent = T().closedBanner; }
+  updateBars();
 }
 
 /* ---------- Mandje ---------- */
@@ -1257,6 +1272,7 @@ function applyLang(){
   document.getElementById("footFindHead").textContent = T().footFindHead;
   document.getElementById("footTagline").textContent = T().footTagline;
   [...document.querySelectorAll("#langsw button")].forEach(b => b.classList.toggle("on", b.dataset.lang===LANG));
+  if(typeof refreshOrderingUI==="function") refreshOrderingUI();
 }
 function applyConfig(){
   document.querySelectorAll(".brandname").forEach(n => { if(n.firstChild) n.firstChild.textContent = CONFIG.naam; });
@@ -1358,6 +1374,7 @@ function togglePauze(){
   else { ORDER_STATE.manualPause = false; ORDER_STATE.openedAt = Date.now(); }  // nu dicht → openen + weekteller resetten
   updatePauzeBtn();
   if(sheet.classList.contains("open")) renderSheet();
+  refreshOrderingUI();
   livePush("bestelpauze.json", ()=>ORDER_STATE, st.open ? "Bestellen gepauzeerd" : "Bestellen heropend");
 }
 function toggleTikkie(){
@@ -1885,6 +1902,8 @@ function orderClosedMsg(st){
   buildMenu();
   applyConfig();
   updateBars();
+  refreshOrderingUI();
+  setInterval(refreshOrderingUI, 60000);
   if(BEHEER) initBeheer(); else resolvePhotos();
 })();
 </script>
