@@ -424,7 +424,8 @@ const CONFIG = {
   adres: "Hakvoortseweg 30, 5084 HA Biest-Houtakker (voordeur aan de oprit)",
   telefoon: "06 58 97 73 39",
   afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
-  emailjs: { serviceId:"service_2l06o1e", templateId:"template_5r324xm", publicKey:"u3yNoV14VAK-yfq19" }
+  emailjs: { serviceId:"service_2l06o1e", templateId:"template_5r324xm", publicKey:"u3yNoV14VAK-yfq19" },
+  agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec"
 };
 
 /* ===================================================================
@@ -864,6 +865,12 @@ function pickupSlots(){
   return out;
 }
 function pickupDateLabel(){ const d=nextPickupDate(); return `${T().zaterdag} ${d.getDate()}-${d.getMonth()+1}`; }
+function pickupISO(slot){
+  const d = nextPickupDate();
+  const [hh,mm] = String(slot||"").split(":").map(Number);
+  d.setHours(hh||0, mm||0, 0, 0);
+  return d.toISOString();
+}
 
 /* ---------- Wikimedia Commons foto's ---------- */
 async function commonsSearch(term, limit){
@@ -1201,6 +1208,13 @@ document.getElementById("waBtn").onclick = async () => {
     await emailjs.send(EJ.serviceId, EJ.templateId, {...params, to_email: CONFIG.email}, { publicKey: EJ.publicKey });
     // Naar de klant (alleen als ingevuld; best-effort bevestiging)
     if(email) emailjs.send(EJ.serviceId, EJ.templateId, {...params, to_email: email}, { publicKey: EJ.publicKey }).catch(()=>{});
+    // Afhaalafspraak in de Google Agenda (best-effort, blokkeert de bestelling niet)
+    if(CONFIG.agendaUrl){
+      fetch(CONFIG.agendaUrl, { method:"POST", mode:"no-cors", body: JSON.stringify({
+        start: pickupISO(slot), order_id: orderId, naam, tel, email,
+        bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note
+      })}).catch(()=>{});
+    }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]);
     store.save();
