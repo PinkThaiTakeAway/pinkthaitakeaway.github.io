@@ -75,6 +75,7 @@
   .hero p{margin-top:16px;max-width:48ch;font-size:clamp(1rem,2.4vw,1.16rem);color:rgba(251,246,236,.82)}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
   .chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-size:.86rem;font-weight:600}
+  .chip .chipsep{width:1px;height:15px;background:rgba(255,255,255,.28);margin:0 6px;flex:0 0 auto}
   .chip .stat{width:9px;height:9px;border-radius:999px;background:#5BD27E;box-shadow:0 0 0 3px rgba(91,210,126,.25);flex:0 0 auto}
   .hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:var(--amber);color:var(--ink);font-weight:800;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s,background .2s}
   .hero-cta:hover{background:var(--amber-deep)}
@@ -326,8 +327,7 @@
     <p id="heroP"></p>
     <div class="chips">
       <span class="chip">📍 <span id="cfgAdres">—</span></span>
-      <span class="chip">🛍 <span id="chipPickup">—</span></span>
-      <span class="chip"><span class="stat"></span> <span id="chipOrder">—</span></span>
+      <span class="chip">🛍 <span id="chipPickup">—</span><span class="chipsep"></span><span class="stat"></span> <span id="chipOrder">—</span></span>
     </div>
     <button class="hero-cta" id="heroCta"></button>
   </div>
