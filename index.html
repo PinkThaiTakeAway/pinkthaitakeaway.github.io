@@ -448,7 +448,7 @@ const I18N = {
     labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd",
     phName:"Voor- en achternaam", phEmail:"voor je bevestiging", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is naar het restaurant gestuurd en er is een bevestiging naar je e-mail onderweg.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer",
+    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is naar het restaurant gestuurd en er is een bevestiging naar je e-mail onderweg.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.",
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
     note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
     spice:["Mild pittig","Kruidig","Pittig"],
@@ -487,7 +487,7 @@ const I18N = {
     labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time",
     phName:"Full name", phEmail:"for your confirmation", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order sent! 🌸 Your order has been sent to the restaurant and a confirmation is on its way to your email.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number",
+    orderOk:"Order sent! 🌸 Your order has been sent to the restaurant and a confirmation is on its way to your email.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderCooldown:"You just placed an order. Please wait a moment before ordering again.",
     orderErr:"Please enter your name, phone and a valid email address.",
     note:"Your order is sent to the restaurant by email.",
     spice:["Mild","Spicy","Hot"],
@@ -526,7 +526,7 @@ const I18N = {
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ",
     phName:"ชื่อ-นามสกุล", phEmail:"สำหรับการยืนยัน", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อให้ร้านแล้ว และกำลังส่งอีเมลยืนยันไปให้คุณ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ",
+    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อให้ร้านแล้ว และกำลังส่งอีเมลยืนยันไปให้คุณ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่",
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
     note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
@@ -1087,7 +1087,8 @@ const overlay = document.getElementById("overlay");
 const sheet = document.getElementById("sheet");
 const sheetBody = document.getElementById("sheetBody");
 const sheetFoot = document.getElementById("sheetFoot");
-function openSheet(){ renderSheet(); overlay.classList.add("open"); sheet.classList.add("open"); }
+let _orderShownAt = 0;
+function openSheet(){ renderSheet(); overlay.classList.add("open"); sheet.classList.add("open"); _orderShownAt = Date.now(); }
 function closeSheet(){ overlay.classList.remove("open"); sheet.classList.remove("open"); }
 document.getElementById("cartBtn").onclick = openSheet;
 document.getElementById("fbGo").onclick = openSheet;
@@ -1113,6 +1114,7 @@ function renderSheet(){
   const slots = pickupSlots().map(s => `<option value="${s}" ${form.slot===s?"selected":""}>${s}</option>`).join("");
   html += `<div class="pickupbox">${T().pickupNotice(pickupDateLabel()+" · "+CONFIG.afhaal.van+"–"+CONFIG.afhaal.tot)}</div>
     <div class="fields">
+      <input type="text" id="fHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
       <div class="field"><label for="fName">${T().labelName} <span class="req">*</span></label><input id="fName" type="text" placeholder="${T().phName}" autocomplete="name" value="${esc(form.naam)}"></div>
       <div class="field"><label for="fPhone">${T().labelPhone} <span class="req">*</span></label><input id="fPhone" type="tel" placeholder="06 ..." autocomplete="tel" value="${esc(form.tel)}"></div>
       <div class="field"><label for="fSlot">${T().labelSlot}</label><select id="fSlot">${slots}</select></div>
@@ -1155,14 +1157,24 @@ function buildOrder(){
 }
 document.getElementById("waBtn").onclick = async () => {
   if(!Object.keys(cart).length) return;
+  // Anti-bot: honeypot (verborgen veld dat alleen bots invullen)
+  const hp = document.getElementById("fHp");
+  if(hp && hp.value.trim()){ return; }
+  // Anti-bot: verdacht snel verstuurd (mens vult formulier niet in < 2,5s)
+  if(_orderShownAt && Date.now() - _orderShownAt < 2500){ return; }
   const naam=(document.getElementById("fName")?.value||"").trim();
   const tel =(document.getElementById("fPhone")?.value||"").trim();
   const email=(document.getElementById("fEmail")?.value||"").trim();
   const slot= document.getElementById("fSlot")?.value || pickupSlots()[0];
   const note=(document.getElementById("fNote")?.value||"").trim();
   const msg = document.getElementById("orderMsg");
+  // Cooldown: niet te snel opnieuw bestellen vanaf hetzelfde apparaat
+  const last = +(loadJSON("tta_lastorder").t || 0);
+  if(last && Date.now() - last < 120000){ msg.className="order-msg err"; msg.textContent=T().orderCooldown; return; }
   const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
-  let bad = !naam ? "fName" : !tel ? "fPhone" : !emailOk ? "fEmail" : null;
+  const telDigits = tel.replace(/\D/g,"");
+  const telOk = telDigits.length >= 9 && telDigits.length <= 15 && !/^(\d)\1+$/.test(telDigits);
+  let bad = !naam ? "fName" : !telOk ? "fPhone" : !emailOk ? "fEmail" : null;
   document.querySelectorAll(".field input").forEach(i=>i.classList.remove("invalid"));
   if(bad){ const f=document.getElementById(bad); f.classList.add("invalid"); f.focus(); msg.className="order-msg err"; msg.textContent=T().orderErr; return; }
   const {lines, sum} = buildOrder();
@@ -1189,6 +1201,7 @@ document.getElementById("waBtn").onclick = async () => {
     await emailjs.send(EJ.serviceId, EJ.templateId, {...params, to_email: CONFIG.email}, { publicKey: EJ.publicKey });
     // Naar de klant (alleen als ingevuld; best-effort bevestiging)
     if(email) emailjs.send(EJ.serviceId, EJ.templateId, {...params, to_email: email}, { publicKey: EJ.publicKey }).catch(()=>{});
+    saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]);
     store.save();
     form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
