@@ -446,7 +446,7 @@ const I18N = {
     eyebrow:"Vers · Bestellen door de week · Afhalen op zaterdag",
     heroTitle:"Echt Thais, <em>vers voor je weekend.</em>",
     heroP:"Bestel deze week online en haal je verse Thaise gerechten op zaterdag af. Met liefde gewokt en gestampt.",
-    chipPickup:"Afhalen za · 17:00–19:00", chipOrder:"Bestel t/m vrijdag",
+    chipPickup:"Afhalen za · 17:00–19:00", chipOrder:(d,t)=>`Bestel t/m ${d} ${t}`, dagen:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
     yourOrder:"Jouw bestelling", empty:"Je mandje is nog leeg.\nKies iets lekkers uit het menu.",
@@ -462,7 +462,7 @@ const I18N = {
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
     note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
     spice:["Mild pittig","Kruidig","Pittig"],
-    footPickupHead:"Afhalen", footOrder:"Bestellen t/m vrijdag",
+    footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t}`,
     footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", expF:"⬇ foto's", expH:"⬇ verborgen", expE:"⬇ extra", wis:"Wis keuzes", sluit:"Sluiten",
@@ -485,7 +485,7 @@ const I18N = {
     eyebrow:"Fresh · Order during the week · Pickup on Saturday",
     heroTitle:"Real Thai, <em>fresh for your weekend.</em>",
     heroP:"Order online during the week and pick up your fresh Thai dishes on Saturday. Wok-fried and pounded with care.",
-    chipPickup:"Pickup Sat · 17:00–19:00", chipOrder:"Order until Friday",
+    chipPickup:"Pickup Sat · 17:00–19:00", chipOrder:(d,t)=>`Order until ${d} ${t}`, dagen:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
     yourOrder:"Your order", empty:"Your basket is empty.\nPick something tasty from the menu.",
@@ -501,7 +501,7 @@ const I18N = {
     orderErr:"Please enter your name, phone and a valid email address.",
     note:"Your order is sent to the restaurant by email.",
     spice:["Mild","Spicy","Hot"],
-    footPickupHead:"Pickup", footOrder:"Order until Friday",
+    footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
     footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.",
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish", expF:"⬇ photos", expH:"⬇ hidden", expE:"⬇ extra", wis:"Clear choices", sluit:"Close",
@@ -524,7 +524,7 @@ const I18N = {
     eyebrow:"สดใหม่ · สั่งภายในสัปดาห์ · รับวันเสาร์",
     heroTitle:"อาหารไทยแท้ <em>สดใหม่สำหรับสุดสัปดาห์</em>",
     heroP:"สั่งออนไลน์ภายในสัปดาห์ แล้วมารับอาหารไทยสดใหม่ในวันเสาร์ ปรุงสดทุกจาน",
-    chipPickup:"รับวันเสาร์ · 17:00–19:00", chipOrder:"สั่งได้ถึงวันศุกร์",
+    chipPickup:"รับวันเสาร์ · 17:00–19:00", chipOrder:(d,t)=>`สั่งได้ถึง${d} ${t}`, dagen:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"],
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
     yourOrder:"คำสั่งซื้อของคุณ", empty:"ตะกร้าของคุณว่างเปล่า\nเลือกเมนูอร่อยๆ ได้เลย",
@@ -540,7 +540,7 @@ const I18N = {
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
     note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
-    footPickupHead:"รับสินค้า", footOrder:"สั่งได้ถึงวันศุกร์",
+    footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t}`,
     footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", expF:"⬇ รูปภาพ", expH:"⬇ ที่ซ่อน", expE:"⬇ เพิ่มเติม", wis:"ล้างที่เลือก", sluit:"ปิด",
@@ -1262,13 +1262,15 @@ function applyLang(){
   document.getElementById("heroTitle").innerHTML = T().heroTitle;
   document.getElementById("heroP").textContent = T().heroP;
   document.getElementById("chipPickup").textContent = T().chipPickup;
-  document.getElementById("chipOrder").textContent = T().chipOrder;
+  const _cutDag = T().dagen[CONFIG.bestel.cutoffDag];
+  const _cutTijd = String(CONFIG.bestel.cutoffUur).padStart(2,"0") + ":00";
+  document.getElementById("chipOrder").textContent = T().chipOrder(_cutDag, _cutTijd);
   document.getElementById("heroCta").textContent = T().heroCta;
   document.getElementById("cartLabel").textContent = T().cart;
   document.getElementById("fbGo").textContent = T().viewOrder;
   document.getElementById("footPickupHead").textContent = T().footPickupHead;
   document.getElementById("footPickup").textContent = `${T().zaterdag} · ${CONFIG.afhaal.van}–${CONFIG.afhaal.tot}`;
-  document.getElementById("footOrder").textContent = T().footOrder;
+  document.getElementById("footOrder").textContent = T().footOrder(_cutDag, _cutTijd);
   document.getElementById("footFindHead").textContent = T().footFindHead;
   document.getElementById("footTagline").textContent = T().footTagline;
   [...document.querySelectorAll("#langsw button")].forEach(b => b.classList.toggle("on", b.dataset.lang===LANG));
