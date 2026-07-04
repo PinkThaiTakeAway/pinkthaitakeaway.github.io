@@ -304,6 +304,8 @@
   body.ordering-closed .optctl button[data-pk],
   body.ordering-closed .optadd,
   body.ordering-closed .stepper [data-pk]{opacity:.35;pointer-events:none;filter:grayscale(.4)}
+  .share-btn{margin-top:16px;display:inline-flex;align-items:center;gap:8px;background:var(--amber);color:#fff;border:none;padding:10px 18px;border-radius:999px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .share-btn:active{transform:scale(.97)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -418,6 +420,7 @@
     <div>
       <span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span>
       <p style="margin-top:10px;max-width:34ch" id="footTagline"></p>
+      <button class="share-btn" id="shareBtn">📤 <span id="shareLabel">Deel deze pagina</span></button>
     </div>
     <div><h4 id="footPickupHead"></h4><p id="footPickup">—</p><p id="footOrder">—</p></div>
     <div><h4 id="footFindHead"></h4><p id="cfgAdres2">—</p><p id="cfgTel">—</p></div>
@@ -467,7 +470,7 @@ const I18N = {
     note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
     spice:["Mild pittig","Kruidig","Pittig"],
     footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t} uur`,
-    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.",
+    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Deel deze pagina", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸", shareCopied:"Link gekopieerd!",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", expF:"⬇ foto's", expH:"⬇ verborgen", expE:"⬇ extra", wis:"Wis keuzes", sluit:"Sluiten",
       count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN",
@@ -506,7 +509,7 @@ const I18N = {
     note:"Your order is sent to the restaurant by email.",
     spice:["Mild","Spicy","Hot"],
     footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
-    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.",
+    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.", shareLabel:"Share this page", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸", shareCopied:"Link copied!",
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish", expF:"⬇ photos", expH:"⬇ hidden", expE:"⬇ extra", wis:"Clear choices", sluit:"Close",
       count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN",
@@ -545,7 +548,7 @@ const I18N = {
     note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
     footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`,
-    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์",
+    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์หน้านี้", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸", shareCopied:"คัดลอกลิงก์แล้ว!",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", expF:"⬇ รูปภาพ", expH:"⬇ ที่ซ่อน", expE:"⬇ เพิ่มเติม", wis:"ล้างที่เลือก", sluit:"ปิด",
       count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่",
@@ -1280,6 +1283,7 @@ function applyLang(){
   document.getElementById("footOrder").textContent = T().footOrder(_cutDag, _cutTijd);
   document.getElementById("footFindHead").textContent = T().footFindHead;
   document.getElementById("footTagline").textContent = T().footTagline;
+  document.getElementById("shareLabel").textContent = T().shareLabel;
   [...document.querySelectorAll("#langsw button")].forEach(b => b.classList.toggle("on", b.dataset.lang===LANG));
   if(typeof refreshOrderingUI==="function") refreshOrderingUI();
 }
@@ -1564,6 +1568,18 @@ async function ghPut(path, obj, message){
   return true;
 }
 let _toastT;
+function wireShare(){
+  const btn = document.getElementById("shareBtn"); if(!btn) return;
+  btn.onclick = async () => {
+    const url = location.origin + location.pathname;
+    if(navigator.share){
+      try{ await navigator.share({ title:"Pink Thai TakeAway", text:T().shareText, url }); }catch(e){}
+      return;
+    }
+    try{ await navigator.clipboard.writeText(url); showToast(T().shareCopied, true); }
+    catch(e){ showToast(url, null); }
+  };
+}
 function showToast(msg, ok){
   let t = document.getElementById("beheerToast");
   if(!t){ t = document.createElement("div"); t.id = "beheerToast"; document.body.appendChild(t); }
@@ -1913,6 +1929,7 @@ function orderClosedMsg(st){
   updateBars();
   refreshOrderingUI();
   setInterval(refreshOrderingUI, 60000);
+  wireShare();
   if(BEHEER) initBeheer(); else resolvePhotos();
 })();
 </script>
