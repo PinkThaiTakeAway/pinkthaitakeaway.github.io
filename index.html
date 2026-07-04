@@ -290,6 +290,7 @@
   }
   @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -414,7 +415,8 @@ const CONFIG = {
   email: "hansstobbe@gmail.com",          // waar bestellingen binnenkomen
   adres: "Hakvoortseweg 30, 5084 HA Biest-Houtakker (voordeur aan de oprit)",
   telefoon: "06 58 97 73 39",
-  afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 }  // dag: 0=zo..6=za
+  afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
+  emailjs: { serviceId:"service_2l06o1e", templateId:"template_5r324xm", publicKey:"u3yNoV14VAK-yfq19" }
 };
 
 /* ===================================================================
@@ -1159,39 +1161,31 @@ document.getElementById("waBtn").onclick = async () => {
   const cash = form.pay === "contant";
   const betaling = cash ? `Contant bij ophalen (${fmt(sum)})` : `Tikkie sturen naar ${tel} (${fmt(sum)})`;
   const orderId = Math.floor(10000 + Math.random()*90000);
-  const confirmLines = [
-    `🌸 ${CONFIG.naam} 🌸`, ``,
-    `Bestelnummer: #${orderId}`, ``,
-    `Bedankt voor je bestelling, ${naam}!`, ``,
-    `Je bestelling:`, ...lines, ``,
-    `Totaal: ${fmt(sum)}`,
-    `Afhalen: ${afhaal}`,
-    `Adres: ${CONFIG.adres}`,
-    `Betaling: ${betaling}`
-  ];
-  if(note) confirmLines.push(``, `Opmerking: ${note}`);
-  confirmLines.push(``, `Tot snel! 🥢`);
-  const confirmText = confirmLines.join("\n");
+  const orderRows = Object.keys(cart).map(id => {
+    const m=byId(baseId(id)), q=cart[id];
+    const dish = (m.nr?"#"+m.nr+" ":"")+m.name.nl+variantNL(id);
+    return `<tr><td style="padding:6px 0;font-size:14px;color:#1a1410;">${esc(String(q))}× ${esc(dish)}</td><td align="right" style="padding:6px 0;font-size:14px;color:#1a1410;white-space:nowrap;">${fmt(m.price*q)}</td></tr>`;
+  }).join("");
+  const noteHtml = note ? `<tr><td style="padding:16px 32px 0 32px;"><div style="background:#FDE7F1;border-radius:12px;padding:12px 16px;font-size:14px;color:#333;line-height:1.6;"><strong style="color:#E8508E;">Opmerking:</strong> ${esc(note)}</div></td></tr>` : "";
+  const params = {
+    order_id: "#"+orderId, customer_name: naam, customer_phone: tel, customer_email: email||"—",
+    order_html: orderRows, total: fmt(sum), pickup: afhaal, address: CONFIG.adres, payment: betaling, note_html: noteHtml
+  };
+  const EJ = CONFIG.emailjs;
   const btn = document.getElementById("waBtn");
   btn.disabled = true; msg.className="order-msg"; msg.textContent = T().orderSending;
   try{
-    const r = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(CONFIG.email)}`, {
-      method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"},
-      body: JSON.stringify({ _subject:`Nieuwe bestelling #${orderId} — ${CONFIG.naam} (${afhaal})`, _template:"table",
-        _autoresponse: confirmText, _replyto: email,
-        Bestelnummer:"#"+orderId, Naam:naam, Telefoon:tel, email:email, Afhalen:afhaal, Bestelling:lines.join(" | "), Totaal:fmt(sum), Betaling:betaling, Opmerking:note||"—" })
-    });
-    if(r.ok){
-      Object.keys(cart).forEach(k => delete cart[k]);
-      store.save();
-      form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
-      buildMenu(); updateBars();
-      sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p></div>`;
-      sheetFoot.style.display = "none";
-    } else {
-      msg.className="order-msg err"; msg.textContent=T().orderFail;
-      btn.disabled = false;
-    }
+    if(!window.emailjs) throw new Error("emailjs not loaded");
+    // Naar het restaurant (verplicht — de bestelling moet aankomen)
+    await emailjs.send(EJ.serviceId, EJ.templateId, {...params, to_email: CONFIG.email}, { publicKey: EJ.publicKey });
+    // Naar de klant (alleen als ingevuld; best-effort bevestiging)
+    if(email) emailjs.send(EJ.serviceId, EJ.templateId, {...params, to_email: email}, { publicKey: EJ.publicKey }).catch(()=>{});
+    Object.keys(cart).forEach(k => delete cart[k]);
+    store.save();
+    form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
+    buildMenu(); updateBars();
+    sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p></div>`;
+    sheetFoot.style.display = "none";
   }catch(e){
     msg.className="order-msg err"; msg.textContent=T().orderFail;
     btn.disabled = false;
