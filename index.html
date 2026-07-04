@@ -343,6 +343,7 @@
   <button class="sl" id="bAdd">Gerecht</button>
   <button class="sl" id="bTrash">🗑️ Prullenbak</button>
   <button class="sl" id="bTikkie">💳 Tikkie</button>
+  <button class="sl" id="bPauze">⏸️ Bestellen</button>
   <button class="sl" id="bToken">🔑 Token</button>
   <button class="exp" id="bPublish">⬆ Publiceren</button>
   <button class="sl" id="bSluit">Sluiten</button>
@@ -425,7 +426,8 @@ const CONFIG = {
   telefoon: "06 58 97 73 39",
   afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
   emailjs: { serviceId:"service_2l06o1e", templateId:"template_5r324xm", publicKey:"u3yNoV14VAK-yfq19" },
-  agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec"
+  agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec",
+  bestel: { dagen:[0,1,2,3,4,5,6], van:"09:00", tot:"21:00" }   // dagen 0=zo..6=za; bestellen open binnen dit venster
 };
 
 /* ===================================================================
@@ -449,7 +451,7 @@ const I18N = {
     labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd",
     phName:"Voor- en achternaam", phEmail:"voor je bevestiging", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is naar het restaurant gestuurd en er is een bevestiging naar je e-mail onderweg.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.",
+    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is naar het restaurant gestuurd en er is een bevestiging naar je e-mail onderweg.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
     note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
     spice:["Mild pittig","Kruidig","Pittig"],
@@ -488,7 +490,7 @@ const I18N = {
     labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time",
     phName:"Full name", phEmail:"for your confirmation", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order sent! 🌸 Your order has been sent to the restaurant and a confirmation is on its way to your email.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderCooldown:"You just placed an order. Please wait a moment before ordering again.",
+    orderOk:"Order sent! 🌸 Your order has been sent to the restaurant and a confirmation is on its way to your email.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
     orderErr:"Please enter your name, phone and a valid email address.",
     note:"Your order is sent to the restaurant by email.",
     spice:["Mild","Spicy","Hot"],
@@ -527,7 +529,7 @@ const I18N = {
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ",
     phName:"ชื่อ-นามสกุล", phEmail:"สำหรับการยืนยัน", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อให้ร้านแล้ว และกำลังส่งอีเมลยืนยันไปให้คุณ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่",
+    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อให้ร้านแล้ว และกำลังส่งอีเมลยืนยันไปให้คุณ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
     note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
@@ -827,6 +829,7 @@ const cart = {};
 const PHOTO = {};
 const HIDDEN = new Set();
 let TIKKIE_ON = true;
+let ORDER_PAUSED = false;
 const DELETED = new Set();
 let EXTRA = [];
 const PRICES = {};
@@ -1156,6 +1159,13 @@ function renderSheet(){
   document.getElementById("grandTotal").textContent = fmt(sum);
   document.getElementById("payNotice").innerHTML = T()[form.pay==="contant"?"payMsgCash":"payMsgTikkie"](fmt(sum));
   sheetFoot.style.display = "block";
+  const st = orderStatus();
+  const wb = document.getElementById("waBtn");
+  if(!st.open){
+    wb.disabled = true;
+    const m = document.getElementById("orderMsg");
+    m.className = "order-msg err"; m.textContent = orderClosedMsg(st);
+  } else { wb.disabled = false; }
 }
 function buildOrder(){
   const ids = Object.keys(cart); let lines=[], sum=0;
@@ -1175,6 +1185,8 @@ document.getElementById("waBtn").onclick = async () => {
   const slot= document.getElementById("fSlot")?.value || pickupSlots()[0];
   const note=(document.getElementById("fNote")?.value||"").trim();
   const msg = document.getElementById("orderMsg");
+  const st = orderStatus();
+  if(!st.open){ msg.className="order-msg err"; msg.textContent=orderClosedMsg(st); return; }
   // Cooldown: niet te snel opnieuw bestellen vanaf hetzelfde apparaat
   const last = +(loadJSON("tta_lastorder").t || 0);
   if(last && Date.now() - last < 120000){ msg.className="order-msg err"; msg.textContent=T().orderCooldown; return; }
@@ -1307,6 +1319,8 @@ async function initBeheer(){
   document.getElementById("bTrash").onclick = openTrash;
   document.getElementById("bTikkie").onclick = toggleTikkie;
   updateTikkieBtn();
+  document.getElementById("bPauze").onclick = togglePauze;
+  updatePauzeBtn();
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
@@ -1333,6 +1347,16 @@ function choose(id, url){ chosen[id]=url; saveJSON("tta_fotos", chosen); setPhot
 function updateTikkieBtn(){
   const b = document.getElementById("bTikkie");
   if(b) b.textContent = TIKKIE_ON ? "💳 Tikkie: aan" : "💳 Tikkie: uit";
+}
+function updatePauzeBtn(){
+  const b = document.getElementById("bPauze");
+  if(b) b.textContent = ORDER_PAUSED ? "🔴 Bestellen: gepauzeerd" : "🟢 Bestellen: open";
+}
+function togglePauze(){
+  ORDER_PAUSED = !ORDER_PAUSED;
+  updatePauzeBtn();
+  if(sheet.classList.contains("open")) renderSheet();
+  livePush("bestelpauze.json", ()=>({paused:ORDER_PAUSED}), ORDER_PAUSED ? "Bestellen gepauzeerd" : "Bestellen heropend");
 }
 function toggleTikkie(){
   TIKKIE_ON = !TIKKIE_ON;
@@ -1559,6 +1583,7 @@ async function publishAll(){
     await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
     await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
     await ghPut("tikkie.json", {enabled:TIKKIE_ON}, "Tikkie-instelling publiceren");
+    await ghPut("bestelpauze.json", {paused:ORDER_PAUSED}, "Bestelpauze publiceren");
     showToast(T().adm.publishOk, true);
   }catch(e){ if(e.message!=="no-token") showToast(T().adm.pushErr + " (" + e.message + ")", false); }
 }
@@ -1807,6 +1832,20 @@ async function loadNummers(){
 async function loadTikkie(){
   try{ const r = await fetch("tikkie.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object" && typeof p.enabled==="boolean") TIKKIE_ON = p.enabled; } }catch(e){}
 }
+async function loadPauze(){
+  try{ const r = await fetch("bestelpauze.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object" && typeof p.paused==="boolean") ORDER_PAUSED = p.paused; } }catch(e){}
+}
+function orderStatus(){
+  if(ORDER_PAUSED) return {open:false, reason:"paused"};
+  const now = new Date(), day = now.getDay(), nowm = now.getHours()*60 + now.getMinutes();
+  if(!CONFIG.bestel.dagen.includes(day)) return {open:false, reason:"closed"};
+  if(nowm < pad(CONFIG.bestel.van) || nowm > pad(CONFIG.bestel.tot)) return {open:false, reason:"closed"};
+  return {open:true};
+}
+function orderClosedMsg(st){
+  const A = T();
+  return st.reason==="paused" ? A.orderPausedMsg : A.orderClosedHours(CONFIG.bestel.van, CONFIG.bestel.tot);
+}
 (async function init(){
   const savedLang = loadJSON("tta_lang_v").l;
   if(savedLang && I18N[savedLang]) LANG = savedLang;
@@ -1820,6 +1859,7 @@ async function loadTikkie(){
   await loadServetips();
   await loadNummers();
   await loadTikkie();
+  await loadPauze();
   if(BEHEER) await loadRecepten();
   if(!BEHEER) await loadHidden();
   Object.entries(store.load()).forEach(([id,q]) => { if(byId(baseId(id)) && q>0 && !HIDDEN.has(baseId(id))) cart[id]=q; });
