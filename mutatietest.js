@@ -187,5 +187,19 @@ function wait(ms){ return new Promise(r=>setTimeout(r, ms)); }
     fs.appendFileSync(summ, md);
   }
 
+  // Health-gegevens toevoegen voor het dashboard in beheer
+  try {
+    const path = "health.json";
+    let h = { updated: null, groepen: [] };
+    try { h = JSON.parse(fs.readFileSync(path, "utf8")); } catch (e) {}
+    h.groepen = (h.groepen || []).filter(g => g.naam !== "Beheer-acties");
+    h.groepen.push({
+      naam: "Beheer-acties",
+      items: results.map(([t, m]) => ({ naam: m, status: t === "ok" ? "ok" : "err" }))
+    });
+    h.updated = new Date().toISOString();
+    fs.writeFileSync(path, JSON.stringify(h, null, 1));
+  } catch (e) { console.log("kon health.json niet schrijven:", e.message); }
+
   process.exit(errs.length ? 1 : 0);
 })();
