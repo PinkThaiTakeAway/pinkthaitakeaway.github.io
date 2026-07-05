@@ -164,20 +164,15 @@ def check_live(html):
     st, _ = http(SITE + "/pink-thai-og.png")
     ok("deelbanner bereikbaar") if st == 200 else warn(f"deelbanner status {st}")
 
-    # 10. Externe diensten waar de bestelfunctie op leunt
-    #     E-mail (EmailJS SDK) en de agenda-koppeling (Apps Script)
-    m = re.search(r'src="(https://cdn\.jsdelivr\.net/[^"]*email[^"]*)"', html or "")
-    if m:
-        st, _ = http(m.group(1))
-        ok("e-mail-SDK (EmailJS) bereikbaar") if st == 200 else warn(f"e-mail-SDK status {st}")
+    # 10. De agenda-koppeling (Apps Script) — verzorgt nu ook alle e-mail
     m = re.search(r'agendaUrl:\s*"([^"]+)"', html or "")
     if m:
         st, _ = http(m.group(1))
         # Apps Script antwoordt op een GET vaak met 200/302/405 - elk is 'leeft'
         if st is not None:
-            ok(f"agenda-koppeling reageert (status {st})")
+            ok(f"bestel- & e-mailkoppeling reageert (status {st})")
         else:
-            warn("agenda-koppeling reageerde niet")
+            warn("bestel- & e-mailkoppeling reageerde niet")
 
 # ----------------------------------------------------------------------------
 def write_health(groep, items, reset=False):
