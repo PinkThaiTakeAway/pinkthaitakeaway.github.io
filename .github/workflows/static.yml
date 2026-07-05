@@ -1,4 +1,4 @@
-# Publiceert de statische site naar GitHub Pages + zelfcontrole (repo + live)
+# Publiceert de statische site naar GitHub Pages + volledige zelfcontrole
 name: Deploy static content to Pages
 
 on:
@@ -27,9 +27,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --- Zelfcontrole van de repo-inhoud (vóór publiceren) ---
+      # --- Zelfcontrole van de bronbestanden ---
       - name: Zelfcontrole (repo-inhoud)
         run: python3 selfcheck.py
+
+      # --- Alle beheer-acties uitproberen in een afgeschermde kopie ---
+      - name: Mutatie-zelftest (alle beheer-acties)
+        run: |
+          npm install jsdom --no-save --silent
+          node mutatietest.js
 
       # --- Publiceren met automatische herhaling ---
       - name: Setup Pages
@@ -57,7 +63,7 @@ jobs:
         if: steps.deployment.outcome == 'failure' && steps.deploy2.outcome == 'failure'
         uses: actions/deploy-pages@v5
 
-      # --- Zelfcontrole van de gepubliceerde site (na publiceren) ---
+      # --- Zelfcontrole van de gepubliceerde site ---
       - name: Even wachten op verwerking
         run: sleep 20
       - name: Zelfcontrole (live site)
