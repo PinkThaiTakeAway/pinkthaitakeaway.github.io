@@ -1820,7 +1820,7 @@ function bestelHtml(b){
   const d = b.tijd ? new Date(b.tijd) : null;
   const tijd = d && !isNaN(d) ? d.toLocaleString("nl-NL",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
   return '<div class="kbest">'+
-    '<div class="kbreg"><span class="kbtijd">#'+esc(b.id)+' · '+esc(tijd)+'</span><span class="kbtot">€ '+esc(b.totaal||"")+'</span></div>'+
+    '<div class="kbreg"><span class="kbtijd">#'+esc(b.id)+' · '+esc(tijd)+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
     (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
     '<div>'+(b.afgehaald?'<span class="kbadge afg">afgehaald</span>':'<span class="kbadge open">open</span>')+(b.bedankt?'<span class="kbadge bdk">bedankt</span>':'')+'</div>'+
     '<div class="kacts">'+
