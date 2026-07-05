@@ -480,6 +480,7 @@ const CONFIG = {
   afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
   emailjs: { serviceId:"service_2l06o1e", templateId:"template_5r324xm", publicKey:"u3yNoV14VAK-yfq19" },
   agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec",
+  emailLimiet: 200,                              // EmailJS gratis: max 200 e-mails per maand
   bestel: { dagen:[0,1,2,3,4,5,6], van:"00:00", tot:"23:59", cutoffDag:5, cutoffUur:23 }   // hele dag open; auto-pauze op cutoffDag (5=vr) om cutoffUur
 };
 
@@ -1620,6 +1621,20 @@ function wireShare(){
     catch(e){ showToast(url, null); }
   };
 }
+function fetchMailCount(){
+  return new Promise((resolve)=>{
+    if(!CONFIG.agendaUrl){ resolve(null); return; }
+    const cb = "ttaMail" + Date.now() + Math.floor(Math.random()*1000);
+    const s = document.createElement("script");
+    let done = false;
+    function cleanup(){ try{ delete window[cb]; }catch(e){ window[cb] = undefined; } if(s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = (data)=>{ if(!done){ done = true; resolve(data); cleanup(); } };
+    s.onerror = ()=>{ if(!done){ done = true; resolve(null); cleanup(); } };
+    s.src = CONFIG.agendaUrl + (CONFIG.agendaUrl.indexOf("?")>=0 ? "&" : "?") + "callback=" + cb + "&t=" + Date.now();
+    document.body.appendChild(s);
+    setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 7000);
+  });
+}
 async function checkAccess(){
   const items = [];
   const tok = ghToken();
@@ -1649,6 +1664,22 @@ async function checkAccess(){
     }catch(e){
       items.push({naam:"Publicatie-token: kon niet controleren (netwerk)", status:"warn"});
     }
+  }
+  // E-mailverbruik deze maand (schatting via de agenda-koppeling)
+  const limiet = CONFIG.emailLimiet || 200;
+  try{
+    const mc = await fetchMailCount();
+    if(mc && typeof mc.emails === "number"){
+      let st = "ok";
+      if(mc.emails >= limiet) st = "err";
+      else if(mc.emails >= limiet*0.8) st = "warn";
+      const best = (typeof mc.bestellingen === "number") ? ` (${mc.bestellingen} bestelling${mc.bestellingen===1?"":"en"})` : "";
+      items.push({naam:`E-mails deze maand: \u00b1 ${mc.emails} van ${limiet}${best}`, status:st});
+    } else {
+      items.push({naam:`E-mailverbruik: nog niet beschikbaar (agenda-koppeling nog niet bijgewerkt) \u2014 limiet ${limiet}/maand`, status:"warn"});
+    }
+  }catch(e){
+    items.push({naam:"E-mailverbruik: kon niet ophalen", status:"warn"});
   }
   return {naam:"Toegang & limieten", items};
 }
