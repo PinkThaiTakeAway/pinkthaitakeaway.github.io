@@ -1346,7 +1346,7 @@ document.getElementById("waBtn").onclick = async () => {
       actie: "bestelling",
       start: pickupISO(slot), order_id: orderId, naam, tel, email,
       bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
-      afhaal, taal: LANG
+      afhaal, taal: LANG, mand: JSON.stringify(cart)
     });
     if(!r || !r.ok) throw new Error("bestelling niet doorgekomen");
     saveJSON("tta_lastorder", {t: Date.now()});
@@ -1866,9 +1866,9 @@ function openKlanten(){ document.getElementById("klantOverlay").classList.add("o
 function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
 
 const VOLG_T = {
-  nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link uit je bevestigingsmail.", laden:"Laden…", ver:"Status vernieuwen" },
-  en: { titel:"Your order", open:"🟠 We're preparing your order", klaar:"✅ Picked up", afhalen:"Pickup", totaal:"Total", betaling:"Payment", niet:"Order not found. Please check the link in your confirmation e-mail.", laden:"Loading…", ver:"Refresh status" },
-  th: { titel:"ออเดอร์ของคุณ", open:"🟠 กำลังเตรียมออเดอร์ของคุณ", klaar:"✅ รับแล้ว", afhalen:"รับอาหาร", totaal:"รวม", betaling:"การชำระเงิน", niet:"ไม่พบออเดอร์ กรุณาตรวจสอบลิงก์ในอีเมลยืนยัน", laden:"กำลังโหลด…", ver:"รีเฟรชสถานะ" }
+  nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link uit je bevestigingsmail.", laden:"Laden…", ver:"Status vernieuwen", opnieuw:"🔁 Opnieuw bestellen", hersteld:"Je bestelling staat weer in je mandje", nietsHersteld:"Kon de bestelling niet herstellen", geslotenMand:"Je mandje is gevuld — bestellen kan zodra we weer open zijn" },
+  en: { titel:"Your order", open:"🟠 We're preparing your order", klaar:"✅ Picked up", afhalen:"Pickup", totaal:"Total", betaling:"Payment", niet:"Order not found. Please check the link in your confirmation e-mail.", laden:"Loading…", ver:"Refresh status", opnieuw:"🔁 Order again", hersteld:"Your order is back in your cart", nietsHersteld:"Could not restore the order", geslotenMand:"Your cart is filled — you can order once we\u2019re open again" },
+  th: { titel:"ออเดอร์ของคุณ", open:"🟠 กำลังเตรียมออเดอร์ของคุณ", klaar:"✅ รับแล้ว", afhalen:"รับอาหาร", totaal:"รวม", betaling:"การชำระเงิน", niet:"ไม่พบออเดอร์ กรุณาตรวจสอบลิงก์ในอีเมลยืนยัน", laden:"กำลังโหลด…", ver:"รีเฟรชสถานะ", opnieuw:"🔁 สั่งอีกครั้ง", hersteld:"ออเดอร์ของคุณกลับเข้าตะกร้าแล้ว", nietsHersteld:"กู้คืนออเดอร์ไม่ได้", geslotenMand:"ใส่ตะกร้าแล้ว — สั่งได้เมื่อเราเปิดอีกครั้ง" }
 };
 const BEHEER_T = {
   nl: {
@@ -1977,6 +1977,7 @@ const BEHEER_T = {
 function BT(){ return BEHEER_T[LANG] || BEHEER_T.nl; }
 
 let _volgCode = "";
+let _volgData = null;
 function openVolg(code){ _volgCode = code; document.getElementById("volgOverlay").classList.add("open"); laadVolg(code); }
 function closeVolg(){ document.getElementById("volgOverlay").classList.remove("open"); }
 async function laadVolg(code){
@@ -1991,6 +1992,7 @@ async function laadVolg(code){
 }
 function renderVolg(b){
   const VT = VOLG_T[LANG] || VOLG_T.nl;
+  _volgData = b;
   const body = document.getElementById("volgBody");
   const regels = String(b.bestelling||"").split("\n").filter(x=>x.trim())
     .map(r=>'<div style="padding:4px 0;border-bottom:1px solid #f2f2f2">'+esc(r)+'</div>').join("");
@@ -2004,7 +2006,36 @@ function renderVolg(b){
       '<div class="kstat"><strong>'+esc(VT.totaal)+':</strong> '+esc(b.totaal||"")+'</div>'+
       (b.afhaal?('<div class="kstat"><strong>'+esc(VT.afhalen)+':</strong> '+esc(b.afhaal)+'</div>'):'')+
       (b.betaling?('<div class="kstat"><strong>'+esc(VT.betaling)+':</strong> '+esc(b.betaling)+'</div>'):'')+
-    '</div>';
+    '</div>'+
+    '<button id="volgAgain" class="hreload" style="background:var(--amber);margin-top:14px">'+esc(VT.opnieuw)+'</button>';
+  const ag = document.getElementById("volgAgain"); if(ag) ag.onclick = herstelMand;
+}
+function herstelMand(){
+  const VT = VOLG_T[LANG] || VOLG_T.nl;
+  if(!_volgData) return;
+  Object.keys(cart).forEach(k => delete cart[k]);
+  let n = 0, mand = null;
+  if(_volgData.mand){ try{ mand = JSON.parse(_volgData.mand); }catch(e){ mand = null; } }
+  if(mand && typeof mand === "object"){
+    for(const key in mand){
+      const base = byId(baseId(key)); const q = parseInt(mand[key],10)||0;
+      if(base && !HIDDEN.has(base.id) && q>0){ cart[key] = q; n += q; }
+    }
+  }
+  if(!n && _volgData.bestelling){
+    String(_volgData.bestelling).split("\n").forEach(line=>{
+      const m = line.match(/^\s*(\d+)\s*[×x]\s*#(\d+)\b/);
+      if(m){ const q = parseInt(m[1],10)||0, nr = parseInt(m[2],10); const item = MENU.find(x=>x.nr===nr);
+        if(item && !HIDDEN.has(item.id) && q>0){ cart[item.id] = (cart[item.id]||0)+q; n += q; } }
+    });
+  }
+  if(!n){ showToast(VT.nietsHersteld, false); return; }
+  try{ store.save(); }catch(e){}
+  updateBars();
+  closeVolg();
+  const st = (typeof orderStatus === "function") ? orderStatus() : {open:true};
+  if(st.open){ openSheet(); showToast(VT.hersteld, true); }
+  else { if(typeof refreshOrderingUI==="function") refreshOrderingUI(); showToast(VT.geslotenMand, true); }
 }
 
 async function laadKlanten(){
