@@ -1,15 +1,12 @@
-# Publiceert de statische site naar GitHub Pages + dagelijkse zelfcontrole
+# Publiceert de statische site naar GitHub Pages + zelfcontrole (repo + live)
 name: Deploy static content to Pages
 
 on:
-  # Bij elke wijziging aan de site
   push:
     branches: ["main"]
-  # Handmatig te starten vanaf het tabblad Actions
   workflow_dispatch:
-  # Dagelijkse zelfcontrole (rond 05:00 UTC ≈ 07:00 NL)
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '0 5 * * *'   # dagelijkse zelfcontrole (± 07:00 NL)
 
 permissions:
   contents: read
@@ -30,35 +27,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --- Zelfcontrole vooraf ---
-      - name: Controleer index.html
-        run: |
-          test -f index.html || { echo "::error::index.html ontbreekt"; exit 1; }
-          grep -q "Pink Thai TakeAway" index.html || { echo "::error::index.html mist verwachte inhoud"; exit 1; }
-          echo "index.html OK"
+      # --- Zelfcontrole van de repo-inhoud (vóór publiceren) ---
+      - name: Zelfcontrole (repo-inhoud)
+        run: python3 selfcheck.py
 
-      - name: Controleer databestanden (geldige JSON)
-        run: |
-          fout=0
-          for f in *.json; do
-            [ -e "$f" ] || continue
-            if python3 -c "import json; json.load(open('$f'))" 2>/dev/null; then
-              echo "OK: $f"
-            else
-              echo "::error::Ongeldige JSON in $f"
-              fout=1
-            fi
-          done
-          exit $fout
-
-      # --- Publiceren (corrigeert automatisch: zet live = repo) ---
+      # --- Publiceren met automatische herhaling ---
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-
       - name: Deploy to GitHub Pages (poging 1)
         id: deployment
         uses: actions/deploy-pages@v5
@@ -78,10 +57,8 @@ jobs:
         if: steps.deployment.outcome == 'failure' && steps.deploy2.outcome == 'failure'
         uses: actions/deploy-pages@v5
 
-      # --- Zelfcontrole achteraf: is de site echt bereikbaar? ---
-      - name: Controleer live site
-        run: |
-          sleep 30
-          code=$(curl -s -o /dev/null -w "%{http_code}" https://pinkthaitakeaway.github.io/)
-          echo "Live site status: $code"
-          if [ "$code" != "200" ]; then echo "::warning::Live site gaf status $code — controleer de publicatie"; fi
+      # --- Zelfcontrole van de gepubliceerde site (na publiceren) ---
+      - name: Even wachten op verwerking
+        run: sleep 20
+      - name: Zelfcontrole (live site)
+        run: python3 selfcheck.py --live
