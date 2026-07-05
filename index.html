@@ -330,6 +330,27 @@
   .hsum.bad{background:#fde8ea;color:#c0142c}
   .hreload{width:100%;margin-top:6px;background:var(--forest);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700;font-family:inherit;cursor:pointer}
   .hloading{text-align:center;color:#888;padding:24px 0}
+  .kzoek{width:100%;box-sizing:border-box;padding:11px 14px;margin-bottom:12px;border:1px solid #ddd;border-radius:10px;font-family:inherit;font-size:.95rem}
+  .kklant{border:1px solid #eee;border-radius:12px;padding:12px 14px;margin-bottom:12px}
+  .kklant .knaam{font-weight:700;color:var(--forest);font-size:1.02rem}
+  .kklant .kmeta{font-size:.82rem;color:#777;margin:2px 0 4px}
+  .kklant .kstat{font-size:.82rem;color:#555;margin-bottom:6px}
+  .kklant .kmailbtn{background:var(--forest-2);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-weight:700;font-size:.8rem;font-family:inherit;cursor:pointer}
+  .kbest{border-top:1px solid #f0f0f0;padding:8px 0;font-size:.9rem}
+  .kbest .kbtijd{font-size:.8rem;color:#888}
+  .kbest .kbreg{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .kbest .kbtot{font-weight:700;white-space:nowrap}
+  .kbest .kbbestel{white-space:pre-line;color:#444;margin:3px 0}
+  .kbadge{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-right:5px}
+  .kbadge.afg{background:#e6f7ec;color:#1a7f37}
+  .kbadge.open{background:#fff3e0;color:#9a6a00}
+  .kbadge.bdk{background:#eef2fb;color:#274b9a}
+  .kacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .kacts button{border:1px solid #ccc;background:#fff;border-radius:8px;padding:5px 10px;font-size:.78rem;font-weight:700;font-family:inherit;cursor:pointer;color:#333}
+  .kacts button.prim{background:var(--amber);border-color:var(--amber);color:#fff}
+  .ksleutel{text-align:center;padding:18px 0}
+  .ksleutel input{width:100%;box-sizing:border-box;padding:11px 14px;margin:10px 0;border:1px solid #ddd;border-radius:10px;font-family:inherit}
+  .ksleutel button{background:var(--forest);color:#fff;border:none;padding:11px 20px;border-radius:10px;font-weight:700;font-family:inherit;cursor:pointer}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -385,6 +406,7 @@
   <button class="sl" id="bTikkie">💳 Tikkie</button>
   <button class="sl" id="bPauze">⏸️ Bestellen</button>
   <button class="sl" id="bHealth">🩺 Health</button>
+  <button class="sl" id="bKlanten">👥 Klanten</button>
   <button class="sl" id="bToken">🔑 Token</button>
   <button class="exp" id="bPublish">⬆ Publiceren</button>
   <button class="sl" id="bSluit">Sluiten</button>
@@ -399,6 +421,18 @@
     <p id="hUpdated" class="hupd">—</p>
     <div id="hBody" class="hbody"></div>
     <button id="hReload" class="hreload">Opnieuw laden</button>
+  </div>
+</div>
+
+<div id="klantOverlay" class="hoverlay">
+  <div class="hpanel">
+    <div class="hhead">
+      <h3>👥 Klanten</h3>
+      <button id="kClose" class="hclose" aria-label="Sluiten">✕</button>
+    </div>
+    <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam, e-mail of telefoon…" autocomplete="off">
+    <div id="kBody" class="hbody"></div>
+    <button id="kReload" class="hreload">Opnieuw laden</button>
   </div>
 </div>
 
@@ -1286,7 +1320,7 @@ document.getElementById("waBtn").onclick = async () => {
     if(CONFIG.agendaUrl){
       fetch(CONFIG.agendaUrl, { method:"POST", mode:"no-cors", body: JSON.stringify({
         start: pickupISO(slot), order_id: orderId, naam, tel, email,
-        bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note
+        bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note, taal: LANG
       })}).catch(()=>{});
     }
     saveJSON("tta_lastorder", {t: Date.now()});
@@ -1391,6 +1425,18 @@ async function initBeheer(){
   document.getElementById("hClose").onclick = closeHealth;
   document.getElementById("hReload").onclick = laadHealth;
   document.getElementById("healthOverlay").addEventListener("click", (e) => { if(e.target.id === "healthOverlay") closeHealth(); });
+  document.getElementById("bKlanten").onclick = openKlanten;
+  document.getElementById("kClose").onclick = closeKlanten;
+  document.getElementById("kReload").onclick = laadKlanten;
+  document.getElementById("kZoek").addEventListener("input", renderKlanten);
+  document.getElementById("klantOverlay").addEventListener("click", (e) => { if(e.target.id === "klantOverlay") closeKlanten(); });
+  document.getElementById("kBody").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-a]"); if(!btn) return;
+    const a = btn.dataset.a;
+    if(a==="afg") klantAfgehaald(btn.dataset.id, btn.dataset.w==="1");
+    else if(a==="bedank") klantBedank(btn.dataset.id);
+    else if(a==="mail") klantMail(btn.dataset.email);
+  });
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
@@ -1621,20 +1667,23 @@ function wireShare(){
     catch(e){ showToast(url, null); }
   };
 }
-function fetchMailCount(){
+function jsonp(params){
   return new Promise((resolve)=>{
     if(!CONFIG.agendaUrl){ resolve(null); return; }
-    const cb = "ttaMail" + Date.now() + Math.floor(Math.random()*1000);
+    const cb = "ttaCb" + Date.now() + Math.floor(Math.random()*10000);
     const s = document.createElement("script");
     let done = false;
     function cleanup(){ try{ delete window[cb]; }catch(e){ window[cb] = undefined; } if(s.parentNode) s.parentNode.removeChild(s); }
     window[cb] = (data)=>{ if(!done){ done = true; resolve(data); cleanup(); } };
     s.onerror = ()=>{ if(!done){ done = true; resolve(null); cleanup(); } };
-    s.src = CONFIG.agendaUrl + (CONFIG.agendaUrl.indexOf("?")>=0 ? "&" : "?") + "callback=" + cb + "&t=" + Date.now();
+    let qs = "callback=" + cb + "&t=" + Date.now();
+    for(const k in (params||{})){ qs += "&" + encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }
+    s.src = CONFIG.agendaUrl + (CONFIG.agendaUrl.indexOf("?")>=0 ? "&" : "?") + qs;
     document.body.appendChild(s);
-    setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 7000);
+    setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 8000);
   });
 }
+function fetchMailCount(){ return jsonp({actie:"mailcount"}); }
 async function checkAccess(){
   const items = [];
   const tok = ghToken();
@@ -1713,6 +1762,94 @@ function renderHealth(h){
 }
 function openHealth(){ document.getElementById("healthOverlay").classList.add("open"); laadHealth(); }
 function closeHealth(){ document.getElementById("healthOverlay").classList.remove("open"); }
+
+function klantKey(){ return localStorage.getItem("tta_klantkey") || ""; }
+let _klantData = [];
+function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); laadKlanten(); }
+function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
+
+async function laadKlanten(){
+  const body = document.getElementById("kBody");
+  if(!klantKey()){ toonSleutelInvoer(); return; }
+  body.innerHTML = '<p class="hloading">Klanten laden…</p>';
+  const r = await jsonp({actie:"klanten", key:klantKey()});
+  if(!r){ body.innerHTML = '<p class="hloading">Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?</p>'; return; }
+  if(!r.ok){
+    if(r.fout === "geen toegang"){ localStorage.removeItem("tta_klantkey"); toonSleutelInvoer("De sleutel klopt niet. Probeer opnieuw."); }
+    else body.innerHTML = '<p class="hloading">Kon klanten niet laden.</p>';
+    return;
+  }
+  _klantData = r.bestellingen || [];
+  renderKlanten();
+}
+function toonSleutelInvoer(fout){
+  document.getElementById("kBody").innerHTML =
+    '<div class="ksleutel">'+
+    '<p>Voer je beheersleutel in om het klantenbestand te bekijken.</p>'+
+    (fout ? ('<p style="color:#c0142c;font-weight:600">'+esc(fout)+'</p>') : '')+
+    '<input id="kKeyIn" type="password" placeholder="Beheersleutel" autocomplete="off">'+
+    '<button id="kKeyOk">Openen</button></div>';
+  document.getElementById("kKeyOk").onclick = ()=>{ const v = document.getElementById("kKeyIn").value.trim(); if(v){ localStorage.setItem("tta_klantkey", v); laadKlanten(); } };
+  document.getElementById("kKeyIn").addEventListener("keydown", (e)=>{ if(e.key==="Enter") document.getElementById("kKeyOk").click(); });
+}
+function renderKlanten(){
+  const body = document.getElementById("kBody");
+  const q = (document.getElementById("kZoek").value||"").toLowerCase().trim();
+  const map = {};
+  _klantData.forEach(b=>{
+    const k = (b.email||b.tel||b.naam||"?").toLowerCase();
+    if(!map[k]) map[k] = {naam:b.naam, email:b.email, tel:b.tel, bestellingen:[]};
+    if(!map[k].naam && b.naam) map[k].naam = b.naam;
+    map[k].bestellingen.push(b);
+  });
+  let klanten = Object.values(map);
+  if(q) klanten = klanten.filter(k => ((k.naam||"")+" "+(k.email||"")+" "+(k.tel||"")).toLowerCase().includes(q));
+  if(!klanten.length){ body.innerHTML = '<p class="hloading">'+(_klantData.length?'Geen klanten gevonden.':'Nog geen bestellingen in het klantenbestand.')+'</p>'; return; }
+  body.innerHTML = klanten.map(k=>{
+    const n = k.bestellingen.length;
+    return '<div class="kklant">'+
+      '<div class="knaam">'+esc(k.naam||"(naam onbekend)")+'</div>'+
+      '<div class="kmeta">'+esc(k.email||"")+(k.tel?(' · '+esc(k.tel)):'')+'</div>'+
+      '<div class="kstat">'+n+' bestelling'+(n===1?'':'en')+'</div>'+
+      (k.email?('<button class="kmailbtn" data-a="mail" data-email="'+esc(k.email)+'">✉ Losse mail</button>'):'')+
+      k.bestellingen.map(bestelHtml).join("")+
+    '</div>';
+  }).join("");
+}
+function bestelHtml(b){
+  const d = b.tijd ? new Date(b.tijd) : null;
+  const tijd = d && !isNaN(d) ? d.toLocaleString("nl-NL",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+  return '<div class="kbest">'+
+    '<div class="kbreg"><span class="kbtijd">#'+esc(b.id)+' · '+esc(tijd)+'</span><span class="kbtot">€ '+esc(b.totaal||"")+'</span></div>'+
+    (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
+    '<div>'+(b.afgehaald?'<span class="kbadge afg">afgehaald</span>':'<span class="kbadge open">open</span>')+(b.bedankt?'<span class="kbadge bdk">bedankt</span>':'')+'</div>'+
+    '<div class="kacts">'+
+      '<button data-a="afg" data-id="'+esc(b.id)+'" data-w="'+(b.afgehaald?'0':'1')+'">'+(b.afgehaald?'↺ Toch niet afgehaald':'✓ Markeer afgehaald')+'</button>'+
+      (b.email?('<button class="prim" data-a="bedank" data-id="'+esc(b.id)+'"'+(b.bedankt?' disabled':'')+'>✉ '+(b.bedankt?'Al bedankt':'Bedankmail')+'</button>'):'')+
+    '</div></div>';
+}
+async function klantAfgehaald(id, waarde){
+  const r = await jsonp({actie:"afgehaald", id, waarde: waarde?"ja":"nee", key:klantKey()});
+  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.afgehaald=waarde; renderKlanten(); showToast("Bijgewerkt", true); }
+  else showToast("Kon niet bijwerken", false);
+}
+async function klantBedank(id){
+  if(!confirm("Bedankmail versturen naar deze klant?")) return;
+  const r = await jsonp({actie:"bedankmail", id, key:klantKey()});
+  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.bedankt=true; renderKlanten(); showToast("Bedankmail verstuurd", true); }
+  else showToast((r&&r.fout==="geen e-mail")?"Klant heeft geen e-mail":"Kon mail niet versturen", false);
+}
+async function klantMail(email){
+  const b = _klantData.find(x => (x.email||"")===email);
+  const naam = b ? (b.naam||"") : "";
+  const onderwerp = prompt("Onderwerp:", "Bericht van Pink Thai TakeAway");
+  if(onderwerp===null) return;
+  const bericht = prompt("Bericht:", "Hoi "+naam+",\n\n");
+  if(bericht===null) return;
+  const r = await jsonp({actie:"mail", email, onderwerp, bericht, key:klantKey()});
+  if(r && r.ok) showToast("Mail verstuurd", true);
+  else showToast("Kon mail niet versturen", false);
+}
 
 function showToast(msg, ok){
   let t = document.getElementById("beheerToast");
