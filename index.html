@@ -55,6 +55,8 @@
   .bar{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;gap:10px}
   .brand{display:flex;align-items:baseline;gap:8px;min-width:0;flex:0 1 auto}
   body:not(.beheer) header .brand{display:none}
+  body.beheer header .brand .logo{display:none}
+  body.beheer .mgmt-badge{margin-left:0}
   .brand .logo{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(.86rem,3.1vw,1.42rem);color:var(--forest);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .brand .logo .dot{color:var(--amber)}
   .bar-right{display:flex;align-items:center;gap:8px;flex:0 0 auto;margin-left:auto}
@@ -86,7 +88,6 @@
   .hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:30px}
   .hero-brand{flex:1 1 auto;align-self:center;font-family:'Fraunces',serif;font-weight:800;font-size:clamp(1.25rem,4vw,2rem);line-height:1.05;color:#FBF6EC;letter-spacing:-.01em}
   .hero-brand .dot{color:var(--amber)}
-  body.beheer .hero-brand{display:none}
   .hero-portret{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
   .hero-portret img{width:clamp(92px,12vw,140px);height:auto;aspect-ratio:1/1;border-radius:50%;display:block;border:4px solid rgba(255,255,255,.92);box-shadow:0 14px 44px rgba(0,0,0,.4)}
   .hero-portret-label{display:block;margin-top:0;font-size:.8rem;font-weight:700;color:var(--amber);letter-spacing:.01em;max-width:150px}
