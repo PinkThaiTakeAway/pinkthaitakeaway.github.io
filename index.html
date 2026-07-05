@@ -1739,7 +1739,17 @@ async function haalHealthData(){
   return h;
 }
 async function updateHealthBadge(){
-  try{ zetHealthBadge(healthStatusVan(await haalHealthData())); }catch(e){}
+  let h = {groepen:[]};
+  try{
+    const r = await fetch("health.json?t=" + Date.now(), {cache:"no-store"});
+    if(r.ok) h = await r.json();
+  }catch(e){}
+  zetHealthBadge(healthStatusVan(h));                 // meteen: op basis van de laatste controle
+  try{
+    const acc = await checkAccess();
+    h.groepen = [acc, ...(h.groepen||[])];
+    zetHealthBadge(healthStatusVan(h));               // verfijnen met token + e-mail
+  }catch(e){}
 }
 async function laadHealth(){
   const body = document.getElementById("hBody");
