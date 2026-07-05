@@ -54,9 +54,10 @@
   header{position:sticky;top:0;z-index:60;background:rgba(251,246,236,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .bar{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;gap:10px}
   .brand{display:flex;align-items:baseline;gap:8px;min-width:0;flex:0 1 auto}
+  body:not(.beheer) header .brand{display:none}
   .brand .logo{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(.86rem,3.1vw,1.42rem);color:var(--forest);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .brand .logo .dot{color:var(--amber)}
-  .bar-right{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .bar-right{display:flex;align-items:center;gap:8px;flex:0 0 auto;margin-left:auto}
   .langsw{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
   .langsw button{font-size:.74rem;font-weight:800;color:var(--muted);padding:7px 9px;letter-spacing:.02em}
   .langsw button.on{background:var(--forest);color:#fff}
@@ -82,18 +83,21 @@
   .hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:var(--amber);color:var(--ink);font-weight:800;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s,background .2s}
   .hero-cta:hover{background:var(--amber-deep)}
   .hero-cta:active{transform:scale(.97)}
-  .hero-inner{display:flex;align-items:center;gap:44px}
+  .hero-inner{display:flex;align-items:flex-start;gap:36px}
   .hero-copy{flex:1 1 auto;min-width:0}
-  .hero-portret{flex:0 0 auto;text-align:center}
-  .hero-portret img{width:clamp(148px,17vw,208px);height:auto;aspect-ratio:1/1;border-radius:50%;display:block;border:4px solid rgba(255,255,255,.92);box-shadow:0 14px 44px rgba(0,0,0,.4)}
-  .hero-portret-label{display:block;margin-top:14px;font-size:.92rem;font-weight:700;color:var(--amber);letter-spacing:.01em}
+  .hero-portret{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+  .hero-brand{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(1.35rem,2.3vw,1.95rem);line-height:1.05;color:#FBF6EC;letter-spacing:-.01em}
+  .hero-brand .dot{color:var(--amber)}
+  body.beheer .hero-brand{display:none}
+  .hero-portret img{width:clamp(118px,13.5vw,166px);height:auto;aspect-ratio:1/1;border-radius:50%;display:block;border:4px solid rgba(255,255,255,.92);box-shadow:0 14px 44px rgba(0,0,0,.4)}
+  .hero-portret-label{display:block;margin-top:0;font-size:.92rem;font-weight:700;color:var(--amber);letter-spacing:.01em}
   @media(max-width:760px){
     .hero-inner{flex-direction:column-reverse;align-items:center;gap:26px;text-align:center}
     .hero-copy{width:100%}
     .hero h1,.hero p{max-width:none}
     .hero .eyebrow{margin-left:auto;margin-right:auto}
     .chips,.hero-actions{justify-content:center}
-    .hero-portret img{width:120px;border-width:3px}
+    .hero-portret img{width:104px;border-width:3px}
   }
 
   .catnav{position:sticky;top:57px;z-index:50;background:rgba(251,246,236,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -306,17 +310,9 @@
 
   @media(max-width:560px){
     #cartLabel{display:none}
-    .cart-btn{padding:7px 9px;gap:5px}
-    .langsw button{padding:6px 7px;font-size:.7rem}
-    .acct-btn{padding:6px 8px;border:none;font-size:1rem}
-    .bar{gap:7px;padding:10px 12px}
-    .bar-right{gap:6px}
-  }
-  @media(max-width:400px){
-    .langsw button{padding:6px 6px;font-size:.66rem}
-    .cart-btn{padding:6px 8px}
-    .acct-btn{padding:6px 6px}
-    .bar{gap:6px;padding:10px 10px}
+    .cart-btn{padding:8px 11px}
+    .langsw button{padding:7px 8px;font-size:.72rem}
+    .bar{gap:8px;padding:10px 14px}
   }
   @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
   .closed-banner{display:none;background:var(--amber);color:#fff;text-align:center;padding:13px 16px;font-weight:800;font-size:.95rem;line-height:1.4}
@@ -442,6 +438,7 @@
       </div>
     </div>
     <div class="hero-portret">
+      <span class="hero-brand brandname">Pink Thai TakeAway<span class="dot">.</span></span>
       <picture>
         <source srcset="chef.webp" type="image/webp">
         <img src="chef.jpg" alt="Pink — Pink Thai TakeAway" width="270" height="270" loading="eager">
