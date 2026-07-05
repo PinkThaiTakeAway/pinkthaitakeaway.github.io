@@ -1,28 +1,26 @@
-# Simple workflow for deploying static content to GitHub Pages
+# Publiceert de statische site naar GitHub Pages + dagelijkse zelfcontrole
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Bij elke wijziging aan de site
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
+  # Handmatig te starten vanaf het tabblad Actions
   workflow_dispatch:
+  # Dagelijkse zelfcontrole (rond 05:00 UTC ≈ 07:00 NL)
+  schedule:
+    - cron: '0 5 * * *'
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -31,13 +29,59 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # --- Zelfcontrole vooraf ---
+      - name: Controleer index.html
+        run: |
+          test -f index.html || { echo "::error::index.html ontbreekt"; exit 1; }
+          grep -q "Pink Thai TakeAway" index.html || { echo "::error::index.html mist verwachte inhoud"; exit 1; }
+          echo "index.html OK"
+
+      - name: Controleer databestanden (geldige JSON)
+        run: |
+          fout=0
+          for f in *.json; do
+            [ -e "$f" ] || continue
+            if python3 -c "import json; json.load(open('$f'))" 2>/dev/null; then
+              echo "OK: $f"
+            else
+              echo "::error::Ongeldige JSON in $f"
+              fout=1
+            fi
+          done
+          exit $fout
+
+      # --- Publiceren (corrigeert automatisch: zet live = repo) ---
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: '.'
-      - name: Deploy to GitHub Pages
+
+      - name: Deploy to GitHub Pages (poging 1)
         id: deployment
         uses: actions/deploy-pages@v5
+        continue-on-error: true
+      - name: Even wachten
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 20
+      - name: Deploy to GitHub Pages (poging 2)
+        id: deploy2
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v5
+        continue-on-error: true
+      - name: Nog even wachten
+        if: steps.deployment.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        run: sleep 30
+      - name: Deploy to GitHub Pages (poging 3)
+        if: steps.deployment.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        uses: actions/deploy-pages@v5
+
+      # --- Zelfcontrole achteraf: is de site echt bereikbaar? ---
+      - name: Controleer live site
+        run: |
+          sleep 30
+          code=$(curl -s -o /dev/null -w "%{http_code}" https://pinkthaitakeaway.github.io/)
+          echo "Live site status: $code"
+          if [ "$code" != "200" ]; then echo "::warning::Live site gaf status $code — controleer de publicatie"; fi
