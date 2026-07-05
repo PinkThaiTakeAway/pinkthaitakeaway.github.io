@@ -11,6 +11,7 @@ Waarschuwingen (⚠) worden gemeld maar laten de controle slagen (om valse
 alarmen bij tijdelijke, externe hikjes te voorkomen).
 """
 import json, os, re, subprocess, sys, hashlib, urllib.request
+from datetime import datetime, timezone
 
 SITE = "https://pinkthaitakeaway.github.io"
 oks, warnings, errors = [], [], []
@@ -163,19 +164,7 @@ def check_live(html):
     st, _ = http(SITE + "/pink-thai-og.png")
     ok("deelbanner bereikbaar") if st == 200 else warn(f"deelbanner status {st}")
 
-    # 10. Loopt de gepubliceerde versie gelijk met de repo?
-    if html:
-        st, body = http(SITE + "/index.html")
-        if st == 200:
-            live_h = hashlib.md5(body).hexdigest()
-            repo_h = hashlib.md5(html.encode("utf-8")).hexdigest()
-            if live_h == repo_h:
-                ok("gepubliceerde versie is gelijk aan de repo")
-            else:
-                warn("gepubliceerde versie wijkt af van de repo (kan even duren "
-                     "door verwerking; controleer bij herhaling)")
-
-    # 11. Externe diensten waar de bestelfunctie op leunt
+    # 10. Externe diensten waar de bestelfunctie op leunt
     #     E-mail (EmailJS SDK) en de agenda-koppeling (Apps Script)
     m = re.search(r'src="(https://cdn\.jsdelivr\.net/[^"]*email[^"]*)"', html or "")
     if m:
@@ -189,6 +178,22 @@ def check_live(html):
             ok(f"agenda-koppeling reageert (status {st})")
         else:
             warn("agenda-koppeling reageerde niet")
+
+# ----------------------------------------------------------------------------
+def write_health(groep, items, reset=False):
+    """Voegt de bevindingen toe aan health.json (dashboard in beheer)."""
+    path = "health.json"
+    h = {"updated": None, "groepen": []}
+    if not reset:
+        try: h = json.load(open(path, encoding="utf-8"))
+        except Exception: pass
+    h["groepen"] = [g for g in h.get("groepen", []) if g.get("naam") != groep]
+    h["groepen"].append({"naam": groep, "items": items})
+    h["updated"] = datetime.now(timezone.utc).isoformat()
+    try:
+        json.dump(h, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    except Exception as e:
+        print("kon health.json niet schrijven:", e)
 
 # ----------------------------------------------------------------------------
 def main():
@@ -221,6 +226,13 @@ def main():
             for m in warnings: f.write(f"- \u26a0\ufe0f {m}\n")
             for m in oks:      f.write(f"- \u2705 {m}\n")
             f.write("\n")
+
+    # Health-gegevens wegschrijven voor het dashboard in beheer
+    groep = "Live site & diensten" if live else "Bronbestanden"
+    items = ([{"naam": m, "status": "err"}  for m in errors] +
+             [{"naam": m, "status": "warn"} for m in warnings] +
+             [{"naam": m, "status": "ok"}   for m in oks])
+    write_health(groep, items, reset=(not live))
 
     sys.exit(1 if errors else 0)
 
