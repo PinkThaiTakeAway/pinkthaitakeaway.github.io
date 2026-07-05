@@ -311,6 +311,25 @@
   .share-btn.hero-share{margin-top:0;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.45);padding:13px 18px;font-size:.95rem;white-space:nowrap}
   .share-btn.hero-share:hover{background:rgba(255,255,255,.1)}
   .share-btn:active{transform:scale(.97)}
+  .hoverlay{display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.55);align-items:flex-end;justify-content:center}
+  .hoverlay.open{display:flex}
+  .hpanel{background:#fff;width:100%;max-width:560px;max-height:82vh;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));overflow-y:auto;font-family:inherit}
+  @media(min-width:600px){ .hoverlay{align-items:center} .hpanel{border-radius:18px} }
+  .hhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .hhead h3{margin:0;font-family:"Fraunces",serif;color:var(--forest);font-size:1.3rem}
+  .hclose{background:none;border:none;font-size:1.3rem;cursor:pointer;color:#888;padding:4px 8px}
+  .hupd{margin:0 0 14px;font-size:.82rem;color:#777}
+  .hgroep{margin-bottom:16px}
+  .hgroep h4{margin:0 0 8px;font-size:.9rem;color:var(--forest);text-transform:uppercase;letter-spacing:.04em}
+  .hitem{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-top:1px solid #f0f0f0;font-size:.92rem;line-height:1.35}
+  .hitem .ic{flex:0 0 auto;font-size:1rem;line-height:1.35}
+  .hitem.err{color:#c0142c;font-weight:600}
+  .hitem.warn{color:#9a6a00}
+  .hsum{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:700;margin-left:8px}
+  .hsum.ok{background:#e6f7ec;color:#1a7f37}
+  .hsum.bad{background:#fde8ea;color:#c0142c}
+  .hreload{width:100%;margin-top:6px;background:var(--forest);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700;font-family:inherit;cursor:pointer}
+  .hloading{text-align:center;color:#888;padding:24px 0}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -365,9 +384,22 @@
   <button class="sl" id="bTrash">🗑️ Prullenbak</button>
   <button class="sl" id="bTikkie">💳 Tikkie</button>
   <button class="sl" id="bPauze">⏸️ Bestellen</button>
+  <button class="sl" id="bHealth">🩺 Health</button>
   <button class="sl" id="bToken">🔑 Token</button>
   <button class="exp" id="bPublish">⬆ Publiceren</button>
   <button class="sl" id="bSluit">Sluiten</button>
+</div>
+
+<div id="healthOverlay" class="hoverlay">
+  <div class="hpanel">
+    <div class="hhead">
+      <h3>🩺 Systeemstatus</h3>
+      <button id="hClose" class="hclose" aria-label="Sluiten">✕</button>
+    </div>
+    <p id="hUpdated" class="hupd">—</p>
+    <div id="hBody" class="hbody"></div>
+    <button id="hReload" class="hreload">Opnieuw laden</button>
+  </div>
 </div>
 
 <div class="addmodal" id="addModal">
@@ -1354,6 +1386,10 @@ async function initBeheer(){
   updateTikkieBtn();
   document.getElementById("bPauze").onclick = togglePauze;
   updatePauzeBtn();
+  document.getElementById("bHealth").onclick = openHealth;
+  document.getElementById("hClose").onclick = closeHealth;
+  document.getElementById("hReload").onclick = laadHealth;
+  document.getElementById("healthOverlay").addEventListener("click", (e) => { if(e.target.id === "healthOverlay") closeHealth(); });
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
@@ -1584,6 +1620,36 @@ function wireShare(){
     catch(e){ showToast(url, null); }
   };
 }
+async function laadHealth(){
+  const body = document.getElementById("hBody");
+  const upd = document.getElementById("hUpdated");
+  body.innerHTML = '<p class="hloading">Bezig met laden…</p>'; upd.textContent = "";
+  try{
+    const r = await fetch("health.json?t=" + Date.now(), {cache:"no-store"});
+    if(!r.ok) throw new Error("geen gegevens");
+    renderHealth(await r.json());
+  }catch(e){
+    body.innerHTML = '<p class="hloading">Nog geen controlegegevens beschikbaar.<br>De eerste controle draait automatisch (dagelijks en na elke wijziging).</p>';
+  }
+}
+function renderHealth(h){
+  const body = document.getElementById("hBody");
+  const upd = document.getElementById("hUpdated");
+  let when = "";
+  if(h.updated){ try{ when = new Date(h.updated).toLocaleString("nl-NL",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}); }catch(e){ when = h.updated; } }
+  let totErr = 0;
+  (h.groepen||[]).forEach(g => (g.items||[]).forEach(i => { if(i.status==="err") totErr++; }));
+  upd.innerHTML = (when ? ("Laatste controle: " + esc(when)) : "") +
+    ` <span class="hsum ${totErr?'bad':'ok'}">${totErr ? (totErr + " probleem" + (totErr>1?"en":"")) : "alles in orde"}</span>`;
+  const icon = s => s==="ok" ? "✅" : (s==="warn" ? "⚠️" : "❌");
+  body.innerHTML = (h.groepen||[]).map(g => `
+    <div class="hgroep"><h4>${esc(g.naam)}</h4>
+      ${(g.items||[]).map(i => `<div class="hitem ${i.status}"><span class="ic">${icon(i.status)}</span><span>${esc(i.naam)}</span></div>`).join("")}
+    </div>`).join("") || '<p class="hloading">Geen onderdelen gevonden.</p>';
+}
+function openHealth(){ document.getElementById("healthOverlay").classList.add("open"); laadHealth(); }
+function closeHealth(){ document.getElementById("healthOverlay").classList.remove("open"); }
+
 function showToast(msg, ok){
   let t = document.getElementById("beheerToast");
   if(!t){ t = document.createElement("div"); t.id = "beheerToast"; document.body.appendChild(t); }
