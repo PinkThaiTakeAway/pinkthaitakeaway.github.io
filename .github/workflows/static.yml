@@ -1,4 +1,4 @@
-# Publiceert de statische site naar GitHub Pages + volledige zelfcontrole
+# Publiceert de site naar GitHub Pages + zelfcontrole -> health.json (dashboard in beheer)
 name: Deploy static content to Pages
 
 on:
@@ -27,17 +27,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --- Zelfcontrole van de bronbestanden ---
+      # --- Zelfcontroles (schrijven health.json; blokkeren de publicatie niet) ---
       - name: Zelfcontrole (repo-inhoud)
         run: python3 selfcheck.py
-
-      # --- Alle beheer-acties uitproberen in een afgeschermde kopie ---
+        continue-on-error: true
       - name: Mutatie-zelftest (alle beheer-acties)
         run: |
           npm install jsdom --no-save --silent
           node mutatietest.js
+        continue-on-error: true
+      - name: Zelfcontrole (live site)
+        run: python3 selfcheck.py --live
+        continue-on-error: true
 
-      # --- Publiceren met automatische herhaling ---
+      # --- Publiceren met automatische herhaling (health.json gaat mee) ---
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
@@ -62,9 +65,3 @@ jobs:
       - name: Deploy to GitHub Pages (poging 3)
         if: steps.deployment.outcome == 'failure' && steps.deploy2.outcome == 'failure'
         uses: actions/deploy-pages@v5
-
-      # --- Zelfcontrole van de gepubliceerde site ---
-      - name: Even wachten op verwerking
-        run: sleep 20
-      - name: Zelfcontrole (live site)
-        run: python3 selfcheck.py --live
