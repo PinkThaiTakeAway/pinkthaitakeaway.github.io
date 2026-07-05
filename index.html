@@ -512,7 +512,6 @@ const CONFIG = {
   telefoon: "06 58 97 73 39",
   afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
   agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec",
-  emailLimiet: 200,                              // EmailJS gratis: max 200 e-mails per maand
   bestel: { dagen:[0,1,2,3,4,5,6], van:"00:00", tot:"23:59", cutoffDag:5, cutoffUur:23 }   // hele dag open; auto-pauze op cutoffDag (5=vr) om cutoffUur
 };
 
@@ -1696,18 +1695,18 @@ async function checkAccess(){
       items.push({naam:"Publicatie-token: kon niet controleren (netwerk)", status:"warn"});
     }
   }
-  // E-mailverbruik deze maand (schatting via de agenda-koppeling)
-  const limiet = CONFIG.emailLimiet || 200;
+  // E-mail via Gmail: maandtotaal (info) + resterende dagruimte (indien script het meegeeft)
   try{
     const mc = await fetchMailCount();
     if(mc && typeof mc.emails === "number"){
-      let st = "ok";
-      if(mc.emails >= limiet) st = "err";
-      else if(mc.emails >= limiet*0.8) st = "warn";
       const best = (typeof mc.bestellingen === "number") ? ` (${mc.bestellingen} bestelling${mc.bestellingen===1?"":"en"})` : "";
-      items.push({naam:`E-mails deze maand: \u00b1 ${mc.emails} van ${limiet}${best}`, status:st});
+      items.push({naam:`E-mails deze maand: \u00b1 ${mc.emails}${best}`, status:"ok"});
+      if(typeof mc.quota === "number"){
+        const st = mc.quota <= 0 ? "err" : (mc.quota < 20 ? "warn" : "ok");
+        items.push({naam:`E-mailruimte vandaag (Gmail): nog \u00b1 ${mc.quota} berichten`, status:st});
+      }
     } else {
-      items.push({naam:`E-mailverbruik: nog niet beschikbaar (agenda-koppeling nog niet bijgewerkt) \u2014 limiet ${limiet}/maand`, status:"warn"});
+      items.push({naam:"E-mailverbruik: nog niet beschikbaar", status:"warn"});
     }
   }catch(e){
     items.push({naam:"E-mailverbruik: kon niet ophalen", status:"warn"});
