@@ -1620,17 +1620,50 @@ function wireShare(){
     catch(e){ showToast(url, null); }
   };
 }
+async function checkAccess(){
+  const items = [];
+  const tok = ghToken();
+  if(!tok){
+    items.push({naam:"Publicatie-token: niet ingesteld op dit apparaat", status:"warn"});
+  } else {
+    try{
+      const r = await fetch(`https://api.github.com/repos/${GH_REPO}?t=`+Date.now(), {headers:{Authorization:"token "+tok}});
+      if(r.ok){
+        const exp = r.headers.get("github-authentication-token-expiration");
+        let d = null;
+        if(exp){ const s = exp.replace(" ","T").replace(/ (\+0000|UTC)$/,"Z"); const dd = new Date(s); if(!isNaN(dd)) d = dd; }
+        if(d){
+          const dagen = Math.round((d - Date.now())/86400000);
+          const datum = d.toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
+          if(dagen < 0)       items.push({naam:`Publicatie-token: verlopen (${datum})`, status:"err"});
+          else if(dagen <= 14) items.push({naam:`Publicatie-token: verloopt binnenkort — over ${dagen} dag(en), op ${datum}`, status:"warn"});
+          else                items.push({naam:`Publicatie-token: geldig (verloopt ${datum})`, status:"ok"});
+        } else {
+          items.push({naam:"Publicatie-token: geldig", status:"ok"});
+        }
+      } else if(r.status===401){
+        items.push({naam:"Publicatie-token: ongeldig of verlopen", status:"err"});
+      } else {
+        items.push({naam:`Publicatie-token: kon niet controleren (status ${r.status})`, status:"warn"});
+      }
+    }catch(e){
+      items.push({naam:"Publicatie-token: kon niet controleren (netwerk)", status:"warn"});
+    }
+  }
+  return {naam:"Toegang & limieten", items};
+}
 async function laadHealth(){
   const body = document.getElementById("hBody");
   const upd = document.getElementById("hUpdated");
   body.innerHTML = '<p class="hloading">Bezig met laden…</p>'; upd.textContent = "";
+  let h = {updated:null, groepen:[]};
   try{
     const r = await fetch("health.json?t=" + Date.now(), {cache:"no-store"});
-    if(!r.ok) throw new Error("geen gegevens");
-    renderHealth(await r.json());
-  }catch(e){
-    body.innerHTML = '<p class="hloading">Nog geen controlegegevens beschikbaar.<br>De eerste controle draait automatisch (dagelijks en na elke wijziging).</p>';
-  }
+    if(r.ok) h = await r.json();
+  }catch(e){}
+  try{ const acc = await checkAccess(); h.groepen = [acc, ...(h.groepen||[])]; }catch(e){}
+  if((h.groepen||[]).length) renderHealth(h);
+  else body.innerHTML = '<p class="hloading">Nog geen controlegegevens beschikbaar.<br>De eerste controle draait automatisch (dagelijks en na elke wijziging).</p>';
 }
 function renderHealth(h){
   const body = document.getElementById("hBody");
