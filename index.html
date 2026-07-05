@@ -464,6 +464,17 @@
   </div>
 </div>
 
+<div id="volgOverlay" class="hoverlay">
+  <div class="hpanel">
+    <div class="hhead">
+      <h3 id="volgTitel">Je bestelling</h3>
+      <button id="volgClose" class="hclose" aria-label="Sluiten">✕</button>
+    </div>
+    <div id="volgBody" class="hbody"></div>
+    <button id="volgReload" class="hreload">Status vernieuwen</button>
+  </div>
+</div>
+
 <div class="addmodal" id="addModal">
   <div class="box">
     <h3 id="amTitle">Gerecht toevoegen</h3>
@@ -1821,6 +1832,41 @@ let _kTab = "klanten";
 function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); laadKlanten(); }
 function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
 
+const VOLG_T = {
+  nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link uit je bevestigingsmail.", laden:"Laden…" },
+  en: { titel:"Your order", open:"🟠 We're preparing your order", klaar:"✅ Picked up", afhalen:"Pickup", totaal:"Total", betaling:"Payment", niet:"Order not found. Please check the link in your confirmation e-mail.", laden:"Loading…" },
+  th: { titel:"ออเดอร์ของคุณ", open:"🟠 กำลังเตรียมออเดอร์ของคุณ", klaar:"✅ รับแล้ว", afhalen:"รับอาหาร", totaal:"รวม", betaling:"การชำระเงิน", niet:"ไม่พบออเดอร์ กรุณาตรวจสอบลิงก์ในอีเมลยืนยัน", laden:"กำลังโหลด…" }
+};
+let _volgCode = "";
+function openVolg(code){ _volgCode = code; document.getElementById("volgOverlay").classList.add("open"); laadVolg(code); }
+function closeVolg(){ document.getElementById("volgOverlay").classList.remove("open"); }
+async function laadVolg(code){
+  const VT = VOLG_T[LANG] || VOLG_T.nl;
+  const body = document.getElementById("volgBody");
+  document.getElementById("volgTitel").textContent = VT.titel;
+  body.innerHTML = '<p class="hloading">'+esc(VT.laden)+'</p>';
+  const r = await jsonp({actie:"volg", code});
+  if(!r || !r.ok || !r.bestelling){ body.innerHTML = '<p class="hloading">'+esc(VT.niet)+'</p>'; return; }
+  renderVolg(r.bestelling);
+}
+function renderVolg(b){
+  const VT = VOLG_T[LANG] || VOLG_T.nl;
+  const body = document.getElementById("volgBody");
+  const regels = String(b.bestelling||"").split("\n").filter(x=>x.trim())
+    .map(r=>'<div style="padding:4px 0;border-bottom:1px solid #f2f2f2">'+esc(r)+'</div>').join("");
+  const statusKlas = b.afgehaald ? "afg" : "open";
+  const statusTxt  = b.afgehaald ? VT.klaar : VT.open;
+  body.innerHTML =
+    '<div style="text-align:center;margin-bottom:16px"><span class="kbadge '+statusKlas+'" style="font-size:1rem;padding:8px 18px">'+esc(statusTxt)+'</span></div>'+
+    '<div class="kklant">'+
+      '<div class="knaam">#'+esc(b.id)+(b.naam?(' · '+esc(b.naam)):'')+'</div>'+
+      '<div class="kbbestel" style="margin:10px 0">'+regels+'</div>'+
+      '<div class="kstat"><strong>'+esc(VT.totaal)+':</strong> '+esc(b.totaal||"")+'</div>'+
+      (b.afhaal?('<div class="kstat"><strong>'+esc(VT.afhalen)+':</strong> '+esc(b.afhaal)+'</div>'):'')+
+      (b.betaling?('<div class="kstat"><strong>'+esc(VT.betaling)+':</strong> '+esc(b.betaling)+'</div>'):'')+
+    '</div>';
+}
+
 async function laadKlanten(){
   const body = document.getElementById("kBody");
   if(!klantKey()){ toonSleutelInvoer(); return; }
@@ -2361,6 +2407,11 @@ function orderClosedMsg(st){
   refreshOrderingUI();
   setInterval(refreshOrderingUI, 60000);
   wireShare();
+  document.getElementById("volgClose").onclick = closeVolg;
+  document.getElementById("volgReload").onclick = () => laadVolg(_volgCode);
+  document.getElementById("volgOverlay").addEventListener("click", (e) => { if(e.target.id === "volgOverlay") closeVolg(); });
+  const _volgParam = new URLSearchParams(location.search).get("volg");
+  if(_volgParam) openVolg(_volgParam);
   if(BEHEER) initBeheer(); else resolvePhotos();
 })();
 </script>
