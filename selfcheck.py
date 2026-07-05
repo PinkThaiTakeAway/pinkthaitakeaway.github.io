@@ -208,6 +208,20 @@ def main():
     print(f"\n{len(oks)} ok \u00b7 {len(warnings)} waarschuwing(en) \u00b7 {len(errors)} fout(en)")
     for m in warnings: print(f"::warning::{m}")
     for m in errors:   print(f"::error::{m}")
+
+    # Net rapport in de GitHub-samenvatting (zichtbaar bovenaan de run)
+    summ = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summ:
+        vlag = "\u2705 alles in orde" if not errors else "\u274c fout gevonden"
+        if not errors and warnings: vlag = "\u26a0\ufe0f let op"
+        with open(summ, "a", encoding="utf-8") as f:
+            f.write(f"## {title} \u2014 {vlag}\n\n")
+            f.write(f"**{len(oks)} ok \u00b7 {len(warnings)} waarschuwing(en) \u00b7 {len(errors)} fout(en)**\n\n")
+            for m in errors:   f.write(f"- \u274c {m}\n")
+            for m in warnings: f.write(f"- \u26a0\ufe0f {m}\n")
+            for m in oks:      f.write(f"- \u2705 {m}\n")
+            f.write("\n")
+
     sys.exit(1 if errors else 0)
 
 if __name__ == "__main__":
