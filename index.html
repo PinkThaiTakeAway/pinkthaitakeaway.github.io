@@ -372,6 +372,10 @@
   .ktoprow{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #f0f0f0;font-size:.92rem}
   .ktoprow .ktn{font-weight:700;color:#555;min-width:26px}
   .kafhaal-dag{font-weight:700;color:var(--forest);margin:14px 0 6px;font-size:.95rem}
+  .bzchart{display:flex;align-items:flex-end;gap:2px;height:90px;padding:6px 0;border-bottom:1px solid #eee;margin-bottom:6px}
+  .bzbar{flex:1;height:100%;display:flex;align-items:flex-end}
+  .bzbfill{width:100%;background:var(--amber);border-radius:2px 2px 0 0;min-height:1px;transition:height .2s}
+  .bztabs-note{font-size:.76rem;color:#999;margin:2px 0 10px}
 </style>
 </head>
 <body>
@@ -454,6 +458,7 @@
       <button class="ktab active" data-tab="klanten">Klanten</button>
       <button class="ktab" data-tab="afhaal">Afhaallijst</button>
       <button class="ktab" data-tab="cijfers">Cijfers</button>
+      <button class="ktab" data-tab="bezoek">Bezoek</button>
     </div>
     <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam, e-mail of telefoon…" autocomplete="off">
     <div id="kBody" class="hbody"></div>
@@ -1435,6 +1440,7 @@ function applyBeheerLang(){
     if(t.dataset.tab==="klanten") t.textContent = B.kl.tabKlanten;
     else if(t.dataset.tab==="afhaal") t.textContent = B.kl.tabAfhaal;
     else if(t.dataset.tab==="cijfers") t.textContent = B.kl.tabCijfers;
+    else if(t.dataset.tab==="bezoek") t.textContent = B.kl.tabBezoek;
   });
   // Health-paneel labels
   const ht = document.getElementById("hTitle"); if(ht) ht.textContent = B.hl.title;
@@ -1869,7 +1875,8 @@ const BEHEER_T = {
     locale:"nl-NL",
     bar:{ tikkieOn:"💳 Tikkie: aan", tikkieOff:"💳 Tikkie: uit", orderOpen:"🟢 Bestellen: open", orderClosed:"🔴 Bestellen: dicht", health:"Health", klanten:"👥 Klanten" },
     kl:{
-      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers",
+      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek",
+      bzLaden:"Bezoek laden…", bzGeen:"Nog geen bezoekgegevens.", bzVandaag:"vandaag", bzWeek:"deze week", bzMaand:"deze maand", bzTotaal:"totaal", bzPerDag:"Bezoeken per dag (30 dagen)", bzType:"Type bezoek", bzKlant:"klant", bzBeheer:"beheer", bzVolg:"volglink", bzTaal:"Taal", bzHerkomst:"Herkomst", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"overig", bzToestel:"Toestel", bzMobiel:"mobiel", bzDesktop:"desktop",
       zoek:"Zoek op naam, e-mail of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
       laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
       nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
@@ -1902,7 +1909,8 @@ const BEHEER_T = {
     locale:"en-GB",
     bar:{ tikkieOn:"💳 Tikkie: on", tikkieOff:"💳 Tikkie: off", orderOpen:"🟢 Ordering: open", orderClosed:"🔴 Ordering: closed", health:"Health", klanten:"👥 Customers" },
     kl:{
-      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats",
+      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits",
+      bzLaden:"Loading visits…", bzGeen:"No visit data yet.", bzVandaag:"today", bzWeek:"this week", bzMaand:"this month", bzTotaal:"total", bzPerDag:"Visits per day (30 days)", bzType:"Visit type", bzKlant:"customer", bzBeheer:"admin", bzVolg:"tracking link", bzTaal:"Language", bzHerkomst:"Source", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"other", bzToestel:"Device", bzMobiel:"mobile", bzDesktop:"desktop",
       zoek:"Search by name, e-mail or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
       laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
       nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
@@ -1935,7 +1943,8 @@ const BEHEER_T = {
     locale:"th-TH",
     bar:{ tikkieOn:"💳 Tikkie: เปิด", tikkieOff:"💳 Tikkie: ปิด", orderOpen:"🟢 รับออเดอร์: เปิด", orderClosed:"🔴 รับออเดอร์: ปิด", health:"สถานะ", klanten:"👥 ลูกค้า" },
     kl:{
-      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ",
+      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม",
+      bzLaden:"กำลังโหลดการเข้าชม…", bzGeen:"ยังไม่มีข้อมูลการเข้าชม", bzVandaag:"วันนี้", bzWeek:"สัปดาห์นี้", bzMaand:"เดือนนี้", bzTotaal:"ทั้งหมด", bzPerDag:"การเข้าชมต่อวัน (30 วัน)", bzType:"ประเภทการเข้าชม", bzKlant:"ลูกค้า", bzBeheer:"ผู้ดูแล", bzVolg:"ลิงก์ติดตาม", bzTaal:"ภาษา", bzHerkomst:"ที่มา", bzDirect:"เข้าตรง", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"อื่นๆ", bzToestel:"อุปกรณ์", bzMobiel:"มือถือ", bzDesktop:"เดสก์ท็อป",
       zoek:"ค้นหาด้วยชื่อ อีเมล หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
       laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
       nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
@@ -2028,6 +2037,7 @@ function renderKlanten(){
   if(zoek){ zoek.style.display = (_kTab==="klanten") ? "" : "none"; zoek.placeholder = BT().kl.zoek; }
   if(_kTab==="afhaal") renderAfhaallijst();
   else if(_kTab==="cijfers") renderCijfers();
+  else if(_kTab==="bezoek") renderBezoek();
   else renderKlantenLijst();
 }
 function klantAggregatie(){
@@ -2141,6 +2151,37 @@ function renderCijfers(){
     '<div class="ktop"><h4>'+esc(K.cTop)+'</h4>'+
       (top.length ? top.map(([naam,aantal])=>'<div class="ktoprow"><span>'+esc(naam)+'</span><span class="ktn">'+aantal+'×</span></div>').join("") : '<p class="hloading">'+K.cGeen+'</p>')+
     '</div>';
+}
+async function renderBezoek(){
+  const K = BT().kl;
+  const body = document.getElementById("kBody");
+  body.innerHTML = '<p class="hloading">'+K.bzLaden+'</p>';
+  const r = await jsonp({actie:"bezoekstats", key:klantKey()});
+  if(!r || !r.ok){ body.innerHTML = '<p class="hloading">'+K.bzGeen+'</p>'; return; }
+  const kaart = (v,l)=>'<div class="kstat-card"><div class="kv">'+v+'</div><div class="kl">'+esc(l)+'</div></div>';
+  const perDag = r.perDag || [];
+  const max = Math.max(1, ...perDag.map(d=>d.aantal));
+  const bars = perDag.map(d=>{
+    const hh = Math.round(d.aantal/max*100);
+    const dag = d.datum.slice(8)+'-'+d.datum.slice(5,7);
+    return '<div class="bzbar" title="'+dag+': '+d.aantal+'"><div class="bzbfill" style="height:'+hh+'%"></div></div>';
+  }).join("");
+  const verdeling = (titel,obj,labels)=>{
+    obj = obj||{};
+    const tot = Object.values(obj).reduce((a,b)=>a+b,0) || 1;
+    const rijen = Object.keys(labels).map(k=>{
+      const v = obj[k]||0, pct = Math.round(v/tot*100);
+      return '<div class="ktoprow"><span>'+esc(labels[k])+'</span><span class="ktn">'+v+' ('+pct+'%)</span></div>';
+    }).join("");
+    return '<div class="ktop"><h4>'+esc(titel)+'</h4>'+rijen+'</div>';
+  };
+  body.innerHTML =
+    '<div class="kstat-grid">'+kaart(r.vandaag,K.bzVandaag)+kaart(r.week,K.bzWeek)+kaart(r.maand,K.bzMaand)+kaart(r.totaal,K.bzTotaal)+'</div>'+
+    '<div class="ktop"><h4>'+esc(K.bzPerDag)+'</h4><div class="bzchart">'+bars+'</div></div>'+
+    verdeling(K.bzType, r.type, {klant:K.bzKlant, beheer:K.bzBeheer, volg:K.bzVolg})+
+    verdeling(K.bzTaal, r.taal, {nl:"Nederlands", en:"English", th:"ไทย"})+
+    verdeling(K.bzHerkomst, r.herkomst, {direct:K.bzDirect, whatsapp:K.bzWhatsapp, google:K.bzGoogle, overig:K.bzOverig})+
+    verdeling(K.bzToestel, r.toestel, {mobiel:K.bzMobiel, desktop:K.bzDesktop});
 }
 async function klantAfgehaald(id, waarde){
   const r = await jsonp({actie:"afgehaald", id, waarde: waarde?"ja":"nee", key:klantKey()});
@@ -2551,6 +2592,16 @@ function orderClosedMsg(st){
   document.getElementById("volgOverlay").addEventListener("click", (e) => { if(e.target.id === "volgOverlay") closeVolg(); });
   const _volgParam = new URLSearchParams(location.search).get("volg");
   if(_volgParam) openVolg(_volgParam);
+  try{
+    if(!sessionStorage.getItem("tta_visit")){
+      sessionStorage.setItem("tta_visit","1");
+      const type = BEHEER ? "beheer" : (_volgParam ? "volg" : "klant");
+      const ref = (document.referrer||"").toLowerCase();
+      const herkomst = !ref ? "direct" : (ref.includes("whatsapp")||ref.includes("wa.me") ? "whatsapp" : (ref.includes("google") ? "google" : "overig"));
+      const toestel = (window.innerWidth||1024) < 768 ? "mobiel" : "desktop";
+      jsonp({actie:"bezoek", taal:LANG, type, herkomst, toestel});
+    }
+  }catch(e){}
   if(BEHEER) initBeheer(); else resolvePhotos();
 })();
 </script>
