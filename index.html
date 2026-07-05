@@ -83,21 +83,21 @@
   .hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:var(--amber);color:var(--ink);font-weight:800;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s,background .2s}
   .hero-cta:hover{background:var(--amber-deep)}
   .hero-cta:active{transform:scale(.97)}
-  .hero-inner{display:flex;align-items:flex-start;gap:36px}
-  .hero-copy{flex:1 1 auto;min-width:0}
-  .hero-portret{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
-  .hero-brand{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(1.35rem,2.3vw,1.95rem);line-height:1.05;color:#FBF6EC;letter-spacing:-.01em}
+  .hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:30px}
+  .hero-brand{flex:1 1 auto;align-self:center;font-family:'Fraunces',serif;font-weight:800;font-size:clamp(1.25rem,4vw,2rem);line-height:1.05;color:#FBF6EC;letter-spacing:-.01em}
   .hero-brand .dot{color:var(--amber)}
   body.beheer .hero-brand{display:none}
-  .hero-portret img{width:clamp(118px,13.5vw,166px);height:auto;aspect-ratio:1/1;border-radius:50%;display:block;border:4px solid rgba(255,255,255,.92);box-shadow:0 14px 44px rgba(0,0,0,.4)}
-  .hero-portret-label{display:block;margin-top:0;font-size:.92rem;font-weight:700;color:var(--amber);letter-spacing:.01em}
+  .hero-portret{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+  .hero-portret img{width:clamp(92px,12vw,140px);height:auto;aspect-ratio:1/1;border-radius:50%;display:block;border:4px solid rgba(255,255,255,.92);box-shadow:0 14px 44px rgba(0,0,0,.4)}
+  .hero-portret-label{display:block;margin-top:0;font-size:.8rem;font-weight:700;color:var(--amber);letter-spacing:.01em;max-width:150px}
   @media(max-width:760px){
-    .hero-inner{flex-direction:column-reverse;align-items:center;gap:26px;text-align:center}
-    .hero-copy{width:100%}
+    .hero-copy{width:100%;text-align:center}
     .hero h1,.hero p{max-width:none}
     .hero .eyebrow{margin-left:auto;margin-right:auto}
     .chips,.hero-actions{justify-content:center}
-    .hero-portret img{width:104px;border-width:3px}
+    .hero-top{gap:12px;margin-bottom:22px}
+    .hero-brand{font-size:clamp(1.2rem,6vw,1.9rem)}
+    .hero-portret img{width:92px;border-width:3px}
   }
 
   .catnav{position:sticky;top:57px;z-index:50;background:rgba(251,246,236,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -421,6 +421,16 @@
 
 <section class="hero">
   <div class="hero-inner">
+    <div class="hero-top">
+      <span class="hero-brand brandname">Pink Thai TakeAway<span class="dot">.</span></span>
+      <div class="hero-portret">
+        <picture>
+          <source srcset="chef.webp" type="image/webp">
+          <img src="chef.jpg" alt="Pink — Pink Thai TakeAway" width="270" height="270" loading="eager">
+        </picture>
+        <span class="hero-portret-label" id="heroChef"></span>
+      </div>
+    </div>
     <div class="hero-copy">
       <span class="eyebrow" id="eyebrow"></span>
       <h1 id="heroTitle"></h1>
@@ -436,14 +446,6 @@
         <button class="hero-cta" id="heroCta"></button>
         <button class="share-btn hero-share" id="shareBtn">📤 <span id="shareLabel">Deel deze pagina</span></button>
       </div>
-    </div>
-    <div class="hero-portret">
-      <span class="hero-brand brandname">Pink Thai TakeAway<span class="dot">.</span></span>
-      <picture>
-        <source srcset="chef.webp" type="image/webp">
-        <img src="chef.jpg" alt="Pink — Pink Thai TakeAway" width="270" height="270" loading="eager">
-      </picture>
-      <span class="hero-portret-label" id="heroChef"></span>
     </div>
   </div>
 </section>
