@@ -353,6 +353,25 @@
   .ksleutel{text-align:center;padding:18px 0}
   .ksleutel input{width:100%;box-sizing:border-box;padding:11px 14px;margin:10px 0;border:1px solid #ddd;border-radius:10px;font-family:inherit}
   .ksleutel button{background:var(--forest);color:#fff;border:none;padding:11px 20px;border-radius:10px;font-weight:700;font-family:inherit;cursor:pointer}
+  .ktabs{display:flex;gap:6px;margin-bottom:12px}
+  .ktab{flex:1;padding:9px 6px;border:1px solid #ddd;background:#fff;border-radius:9px;font-family:inherit;font-weight:700;font-size:.85rem;color:#555;cursor:pointer}
+  .ktab.active{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .kfoot{display:flex;flex-direction:column;gap:8px}
+  .kbulk{background:var(--amber)!important}
+  .klabel{display:inline-block;background:#fff3e0;color:#9a6a00;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:6px}
+  .knotitie{margin:8px 0}
+  .knotitie textarea{width:100%;box-sizing:border-box;border:1px solid #eee;border-radius:8px;padding:7px 10px;font-family:inherit;font-size:.85rem;resize:vertical;min-height:38px;background:#fffdf7}
+  .knotitie .knsave{margin-top:4px;border:1px solid #ccc;background:#fff;border-radius:8px;padding:4px 10px;font-size:.76rem;font-weight:700;font-family:inherit;cursor:pointer}
+  .kdelbtn{border:1px solid #f3c0c8!important;color:#c0142c!important;background:#fff!important}
+  .kstat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .kstat-card{background:#faf6f2;border-radius:12px;padding:14px 16px}
+  .kstat-card .kv{font-size:1.5rem;font-weight:800;color:var(--forest);font-family:"Fraunces",serif}
+  .kstat-card .kl{font-size:.8rem;color:#777;margin-top:2px}
+  .ktop{margin-top:4px}
+  .ktop h4{margin:0 0 8px;font-size:.9rem;color:var(--forest);text-transform:uppercase;letter-spacing:.04em}
+  .ktoprow{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #f0f0f0;font-size:.92rem}
+  .ktoprow .ktn{font-weight:700;color:#555;min-width:26px}
+  .kafhaal-dag{font-weight:700;color:var(--forest);margin:14px 0 6px;font-size:.95rem}
 </style>
 </head>
 <body>
@@ -431,9 +450,17 @@
       <h3>👥 Klanten</h3>
       <button id="kClose" class="hclose" aria-label="Sluiten">✕</button>
     </div>
+    <div class="ktabs">
+      <button class="ktab active" data-tab="klanten">Klanten</button>
+      <button class="ktab" data-tab="afhaal">Afhaallijst</button>
+      <button class="ktab" data-tab="cijfers">Cijfers</button>
+    </div>
     <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam, e-mail of telefoon…" autocomplete="off">
     <div id="kBody" class="hbody"></div>
-    <button id="kReload" class="hreload">Opnieuw laden</button>
+    <div class="kfoot">
+      <button id="kBulk" class="hreload kbulk">✉ Mail alle klanten</button>
+      <button id="kReload" class="hreload">Opnieuw laden</button>
+    </div>
   </div>
 </div>
 
@@ -1420,7 +1447,16 @@ async function initBeheer(){
     if(a==="afg") klantAfgehaald(btn.dataset.id, btn.dataset.w==="1");
     else if(a==="bedank") klantBedank(btn.dataset.id);
     else if(a==="mail") klantMail(btn.dataset.email);
+    else if(a==="del") klantVerwijder(btn.dataset.id);
+    else if(a==="delklant") klantVerwijderKlant(btn.dataset.email);
+    else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.email, ta ? ta.value : ""); }
   });
+  document.querySelectorAll(".ktab").forEach(t => t.onclick = () => {
+    _kTab = t.dataset.tab;
+    document.querySelectorAll(".ktab").forEach(x => x.classList.toggle("active", x===t));
+    renderKlanten();
+  });
+  document.getElementById("kBulk").onclick = klantBulk;
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
@@ -1781,6 +1817,7 @@ function closeHealth(){ document.getElementById("healthOverlay").classList.remov
 
 function klantKey(){ return localStorage.getItem("tta_klantkey") || ""; }
 let _klantData = [];
+let _kTab = "klanten";
 function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); laadKlanten(); }
 function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
 
@@ -1809,8 +1846,13 @@ function toonSleutelInvoer(fout){
   document.getElementById("kKeyIn").addEventListener("keydown", (e)=>{ if(e.key==="Enter") document.getElementById("kKeyOk").click(); });
 }
 function renderKlanten(){
-  const body = document.getElementById("kBody");
-  const q = (document.getElementById("kZoek").value||"").toLowerCase().trim();
+  const zoek = document.getElementById("kZoek");
+  if(zoek) zoek.style.display = (_kTab==="klanten") ? "" : "none";
+  if(_kTab==="afhaal") renderAfhaallijst();
+  else if(_kTab==="cijfers") renderCijfers();
+  else renderKlantenLijst();
+}
+function klantAggregatie(){
   const map = {};
   _klantData.forEach(b=>{
     const k = String(b.email||b.tel||b.naam||"?").toLowerCase();
@@ -1818,17 +1860,29 @@ function renderKlanten(){
     if(!map[k].naam && b.naam) map[k].naam = b.naam;
     map[k].bestellingen.push(b);
   });
-  let klanten = Object.values(map);
+  return map;
+}
+function renderKlantenLijst(){
+  const body = document.getElementById("kBody");
+  const q = (document.getElementById("kZoek").value||"").toLowerCase().trim();
+  let klanten = Object.values(klantAggregatie());
   if(q) klanten = klanten.filter(k => ((k.naam||"")+" "+(k.email||"")+" "+(k.tel||"")).toLowerCase().includes(q));
   if(!klanten.length){ body.innerHTML = '<p class="hloading">'+(_klantData.length?'Geen klanten gevonden.':'Nog geen bestellingen in het klantenbestand.')+'</p>'; return; }
+  klanten.sort((a,b)=>b.bestellingen.length - a.bestellingen.length);
   body.innerHTML = klanten.map(k=>{
     const n = k.bestellingen.length;
+    const vast = n>=5 ? '<span class="klabel">⭐ vaste klant</span>' : '';
+    const notitie = k.bestellingen[0] ? (k.bestellingen[0].notitie||"") : "";
     return '<div class="kklant">'+
-      '<div class="knaam">'+esc(k.naam||"(naam onbekend)")+'</div>'+
+      '<div class="knaam">'+esc(k.naam||"(naam onbekend)")+vast+'</div>'+
       '<div class="kmeta">'+esc(k.email||"")+(k.tel?(' · '+esc(k.tel)):'')+'</div>'+
       '<div class="kstat">'+n+' bestelling'+(n===1?'':'en')+'</div>'+
-      (k.email?('<button class="kmailbtn" data-a="mail" data-email="'+esc(k.email)+'">✉ Losse mail</button>'):'')+
+      (k.email?('<div class="knotitie"><textarea placeholder="Notitie (voorkeuren, allergie\u00ebn\u2026)">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-email="'+esc(k.email)+'">Notitie opslaan</button></div>'):'')+
       k.bestellingen.map(bestelHtml).join("")+
+      '<div class="kacts" style="margin-top:8px">'+
+        (k.email?('<button data-a="mail" data-email="'+esc(k.email)+'">✉ Losse mail</button>'):'')+
+        (k.email?('<button class="kdelbtn" data-a="delklant" data-email="'+esc(k.email)+'">🗑 Klant verwijderen</button>'):'')+
+      '</div>'+
     '</div>';
   }).join("");
 }
@@ -1842,7 +1896,69 @@ function bestelHtml(b){
     '<div class="kacts">'+
       '<button data-a="afg" data-id="'+esc(b.id)+'" data-w="'+(b.afgehaald?'0':'1')+'">'+(b.afgehaald?'↺ Toch niet afgehaald':'✓ Markeer afgehaald')+'</button>'+
       (b.email?('<button class="prim" data-a="bedank" data-id="'+esc(b.id)+'"'+(b.bedankt?' disabled':'')+'>✉ '+(b.bedankt?'Al bedankt':'Bedankmail')+'</button>'):'')+
+      '<button class="kdelbtn" data-a="del" data-id="'+esc(b.id)+'" title="Bestelling verwijderen">🗑</button>'+
     '</div></div>';
+}
+function renderAfhaallijst(){
+  const body = document.getElementById("kBody");
+  const open = _klantData.filter(b => !b.afgehaald);
+  if(!open.length){ body.innerHTML = '<p class="hloading">Geen openstaande bestellingen. 🎉</p>'; return; }
+  const groepen = {};
+  open.forEach(b => {
+    const af = b.afhaal || "Afhaaltijd onbekend";
+    const m = af.match(/^(.+?)\s+(\d{1,2}:\d{2})$/);
+    const dag = m ? m[1] : af, tijd = m ? m[2] : "";
+    (groepen[dag] = groepen[dag]||[]).push({b, tijd});
+  });
+  body.innerHTML = Object.keys(groepen).sort().map(dag => {
+    const items = groepen[dag].sort((a,b)=>(a.tijd||"").localeCompare(b.tijd||""));
+    return '<div class="kafhaal-dag">🛍 '+esc(dag)+'</div>'+
+      items.map(({b,tijd}) =>
+        '<div class="kbest">'+
+          '<div class="kbreg"><span class="kbtijd">'+(tijd?esc(tijd)+' · ':'')+'#'+esc(b.id)+' · '+esc(b.naam||"")+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
+          (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
+          (b.opmerking?('<div style="font-size:.82rem;color:#9a6a00">📝 '+esc(b.opmerking)+'</div>'):'')+
+          '<div class="kacts"><button data-a="afg" data-id="'+esc(b.id)+'" data-w="1">✓ Afgehaald</button></div>'+
+        '</div>'
+      ).join("");
+  }).join("");
+}
+function parseBedrag(t){
+  const s = String(t||"").replace(/[^\d.,]/g,"").replace(/\.(?=\d{3}(\D|$))/g,"").replace(",",".");
+  const n = parseFloat(s); return isNaN(n) ? 0 : n;
+}
+function parseGerechten(bestelling){
+  const out = [];
+  String(bestelling||"").split("\n").forEach(r=>{
+    const m = r.match(/^\s*(\d+)\s*[×x]\s*(.+?)\s*[—–-]\s*€/);
+    if(m) out.push({aantal:parseInt(m[1],10)||1, naam:m[2].trim()});
+  });
+  return out;
+}
+function renderCijfers(){
+  const body = document.getElementById("kBody");
+  const nu = new Date(), maand = nu.getFullYear()+"-"+String(nu.getMonth()+1).padStart(2,"0");
+  let mBest=0, mOmzet=0; const gerechten={};
+  _klantData.forEach(b=>{
+    const bedrag = parseBedrag(b.totaal);
+    let inMaand=false;
+    if(b.tijd){ const d=new Date(b.tijd); if(!isNaN(d) && (d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"))===maand) inMaand=true; }
+    if(inMaand){ mBest++; mOmzet+=bedrag; }
+    parseGerechten(b.bestelling).forEach(g=>{ gerechten[g.naam]=(gerechten[g.naam]||0)+g.aantal; });
+  });
+  const klanten = new Set(_klantData.map(b=>String(b.email||b.tel||b.naam||"?").toLowerCase())).size;
+  const top = Object.entries(gerechten).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const eur = n => "€ "+n.toFixed(2).replace(".",",");
+  body.innerHTML =
+    '<div class="kstat-grid">'+
+      '<div class="kstat-card"><div class="kv">'+mBest+'</div><div class="kl">bestellingen deze maand</div></div>'+
+      '<div class="kstat-card"><div class="kv">'+eur(mOmzet)+'</div><div class="kl">omzet deze maand</div></div>'+
+      '<div class="kstat-card"><div class="kv">'+_klantData.length+'</div><div class="kl">bestellingen totaal</div></div>'+
+      '<div class="kstat-card"><div class="kv">'+klanten+'</div><div class="kl">unieke klanten</div></div>'+
+    '</div>'+
+    '<div class="ktop"><h4>Best verkocht</h4>'+
+      (top.length ? top.map(([naam,aantal])=>'<div class="ktoprow"><span>'+esc(naam)+'</span><span class="ktn">'+aantal+'×</span></div>').join("") : '<p class="hloading">Nog geen gegevens.</p>')+
+    '</div>';
 }
 async function klantAfgehaald(id, waarde){
   const r = await jsonp({actie:"afgehaald", id, waarde: waarde?"ja":"nee", key:klantKey()});
@@ -1865,6 +1981,34 @@ async function klantMail(email){
   const r = await jsonp({actie:"mail", email, onderwerp, bericht, key:klantKey()});
   if(r && r.ok) showToast("Mail verstuurd", true);
   else showToast("Kon mail niet versturen", false);
+}
+async function klantNotitie(email, tekst){
+  const r = await jsonp({actie:"notitie", email, notitie:tekst, key:klantKey()});
+  if(r && r.ok){ _klantData.forEach(x=>{ if(String(x.email||"").toLowerCase()===email.toLowerCase()) x.notitie=tekst; }); showToast("Notitie opgeslagen", true); }
+  else showToast("Kon notitie niet opslaan", false);
+}
+async function klantVerwijder(id){
+  if(!confirm("Deze bestelling verwijderen?")) return;
+  const r = await jsonp({actie:"verwijder", id, key:klantKey()});
+  if(r && r.ok){ _klantData = _klantData.filter(x=>x.id!==id); renderKlanten(); showToast("Bestelling verwijderd", true); }
+  else showToast("Kon niet verwijderen", false);
+}
+async function klantVerwijderKlant(email){
+  if(!confirm("Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.")) return;
+  const r = await jsonp({actie:"verwijderklant", email, key:klantKey()});
+  if(r && r.ok){ _klantData = _klantData.filter(x=>String(x.email||"").toLowerCase()!==email.toLowerCase()); renderKlanten(); showToast("Klant verwijderd", true); }
+  else showToast("Kon niet verwijderen", false);
+}
+async function klantBulk(){
+  const onderwerp = prompt("Onderwerp van de mail aan alle klanten:", "Nieuws van Pink Thai TakeAway");
+  if(onderwerp===null) return;
+  const bericht = prompt("Bericht aan alle klanten:", "");
+  if(bericht===null || !bericht.trim()) return;
+  if(!confirm("Deze mail naar ALLE klanten met een e-mailadres versturen?")) return;
+  showToast("Bezig met versturen…", true);
+  const r = await jsonp({actie:"bulkmail", onderwerp, bericht, key:klantKey()});
+  if(r && r.ok) showToast((r.verstuurd||0)+" van "+(r.klanten||0)+" mails verstuurd", true);
+  else showToast("Kon niet versturen", false);
 }
 
 function showToast(msg, ok){
