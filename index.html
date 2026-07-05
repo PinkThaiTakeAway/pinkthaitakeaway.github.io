@@ -940,7 +940,7 @@ function saveJSON(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(
 function loadStr(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 const store = { save(){ saveJSON("tta_cart", cart); }, load(){ return loadJSON("tta_cart"); } };
 function goTo(id){ const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
-function esc(s){ return (s||"").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function esc(s){ return String(s==null?"":s).replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
 function pad(t){ const [h,m]=t.split(":").map(Number); return h*60+m; }
 
 /* ---------- Afhaaldatum + tijden ---------- */
@@ -1797,7 +1797,7 @@ function renderKlanten(){
   const q = (document.getElementById("kZoek").value||"").toLowerCase().trim();
   const map = {};
   _klantData.forEach(b=>{
-    const k = (b.email||b.tel||b.naam||"?").toLowerCase();
+    const k = String(b.email||b.tel||b.naam||"?").toLowerCase();
     if(!map[k]) map[k] = {naam:b.naam, email:b.email, tel:b.tel, bestellingen:[]};
     if(!map[k].naam && b.naam) map[k].naam = b.naam;
     map[k].bestellingen.push(b);
