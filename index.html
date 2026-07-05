@@ -328,6 +328,8 @@
   .hsum{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:700;margin-left:8px}
   .hsum.ok{background:#e6f7ec;color:#1a7f37}
   .hsum.bad{background:#fde8ea;color:#c0142c}
+  .hsum.warn{background:#fff3e0;color:#9a6a00}
+  #bHealth .hb{margin-left:1px;font-size:.95em;vertical-align:middle}
   .hreload{width:100%;margin-top:6px;background:var(--forest);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700;font-family:inherit;cursor:pointer}
   .hloading{text-align:center;color:#888;padding:24px 0}
   .kzoek{width:100%;box-sizing:border-box;padding:11px 14px;margin-bottom:12px;border:1px solid #ddd;border-radius:10px;font-family:inherit;font-size:.95rem}
@@ -1403,6 +1405,7 @@ async function initBeheer(){
   document.getElementById("bPauze").onclick = togglePauze;
   updatePauzeBtn();
   document.getElementById("bHealth").onclick = openHealth;
+  updateHealthBadge();
   document.getElementById("hClose").onclick = closeHealth;
   document.getElementById("hReload").onclick = laadHealth;
   document.getElementById("healthOverlay").addEventListener("click", (e) => { if(e.target.id === "healthOverlay") closeHealth(); });
@@ -1713,16 +1716,37 @@ async function checkAccess(){
   }
   return {naam:"Toegang & limieten", items};
 }
-async function laadHealth(){
-  const body = document.getElementById("hBody");
-  const upd = document.getElementById("hUpdated");
-  body.innerHTML = '<p class="hloading">Bezig met laden…</p>'; upd.textContent = "";
+function healthStatusVan(h){
+  let err=0, warn=0;
+  (h.groepen||[]).forEach(g => (g.items||[]).forEach(i => {
+    if(i.status==="err") err++; else if(i.status==="warn") warn++;
+  }));
+  return err ? "err" : (warn ? "warn" : "ok");
+}
+function zetHealthBadge(status){
+  const btn = document.getElementById("bHealth");
+  if(!btn) return;
+  const icoon = status==="err" ? "❌" : (status==="warn" ? "⚠️" : "✅");
+  btn.innerHTML = '🩺 Health <span class="hb">'+icoon+'</span>';
+}
+async function haalHealthData(){
   let h = {updated:null, groepen:[]};
   try{
     const r = await fetch("health.json?t=" + Date.now(), {cache:"no-store"});
     if(r.ok) h = await r.json();
   }catch(e){}
   try{ const acc = await checkAccess(); h.groepen = [acc, ...(h.groepen||[])]; }catch(e){}
+  return h;
+}
+async function updateHealthBadge(){
+  try{ zetHealthBadge(healthStatusVan(await haalHealthData())); }catch(e){}
+}
+async function laadHealth(){
+  const body = document.getElementById("hBody");
+  const upd = document.getElementById("hUpdated");
+  body.innerHTML = '<p class="hloading">Bezig met laden…</p>'; upd.textContent = "";
+  const h = await haalHealthData();
+  zetHealthBadge(healthStatusVan(h));
   if((h.groepen||[]).length) renderHealth(h);
   else body.innerHTML = '<p class="hloading">Nog geen controlegegevens beschikbaar.<br>De eerste controle draait automatisch (dagelijks en na elke wijziging).</p>';
 }
@@ -1731,10 +1755,11 @@ function renderHealth(h){
   const upd = document.getElementById("hUpdated");
   let when = "";
   if(h.updated){ try{ when = new Date(h.updated).toLocaleString("nl-NL",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}); }catch(e){ when = h.updated; } }
-  let totErr = 0;
-  (h.groepen||[]).forEach(g => (g.items||[]).forEach(i => { if(i.status==="err") totErr++; }));
-  upd.innerHTML = (when ? ("Laatste controle: " + esc(when)) : "") +
-    ` <span class="hsum ${totErr?'bad':'ok'}">${totErr ? (totErr + " probleem" + (totErr>1?"en":"")) : "alles in orde"}</span>`;
+  let totErr = 0, totWarn = 0;
+  (h.groepen||[]).forEach(g => (g.items||[]).forEach(i => { if(i.status==="err") totErr++; else if(i.status==="warn") totWarn++; }));
+  const samKlas = totErr ? "bad" : (totWarn ? "warn" : "ok");
+  const samTekst = totErr ? (totErr + " probleem" + (totErr>1?"en":"")) : (totWarn ? "let op" : "alles in orde");
+  upd.innerHTML = (when ? ("Laatste controle: " + esc(when)) : "") + ` <span class="hsum ${samKlas}">${samTekst}</span>`;
   const icon = s => s==="ok" ? "✅" : (s==="warn" ? "⚠️" : "❌");
   body.innerHTML = (h.groepen||[]).map(g => `
     <div class="hgroep"><h4>${esc(g.naam)}</h4>
