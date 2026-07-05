@@ -175,5 +175,17 @@ function wait(ms){ return new Promise(r=>setTimeout(r, ms)); }
   for (const [t, m] of results) console.log("  " + (t === "ok" ? "\u2713" : "\u2717") + " " + m);
   console.log(`\n${results.length - errs.length}/${results.length} beheer-acties correct`);
   for (const [, m] of errs) console.log(`::error::mutatie-zelftest: ${m}`);
+
+  // Net rapport in de GitHub-samenvatting
+  const summ = process.env.GITHUB_STEP_SUMMARY;
+  if (summ) {
+    const vlag = errs.length ? "\u274c fout gevonden" : "\u2705 alle beheer-acties werken";
+    let md = `## MUTATIE-ZELFTEST \u2014 ${vlag}\n\n`;
+    md += `**${results.length - errs.length}/${results.length} beheer-acties correct**\n\n`;
+    for (const [t, m] of results) md += `- ${t === "ok" ? "\u2705" : "\u274c"} ${m}\n`;
+    md += "\n";
+    fs.appendFileSync(summ, md);
+  }
+
   process.exit(errs.length ? 1 : 0);
 })();
