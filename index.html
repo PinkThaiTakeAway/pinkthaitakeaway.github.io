@@ -435,7 +435,7 @@
 <div id="healthOverlay" class="hoverlay">
   <div class="hpanel">
     <div class="hhead">
-      <h3>🩺 Systeemstatus</h3>
+      <h3 id="hTitle">🩺 Systeemstatus</h3>
       <button id="hClose" class="hclose" aria-label="Sluiten">✕</button>
     </div>
     <p id="hUpdated" class="hupd">—</p>
@@ -447,7 +447,7 @@
 <div id="klantOverlay" class="hoverlay">
   <div class="hpanel">
     <div class="hhead">
-      <h3>👥 Klanten</h3>
+      <h3 id="kTitle">👥 Klanten</h3>
       <button id="kClose" class="hclose" aria-label="Sluiten">✕</button>
     </div>
     <div class="ktabs">
@@ -1415,13 +1415,37 @@ async function resolvePhotos(){
 /* ---------- Beheermodus ---------- */
 let chosen = {};
 function applyBeheerLang(){
-  const A = T().adm;
+  const A = T().adm, B = BT();
   document.getElementById("bTitle").textContent = A.title;
   document.getElementById("bAdd").textContent = A.add;
   document.getElementById("bToken").textContent = A.tokenBtn;
   document.getElementById("bPublish").textContent = A.publish;
   document.getElementById("bSluit").textContent = A.sluit;
+  document.getElementById("bKlanten").textContent = B.bar.klanten;
   updateBeheerCount();
+  updateTrashCount();
+  updateTikkieBtn();
+  updatePauzeBtn();
+  // Klanten-paneel labels
+  const kt = document.getElementById("kTitle"); if(kt) kt.textContent = B.kl.title;
+  const kz = document.getElementById("kZoek"); if(kz) kz.placeholder = B.kl.zoek;
+  const kb = document.getElementById("kBulk"); if(kb) kb.textContent = B.kl.bulk;
+  const kr = document.getElementById("kReload"); if(kr) kr.textContent = B.kl.reload;
+  document.querySelectorAll(".ktab").forEach(t => {
+    if(t.dataset.tab==="klanten") t.textContent = B.kl.tabKlanten;
+    else if(t.dataset.tab==="afhaal") t.textContent = B.kl.tabAfhaal;
+    else if(t.dataset.tab==="cijfers") t.textContent = B.kl.tabCijfers;
+  });
+  // Health-paneel labels
+  const ht = document.getElementById("hTitle"); if(ht) ht.textContent = B.hl.title;
+  const hr = document.getElementById("hReload"); if(hr) hr.textContent = B.hl.reload;
+  // Volg-scherm knop (klant)
+  const vr = document.getElementById("volgReload"); if(vr) vr.textContent = (VOLG_T[LANG]||VOLG_T.nl).ver;
+  // open panelen meteen opnieuw tekenen in de nieuwe taal
+  if(document.getElementById("healthOverlay").classList.contains("open")) laadHealth();
+  else zetHealthBadge(_laatsteHealthStatus);
+  if(document.getElementById("klantOverlay").classList.contains("open") && _klantData.length) renderKlanten();
+  if(document.getElementById("volgOverlay").classList.contains("open") && _volgCode) laadVolg(_volgCode);
 }
 async function initBeheer(){
   document.body.classList.add("beheer");
@@ -1493,11 +1517,11 @@ async function doSearch(id){
 function choose(id, url){ chosen[id]=url; saveJSON("tta_fotos", chosen); setPhoto(id, url); updateBeheerCount(); livePush("fotos.json", currentFotos, "Foto bijgewerkt"); }
 function updateTikkieBtn(){
   const b = document.getElementById("bTikkie");
-  if(b) b.textContent = TIKKIE_ON ? "💳 Tikkie: aan" : "💳 Tikkie: uit";
+  if(b) b.textContent = TIKKIE_ON ? BT().bar.tikkieOn : BT().bar.tikkieOff;
 }
 function updatePauzeBtn(){
   const b = document.getElementById("bPauze"); if(!b) return;
-  b.textContent = orderStatus().open ? "🟢 Bestellen: open" : "🔴 Bestellen: dicht";
+  b.textContent = orderStatus().open ? BT().bar.orderOpen : BT().bar.orderClosed;
 }
 function togglePauze(){
   const st = orderStatus();
@@ -1716,10 +1740,11 @@ function jsonp(params){
 }
 function fetchMailCount(){ return jsonp({actie:"mailcount"}); }
 async function checkAccess(){
+  const H = BT().hl;
   const items = [];
   const tok = ghToken();
   if(!tok){
-    items.push({naam:"Publicatie-token: niet ingesteld op dit apparaat", status:"warn"});
+    items.push({naam:H.tokNiet, status:"warn"});
   } else {
     try{
       const r = await fetch(`https://api.github.com/repos/${GH_REPO}?t=`+Date.now(), {headers:{Authorization:"token "+tok}});
@@ -1729,39 +1754,38 @@ async function checkAccess(){
         if(exp){ const s = exp.replace(" ","T").replace(/ (\+0000|UTC)$/,"Z"); const dd = new Date(s); if(!isNaN(dd)) d = dd; }
         if(d){
           const dagen = Math.round((d - Date.now())/86400000);
-          const datum = d.toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});
-          if(dagen < 0)       items.push({naam:`Publicatie-token: verlopen (${datum})`, status:"err"});
-          else if(dagen <= 14) items.push({naam:`Publicatie-token: verloopt binnenkort — over ${dagen} dag(en), op ${datum}`, status:"warn"});
-          else                items.push({naam:`Publicatie-token: geldig (verloopt ${datum})`, status:"ok"});
+          const datum = d.toLocaleDateString(BT().locale,{day:"numeric",month:"long",year:"numeric"});
+          if(dagen < 0)       items.push({naam:H.tokVerlopen(datum), status:"err"});
+          else if(dagen <= 14) items.push({naam:H.tokBinnenkort(dagen, datum), status:"warn"});
+          else                items.push({naam:H.tokGeldig(datum), status:"ok"});
         } else {
-          items.push({naam:"Publicatie-token: geldig", status:"ok"});
+          items.push({naam:H.tokGeldigKort, status:"ok"});
         }
       } else if(r.status===401){
-        items.push({naam:"Publicatie-token: ongeldig of verlopen", status:"err"});
+        items.push({naam:H.tokOngeldig, status:"err"});
       } else {
-        items.push({naam:`Publicatie-token: kon niet controleren (status ${r.status})`, status:"warn"});
+        items.push({naam:H.tokControle(r.status), status:"warn"});
       }
     }catch(e){
-      items.push({naam:"Publicatie-token: kon niet controleren (netwerk)", status:"warn"});
+      items.push({naam:H.tokNetwerk, status:"warn"});
     }
   }
-  // E-mail via Gmail: maandtotaal (info) + resterende dagruimte (indien script het meegeeft)
   try{
     const mc = await fetchMailCount();
     if(mc && typeof mc.emails === "number"){
-      const best = (typeof mc.bestellingen === "number") ? ` (${mc.bestellingen} bestelling${mc.bestellingen===1?"":"en"})` : "";
-      items.push({naam:`E-mails deze maand: \u00b1 ${mc.emails}${best}`, status:"ok"});
+      const best = (typeof mc.bestellingen === "number") ? H.mailBest(mc.bestellingen) : "";
+      items.push({naam:H.mailMaand(mc.emails, best), status:"ok"});
       if(typeof mc.quota === "number"){
         const st = mc.quota <= 0 ? "err" : (mc.quota < 20 ? "warn" : "ok");
-        items.push({naam:`E-mailruimte vandaag (Gmail): nog \u00b1 ${mc.quota} berichten`, status:st});
+        items.push({naam:H.mailRuimte(mc.quota), status:st});
       }
     } else {
-      items.push({naam:"E-mailverbruik: nog niet beschikbaar", status:"warn"});
+      items.push({naam:H.mailNietBesch, status:"warn"});
     }
   }catch(e){
-    items.push({naam:"E-mailverbruik: kon niet ophalen", status:"warn"});
+    items.push({naam:H.mailNietOp, status:"warn"});
   }
-  return {naam:"Toegang & limieten", items};
+  return {naam:H.accGroup, items};
 }
 function healthStatusVan(h){
   let err=0, warn=0;
@@ -1770,11 +1794,13 @@ function healthStatusVan(h){
   }));
   return err ? "err" : (warn ? "warn" : "ok");
 }
+let _laatsteHealthStatus = "ok";
 function zetHealthBadge(status){
+  _laatsteHealthStatus = status || "ok";
   const btn = document.getElementById("bHealth");
   if(!btn) return;
   const icoon = status==="err" ? "❌" : (status==="warn" ? "⚠️" : "✅");
-  btn.innerHTML = '🩺 Health <span class="hb">'+icoon+'</span>';
+  btn.innerHTML = '🩺 '+BT().bar.health+' <span class="hb">'+icoon+'</span>';
 }
 async function haalHealthData(){
   let h = {updated:null, groepen:[]};
@@ -1801,27 +1827,28 @@ async function updateHealthBadge(){
 async function laadHealth(){
   const body = document.getElementById("hBody");
   const upd = document.getElementById("hUpdated");
-  body.innerHTML = '<p class="hloading">Bezig met laden…</p>'; upd.textContent = "";
+  body.innerHTML = '<p class="hloading">'+BT().hl.laden+'</p>'; upd.textContent = "";
   const h = await haalHealthData();
   zetHealthBadge(healthStatusVan(h));
   if((h.groepen||[]).length) renderHealth(h);
-  else body.innerHTML = '<p class="hloading">Nog geen controlegegevens beschikbaar.<br>De eerste controle draait automatisch (dagelijks en na elke wijziging).</p>';
+  else body.innerHTML = '<p class="hloading">'+BT().hl.geen+'</p>';
 }
 function renderHealth(h){
   const body = document.getElementById("hBody");
   const upd = document.getElementById("hUpdated");
+  const H = BT().hl;
   let when = "";
-  if(h.updated){ try{ when = new Date(h.updated).toLocaleString("nl-NL",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}); }catch(e){ when = h.updated; } }
+  if(h.updated){ try{ when = new Date(h.updated).toLocaleString(BT().locale,{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}); }catch(e){ when = h.updated; } }
   let totErr = 0, totWarn = 0;
   (h.groepen||[]).forEach(g => (g.items||[]).forEach(i => { if(i.status==="err") totErr++; else if(i.status==="warn") totWarn++; }));
   const samKlas = totErr ? "bad" : (totWarn ? "warn" : "ok");
-  const samTekst = totErr ? (totErr + " probleem" + (totErr>1?"en":"")) : (totWarn ? "let op" : "alles in orde");
-  upd.innerHTML = (when ? ("Laatste controle: " + esc(when)) : "") + ` <span class="hsum ${samKlas}">${samTekst}</span>`;
+  const samTekst = totErr ? H.samErr(totErr) : (totWarn ? H.samWarn : H.samOk);
+  upd.innerHTML = (when ? (esc(H.laatste) + " " + esc(when)) : "") + ` <span class="hsum ${samKlas}">${esc(samTekst)}</span>`;
   const icon = s => s==="ok" ? "✅" : (s==="warn" ? "⚠️" : "❌");
   body.innerHTML = (h.groepen||[]).map(g => `
     <div class="hgroep"><h4>${esc(g.naam)}</h4>
       ${(g.items||[]).map(i => `<div class="hitem ${i.status}"><span class="ic">${icon(i.status)}</span><span>${esc(i.naam)}</span></div>`).join("")}
-    </div>`).join("") || '<p class="hloading">Geen onderdelen gevonden.</p>';
+    </div>`).join("") || '<p class="hloading">'+BT().hl.geenOnderdelen+'</p>';
 }
 function openHealth(){ document.getElementById("healthOverlay").classList.add("open"); laadHealth(); }
 function closeHealth(){ document.getElementById("healthOverlay").classList.remove("open"); }
@@ -1833,10 +1860,113 @@ function openKlanten(){ document.getElementById("klantOverlay").classList.add("o
 function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
 
 const VOLG_T = {
-  nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link uit je bevestigingsmail.", laden:"Laden…" },
-  en: { titel:"Your order", open:"🟠 We're preparing your order", klaar:"✅ Picked up", afhalen:"Pickup", totaal:"Total", betaling:"Payment", niet:"Order not found. Please check the link in your confirmation e-mail.", laden:"Loading…" },
-  th: { titel:"ออเดอร์ของคุณ", open:"🟠 กำลังเตรียมออเดอร์ของคุณ", klaar:"✅ รับแล้ว", afhalen:"รับอาหาร", totaal:"รวม", betaling:"การชำระเงิน", niet:"ไม่พบออเดอร์ กรุณาตรวจสอบลิงก์ในอีเมลยืนยัน", laden:"กำลังโหลด…" }
+  nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link uit je bevestigingsmail.", laden:"Laden…", ver:"Status vernieuwen" },
+  en: { titel:"Your order", open:"🟠 We're preparing your order", klaar:"✅ Picked up", afhalen:"Pickup", totaal:"Total", betaling:"Payment", niet:"Order not found. Please check the link in your confirmation e-mail.", laden:"Loading…", ver:"Refresh status" },
+  th: { titel:"ออเดอร์ของคุณ", open:"🟠 กำลังเตรียมออเดอร์ของคุณ", klaar:"✅ รับแล้ว", afhalen:"รับอาหาร", totaal:"รวม", betaling:"การชำระเงิน", niet:"ไม่พบออเดอร์ กรุณาตรวจสอบลิงก์ในอีเมลยืนยัน", laden:"กำลังโหลด…", ver:"รีเฟรชสถานะ" }
 };
+const BEHEER_T = {
+  nl: {
+    locale:"nl-NL",
+    bar:{ tikkieOn:"💳 Tikkie: aan", tikkieOff:"💳 Tikkie: uit", orderOpen:"🟢 Bestellen: open", orderClosed:"🔴 Bestellen: dicht", health:"Health", klanten:"👥 Klanten" },
+    kl:{
+      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers",
+      zoek:"Zoek op naam, e-mail of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
+      laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
+      nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
+      sleutelVraag:"Voer je beheersleutel in om het klantenbestand te bekijken.", sleutelFout:"De sleutel klopt niet. Probeer opnieuw.", sleutelPh:"Beheersleutel", sleutelOpen:"Openen",
+      naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"),
+      notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", losseMail:"✉ Losse mail", klantVerw:"🗑 Klant verwijderen",
+      badgeAfg:"afgehaald", badgeOpen:"open", badgeBedankt:"bedankt",
+      markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", bedankBtn:"✉ Bedankmail", bedankAl:"✉ Al bedankt", delTitle:"Bestelling verwijderen",
+      afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend",
+      cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.",
+      promptOnderwerp:"Onderwerp:", promptOnderwerpDef:"Bericht van Pink Thai TakeAway", promptBericht:"Bericht:",
+      confBedank:"Bedankmail versturen naar deze klant?", confDelBest:"Deze bestelling verwijderen?", confDelKlant:"Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.",
+      bulkOnderwerp:"Onderwerp van de mail aan alle klanten:", bulkOnderwerpDef:"Nieuws van Pink Thai TakeAway", bulkBericht:"Bericht aan alle klanten:", bulkConf:"Deze mail naar ALLE klanten met een e-mailadres versturen?", bulkBezig:"Bezig met versturen…",
+      tBijgewerkt:"Bijgewerkt", tNietBij:"Kon niet bijwerken", tBedankVerz:"Bedankmail verstuurd", tGeenMail:"Klant heeft geen e-mail", tMailFout:"Kon mail niet versturen", tMailVerz:"Mail verstuurd",
+      tNotitieOk:"Notitie opgeslagen", tNotitieFout:"Kon notitie niet opslaan", tBestVerw:"Bestelling verwijderd", tVerwFout:"Kon niet verwijderen", tKlantVerw:"Klant verwijderd",
+      tBulkKlaar:(v,k)=>v+" van "+k+" mails verstuurd", tBulkFout:"Kon niet versturen"
+    },
+    hl:{
+      title:"🩺 Systeemstatus", reload:"Opnieuw laden", laden:"Bezig met laden…",
+      geen:"Nog geen controlegegevens beschikbaar.<br>De eerste controle draait automatisch (dagelijks en na elke wijziging).", geenOnderdelen:"Geen onderdelen gevonden.",
+      samOk:"alles in orde", samWarn:"let op", samErr:(n)=>n+" probleem"+(n>1?"en":""), laatste:"Laatste controle:",
+      accGroup:"Toegang & limieten",
+      tokNiet:"Publicatie-token: niet ingesteld op dit apparaat", tokVerlopen:(d)=>"Publicatie-token: verlopen ("+d+")",
+      tokBinnenkort:(dagen,d)=>"Publicatie-token: verloopt binnenkort — over "+dagen+" dag(en), op "+d, tokGeldig:(d)=>"Publicatie-token: geldig (verloopt "+d+")",
+      tokGeldigKort:"Publicatie-token: geldig", tokOngeldig:"Publicatie-token: ongeldig of verlopen", tokControle:(s)=>"Publicatie-token: kon niet controleren (status "+s+")", tokNetwerk:"Publicatie-token: kon niet controleren (netwerk)",
+      mailMaand:(e,best)=>"E-mails deze maand: ± "+e+best, mailBest:(n)=>" ("+n+" bestelling"+(n===1?"":"en")+")", mailRuimte:(q)=>"E-mailruimte vandaag (Gmail): nog ± "+q+" berichten", mailNietBesch:"E-mailverbruik: nog niet beschikbaar", mailNietOp:"E-mailverbruik: kon niet ophalen"
+    }
+  },
+  en: {
+    locale:"en-GB",
+    bar:{ tikkieOn:"💳 Tikkie: on", tikkieOff:"💳 Tikkie: off", orderOpen:"🟢 Ordering: open", orderClosed:"🔴 Ordering: closed", health:"Health", klanten:"👥 Customers" },
+    kl:{
+      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats",
+      zoek:"Search by name, e-mail or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
+      laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
+      nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
+      sleutelVraag:"Enter your admin key to view the customer file.", sleutelFout:"That key is incorrect. Please try again.", sleutelPh:"Admin key", sleutelOpen:"Open",
+      naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"),
+      notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", losseMail:"✉ Send e-mail", klantVerw:"🗑 Delete customer",
+      badgeAfg:"picked up", badgeOpen:"open", badgeBedankt:"thanked",
+      markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", bedankBtn:"✉ Thank-you e-mail", bedankAl:"✉ Already thanked", delTitle:"Delete order",
+      afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown",
+      cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.",
+      promptOnderwerp:"Subject:", promptOnderwerpDef:"Message from Pink Thai TakeAway", promptBericht:"Message:",
+      confBedank:"Send a thank-you e-mail to this customer?", confDelBest:"Delete this order?", confDelKlant:"Delete all data for this customer? This cannot be undone.",
+      bulkOnderwerp:"Subject of the e-mail to all customers:", bulkOnderwerpDef:"News from Pink Thai TakeAway", bulkBericht:"Message to all customers:", bulkConf:"Send this e-mail to ALL customers with an e-mail address?", bulkBezig:"Sending…",
+      tBijgewerkt:"Updated", tNietBij:"Could not update", tBedankVerz:"Thank-you e-mail sent", tGeenMail:"Customer has no e-mail", tMailFout:"Could not send e-mail", tMailVerz:"E-mail sent",
+      tNotitieOk:"Note saved", tNotitieFout:"Could not save note", tBestVerw:"Order deleted", tVerwFout:"Could not delete", tKlantVerw:"Customer deleted",
+      tBulkKlaar:(v,k)=>v+" of "+k+" e-mails sent", tBulkFout:"Could not send"
+    },
+    hl:{
+      title:"🩺 System status", reload:"Reload", laden:"Loading…",
+      geen:"No check data available yet.<br>The first check runs automatically (daily and after every change).", geenOnderdelen:"No items found.",
+      samOk:"all good", samWarn:"attention", samErr:(n)=>n+" issue"+(n>1?"s":""), laatste:"Last check:",
+      accGroup:"Access & limits",
+      tokNiet:"Publishing token: not set on this device", tokVerlopen:(d)=>"Publishing token: expired ("+d+")",
+      tokBinnenkort:(dagen,d)=>"Publishing token: expires soon — in "+dagen+" day(s), on "+d, tokGeldig:(d)=>"Publishing token: valid (expires "+d+")",
+      tokGeldigKort:"Publishing token: valid", tokOngeldig:"Publishing token: invalid or expired", tokControle:(s)=>"Publishing token: could not check (status "+s+")", tokNetwerk:"Publishing token: could not check (network)",
+      mailMaand:(e,best)=>"E-mails this month: ± "+e+best, mailBest:(n)=>" ("+n+" order"+(n===1?"":"s")+")", mailRuimte:(q)=>"E-mail room today (Gmail): ± "+q+" messages left", mailNietBesch:"E-mail usage: not available yet", mailNietOp:"E-mail usage: could not fetch"
+    }
+  },
+  th: {
+    locale:"th-TH",
+    bar:{ tikkieOn:"💳 Tikkie: เปิด", tikkieOff:"💳 Tikkie: ปิด", orderOpen:"🟢 รับออเดอร์: เปิด", orderClosed:"🔴 รับออเดอร์: ปิด", health:"สถานะ", klanten:"👥 ลูกค้า" },
+    kl:{
+      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ",
+      zoek:"ค้นหาด้วยชื่อ อีเมล หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
+      laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
+      nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
+      sleutelVraag:"กรอกรหัสผู้ดูแลเพื่อดูข้อมูลลูกค้า", sleutelFout:"รหัสไม่ถูกต้อง กรุณาลองใหม่", sleutelPh:"รหัสผู้ดูแล", sleutelOpen:"เปิด",
+      naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์",
+      notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", losseMail:"✉ ส่งอีเมล", klantVerw:"🗑 ลบลูกค้า",
+      badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBedankt:"ขอบคุณแล้ว",
+      markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", bedankBtn:"✉ อีเมลขอบคุณ", bedankAl:"✉ ขอบคุณแล้ว", delTitle:"ลบออเดอร์",
+      afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ",
+      cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล",
+      promptOnderwerp:"หัวข้อ:", promptOnderwerpDef:"ข้อความจาก Pink Thai TakeAway", promptBericht:"ข้อความ:",
+      confBedank:"ส่งอีเมลขอบคุณถึงลูกค้ารายนี้?", confDelBest:"ลบออเดอร์นี้?", confDelKlant:"ลบข้อมูลทั้งหมดของลูกค้ารายนี้? ไม่สามารถกู้คืนได้",
+      bulkOnderwerp:"หัวข้ออีเมลถึงลูกค้าทุกคน:", bulkOnderwerpDef:"ข่าวสารจาก Pink Thai TakeAway", bulkBericht:"ข้อความถึงลูกค้าทุกคน:", bulkConf:"ส่งอีเมลนี้ถึงลูกค้าทุกคนที่มีอีเมล?", bulkBezig:"กำลังส่ง…",
+      tBijgewerkt:"อัปเดตแล้ว", tNietBij:"อัปเดตไม่ได้", tBedankVerz:"ส่งอีเมลขอบคุณแล้ว", tGeenMail:"ลูกค้าไม่มีอีเมล", tMailFout:"ส่งอีเมลไม่ได้", tMailVerz:"ส่งอีเมลแล้ว",
+      tNotitieOk:"บันทึกโน้ตแล้ว", tNotitieFout:"บันทึกโน้ตไม่ได้", tBestVerw:"ลบออเดอร์แล้ว", tVerwFout:"ลบไม่ได้", tKlantVerw:"ลบลูกค้าแล้ว",
+      tBulkKlaar:(v,k)=>"ส่งแล้ว "+v+" จาก "+k+" อีเมล", tBulkFout:"ส่งไม่ได้"
+    },
+    hl:{
+      title:"🩺 สถานะระบบ", reload:"โหลดใหม่", laden:"กำลังโหลด…",
+      geen:"ยังไม่มีข้อมูลการตรวจสอบ<br>การตรวจสอบครั้งแรกจะทำงานอัตโนมัติ (ทุกวันและหลังการเปลี่ยนแปลงทุกครั้ง)", geenOnderdelen:"ไม่พบรายการ",
+      samOk:"ทุกอย่างปกติ", samWarn:"ควรตรวจสอบ", samErr:(n)=>n+" ปัญหา", laatste:"ตรวจสอบล่าสุด:",
+      accGroup:"การเข้าถึงและขีดจำกัด",
+      tokNiet:"โทเคนเผยแพร่: ยังไม่ได้ตั้งค่าบนอุปกรณ์นี้", tokVerlopen:(d)=>"โทเคนเผยแพร่: หมดอายุ ("+d+")",
+      tokBinnenkort:(dagen,d)=>"โทเคนเผยแพร่: กำลังจะหมดอายุ — ในอีก "+dagen+" วัน วันที่ "+d, tokGeldig:(d)=>"โทเคนเผยแพร่: ใช้งานได้ (หมดอายุ "+d+")",
+      tokGeldigKort:"โทเคนเผยแพร่: ใช้งานได้", tokOngeldig:"โทเคนเผยแพร่: ไม่ถูกต้องหรือหมดอายุ", tokControle:(s)=>"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (สถานะ "+s+")", tokNetwerk:"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (เครือข่าย)",
+      mailMaand:(e,best)=>"อีเมลเดือนนี้: ± "+e+best, mailBest:(n)=>" ("+n+" ออเดอร์)", mailRuimte:(q)=>"โควตาอีเมลวันนี้ (Gmail): เหลือ ± "+q+" ฉบับ", mailNietBesch:"การใช้อีเมล: ยังไม่พร้อม", mailNietOp:"การใช้อีเมล: ดึงข้อมูลไม่ได้"
+    }
+  }
+};
+function BT(){ return BEHEER_T[LANG] || BEHEER_T.nl; }
+
 let _volgCode = "";
 function openVolg(code){ _volgCode = code; document.getElementById("volgOverlay").classList.add("open"); laadVolg(code); }
 function closeVolg(){ document.getElementById("volgOverlay").classList.remove("open"); }
@@ -1844,6 +1974,7 @@ async function laadVolg(code){
   const VT = VOLG_T[LANG] || VOLG_T.nl;
   const body = document.getElementById("volgBody");
   document.getElementById("volgTitel").textContent = VT.titel;
+  const _vr = document.getElementById("volgReload"); if(_vr) _vr.textContent = VT.ver;
   body.innerHTML = '<p class="hloading">'+esc(VT.laden)+'</p>';
   const r = await jsonp({actie:"volg", code});
   if(!r || !r.ok || !r.bestelling){ body.innerHTML = '<p class="hloading">'+esc(VT.niet)+'</p>'; return; }
@@ -1870,30 +2001,31 @@ function renderVolg(b){
 async function laadKlanten(){
   const body = document.getElementById("kBody");
   if(!klantKey()){ toonSleutelInvoer(); return; }
-  body.innerHTML = '<p class="hloading">Klanten laden…</p>';
+  body.innerHTML = '<p class="hloading">'+BT().kl.laden+'</p>';
   const r = await jsonp({actie:"klanten", key:klantKey()});
-  if(!r){ body.innerHTML = '<p class="hloading">Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?</p>'; return; }
+  if(!r){ body.innerHTML = '<p class="hloading">'+BT().kl.geenVerb+'</p>'; return; }
   if(!r.ok){
-    if(r.fout === "geen toegang"){ localStorage.removeItem("tta_klantkey"); toonSleutelInvoer("De sleutel klopt niet. Probeer opnieuw."); }
-    else body.innerHTML = '<p class="hloading">Kon klanten niet laden.</p>';
+    if(r.fout === "geen toegang"){ localStorage.removeItem("tta_klantkey"); toonSleutelInvoer(BT().kl.sleutelFout); }
+    else body.innerHTML = '<p class="hloading">'+BT().kl.nietLaden+'</p>';
     return;
   }
   _klantData = r.bestellingen || [];
   renderKlanten();
 }
 function toonSleutelInvoer(fout){
+  const K = BT().kl;
   document.getElementById("kBody").innerHTML =
     '<div class="ksleutel">'+
-    '<p>Voer je beheersleutel in om het klantenbestand te bekijken.</p>'+
+    '<p>'+esc(K.sleutelVraag)+'</p>'+
     (fout ? ('<p style="color:#c0142c;font-weight:600">'+esc(fout)+'</p>') : '')+
-    '<input id="kKeyIn" type="password" placeholder="Beheersleutel" autocomplete="off">'+
-    '<button id="kKeyOk">Openen</button></div>';
+    '<input id="kKeyIn" type="password" placeholder="'+esc(K.sleutelPh)+'" autocomplete="off">'+
+    '<button id="kKeyOk">'+esc(K.sleutelOpen)+'</button></div>';
   document.getElementById("kKeyOk").onclick = ()=>{ const v = document.getElementById("kKeyIn").value.trim(); if(v){ localStorage.setItem("tta_klantkey", v); laadKlanten(); } };
   document.getElementById("kKeyIn").addEventListener("keydown", (e)=>{ if(e.key==="Enter") document.getElementById("kKeyOk").click(); });
 }
 function renderKlanten(){
   const zoek = document.getElementById("kZoek");
-  if(zoek) zoek.style.display = (_kTab==="klanten") ? "" : "none";
+  if(zoek){ zoek.style.display = (_kTab==="klanten") ? "" : "none"; zoek.placeholder = BT().kl.zoek; }
   if(_kTab==="afhaal") renderAfhaallijst();
   else if(_kTab==="cijfers") renderCijfers();
   else renderKlantenLijst();
@@ -1909,49 +2041,52 @@ function klantAggregatie(){
   return map;
 }
 function renderKlantenLijst(){
+  const K = BT().kl;
   const body = document.getElementById("kBody");
   const q = (document.getElementById("kZoek").value||"").toLowerCase().trim();
   let klanten = Object.values(klantAggregatie());
   if(q) klanten = klanten.filter(k => ((k.naam||"")+" "+(k.email||"")+" "+(k.tel||"")).toLowerCase().includes(q));
-  if(!klanten.length){ body.innerHTML = '<p class="hloading">'+(_klantData.length?'Geen klanten gevonden.':'Nog geen bestellingen in het klantenbestand.')+'</p>'; return; }
+  if(!klanten.length){ body.innerHTML = '<p class="hloading">'+(_klantData.length?K.geenGevonden:K.geenKlanten)+'</p>'; return; }
   klanten.sort((a,b)=>b.bestellingen.length - a.bestellingen.length);
   body.innerHTML = klanten.map(k=>{
     const n = k.bestellingen.length;
-    const vast = n>=5 ? '<span class="klabel">⭐ vaste klant</span>' : '';
+    const vast = n>=5 ? '<span class="klabel">'+K.vasteKlant+'</span>' : '';
     const notitie = k.bestellingen[0] ? (k.bestellingen[0].notitie||"") : "";
     return '<div class="kklant">'+
-      '<div class="knaam">'+esc(k.naam||"(naam onbekend)")+vast+'</div>'+
+      '<div class="knaam">'+esc(k.naam||K.naamOnbekend)+vast+'</div>'+
       '<div class="kmeta">'+esc(k.email||"")+(k.tel?(' · '+esc(k.tel)):'')+'</div>'+
-      '<div class="kstat">'+n+' bestelling'+(n===1?'':'en')+'</div>'+
-      (k.email?('<div class="knotitie"><textarea placeholder="Notitie (voorkeuren, allergie\u00ebn\u2026)">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-email="'+esc(k.email)+'">Notitie opslaan</button></div>'):'')+
+      '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+
+      (k.email?('<div class="knotitie"><textarea placeholder="'+esc(K.notitiePh)+'">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-email="'+esc(k.email)+'">'+K.notitieSave+'</button></div>'):'')+
       k.bestellingen.map(bestelHtml).join("")+
       '<div class="kacts" style="margin-top:8px">'+
-        (k.email?('<button data-a="mail" data-email="'+esc(k.email)+'">✉ Losse mail</button>'):'')+
-        (k.email?('<button class="kdelbtn" data-a="delklant" data-email="'+esc(k.email)+'">🗑 Klant verwijderen</button>'):'')+
+        (k.email?('<button data-a="mail" data-email="'+esc(k.email)+'">'+K.losseMail+'</button>'):'')+
+        (k.email?('<button class="kdelbtn" data-a="delklant" data-email="'+esc(k.email)+'">'+K.klantVerw+'</button>'):'')+
       '</div>'+
     '</div>';
   }).join("");
 }
 function bestelHtml(b){
+  const K = BT().kl;
   const d = b.tijd ? new Date(b.tijd) : null;
-  const tijd = d && !isNaN(d) ? d.toLocaleString("nl-NL",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+  const tijd = d && !isNaN(d) ? d.toLocaleString(BT().locale,{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
   return '<div class="kbest">'+
     '<div class="kbreg"><span class="kbtijd">#'+esc(b.id)+' · '+esc(tijd)+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
     (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
-    '<div>'+(b.afgehaald?'<span class="kbadge afg">afgehaald</span>':'<span class="kbadge open">open</span>')+(b.bedankt?'<span class="kbadge bdk">bedankt</span>':'')+'</div>'+
+    '<div>'+(b.afgehaald?'<span class="kbadge afg">'+K.badgeAfg+'</span>':'<span class="kbadge open">'+K.badgeOpen+'</span>')+(b.bedankt?'<span class="kbadge bdk">'+K.badgeBedankt+'</span>':'')+'</div>'+
     '<div class="kacts">'+
-      '<button data-a="afg" data-id="'+esc(b.id)+'" data-w="'+(b.afgehaald?'0':'1')+'">'+(b.afgehaald?'↺ Toch niet afgehaald':'✓ Markeer afgehaald')+'</button>'+
-      (b.email?('<button class="prim" data-a="bedank" data-id="'+esc(b.id)+'"'+(b.bedankt?' disabled':'')+'>✉ '+(b.bedankt?'Al bedankt':'Bedankmail')+'</button>'):'')+
-      '<button class="kdelbtn" data-a="del" data-id="'+esc(b.id)+'" title="Bestelling verwijderen">🗑</button>'+
+      '<button data-a="afg" data-id="'+esc(b.id)+'" data-w="'+(b.afgehaald?'0':'1')+'">'+(b.afgehaald?K.markNiet:K.markAfg)+'</button>'+
+      (b.email?('<button class="prim" data-a="bedank" data-id="'+esc(b.id)+'"'+(b.bedankt?' disabled':'')+'>'+(b.bedankt?K.bedankAl:K.bedankBtn)+'</button>'):'')+
+      '<button class="kdelbtn" data-a="del" data-id="'+esc(b.id)+'" title="'+esc(K.delTitle)+'">🗑</button>'+
     '</div></div>';
 }
 function renderAfhaallijst(){
+  const K = BT().kl;
   const body = document.getElementById("kBody");
   const open = _klantData.filter(b => !b.afgehaald);
-  if(!open.length){ body.innerHTML = '<p class="hloading">Geen openstaande bestellingen. 🎉</p>'; return; }
+  if(!open.length){ body.innerHTML = '<p class="hloading">'+K.geenOpen+'</p>'; return; }
   const groepen = {};
   open.forEach(b => {
-    const af = b.afhaal || "Afhaaltijd onbekend";
+    const af = b.afhaal || K.afhaalOnbekend;
     const m = af.match(/^(.+?)\s+(\d{1,2}:\d{2})$/);
     const dag = m ? m[1] : af, tijd = m ? m[2] : "";
     (groepen[dag] = groepen[dag]||[]).push({b, tijd});
@@ -1964,7 +2099,7 @@ function renderAfhaallijst(){
           '<div class="kbreg"><span class="kbtijd">'+(tijd?esc(tijd)+' · ':'')+'#'+esc(b.id)+' · '+esc(b.naam||"")+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
           (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
           (b.opmerking?('<div style="font-size:.82rem;color:#9a6a00">📝 '+esc(b.opmerking)+'</div>'):'')+
-          '<div class="kacts"><button data-a="afg" data-id="'+esc(b.id)+'" data-w="1">✓ Afgehaald</button></div>'+
+          '<div class="kacts"><button data-a="afg" data-id="'+esc(b.id)+'" data-w="1">'+K.afgehaaldKort+'</button></div>'+
         '</div>'
       ).join("");
   }).join("");
@@ -1982,6 +2117,7 @@ function parseGerechten(bestelling){
   return out;
 }
 function renderCijfers(){
+  const K = BT().kl;
   const body = document.getElementById("kBody");
   const nu = new Date(), maand = nu.getFullYear()+"-"+String(nu.getMonth()+1).padStart(2,"0");
   let mBest=0, mOmzet=0; const gerechten={};
@@ -1997,64 +2133,66 @@ function renderCijfers(){
   const eur = n => "€ "+n.toFixed(2).replace(".",",");
   body.innerHTML =
     '<div class="kstat-grid">'+
-      '<div class="kstat-card"><div class="kv">'+mBest+'</div><div class="kl">bestellingen deze maand</div></div>'+
-      '<div class="kstat-card"><div class="kv">'+eur(mOmzet)+'</div><div class="kl">omzet deze maand</div></div>'+
-      '<div class="kstat-card"><div class="kv">'+_klantData.length+'</div><div class="kl">bestellingen totaal</div></div>'+
-      '<div class="kstat-card"><div class="kv">'+klanten+'</div><div class="kl">unieke klanten</div></div>'+
+      '<div class="kstat-card"><div class="kv">'+mBest+'</div><div class="kl">'+K.cBestMaand+'</div></div>'+
+      '<div class="kstat-card"><div class="kv">'+eur(mOmzet)+'</div><div class="kl">'+K.cOmzetMaand+'</div></div>'+
+      '<div class="kstat-card"><div class="kv">'+_klantData.length+'</div><div class="kl">'+K.cBestTotaal+'</div></div>'+
+      '<div class="kstat-card"><div class="kv">'+klanten+'</div><div class="kl">'+K.cKlanten+'</div></div>'+
     '</div>'+
-    '<div class="ktop"><h4>Best verkocht</h4>'+
-      (top.length ? top.map(([naam,aantal])=>'<div class="ktoprow"><span>'+esc(naam)+'</span><span class="ktn">'+aantal+'×</span></div>').join("") : '<p class="hloading">Nog geen gegevens.</p>')+
+    '<div class="ktop"><h4>'+esc(K.cTop)+'</h4>'+
+      (top.length ? top.map(([naam,aantal])=>'<div class="ktoprow"><span>'+esc(naam)+'</span><span class="ktn">'+aantal+'×</span></div>').join("") : '<p class="hloading">'+K.cGeen+'</p>')+
     '</div>';
 }
 async function klantAfgehaald(id, waarde){
   const r = await jsonp({actie:"afgehaald", id, waarde: waarde?"ja":"nee", key:klantKey()});
-  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.afgehaald=waarde; renderKlanten(); showToast("Bijgewerkt", true); }
-  else showToast("Kon niet bijwerken", false);
+  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.afgehaald=waarde; renderKlanten(); showToast(BT().kl.tBijgewerkt, true); }
+  else showToast(BT().kl.tNietBij, false);
 }
 async function klantBedank(id){
-  if(!confirm("Bedankmail versturen naar deze klant?")) return;
+  if(!confirm(BT().kl.confBedank)) return;
   const r = await jsonp({actie:"bedankmail", id, key:klantKey()});
-  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.bedankt=true; renderKlanten(); showToast("Bedankmail verstuurd", true); }
-  else showToast((r&&r.fout==="geen e-mail")?"Klant heeft geen e-mail":"Kon mail niet versturen", false);
+  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.bedankt=true; renderKlanten(); showToast(BT().kl.tBedankVerz, true); }
+  else showToast((r&&r.fout==="geen e-mail")?BT().kl.tGeenMail:BT().kl.tMailFout, false);
 }
 async function klantMail(email){
   const b = _klantData.find(x => (x.email||"")===email);
   const naam = b ? (b.naam||"") : "";
-  const onderwerp = prompt("Onderwerp:", "Bericht van Pink Thai TakeAway");
+  const K = BT().kl;
+  const onderwerp = prompt(K.promptOnderwerp, K.promptOnderwerpDef);
   if(onderwerp===null) return;
-  const bericht = prompt("Bericht:", "Hoi "+naam+",\n\n");
+  const bericht = prompt(K.promptBericht, "");
   if(bericht===null) return;
   const r = await jsonp({actie:"mail", email, onderwerp, bericht, key:klantKey()});
-  if(r && r.ok) showToast("Mail verstuurd", true);
-  else showToast("Kon mail niet versturen", false);
+  if(r && r.ok) showToast(K.tMailVerz, true);
+  else showToast(K.tMailFout, false);
 }
 async function klantNotitie(email, tekst){
   const r = await jsonp({actie:"notitie", email, notitie:tekst, key:klantKey()});
-  if(r && r.ok){ _klantData.forEach(x=>{ if(String(x.email||"").toLowerCase()===email.toLowerCase()) x.notitie=tekst; }); showToast("Notitie opgeslagen", true); }
-  else showToast("Kon notitie niet opslaan", false);
+  if(r && r.ok){ _klantData.forEach(x=>{ if(String(x.email||"").toLowerCase()===email.toLowerCase()) x.notitie=tekst; }); showToast(BT().kl.tNotitieOk, true); }
+  else showToast(BT().kl.tNotitieFout, false);
 }
 async function klantVerwijder(id){
-  if(!confirm("Deze bestelling verwijderen?")) return;
+  if(!confirm(BT().kl.confDelBest)) return;
   const r = await jsonp({actie:"verwijder", id, key:klantKey()});
-  if(r && r.ok){ _klantData = _klantData.filter(x=>x.id!==id); renderKlanten(); showToast("Bestelling verwijderd", true); }
-  else showToast("Kon niet verwijderen", false);
+  if(r && r.ok){ _klantData = _klantData.filter(x=>x.id!==id); renderKlanten(); showToast(BT().kl.tBestVerw, true); }
+  else showToast(BT().kl.tVerwFout, false);
 }
 async function klantVerwijderKlant(email){
-  if(!confirm("Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.")) return;
+  if(!confirm(BT().kl.confDelKlant)) return;
   const r = await jsonp({actie:"verwijderklant", email, key:klantKey()});
-  if(r && r.ok){ _klantData = _klantData.filter(x=>String(x.email||"").toLowerCase()!==email.toLowerCase()); renderKlanten(); showToast("Klant verwijderd", true); }
-  else showToast("Kon niet verwijderen", false);
+  if(r && r.ok){ _klantData = _klantData.filter(x=>String(x.email||"").toLowerCase()!==email.toLowerCase()); renderKlanten(); showToast(BT().kl.tKlantVerw, true); }
+  else showToast(BT().kl.tVerwFout, false);
 }
 async function klantBulk(){
-  const onderwerp = prompt("Onderwerp van de mail aan alle klanten:", "Nieuws van Pink Thai TakeAway");
+  const K = BT().kl;
+  const onderwerp = prompt(K.bulkOnderwerp, K.bulkOnderwerpDef);
   if(onderwerp===null) return;
-  const bericht = prompt("Bericht aan alle klanten:", "");
+  const bericht = prompt(K.bulkBericht, "");
   if(bericht===null || !bericht.trim()) return;
-  if(!confirm("Deze mail naar ALLE klanten met een e-mailadres versturen?")) return;
-  showToast("Bezig met versturen…", true);
+  if(!confirm(K.bulkConf)) return;
+  showToast(K.bulkBezig, true);
   const r = await jsonp({actie:"bulkmail", onderwerp, bericht, key:klantKey()});
-  if(r && r.ok) showToast((r.verstuurd||0)+" van "+(r.klanten||0)+" mails verstuurd", true);
-  else showToast("Kon niet versturen", false);
+  if(r && r.ok) showToast(K.tBulkKlaar(r.verstuurd||0, r.klanten||0), true);
+  else showToast(K.tBulkFout, false);
 }
 
 function showToast(msg, ok){
@@ -2305,6 +2443,7 @@ function setLang(l){
   LANG = l; saveJSON("tta_lang_v", {l});
   applyLang(); buildMenu(); applyConfig(); updateBars(); pushNumbersIfNeeded();
   if(BEHEER) applyBeheerLang();
+  if(document.getElementById("volgOverlay").classList.contains("open") && _volgCode) laadVolg(_volgCode);
   if(sheet.classList.contains("open")) renderSheet();
 }
 document.querySelectorAll("#langsw button").forEach(b => b.onclick = () => setLang(b.dataset.lang));
