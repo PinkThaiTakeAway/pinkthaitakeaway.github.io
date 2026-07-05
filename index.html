@@ -2030,6 +2030,13 @@ function herstelMand(){
     });
   }
   if(!n){ showToast(VT.nietsHersteld, false); return; }
+  // bekende gegevens alvast invullen
+  try{
+    if(_volgData.naam)  form.naam  = _volgData.naam;
+    if(_volgData.tel)   form.tel   = _volgData.tel;
+    if(_volgData.email) form.email = _volgData.email;
+    form.pay = String(_volgData.betaling||"").toLowerCase().includes("tikkie") ? "tikkie" : "contant";
+  }catch(e){}
   try{ store.save(); }catch(e){}
   updateBars();
   closeVolg();
