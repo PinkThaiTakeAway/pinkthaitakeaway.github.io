@@ -82,6 +82,19 @@
   .hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:var(--amber);color:var(--ink);font-weight:800;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s,background .2s}
   .hero-cta:hover{background:var(--amber-deep)}
   .hero-cta:active{transform:scale(.97)}
+  .hero-inner{display:flex;align-items:center;gap:44px}
+  .hero-copy{flex:1 1 auto;min-width:0}
+  .hero-portret{flex:0 0 auto;text-align:center}
+  .hero-portret img{width:clamp(180px,24vw,272px);height:auto;aspect-ratio:1/1;border-radius:50%;display:block;border:4px solid rgba(255,255,255,.92);box-shadow:0 14px 44px rgba(0,0,0,.4)}
+  .hero-portret-label{display:block;margin-top:14px;font-size:.92rem;font-weight:700;color:var(--amber);letter-spacing:.01em}
+  @media(max-width:760px){
+    .hero-inner{flex-direction:column-reverse;align-items:center;gap:26px;text-align:center}
+    .hero-copy{width:100%}
+    .hero h1,.hero p{max-width:none}
+    .hero .eyebrow{margin-left:auto;margin-right:auto}
+    .chips,.hero-actions{justify-content:center}
+    .hero-portret img{width:158px;border-width:3px}
+  }
 
   .catnav{position:sticky;top:57px;z-index:50;background:rgba(251,246,236,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .catnav-inner{max-width:1100px;margin:0 auto;display:flex;gap:8px;padding:11px 14px;overflow-x:auto;scrollbar-width:none}
@@ -405,19 +418,28 @@
 
 <section class="hero">
   <div class="hero-inner">
-    <span class="eyebrow" id="eyebrow"></span>
-    <h1 id="heroTitle"></h1>
-    <p id="heroP"></p>
-    <div class="chips">
-      <span class="chip">📍 <span id="cfgAdres">—</span></span>
-      <span class="chip chip-info">
-        <span class="chip-line">🛍 <span id="chipPickup">—</span></span>
-        <span class="chip-line"><span class="stat"></span> <span id="chipOrder">—</span></span>
-      </span>
+    <div class="hero-copy">
+      <span class="eyebrow" id="eyebrow"></span>
+      <h1 id="heroTitle"></h1>
+      <p id="heroP"></p>
+      <div class="chips">
+        <span class="chip">📍 <span id="cfgAdres">—</span></span>
+        <span class="chip chip-info">
+          <span class="chip-line">🛍 <span id="chipPickup">—</span></span>
+          <span class="chip-line"><span class="stat"></span> <span id="chipOrder">—</span></span>
+        </span>
+      </div>
+      <div class="hero-actions">
+        <button class="hero-cta" id="heroCta"></button>
+        <button class="share-btn hero-share" id="shareBtn">📤 <span id="shareLabel">Deel deze pagina</span></button>
+      </div>
     </div>
-    <div class="hero-actions">
-      <button class="hero-cta" id="heroCta"></button>
-      <button class="share-btn hero-share" id="shareBtn">📤 <span id="shareLabel">Deel deze pagina</span></button>
+    <div class="hero-portret">
+      <picture>
+        <source srcset="chef.webp" type="image/webp">
+        <img src="chef.jpg" alt="Ruchanee — Pink Thai TakeAway" width="270" height="270" loading="eager">
+      </picture>
+      <span class="hero-portret-label" id="heroChef"></span>
     </div>
   </div>
 </section>
@@ -601,6 +623,7 @@ const I18N = {
     eyebrow:"Vers · Bestellen door de week · Afhalen op zaterdag",
     heroTitle:"Echt Thais, <em>vers voor je weekend.</em>",
     heroP:"Bestel deze week online en haal je verse Thaise gerechten op zaterdag af. Met liefde gewokt en gestampt.",
+    heroChef:"Met liefde gekookt door Ruchanee",
     chipPickup:"Afhalen zaterdag · 17:00–19:00 uur", chipOrder:(d,t)=>`Bestel t/m ${d} ${t} uur`, dagen:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
@@ -640,6 +663,7 @@ const I18N = {
     eyebrow:"Fresh · Order during the week · Pickup on Saturday",
     heroTitle:"Real Thai, <em>fresh for your weekend.</em>",
     heroP:"Order online during the week and pick up your fresh Thai dishes on Saturday. Wok-fried and pounded with care.",
+    heroChef:"Lovingly cooked by Ruchanee",
     chipPickup:"Pickup Saturday · 17:00–19:00", chipOrder:(d,t)=>`Order until ${d} ${t}`, dagen:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
@@ -679,6 +703,7 @@ const I18N = {
     eyebrow:"สดใหม่ · สั่งภายในสัปดาห์ · รับวันเสาร์",
     heroTitle:"อาหารไทยแท้ <em>สดใหม่สำหรับสุดสัปดาห์</em>",
     heroP:"สั่งออนไลน์ภายในสัปดาห์ แล้วมารับอาหารไทยสดใหม่ในวันเสาร์ ปรุงสดทุกจาน",
+    heroChef:"ปรุงด้วยความรักโดยคุณรัชนี",
     chipPickup:"รับวันเสาร์ · 17:00–19:00 น.", chipOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`, dagen:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"],
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
@@ -1399,6 +1424,7 @@ function applyLang(){
   document.documentElement.lang = LANG;
   document.getElementById("eyebrow").textContent = T().eyebrow;
   document.getElementById("heroTitle").innerHTML = T().heroTitle;
+  { const _hc=document.getElementById("heroChef"); if(_hc) _hc.textContent = T().heroChef || ""; }
   document.getElementById("heroP").textContent = T().heroP;
   document.getElementById("chipPickup").textContent = T().chipPickup;
   const _cutDag = T().dagen[CONFIG.bestel.cutoffDag];
