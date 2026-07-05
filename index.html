@@ -54,7 +54,7 @@
   header{position:sticky;top:0;z-index:60;background:rgba(251,246,236,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .bar{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;gap:10px}
   .brand{display:flex;align-items:baseline;gap:8px;min-width:0;flex:0 1 auto}
-  .brand .logo{font-family:'Fraunces',serif;font-weight:800;font-size:1.42rem;color:var(--forest);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .logo{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(.86rem,3.1vw,1.42rem);color:var(--forest);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .brand .logo .dot{color:var(--amber)}
   .bar-right{display:flex;align-items:center;gap:8px;flex:0 0 auto}
   .langsw{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
@@ -305,11 +305,18 @@
   .copy{font-size:.78rem;color:rgba(251,246,236,.55);border-top:1px solid rgba(255,255,255,.12);padding:18px 22px;text-align:center;max-width:1100px;margin:0 auto}
 
   @media(max-width:560px){
-    .brand .logo{font-size:1.2rem}
     #cartLabel{display:none}
-    .cart-btn{padding:8px 11px}
-    .langsw button{padding:7px 8px;font-size:.72rem}
-    .bar{gap:8px;padding:10px 14px}
+    .cart-btn{padding:7px 9px;gap:5px}
+    .langsw button{padding:6px 7px;font-size:.7rem}
+    .acct-btn{padding:6px 8px;border:none;font-size:1rem}
+    .bar{gap:7px;padding:10px 12px}
+    .bar-right{gap:6px}
+  }
+  @media(max-width:400px){
+    .langsw button{padding:6px 6px;font-size:.66rem}
+    .cart-btn{padding:6px 8px}
+    .acct-btn{padding:6px 6px}
+    .bar{gap:6px;padding:10px 10px}
   }
   @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
   .closed-banner{display:none;background:var(--amber);color:#fff;text-align:center;padding:13px 16px;font-weight:800;font-size:.95rem;line-height:1.4}
