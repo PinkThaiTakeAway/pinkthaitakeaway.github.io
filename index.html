@@ -85,7 +85,7 @@
   .hero-inner{display:flex;align-items:center;gap:44px}
   .hero-copy{flex:1 1 auto;min-width:0}
   .hero-portret{flex:0 0 auto;text-align:center}
-  .hero-portret img{width:clamp(180px,24vw,272px);height:auto;aspect-ratio:1/1;border-radius:50%;display:block;border:4px solid rgba(255,255,255,.92);box-shadow:0 14px 44px rgba(0,0,0,.4)}
+  .hero-portret img{width:clamp(148px,17vw,208px);height:auto;aspect-ratio:1/1;border-radius:50%;display:block;border:4px solid rgba(255,255,255,.92);box-shadow:0 14px 44px rgba(0,0,0,.4)}
   .hero-portret-label{display:block;margin-top:14px;font-size:.92rem;font-weight:700;color:var(--amber);letter-spacing:.01em}
   @media(max-width:760px){
     .hero-inner{flex-direction:column-reverse;align-items:center;gap:26px;text-align:center}
@@ -93,7 +93,7 @@
     .hero h1,.hero p{max-width:none}
     .hero .eyebrow{margin-left:auto;margin-right:auto}
     .chips,.hero-actions{justify-content:center}
-    .hero-portret img{width:158px;border-width:3px}
+    .hero-portret img{width:120px;border-width:3px}
   }
 
   .catnav{position:sticky;top:57px;z-index:50;background:rgba(251,246,236,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -437,7 +437,7 @@
     <div class="hero-portret">
       <picture>
         <source srcset="chef.webp" type="image/webp">
-        <img src="chef.jpg" alt="Ruchanee — Pink Thai TakeAway" width="270" height="270" loading="eager">
+        <img src="chef.jpg" alt="Pink — Pink Thai TakeAway" width="270" height="270" loading="eager">
       </picture>
       <span class="hero-portret-label" id="heroChef"></span>
     </div>
@@ -623,7 +623,7 @@ const I18N = {
     eyebrow:"Vers · Bestellen door de week · Afhalen op zaterdag",
     heroTitle:"Echt Thais, <em>vers voor je weekend.</em>",
     heroP:"Bestel deze week online en haal je verse Thaise gerechten op zaterdag af. Met liefde gewokt en gestampt.",
-    heroChef:"Met liefde gekookt door Ruchanee",
+    heroChef:"Met liefde gekookt door Pink",
     chipPickup:"Afhalen zaterdag · 17:00–19:00 uur", chipOrder:(d,t)=>`Bestel t/m ${d} ${t} uur`, dagen:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
@@ -663,7 +663,7 @@ const I18N = {
     eyebrow:"Fresh · Order during the week · Pickup on Saturday",
     heroTitle:"Real Thai, <em>fresh for your weekend.</em>",
     heroP:"Order online during the week and pick up your fresh Thai dishes on Saturday. Wok-fried and pounded with care.",
-    heroChef:"Lovingly cooked by Ruchanee",
+    heroChef:"Lovingly cooked by Pink",
     chipPickup:"Pickup Saturday · 17:00–19:00", chipOrder:(d,t)=>`Order until ${d} ${t}`, dagen:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
@@ -703,7 +703,7 @@ const I18N = {
     eyebrow:"สดใหม่ · สั่งภายในสัปดาห์ · รับวันเสาร์",
     heroTitle:"อาหารไทยแท้ <em>สดใหม่สำหรับสุดสัปดาห์</em>",
     heroP:"สั่งออนไลน์ภายในสัปดาห์ แล้วมารับอาหารไทยสดใหม่ในวันเสาร์ ปรุงสดทุกจาน",
-    heroChef:"ปรุงด้วยความรักโดยคุณรัชนี",
+    heroChef:"ปรุงด้วยความรักโดยคุณพิงค์",
     chipPickup:"รับวันเสาร์ · 17:00–19:00 น.", chipOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`, dagen:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"],
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
