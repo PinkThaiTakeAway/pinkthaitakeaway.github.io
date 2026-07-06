@@ -317,6 +317,16 @@
   @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
   .closed-banner{display:none;margin-top:20px;background:var(--amber);color:#fff;text-align:center;padding:9px 15px;border-radius:999px;font-weight:800;font-size:clamp(.68rem,2.2vw,.9rem);line-height:1.3;box-shadow:0 6px 20px rgba(0,0,0,.22)}
   .closed-banner.show{display:inline-block}
+  .sk-pill{display:inline-block;height:34px;width:96px;border-radius:999px;background:#ece5d5;flex:0 0 auto;margin-right:8px;position:relative;overflow:hidden}
+  .menu-skeleton{max-width:1100px;margin:0 auto;padding:26px 22px}
+  .sk-cat{height:24px;width:170px;border-radius:8px;background:#ece5d5;margin:0 0 18px;position:relative;overflow:hidden}
+  .sk-grid{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:640px){.sk-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:980px){.sk-grid{grid-template-columns:repeat(3,1fr)}}
+  .sk-card{height:112px;border-radius:16px;background:#ece5d5;position:relative;overflow:hidden}
+  .sk-pill::after,.sk-cat::after,.sk-card::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);animation:skshimmer 1.3s infinite}
+  @keyframes skshimmer{100%{transform:translateX(100%)}}
+  @media(prefers-reduced-motion:reduce){.sk-pill::after,.sk-cat::after,.sk-card::after{animation:none}}
   body.ordering-closed .add,
   body.ordering-closed .optctl button[data-pk],
   body.ordering-closed .optadd,
@@ -451,9 +461,9 @@
   </div>
 </section>
 
-<nav class="catnav" aria-label="menu"><div class="catnav-inner" id="catnav"></div></nav>
+<nav class="catnav" aria-label="menu"><div class="catnav-inner" id="catnav"><span class="sk-pill"></span><span class="sk-pill"></span><span class="sk-pill"></span><span class="sk-pill"></span></div></nav>
 
-<main id="menu"></main>
+<main id="menu"><div class="menu-skeleton" aria-hidden="true"><div class="sk-cat"></div><div class="sk-grid"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div></div></main>
 
 <div class="floatbar" id="floatbar">
   <div class="floatbar-inner">
