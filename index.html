@@ -320,6 +320,9 @@
   .kinlog{font-size:.8rem;color:#0e7a52;font-weight:700;margin-top:2px}
   .kbadge.bet{background:#0e7a52;color:#fff}
   .kbadge.onbet{background:#E8508E;color:#fff}
+  .kviewtog{display:flex;gap:6px;margin-bottom:12px}
+  .kviewtog button{flex:1;padding:8px 6px;border:1px solid var(--line);border-radius:8px;background:#fff;font-family:inherit;font-size:.85rem;font-weight:700;color:#666;cursor:pointer}
+  .kviewtog button.on{background:var(--forest);color:#fff;border-color:var(--forest)}
   .sk-pill{display:inline-block;height:34px;width:96px;border-radius:999px;background:#ece5d5;flex:0 0 auto;margin-right:8px;position:relative;overflow:hidden}
   .menu-skeleton{max-width:1100px;margin:0 auto;padding:26px 22px}
   .sk-cat{height:24px;width:170px;border-radius:8px;background:#ece5d5;margin:0 0 18px;position:relative;overflow:hidden}
@@ -1570,6 +1573,7 @@ async function initBeheer(){
     else if(a==="del") klantVerwijder(btn.dataset.id);
     else if(a==="delklant") klantVerwijderKlant(btn.dataset.email);
     else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.email, ta ? ta.value : ""); }
+    else if(a==="kview"){ _kKlantView = btn.dataset.v; renderKlantenLijst(); }
   });
   document.querySelectorAll(".ktab").forEach(t => t.onclick = () => {
     _kTab = t.dataset.tab;
@@ -1942,6 +1946,7 @@ function klantKey(){ return localStorage.getItem("tta_klantkey") || ""; }
 let _klantData = [];
 let _klantRecords = [];
 let _kTab = "klanten";
+let _kKlantView = "compact";
 function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); laadKlanten(); }
 function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
 
@@ -1964,7 +1969,7 @@ const BEHEER_T = {
       naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"),
       notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", losseMail:"✉ Losse mail", klantVerw:"🗑 Klant verwijderen",
       badgeAfg:"afgehaald", badgeOpen:"open", badgeBedankt:"bedankt", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
-      markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald",
+      markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
       markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", bedankBtn:"✉ Bedankmail", bedankAl:"✉ Al bedankt", delTitle:"Bestelling verwijderen",
       afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend",
       cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.",
@@ -1999,7 +2004,7 @@ const BEHEER_T = {
       naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"),
       notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", losseMail:"✉ Send e-mail", klantVerw:"🗑 Delete customer",
       badgeAfg:"picked up", badgeOpen:"open", badgeBedankt:"thanked", badgeBetaald:"paid", badgeNietBet:"unpaid",
-      markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid",
+      markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
       markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", bedankBtn:"✉ Thank-you e-mail", bedankAl:"✉ Already thanked", delTitle:"Delete order",
       afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown",
       cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.",
@@ -2034,7 +2039,7 @@ const BEHEER_T = {
       naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์",
       notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", losseMail:"✉ ส่งอีเมล", klantVerw:"🗑 ลบลูกค้า",
       badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBedankt:"ขอบคุณแล้ว", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
-      markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว",
+      markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
       markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", bedankBtn:"✉ อีเมลขอบคุณ", bedankAl:"✉ ขอบคุณแล้ว", delTitle:"ลบออเดอร์",
       afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ",
       cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล",
@@ -2271,7 +2276,11 @@ function renderKlantenLijst(){
   if(q) klanten = klanten.filter(k => ((k.naam||"")+" "+(k.email||"")+" "+(k.tel||"")).toLowerCase().includes(q));
   if(!klanten.length){ body.innerHTML = '<p class="hloading">'+(_klantData.length?K.geenGevonden:K.geenKlanten)+'</p>'; return; }
   klanten.sort((a,b)=>b.bestellingen.length - a.bestellingen.length);
-  body.innerHTML = klanten.map(k=>{
+  const tog = '<div class="kviewtog">'+
+    '<button data-a="kview" data-v="compact" class="'+(_kKlantView==="compact"?"on":"")+'">'+esc(K.klantViewCompact)+'</button>'+
+    '<button data-a="kview" data-v="vol" class="'+(_kKlantView==="vol"?"on":"")+'">'+esc(K.klantViewVol)+'</button>'+
+  '</div>';
+  body.innerHTML = tog + klanten.map(k=>{
     const n = k.bestellingen.length;
     const vast = n>=5 ? '<span class="klabel">'+K.vasteKlant+'</span>' : '';
     const notitie = k.notitie||"";
@@ -2281,7 +2290,7 @@ function renderKlantenLijst(){
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
       '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+
       (k.email?('<div class="knotitie"><textarea placeholder="'+esc(K.notitiePh)+'">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-email="'+esc(k.email)+'">'+K.notitieSave+'</button></div>'):'')+
-      k.bestellingen.map(bestelHtml).join("")+
+      (_kKlantView==="vol" ? k.bestellingen.map(bestelHtml).join("") : "")+
       '<div class="kacts" style="margin-top:8px">'+
         (k.email?('<button data-a="mail" data-email="'+esc(k.email)+'">'+K.losseMail+'</button>'):'')+
         (k.email?('<button class="kdelbtn" data-a="delklant" data-email="'+esc(k.email)+'">'+K.klantVerw+'</button>'):'')+
