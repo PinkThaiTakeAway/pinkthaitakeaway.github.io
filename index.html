@@ -2239,9 +2239,8 @@ async function laadKlanten(){
     if(c && c.bestellingen){ _klantData = c.bestellingen; _klantRecords = c.klanten||[]; renderKlanten(); toonde = true; }
   }catch(e){}
   if(!toonde) body.innerHTML = '<p class="hloading">'+BT().kl.laden+'</p>';
-  // 2) haal ondertussen verse gegevens op
-  let r = await jsonp({actie:"klanten", key:klantKey()});
-  if(!r){ await new Promise(res=>setTimeout(res,600)); r = await jsonp({actie:"klanten", key:klantKey()}); }
+  // 2) haal ondertussen verse gegevens op (deelt aanroep met prefetch)
+  let r = await fetchKlanten();
   if(!r){ if(!toonde) body.innerHTML = '<p class="hloading">'+BT().kl.geenVerb+'</p>'; return; }
   if(!r.ok){
     if(r.fout === "geen toegang"){ localStorage.removeItem("tta_klantkey"); localStorage.removeItem("tta_klantcache"); toonSleutelInvoer(BT().kl.sleutelFout); }
@@ -2255,10 +2254,21 @@ async function laadKlanten(){
   let oudStr = ""; try{ const cc = JSON.parse(cacheStr||"null"); if(cc) oudStr = JSON.stringify({bestellingen:cc.bestellingen, klanten:cc.klanten||[]}); }catch(e){}
   if(!toonde || verseStr !== oudStr) renderKlanten();  // alleen hertekenen als nieuw of gewijzigd
 }
+let _klantFetch = null;
+function fetchKlanten(){
+  if(_klantFetch) return _klantFetch;               // al bezig? gebruik dezelfde aanroep
+  _klantFetch = (async ()=>{
+    let r = await jsonp({actie:"klanten", key:klantKey()});
+    if(!r){ await new Promise(res=>setTimeout(res,600)); r = await jsonp({actie:"klanten", key:klantKey()}); }
+    return r;
+  })();
+  _klantFetch.finally(()=>{ _klantFetch = null; });  // vrijgeven na afronden
+  return _klantFetch;
+}
 async function prefetchKlanten(){
   if(!klantKey()) return;
   try{
-    const r = await jsonp({actie:"klanten", key:klantKey()});
+    const r = await fetchKlanten();
     if(r && r.ok){
       _klantData = r.bestellingen || []; _klantRecords = r.klanten || [];
       try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
