@@ -2225,18 +2225,39 @@ async function toonBeheerder(){
 async function laadKlanten(){
   const body = document.getElementById("kBody");
   if(!klantKey()){ toonSleutelInvoer(); return; }
-  body.innerHTML = '<p class="hloading">'+BT().kl.laden+'</p>';
+  // 1) toon direct de laatst bekende gegevens (snel), indien aanwezig
+  let toonde = false, cacheStr = "";
+  try{
+    cacheStr = localStorage.getItem("tta_klantcache")||"";
+    const c = JSON.parse(cacheStr||"null");
+    if(c && c.bestellingen){ _klantData = c.bestellingen; _klantRecords = c.klanten||[]; renderKlanten(); toonde = true; }
+  }catch(e){}
+  if(!toonde) body.innerHTML = '<p class="hloading">'+BT().kl.laden+'</p>';
+  // 2) haal ondertussen verse gegevens op
   let r = await jsonp({actie:"klanten", key:klantKey()});
   if(!r){ await new Promise(res=>setTimeout(res,600)); r = await jsonp({actie:"klanten", key:klantKey()}); }
-  if(!r){ body.innerHTML = '<p class="hloading">'+BT().kl.geenVerb+'</p>'; return; }
+  if(!r){ if(!toonde) body.innerHTML = '<p class="hloading">'+BT().kl.geenVerb+'</p>'; return; }
   if(!r.ok){
-    if(r.fout === "geen toegang"){ localStorage.removeItem("tta_klantkey"); toonSleutelInvoer(BT().kl.sleutelFout); }
-    else body.innerHTML = '<p class="hloading">'+BT().kl.nietLaden+'</p>';
+    if(r.fout === "geen toegang"){ localStorage.removeItem("tta_klantkey"); localStorage.removeItem("tta_klantcache"); toonSleutelInvoer(BT().kl.sleutelFout); }
+    else if(!toonde) body.innerHTML = '<p class="hloading">'+BT().kl.nietLaden+'</p>';
     return;
   }
   _klantData = r.bestellingen || [];
   _klantRecords = r.klanten || [];
-  renderKlanten();
+  const verseStr = JSON.stringify({bestellingen:_klantData, klanten:_klantRecords});
+  try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
+  let oudStr = ""; try{ const cc = JSON.parse(cacheStr||"null"); if(cc) oudStr = JSON.stringify({bestellingen:cc.bestellingen, klanten:cc.klanten||[]}); }catch(e){}
+  if(!toonde || verseStr !== oudStr) renderKlanten();  // alleen hertekenen als nieuw of gewijzigd
+}
+async function prefetchKlanten(){
+  if(!klantKey()) return;
+  try{
+    const r = await jsonp({actie:"klanten", key:klantKey()});
+    if(r && r.ok){
+      _klantData = r.bestellingen || []; _klantRecords = r.klanten || [];
+      try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
+    }
+  }catch(e){}
 }
 function toonSleutelInvoer(fout){
   const K = BT().kl;
@@ -2880,7 +2901,7 @@ function orderClosedMsg(st){
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer(); toonBeheerder(); } else resolvePhotos();
+  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); } else resolvePhotos();
 })();
 </script>
 </body>
