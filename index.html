@@ -221,6 +221,8 @@
   .translate-btn{display:block;width:100%;margin:6px 0 4px;background:var(--forest);color:#fff;border:none;border-radius:10px;padding:11px;font-size:.9rem;font-weight:700;cursor:pointer}
   .translate-btn:active{transform:scale(.98)}
   .translate-btn:disabled{opacity:.6}
+  .mgmt-user{display:none}
+  body.beheer .mgmt-user{display:inline-block;margin-left:8px;font-weight:800;color:var(--forest);font-size:.9rem;vertical-align:middle}
   body.beheer .mgmt-badge{display:inline-block;margin-left:10px;padding:3px 10px;border-radius:999px;background:var(--amber);color:#fff;font-size:.7rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle}
   #beheerbar .bstat{flex-basis:100%;text-align:center;font-size:.82rem;font-weight:700;margin:0}
   #beheerbar .bstat small{color:rgba(255,255,255,.6);font-weight:500}
@@ -424,7 +426,7 @@
 
 <header>
   <div class="bar">
-    <div class="brand"><span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span><span class="mgmt-badge">Management</span></div>
+    <div class="brand"><span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span><span class="mgmt-badge">Management</span><span class="mgmt-user" id="mgmtUser"></span></div>
     <div class="bar-right">
       <div class="langsw" id="langsw">
         <button data-lang="nl">NL</button><button data-lang="en">EN</button><button data-lang="th">ไทย</button>
@@ -2214,6 +2216,11 @@ function renderAccount(a){
   });
 }
 function uitloggen(){ localStorage.removeItem("tta_klanttoken"); updateAcctBtn(); closeAccount(); }
+async function toonBeheerder(){
+  const el = document.getElementById("mgmtUser"); if(!el) return;
+  const tok = acctToken(); if(!tok) return;
+  try{ const r = await jsonp({actie:"account", token:tok}); if(r && r.ok && r.naam) el.textContent = "👤 " + r.naam; }catch(e){}
+}
 
 async function laadKlanten(){
   const body = document.getElementById("kBody");
@@ -2857,7 +2864,7 @@ function orderClosedMsg(st){
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER) initBeheer(); else resolvePhotos();
+  if(BEHEER){ initBeheer(); toonBeheerder(); } else resolvePhotos();
 })();
 </script>
 </body>
