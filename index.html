@@ -2226,7 +2226,8 @@ async function laadKlanten(){
   const body = document.getElementById("kBody");
   if(!klantKey()){ toonSleutelInvoer(); return; }
   body.innerHTML = '<p class="hloading">'+BT().kl.laden+'</p>';
-  const r = await jsonp({actie:"klanten", key:klantKey()});
+  let r = await jsonp({actie:"klanten", key:klantKey()});
+  if(!r){ await new Promise(res=>setTimeout(res,600)); r = await jsonp({actie:"klanten", key:klantKey()}); }
   if(!r){ body.innerHTML = '<p class="hloading">'+BT().kl.geenVerb+'</p>'; return; }
   if(!r.ok){
     if(r.fout === "geen toegang"){ localStorage.removeItem("tta_klantkey"); toonSleutelInvoer(BT().kl.sleutelFout); }
@@ -2389,7 +2390,8 @@ async function renderBezoek(){
   const K = BT().kl;
   const body = document.getElementById("kBody");
   body.innerHTML = '<p class="hloading">'+K.bzLaden+'</p>';
-  const r = await jsonp({actie:"bezoekstats", key:klantKey()});
+  let r = await jsonp({actie:"bezoekstats", key:klantKey()});
+  if(!r){ await new Promise(res=>setTimeout(res,600)); r = await jsonp({actie:"bezoekstats", key:klantKey()}); }
   if(!r || !r.ok){ body.innerHTML = '<p class="hloading">'+K.bzGeen+'</p>'; return; }
   const kaart = (v,l)=>'<div class="kstat-card"><div class="kv">'+v+'</div><div class="kl">'+esc(l)+'</div></div>';
   const perDag = r.perDag || [];
