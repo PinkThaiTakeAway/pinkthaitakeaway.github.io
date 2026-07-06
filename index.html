@@ -325,6 +325,14 @@
   .kviewtog{display:flex;gap:6px;margin-bottom:12px}
   .kviewtog button{flex:1;padding:8px 6px;border:1px solid var(--line);border-radius:8px;background:#fff;font-family:inherit;font-size:.85rem;font-weight:700;color:#666;cursor:pointer}
   .kviewtog button.on{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .kaddrow{display:flex;gap:6px;margin-bottom:10px}
+  .kaddrow button{flex:1;padding:9px 6px;border:1px solid var(--line);border-radius:8px;background:#fff;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--forest);cursor:pointer}
+  .kaddrow button.on{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .kaddform{background:#faf6ef;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:14px;display:flex;flex-direction:column;gap:8px}
+  .kaddform input,.kaddform textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:.95rem;box-sizing:border-box}
+  .kaddform textarea{resize:vertical}
+  .kaddform .khint{margin:0;font-size:.82rem;color:#666}
+  .kaddok{padding:10px;border:none;border-radius:8px;background:var(--forest);color:#fff;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
   .sk-pill{display:inline-block;height:34px;width:96px;border-radius:999px;background:#ece5d5;flex:0 0 auto;margin-right:8px;position:relative;overflow:hidden}
   .menu-skeleton{max-width:1100px;margin:0 auto;padding:26px 22px}
   .sk-cat{height:24px;width:170px;border-radius:8px;background:#ece5d5;margin:0 0 18px;position:relative;overflow:hidden}
@@ -1533,7 +1541,7 @@ function applyBeheerLang(){
   // open panelen meteen opnieuw tekenen in de nieuwe taal
   if(document.getElementById("healthOverlay").classList.contains("open")) laadHealth();
   else zetHealthBadge(_laatsteHealthStatus);
-  if(document.getElementById("klantOverlay").classList.contains("open") && _klantData.length) renderKlanten();
+  if(document.getElementById("klantOverlay").classList.contains("open") && _klantData.length && !_kForm) renderKlanten();
   if(document.getElementById("volgOverlay").classList.contains("open") && _volgCode) laadVolg(_volgCode);
 }
 async function initBeheer(){
@@ -1576,6 +1584,9 @@ async function initBeheer(){
     else if(a==="delklant") klantVerwijderKlant(btn.dataset.email);
     else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.email, ta ? ta.value : ""); }
     else if(a==="kview"){ _kKlantView = btn.dataset.v; renderKlantenLijst(); }
+    else if(a==="kform"){ _kForm = (_kForm===btn.dataset.f)?null:btn.dataset.f; renderKlantenLijst(); }
+    else if(a==="knieuw-ok") klantNieuwOpslaan();
+    else if(a==="kimport-ok") klantImporteren();
   });
   document.querySelectorAll(".ktab").forEach(t => t.onclick = () => {
     _kTab = t.dataset.tab;
@@ -1955,6 +1966,7 @@ let _klantData = [];
 let _klantRecords = [];
 let _kTab = "klanten";
 let _kKlantView = "compact";
+let _kForm = null;
 function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); laadKlanten(); }
 function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
 
@@ -1971,6 +1983,11 @@ const BEHEER_T = {
       title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek",
       bzLaden:"Bezoek laden…", bzGeen:"Nog geen bezoekgegevens.", bzVandaag:"vandaag", bzWeek:"deze week", bzMaand:"deze maand", bzTotaal:"totaal", bzPerDag:"Bezoeken per dag (30 dagen)", bzType:"Type bezoek", bzKlant:"klant", bzBeheer:"beheer", bzVolg:"volglink", bzTaal:"Taal", bzHerkomst:"Herkomst", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"overig", bzToestel:"Toestel", bzMobiel:"mobiel", bzDesktop:"desktop", bzVasteKlanten:"Terugkerende klanten", laatstInlog:"laatst ingelogd:", bzBeheerders:"In beheer ingelogd", bzInlogLog:"Inloggeschiedenis", bzDeelLijst:"Binnengekomen via delen",
       zoek:"Zoek op naam, e-mail of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
+      addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knEmailPh:"E-mail (verplicht)", knTelPh:"Telefoon", knOpslaan:"Klant opslaan",
+      impHint:"Eén klant per regel: naam, e-mail, telefoon", impPlaceholder:"Jan Jansen, jan@mail.nl, 0612345678", impBtn:"Importeren",
+      emailFout:"Vul een geldig e-mailadres in", klantToegevoegd:"Klant toegevoegd", klantBijgewerkt:"Klant bijgewerkt",
+      impLeeg:"Plak eerst een lijst", impGeenEmail:"Geen geldige e-mailadressen gevonden", impTeveel:"Te veel tegelijk — importeer in stukjes van max 100",
+      impKlaar:(n,b)=>n+" nieuw, "+b+" bijgewerkt",
       laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
       nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
       sleutelVraag:"Voer je beheersleutel in om het klantenbestand te bekijken.", sleutelFout:"De sleutel klopt niet. Probeer opnieuw.", sleutelPh:"Beheersleutel", sleutelOpen:"Openen",
@@ -2006,6 +2023,11 @@ const BEHEER_T = {
       title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits",
       bzLaden:"Loading visits…", bzGeen:"No visit data yet.", bzVandaag:"today", bzWeek:"this week", bzMaand:"this month", bzTotaal:"total", bzPerDag:"Visits per day (30 days)", bzType:"Visit type", bzKlant:"customer", bzBeheer:"admin", bzVolg:"tracking link", bzTaal:"Language", bzHerkomst:"Source", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"other", bzToestel:"Device", bzMobiel:"mobile", bzDesktop:"desktop", bzVasteKlanten:"Returning customers", laatstInlog:"last login:", bzBeheerders:"Logged into admin", bzInlogLog:"Login history", bzDeelLijst:"Arrived via sharing",
       zoek:"Search by name, e-mail or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
+      addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knEmailPh:"E-mail (required)", knTelPh:"Phone", knOpslaan:"Save customer",
+      impHint:"One customer per line: name, e-mail, phone", impPlaceholder:"Jan Jansen, jan@mail.nl, 0612345678", impBtn:"Import",
+      emailFout:"Enter a valid e-mail address", klantToegevoegd:"Customer added", klantBijgewerkt:"Customer updated",
+      impLeeg:"Paste a list first", impGeenEmail:"No valid e-mail addresses found", impTeveel:"Too many at once — import in batches of max 100",
+      impKlaar:(n,b)=>n+" new, "+b+" updated",
       laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
       nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
       sleutelVraag:"Enter your admin key to view the customer file.", sleutelFout:"That key is incorrect. Please try again.", sleutelPh:"Admin key", sleutelOpen:"Open",
@@ -2041,6 +2063,11 @@ const BEHEER_T = {
       title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม",
       bzLaden:"กำลังโหลดการเข้าชม…", bzGeen:"ยังไม่มีข้อมูลการเข้าชม", bzVandaag:"วันนี้", bzWeek:"สัปดาห์นี้", bzMaand:"เดือนนี้", bzTotaal:"ทั้งหมด", bzPerDag:"การเข้าชมต่อวัน (30 วัน)", bzType:"ประเภทการเข้าชม", bzKlant:"ลูกค้า", bzBeheer:"ผู้ดูแล", bzVolg:"ลิงก์ติดตาม", bzTaal:"ภาษา", bzHerkomst:"ที่มา", bzDirect:"เข้าตรง", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"อื่นๆ", bzToestel:"อุปกรณ์", bzMobiel:"มือถือ", bzDesktop:"เดสก์ท็อป", bzVasteKlanten:"ลูกค้าประจำ", laatstInlog:"เข้าสู่ระบบล่าสุด:", bzBeheerders:"เข้าสู่ระบบผู้ดูแล", bzInlogLog:"ประวัติการเข้าสู่ระบบ", bzDeelLijst:"เข้ามาผ่านการแชร์",
       zoek:"ค้นหาด้วยชื่อ อีเมล หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
+      addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knEmailPh:"อีเมล (จำเป็น)", knTelPh:"เบอร์โทร", knOpslaan:"บันทึกลูกค้า",
+      impHint:"หนึ่งคนต่อบรรทัด: ชื่อ, อีเมล, เบอร์โทร", impPlaceholder:"สมชาย, som@mail.com, 0812345678", impBtn:"นำเข้า",
+      emailFout:"กรุณากรอกอีเมลที่ถูกต้อง", klantToegevoegd:"เพิ่มลูกค้าแล้ว", klantBijgewerkt:"อัปเดตลูกค้าแล้ว",
+      impLeeg:"วางรายชื่อก่อน", impGeenEmail:"ไม่พบอีเมลที่ถูกต้อง", impTeveel:"มากเกินไป — นำเข้าครั้งละไม่เกิน 100",
+      impKlaar:(n,b)=>n+" ใหม่, "+b+" อัปเดต",
       laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
       nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
       sleutelVraag:"กรอกรหัสผู้ดูแลเพื่อดูข้อมูลลูกค้า", sleutelFout:"รหัสไม่ถูกต้อง กรุณาลองใหม่", sleutelPh:"รหัสผู้ดูแล", sleutelOpen:"เปิด",
@@ -2252,7 +2279,7 @@ async function laadKlanten(){
   const verseStr = JSON.stringify({bestellingen:_klantData, klanten:_klantRecords});
   try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
   let oudStr = ""; try{ const cc = JSON.parse(cacheStr||"null"); if(cc) oudStr = JSON.stringify({bestellingen:cc.bestellingen, klanten:cc.klanten||[]}); }catch(e){}
-  if(!toonde || verseStr !== oudStr) renderKlanten();  // alleen hertekenen als nieuw of gewijzigd
+  if((!toonde || verseStr !== oudStr) && !_kForm) renderKlanten();  // alleen hertekenen als nieuw of gewijzigd (niet tijdens invoer)
 }
 let _klantFetch = null;
 function fetchKlanten(){
@@ -2313,19 +2340,73 @@ function klantAggregatie(){
   return map;
 }
 function fmtInlog(iso){ try{ const d=new Date(iso); if(isNaN(d))return ""; return d.toLocaleString((BT&&BT().locale)||"nl-NL",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } }
+function parseKlantImport(txt){
+  const out=[];
+  (txt||"").split(/\r?\n/).forEach(line=>{
+    line=line.trim(); if(!line) return;
+    const parts=line.split(/[,;\t]+/).map(s=>s.trim()).filter(Boolean);
+    let email="", tel="", naam=[];
+    parts.forEach(pp=>{
+      if(!email && pp.indexOf("@")>0) email=pp;
+      else if(!tel && /^[+()\d][\d\s()+-]{5,}$/.test(pp)) tel=pp;
+      else naam.push(pp);
+    });
+    if(email) out.push({naam:naam.join(" "), email, tel});
+  });
+  return out;
+}
+async function klantNieuwOpslaan(){
+  const naam=(document.getElementById("knNaam").value||"").trim();
+  const email=(document.getElementById("knEmail").value||"").trim();
+  const tel=(document.getElementById("knTel").value||"").trim();
+  if(!email || email.indexOf("@")<1){ showToast(BT().kl.emailFout, false); return; }
+  const r = await jsonp({actie:"klantnieuw", email, naam, tel, key:klantKey()});
+  if(r && r.ok){ _kForm=null; localStorage.removeItem("tta_klantcache"); showToast(r.bestond?BT().kl.klantBijgewerkt:BT().kl.klantToegevoegd, true); laadKlanten(); }
+  else showToast((r&&r.fout)||BT().kl.tNietBij, false);
+}
+async function klantImporteren(){
+  const txt=(document.getElementById("kimpTxt").value||"").trim();
+  if(!txt){ showToast(BT().kl.impLeeg, false); return; }
+  const lijst = parseKlantImport(txt);
+  if(!lijst.length){ showToast(BT().kl.impGeenEmail, false); return; }
+  if(lijst.length>100){ showToast(BT().kl.impTeveel, false); return; }
+  const r = await jsonp({actie:"klantimport", data: JSON.stringify(lijst), key:klantKey()});
+  if(r && r.ok){ _kForm=null; localStorage.removeItem("tta_klantcache"); showToast(BT().kl.impKlaar(r.nieuw||0, r.bijgewerkt||0), true); laadKlanten(); }
+  else showToast((r&&r.fout)||BT().kl.tNietBij, false);
+}
 function renderKlantenLijst(){
   const K = BT().kl;
   const body = document.getElementById("kBody");
   const q = (document.getElementById("kZoek").value||"").toLowerCase().trim();
+  const addBar = '<div class="kaddrow">'+
+    '<button data-a="kform" data-f="nieuw" class="'+(_kForm==="nieuw"?"on":"")+'">'+esc(K.addKlant)+'</button>'+
+    '<button data-a="kform" data-f="import" class="'+(_kForm==="import"?"on":"")+'">'+esc(K.importKlant)+'</button>'+
+  '</div>';
+  let formHtml = "";
+  if(_kForm==="nieuw"){
+    formHtml = '<div class="kaddform">'+
+      '<input id="knNaam" placeholder="'+esc(K.knNaamPh)+'">'+
+      '<input id="knEmail" type="email" placeholder="'+esc(K.knEmailPh)+'">'+
+      '<input id="knTel" type="tel" placeholder="'+esc(K.knTelPh)+'">'+
+      '<button class="kaddok" data-a="knieuw-ok">'+esc(K.knOpslaan)+'</button>'+
+    '</div>';
+  } else if(_kForm==="import"){
+    formHtml = '<div class="kaddform">'+
+      '<p class="khint">'+esc(K.impHint)+'</p>'+
+      '<textarea id="kimpTxt" rows="5" placeholder="'+esc(K.impPlaceholder)+'"></textarea>'+
+      '<button class="kaddok" data-a="kimport-ok">'+esc(K.impBtn)+'</button>'+
+    '</div>';
+  }
+  const topBar = addBar + formHtml;
   let klanten = Object.values(klantAggregatie());
   if(q) klanten = klanten.filter(k => ((k.naam||"")+" "+(k.email||"")+" "+(k.tel||"")).toLowerCase().includes(q));
-  if(!klanten.length){ body.innerHTML = '<p class="hloading">'+(_klantData.length?K.geenGevonden:K.geenKlanten)+'</p>'; return; }
+  if(!klanten.length){ body.innerHTML = topBar + '<p class="hloading">'+(_klantData.length?K.geenGevonden:K.geenKlanten)+'</p>'; return; }
   klanten.sort((a,b)=>b.bestellingen.length - a.bestellingen.length);
   const tog = '<div class="kviewtog">'+
     '<button data-a="kview" data-v="compact" class="'+(_kKlantView==="compact"?"on":"")+'">'+esc(K.klantViewCompact)+'</button>'+
     '<button data-a="kview" data-v="vol" class="'+(_kKlantView==="vol"?"on":"")+'">'+esc(K.klantViewVol)+'</button>'+
   '</div>';
-  body.innerHTML = tog + klanten.map(k=>{
+  body.innerHTML = topBar + tog + klanten.map(k=>{
     const n = k.bestellingen.length;
     const vast = n>=5 ? '<span class="klabel">'+K.vasteKlant+'</span>' : '';
     const notitie = k.notitie||"";
