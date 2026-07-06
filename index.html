@@ -318,6 +318,8 @@
   .closed-banner{display:none;margin-top:20px;background:var(--amber);color:#fff;text-align:center;padding:9px 15px;border-radius:999px;font-weight:800;font-size:clamp(.68rem,2.2vw,.9rem);line-height:1.3;box-shadow:0 6px 20px rgba(0,0,0,.22)}
   .closed-banner.show{display:inline-block}
   .kinlog{font-size:.8rem;color:#0e7a52;font-weight:700;margin-top:2px}
+  .kbadge.bet{background:#0e7a52;color:#fff}
+  .kbadge.onbet{background:#E8508E;color:#fff}
   .sk-pill{display:inline-block;height:34px;width:96px;border-radius:999px;background:#ece5d5;flex:0 0 auto;margin-right:8px;position:relative;overflow:hidden}
   .menu-skeleton{max-width:1100px;margin:0 auto;padding:26px 22px}
   .sk-cat{height:24px;width:170px;border-radius:8px;background:#ece5d5;margin:0 0 18px;position:relative;overflow:hidden}
@@ -1562,6 +1564,7 @@ async function initBeheer(){
     const btn = e.target.closest("button[data-a]"); if(!btn) return;
     const a = btn.dataset.a;
     if(a==="afg") klantAfgehaald(btn.dataset.id, btn.dataset.w==="1");
+    else if(a==="bet") klantBetaald(btn.dataset.id, btn.dataset.w==="1");
     else if(a==="bedank") klantBedank(btn.dataset.id);
     else if(a==="mail") klantMail(btn.dataset.email);
     else if(a==="del") klantVerwijder(btn.dataset.id);
@@ -1960,7 +1963,8 @@ const BEHEER_T = {
       sleutelVraag:"Voer je beheersleutel in om het klantenbestand te bekijken.", sleutelFout:"De sleutel klopt niet. Probeer opnieuw.", sleutelPh:"Beheersleutel", sleutelOpen:"Openen",
       naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"),
       notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", losseMail:"✉ Losse mail", klantVerw:"🗑 Klant verwijderen",
-      badgeAfg:"afgehaald", badgeOpen:"open", badgeBedankt:"bedankt",
+      badgeAfg:"afgehaald", badgeOpen:"open", badgeBedankt:"bedankt", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
+      markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald",
       markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", bedankBtn:"✉ Bedankmail", bedankAl:"✉ Al bedankt", delTitle:"Bestelling verwijderen",
       afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend",
       cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.",
@@ -1994,7 +1998,8 @@ const BEHEER_T = {
       sleutelVraag:"Enter your admin key to view the customer file.", sleutelFout:"That key is incorrect. Please try again.", sleutelPh:"Admin key", sleutelOpen:"Open",
       naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"),
       notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", losseMail:"✉ Send e-mail", klantVerw:"🗑 Delete customer",
-      badgeAfg:"picked up", badgeOpen:"open", badgeBedankt:"thanked",
+      badgeAfg:"picked up", badgeOpen:"open", badgeBedankt:"thanked", badgeBetaald:"paid", badgeNietBet:"unpaid",
+      markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid",
       markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", bedankBtn:"✉ Thank-you e-mail", bedankAl:"✉ Already thanked", delTitle:"Delete order",
       afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown",
       cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.",
@@ -2028,7 +2033,8 @@ const BEHEER_T = {
       sleutelVraag:"กรอกรหัสผู้ดูแลเพื่อดูข้อมูลลูกค้า", sleutelFout:"รหัสไม่ถูกต้อง กรุณาลองใหม่", sleutelPh:"รหัสผู้ดูแล", sleutelOpen:"เปิด",
       naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์",
       notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", losseMail:"✉ ส่งอีเมล", klantVerw:"🗑 ลบลูกค้า",
-      badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBedankt:"ขอบคุณแล้ว",
+      badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBedankt:"ขอบคุณแล้ว", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
+      markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว",
       markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", bedankBtn:"✉ อีเมลขอบคุณ", bedankAl:"✉ ขอบคุณแล้ว", delTitle:"ลบออเดอร์",
       afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ",
       cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล",
@@ -2290,9 +2296,10 @@ function bestelHtml(b){
   return '<div class="kbest">'+
     '<div class="kbreg"><span class="kbtijd">#'+esc(b.id)+' · '+esc(tijd)+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
     (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
-    '<div>'+(b.afgehaald?'<span class="kbadge afg">'+K.badgeAfg+'</span>':'<span class="kbadge open">'+K.badgeOpen+'</span>')+(b.bedankt?'<span class="kbadge bdk">'+K.badgeBedankt+'</span>':'')+'</div>'+
+    '<div>'+(b.afgehaald?'<span class="kbadge afg">'+K.badgeAfg+'</span>':'<span class="kbadge open">'+K.badgeOpen+'</span>')+(b.betaald?'<span class="kbadge bet">'+K.badgeBetaald+'</span>':'<span class="kbadge onbet">'+K.badgeNietBet+'</span>')+(b.bedankt?'<span class="kbadge bdk">'+K.badgeBedankt+'</span>':'')+'</div>'+
     '<div class="kacts">'+
       '<button data-a="afg" data-id="'+esc(b.id)+'" data-w="'+(b.afgehaald?'0':'1')+'">'+(b.afgehaald?K.markNiet:K.markAfg)+'</button>'+
+      '<button data-a="bet" data-id="'+esc(b.id)+'" data-w="'+(b.betaald?'0':'1')+'">'+(b.betaald?K.markNietBet:K.markBetaald)+'</button>'+
       (b.email?('<button class="prim" data-a="bedank" data-id="'+esc(b.id)+'"'+(b.bedankt?' disabled':'')+'>'+(b.bedankt?K.bedankAl:K.bedankBtn)+'</button>'):'')+
       '<button class="kdelbtn" data-a="del" data-id="'+esc(b.id)+'" title="'+esc(K.delTitle)+'">🗑</button>'+
     '</div></div>';
@@ -2315,9 +2322,11 @@ function renderAfhaallijst(){
       items.map(({b,tijd}) =>
         '<div class="kbest">'+
           '<div class="kbreg"><span class="kbtijd">'+(tijd?esc(tijd)+' · ':'')+'#'+esc(b.id)+' · '+esc(b.naam||"")+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
+          '<div>'+(b.betaald?'<span class="kbadge bet">'+K.badgeBetaald+'</span>':'<span class="kbadge onbet">'+K.badgeNietBet+'</span>')+'</div>'+
           (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
           (b.opmerking?('<div style="font-size:.82rem;color:#9a6a00">📝 '+esc(b.opmerking)+'</div>'):'')+
-          '<div class="kacts"><button data-a="afg" data-id="'+esc(b.id)+'" data-w="1">'+K.afgehaaldKort+'</button></div>'+
+          '<div class="kacts"><button data-a="afg" data-id="'+esc(b.id)+'" data-w="1">'+K.afgehaaldKort+'</button>'+
+            '<button data-a="bet" data-id="'+esc(b.id)+'" data-w="'+(b.betaald?'0':'1')+'">'+(b.betaald?K.markNietBet:K.markBetaald)+'</button></div>'+
         '</div>'
       ).join("");
   }).join("");
@@ -2401,6 +2410,11 @@ async function renderBezoek(){
 async function klantAfgehaald(id, waarde){
   const r = await jsonp({actie:"afgehaald", id, waarde: waarde?"ja":"nee", key:klantKey()});
   if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.afgehaald=waarde; renderKlanten(); showToast(BT().kl.tBijgewerkt, true); }
+  else showToast(BT().kl.tNietBij, false);
+}
+async function klantBetaald(id, waarde){
+  const r = await jsonp({actie:"betaald", id, waarde: waarde?"ja":"nee", key:klantKey()});
+  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.betaald=waarde; renderKlanten(); showToast(BT().kl.tBijgewerkt, true); }
   else showToast(BT().kl.tNietBij, false);
 }
 async function klantBedank(id){
