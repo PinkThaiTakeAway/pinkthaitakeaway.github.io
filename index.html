@@ -236,6 +236,11 @@
   #bAdd::before{content:"+";display:inline-block;color:#fff;font-weight:800;font-size:1.25em;line-height:1;margin-right:7px;vertical-align:-1px}
   #beheerbar .exp{background:var(--amber);color:var(--ink)}
   #beheerbar .sl{background:var(--forest-2);color:#fff}
+  .sysmenu-wrap{position:relative;display:inline-block}
+  .sysmenu{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);z-index:90;background:var(--ink);border:1px solid rgba(255,255,255,.16);border-radius:12px;box-shadow:0 -8px 28px rgba(0,0,0,.4);padding:8px;display:none;flex-direction:column;gap:6px;min-width:184px}
+  .sysmenu.open{display:flex}
+  .sysmenu button{width:100%;text-align:left;white-space:nowrap}
+  #bSystem[aria-expanded="true"]{outline:2px solid var(--amber);outline-offset:1px}
 
   .floatbar{position:fixed;left:0;right:0;bottom:0;z-index:70;transform:translateY(120%);transition:transform .3s cubic-bezier(.4,0,.2,1);padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,var(--paper) 28%)}
   .floatbar.show{transform:translateY(0)}
@@ -548,12 +553,17 @@
   <span class="bstat"><span id="bTitle">Beheermodus</span> · <small id="bCount">0 / 0</small></span>
   <button class="sl" id="bAdd">Gerecht</button>
   <button class="sl" id="bTrash">🗑️ Prullenbak</button>
-  <button class="sl" id="bTikkie">💳 Tikkie</button>
   <button class="sl" id="bPauze">⏸️ Bestellen</button>
-  <button class="sl" id="bHealth">🩺 Health</button>
-  <button class="sl" id="bKlanten">👥 Klanten</button>
-  <button class="sl" id="bToken">🔑 Token</button>
-  <button class="exp" id="bPublish">⬆ Publiceren</button>
+  <div class="sysmenu-wrap">
+    <button class="sl" id="bSystem" aria-haspopup="true" aria-expanded="false">⚙️ System</button>
+    <div class="sysmenu" id="sysMenu">
+      <button class="sl" id="bTikkie">💳 Tikkie</button>
+      <button class="sl" id="bHealth">🩺 Health</button>
+      <button class="sl" id="bKlanten">👥 Klanten</button>
+      <button class="sl" id="bToken">🔑 Token</button>
+      <button class="exp" id="bPublish">⬆ Publiceren</button>
+    </div>
+  </div>
   <button class="sl" id="bSluit">Sluiten</button>
 </div>
 
@@ -1696,6 +1706,14 @@ async function initBeheer(){
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
   document.getElementById("bPublish").onclick = publishAll;
+  (function(){
+    const sysBtn=document.getElementById("bSystem"), sysMenu=document.getElementById("sysMenu");
+    if(!sysBtn || !sysMenu) return;
+    const dicht=()=>{ sysMenu.classList.remove("open"); sysBtn.setAttribute("aria-expanded","false"); };
+    sysBtn.onclick=(e)=>{ e.stopPropagation(); const open=sysMenu.classList.toggle("open"); sysBtn.setAttribute("aria-expanded", open?"true":"false"); };
+    sysMenu.querySelectorAll("button").forEach(b=>b.addEventListener("click", dicht));
+    document.addEventListener("click",(e)=>{ if(!sysMenu.contains(e.target) && e.target!==sysBtn) dicht(); });
+  })();
   document.getElementById("fCancel").onclick = () => document.getElementById("addModal").classList.remove("open");
   document.getElementById("fSave").onclick = saveNewDish;
   document.getElementById("fSuggest").onclick = suggestDesc;
