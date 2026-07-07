@@ -2468,8 +2468,23 @@ async function ververKlantCache(forceerRender){
 function startKlantAutoRefresh(){
   if(_klantAutoStarted || !BEHEER) return;
   _klantAutoStarted = true;
-  setInterval(()=>ververKlantCache(true), 120000);                 // elke 2 min stil verversen
-  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) ververKlantCache(true); });
+  const verversAlles = ()=>{ ververKlantCache(true); ververBezoekCache(true); };
+  setInterval(verversAlles, 120000);                               // elke 2 min stil verversen
+  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) verversAlles(); });
+}
+async function ververBezoekCache(forceerRender){
+  if(!klantKey() || document.hidden) return;
+  try{
+    const r = await fetchBezoek();
+    if(r && r.ok){
+      _bezoekData = r;
+      try{ localStorage.setItem("tta_bezoekcache", JSON.stringify({r:r, t:Date.now()})); }catch(e){}
+      if(forceerRender){
+        const ov = document.getElementById("klantOverlay");
+        if(ov && ov.classList.contains("open") && _kTab==="bezoek") tekenBezoek(r);
+      }
+    }
+  }catch(e){}
 }
 function toonSleutelInvoer(fout){
   const K = BT().kl;
@@ -2782,13 +2797,35 @@ function exportBestellingenCSV(){
   setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
   showToast(BT().kl.cGeexporteerd.replace("{n}", rijen.length), true);
 }
+let _bezoekData = null, _bezoekFetch = null;
+function fetchBezoek(){
+  if(_bezoekFetch) return _bezoekFetch;
+  _bezoekFetch = (async ()=>{
+    let r = await jsonp({actie:"bezoekstats", key:klantKey()});
+    if(!r){ await new Promise(res=>setTimeout(res,600)); r = await jsonp({actie:"bezoekstats", key:klantKey()}); }
+    return r;
+  })();
+  _bezoekFetch.finally(()=>{ _bezoekFetch = null; });
+  return _bezoekFetch;
+}
+async function prefetchBezoek(){
+  if(!klantKey()) return;
+  try{ const r = await fetchBezoek(); if(r && r.ok){ _bezoekData = r; try{ localStorage.setItem("tta_bezoekcache", JSON.stringify({r:r, t:Date.now()})); }catch(e){} } }catch(e){}
+}
 async function renderBezoek(){
   const K = BT().kl;
   const body = document.getElementById("kBody");
-  body.innerHTML = '<p class="hloading">'+K.bzLaden+'</p>';
-  let r = await jsonp({actie:"bezoekstats", key:klantKey()});
-  if(!r){ await new Promise(res=>setTimeout(res,600)); r = await jsonp({actie:"bezoekstats", key:klantKey()}); }
-  if(!r || !r.ok){ body.innerHTML = '<p class="hloading">'+K.bzGeen+'</p>'; return; }
+  if(!_bezoekData){ try{ const c = JSON.parse(localStorage.getItem("tta_bezoekcache")||"null"); if(c && c.r) _bezoekData = c.r; }catch(e){} }
+  if(_bezoekData) tekenBezoek(_bezoekData); else body.innerHTML = '<p class="hloading">'+K.bzLaden+'</p>';
+  const r = await fetchBezoek();
+  if(!r || !r.ok){ if(!_bezoekData) body.innerHTML = '<p class="hloading">'+K.bzGeen+'</p>'; return; }
+  _bezoekData = r;
+  try{ localStorage.setItem("tta_bezoekcache", JSON.stringify({r:r, t:Date.now()})); }catch(e){}
+  if(_kTab === "bezoek") tekenBezoek(r);
+}
+function tekenBezoek(r){
+  const K = BT().kl;
+  const body = document.getElementById("kBody");
   const kaart = (v,l)=>'<div class="kstat-card"><div class="kv">'+v+'</div><div class="kl">'+esc(l)+'</div></div>';
   const perDag = r.perDag || [];
   const max = Math.max(1, ...perDag.map(d=>d.aantal));
@@ -3294,7 +3331,7 @@ function orderClosedMsg(st){
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); startKlantAutoRefresh(); } else resolvePhotos();
+  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); startKlantAutoRefresh(); } else resolvePhotos();
 })();
 </script>
 </body>
