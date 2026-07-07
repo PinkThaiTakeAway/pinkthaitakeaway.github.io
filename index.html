@@ -500,9 +500,8 @@
 </script>
 </head>
 <body>
-<!-- BLACKOUT: tijdelijk zwart scherm voor bezoekers. Verwijder dit blok (div + script) om de site weer te tonen. Beheer blijft bereikbaar via ?beheer -->
+<!-- BLACKOUT: tijdelijk zwart scherm voor ALLE bezoekers (ook beheer). Verwijder dit blok (div) om de site weer te tonen. -->
 <div id="blackout" style="position:fixed;inset:0;background:#000;z-index:2147483647"></div>
-<script>if(/[?&]beheer\b/.test(location.search)){var _bo=document.getElementById('blackout'); if(_bo) _bo.style.display='none';}</script>
 
 <header>
   <div class="bar">
