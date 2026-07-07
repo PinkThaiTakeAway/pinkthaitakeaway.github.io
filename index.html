@@ -2449,6 +2449,28 @@ async function prefetchKlanten(){
     }
   }catch(e){}
 }
+let _klantAutoStarted = false;
+async function ververKlantCache(forceerRender){
+  if(!klantKey() || document.hidden) return;
+  try{
+    const r = await fetchKlanten();
+    if(r && r.ok){
+      _klantData = r.bestellingen || []; _klantRecords = r.klanten || [];
+      try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
+      // paneel open en geen bewerkformulier actief? meteen bijwerken
+      if(forceerRender){
+        const ov = document.getElementById("klantOverlay");
+        if(ov && ov.classList.contains("open") && !_kForm) renderKlanten();
+      }
+    }
+  }catch(e){}
+}
+function startKlantAutoRefresh(){
+  if(_klantAutoStarted || !BEHEER) return;
+  _klantAutoStarted = true;
+  setInterval(()=>ververKlantCache(true), 120000);                 // elke 2 min stil verversen
+  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) ververKlantCache(true); });
+}
 function toonSleutelInvoer(fout){
   const K = BT().kl;
   document.getElementById("kBody").innerHTML =
@@ -3272,7 +3294,7 @@ function orderClosedMsg(st){
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); } else resolvePhotos();
+  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); startKlantAutoRefresh(); } else resolvePhotos();
 })();
 </script>
 </body>
