@@ -126,6 +126,11 @@
   .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s}
   .thumb img.loaded{opacity:1}
   .badge-spice{position:absolute;top:10px;left:10px;z-index:2;background:rgba(26,20,16,.62);backdrop-filter:blur(4px);color:#fff;font-size:.72rem;font-weight:700;padding:5px 9px;border-radius:999px;display:flex;align-items:center;gap:4px}
+  .diet-badges{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px}
+  .diet-badge{font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:#f4f7f4;color:var(--forest)}
+  .diet-badge.diet-vega{background:#eef7ec;border-color:#cfe6c8;color:#2e7d32}
+  .diet-badge.diet-glutenvrij{background:#fbf3e6;border-color:#ecdcbf;color:#8a5a00}
+  .diet-badge.diet-noten{background:#fdeceb;border-color:#f3c9c5;color:#b3261e}
   .badge-nr{position:absolute;bottom:10px;right:10px;z-index:2;background:var(--amber);color:#fff;font-size:.8rem;font-weight:800;padding:5px 11px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
   .card-body{padding:15px 16px 16px;display:flex;flex-direction:column;flex:1}
   .card-title{display:flex;flex-direction:column;gap:1px}
@@ -710,6 +715,7 @@ const I18N = {
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
     note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
     spice:["Mild pittig","Kruidig","Pittig"],
+    diet:{ vega:"Vega", glutenvrij:"Glutenvrij", noten:"Bevat noten" },
     footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t} uur`,
     footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸", shareCopied:"Link gekopieerd!",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
@@ -750,6 +756,7 @@ const I18N = {
     orderErr:"Please enter your name, phone and a valid email address.",
     note:"Your order is sent to the restaurant by email.",
     spice:["Mild","Spicy","Hot"],
+    diet:{ vega:"Veggie", glutenvrij:"Gluten-free", noten:"Contains nuts" },
     footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
     footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸", shareCopied:"Link copied!",
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
@@ -790,6 +797,7 @@ const I18N = {
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
     note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
+    diet:{ vega:"มังสวิรัติ", glutenvrij:"ไม่มีกลูเตน", noten:"มีถั่ว" },
     footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`,
     footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸", shareCopied:"คัดลอกลิงก์แล้ว!",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
@@ -1094,6 +1102,19 @@ const RECIPES = {};
 const NAMES = {};
 const DESCS = {};
 const SPICES = {};
+// Dieet-/allergenenlabels per gerecht — VUL AAN & CONTROLEER (vooral 'noten'!).
+// Opties per gerecht: "vega", "glutenvrij", "noten". Voorbeeld: cashew:["noten"]
+const DIET = {
+  popia:["vega"],
+  satay:["noten"],
+  cashew:["noten"]
+};
+const DIET_ICON = { vega:"🌱", glutenvrij:"🌾", noten:"🥜" };
+function dietLabel(m){
+  if(!m.diet || !m.diet.length) return "";
+  const D = T().diet || {};
+  return '<div class="diet-badges">'+m.diet.map(k=>'<span class="diet-badge diet-'+k+'">'+(DIET_ICON[k]||"")+' '+(D[k]||k)+'</span>').join("")+'</div>';
+}
 const SERVE_EDITS = {};
 const NUMS = {};
 let _numsDirty = false;
@@ -1202,6 +1223,7 @@ function card(m){
     <div class="card-body">
       <div class="card-title"><span class="nm">${m.name[LANG]}</span><span class="sub">${sub}</span></div>
       <p class="card-desc">${m.desc[LANG]}</p>
+      ${dietLabel(m)}
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
       <div class="card-foot"><span class="price">${fmt(m.price)}</span><div class="ctl" data-ctl="${m.id}"></div></div>
     </div>
@@ -3030,6 +3052,7 @@ async function loadOmschrijvingen(){
 async function loadPittigheid(){
   try{ const r = await fetch("pittigheid.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(SPICES, p); } }catch(e){}
   for(const id in SPICES){ const m = byId(id); if(m && typeof SPICES[id]==="number") m.spice = SPICES[id]; }
+  for(const id in DIET){ const m = byId(id); if(m && Array.isArray(DIET[id])) m.diet = DIET[id]; }
 }
 async function loadVerwijderd(){
   const local = loadJSON("tta_deleted");
