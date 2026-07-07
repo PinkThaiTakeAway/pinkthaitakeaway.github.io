@@ -241,6 +241,10 @@
   .sysmenu.open{display:flex}
   .sysmenu button{width:100%;text-align:left;white-space:nowrap}
   #bSystem[aria-expanded="true"]{outline:2px solid var(--amber);outline-offset:1px}
+  .sysdot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-left:2px;vertical-align:middle;background:#8a9a92;box-shadow:0 0 0 2px rgba(255,255,255,.15)}
+  .sysdot-ok{background:#3fbf6a}
+  .sysdot-warn{background:#f0a500}
+  .sysdot-err{background:#e5484d}
 
   .floatbar{position:fixed;left:0;right:0;bottom:0;z-index:70;transform:translateY(120%);transition:transform .3s cubic-bezier(.4,0,.2,1);padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,var(--paper) 28%)}
   .floatbar.show{transform:translateY(0)}
@@ -555,7 +559,7 @@
   <button class="sl" id="bTrash">🗑️ Prullenbak</button>
   <button class="sl" id="bPauze">⏸️ Bestellen</button>
   <div class="sysmenu-wrap">
-    <button class="sl" id="bSystem" aria-haspopup="true" aria-expanded="false">⚙️ System</button>
+    <button class="sl" id="bSystem" aria-haspopup="true" aria-expanded="false">⚙️ System <span class="sysdot" id="sysDot"></span></button>
     <div class="sysmenu" id="sysMenu">
       <button class="sl" id="bTikkie">💳 Tikkie</button>
       <button class="sl" id="bHealth">🩺 Health</button>
@@ -2026,6 +2030,8 @@ function zetHealthBadge(status){
   if(!btn) return;
   const icoon = status==="err" ? "❌" : (status==="warn" ? "⚠️" : "✅");
   btn.innerHTML = '🩺 '+BT().bar.health+' <span class="hb">'+icoon+'</span>';
+  const dot = document.getElementById("sysDot");
+  if(dot) dot.className = "sysdot sysdot-" + _laatsteHealthStatus;
 }
 async function haalHealthData(){
   let h = {updated:null, groepen:[]};
