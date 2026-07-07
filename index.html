@@ -329,6 +329,10 @@
   .kuitg{font-size:.8rem;color:#128C7E;font-weight:700;margin-top:2px}
   .order-hint{margin-top:10px;font-size:.9rem;color:var(--forest);font-weight:600;background:#f0f7f2;border-radius:10px;padding:8px 10px}
   .order-share{margin-top:14px}
+  .kexport{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;padding:12px 14px;background:#f4f7f4;border:1px solid var(--line);border-radius:12px}
+  .kexport label{font-weight:700;color:var(--forest)}
+  .kexport select{border:1px solid var(--line);border-radius:8px;padding:7px;font:inherit;background:#fff}
+  .kexport button{margin-left:auto;padding:8px 14px;border:none;border-radius:8px;background:var(--forest);color:#fff;font-family:inherit;font-weight:700;cursor:pointer}
   .kooklijst{background:#fff5ef;border:1px solid #f0d8c8;border-radius:12px;padding:12px 14px;margin-bottom:16px}
   .kooktitel{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--forest);margin-bottom:8px;flex-wrap:wrap}
   .kooksub{font-weight:600;color:#8a6a55;font-size:.85rem}
@@ -1670,6 +1674,7 @@ async function initBeheer(){
     else if(a==="kimport-ok") klantImporteren();
     else if(a==="wa") waUitnodiging(btn.dataset.tel, btn.dataset.naam, btn.dataset.email, btn.dataset.taal);
     else if(a==="kookkopie") kopieerKooklijst();
+    else if(a==="expcsv") exportBestellingenCSV();
   });
   document.querySelectorAll(".ktab").forEach(t => t.onclick = () => {
     _kTab = t.dataset.tab;
@@ -2083,7 +2088,7 @@ const BEHEER_T = {
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
       markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", bedankBtn:"✉ Bedankmail", bedankAl:"✉ Al bedankt", delTitle:"Bestelling verwijderen",
       afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend", kooklijst:"Kooklijst", kookBest:"bestellingen", kookKopie:"📋 Kopieer", kookGekopieerd:"Kooklijst gekopieerd!",
-      cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.",
+      cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.", cMaandOmzet:"Omzet per maand", cExportMaand:"Exporteren:", cAlle:"Alle", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} bestellingen geëxporteerd", maanden:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],
       promptOnderwerp:"Onderwerp:", promptOnderwerpDef:"Bericht van Pink Thai TakeAway", promptBericht:"Bericht:",
       confBedank:"Bedankmail versturen naar deze klant?", confDelBest:"Deze bestelling verwijderen?", confDelKlant:"Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.",
       bulkOnderwerp:"Onderwerp van de mail aan alle klanten:", bulkOnderwerpDef:"Nieuws van Pink Thai TakeAway", bulkBericht:"Bericht aan alle klanten:", bulkConf:"Deze mail naar ALLE klanten met een e-mailadres versturen?", bulkBezig:"Bezig met versturen…",
@@ -2125,7 +2130,7 @@ const BEHEER_T = {
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
       markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", bedankBtn:"✉ Thank-you e-mail", bedankAl:"✉ Already thanked", delTitle:"Delete order",
       afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown", kooklijst:"Cooking list", kookBest:"orders", kookKopie:"📋 Copy", kookGekopieerd:"Cooking list copied!",
-      cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.",
+      cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.", cMaandOmzet:"Revenue per month", cExportMaand:"Export:", cAlle:"All", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} orders exported", maanden:["January","February","March","April","May","June","July","August","September","October","November","December"],
       promptOnderwerp:"Subject:", promptOnderwerpDef:"Message from Pink Thai TakeAway", promptBericht:"Message:",
       confBedank:"Send a thank-you e-mail to this customer?", confDelBest:"Delete this order?", confDelKlant:"Delete all data for this customer? This cannot be undone.",
       bulkOnderwerp:"Subject of the e-mail to all customers:", bulkOnderwerpDef:"News from Pink Thai TakeAway", bulkBericht:"Message to all customers:", bulkConf:"Send this e-mail to ALL customers with an e-mail address?", bulkBezig:"Sending…",
@@ -2167,7 +2172,7 @@ const BEHEER_T = {
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
       markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", bedankBtn:"✉ อีเมลขอบคุณ", bedankAl:"✉ ขอบคุณแล้ว", delTitle:"ลบออเดอร์",
       afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ", kooklijst:"รายการทำอาหาร", kookBest:"ออเดอร์", kookKopie:"📋 คัดลอก", kookGekopieerd:"คัดลอกรายการแล้ว!",
-      cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล",
+      cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล", cMaandOmzet:"รายได้ต่อเดือน", cExportMaand:"ส่งออก:", cAlle:"ทั้งหมด", cExportCSV:"📥 ดาวน์โหลด CSV", cGeexporteerd:"ส่งออก {n} ออเดอร์แล้ว", maanden:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
       promptOnderwerp:"หัวข้อ:", promptOnderwerpDef:"ข้อความจาก Pink Thai TakeAway", promptBericht:"ข้อความ:",
       confBedank:"ส่งอีเมลขอบคุณถึงลูกค้ารายนี้?", confDelBest:"ลบออเดอร์นี้?", confDelKlant:"ลบข้อมูลทั้งหมดของลูกค้ารายนี้? ไม่สามารถกู้คืนได้",
       bulkOnderwerp:"หัวข้ออีเมลถึงลูกค้าทุกคน:", bulkOnderwerpDef:"ข่าวสารจาก Pink Thai TakeAway", bulkBericht:"ข้อความถึงลูกค้าทุกคน:", bulkConf:"ส่งอีเมลนี้ถึงลูกค้าทุกคนที่มีอีเมล?", bulkBezig:"กำลังส่ง…",
@@ -2631,6 +2636,19 @@ function renderCijfers(){
   const klanten = new Set(_klantData.map(b=>String(b.email||b.tel||b.naam||"?").toLowerCase())).size;
   const top = Object.entries(gerechten).sort((a,b)=>b[1]-a[1]).slice(0,8);
   const eur = n => "€ "+n.toFixed(2).replace(".",",");
+  // Omzet per maand + maandkeuze voor export
+  const perMaand = {};
+  _klantData.forEach(b=>{ if(!b.tijd) return; const d=new Date(b.tijd); if(isNaN(d)) return;
+    const mk=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+    (perMaand[mk]=perMaand[mk]||{aantal:0,omzet:0}); perMaand[mk].aantal++; perMaand[mk].omzet+=parseBedrag(b.totaal); });
+  const maanden = Object.keys(perMaand).sort().reverse();
+  const maandNaam = mk => { const [y,m]=mk.split("-"); return ((K.maanden&&K.maanden[+m-1])||m)+" "+y; };
+  const maandBlok = maanden.length ? ('<div class="ktop"><h4>'+esc(K.cMaandOmzet)+'</h4>'+
+      maanden.map(mk=>'<div class="ktoprow"><span>'+esc(maandNaam(mk))+'</span><span class="ktn">'+perMaand[mk].aantal+' · '+eur(perMaand[mk].omzet)+'</span></div>').join("")+'</div>') : '';
+  const expBlok = '<div class="kexport"><label for="expMaand">'+esc(K.cExportMaand)+'</label>'+
+      '<select id="expMaand"><option value="alle">'+esc(K.cAlle)+'</option>'+
+      maanden.map(mk=>'<option value="'+mk+'"'+(mk===maand?' selected':'')+'>'+esc(maandNaam(mk))+'</option>').join("")+'</select>'+
+      '<button data-a="expcsv">'+esc(K.cExportCSV)+'</button></div>';
   body.innerHTML =
     '<div class="kstat-grid">'+
       '<div class="kstat-card"><div class="kv">'+mBest+'</div><div class="kl">'+K.cBestMaand+'</div></div>'+
@@ -2640,7 +2658,31 @@ function renderCijfers(){
     '</div>'+
     '<div class="ktop"><h4>'+esc(K.cTop)+'</h4>'+
       (top.length ? top.map(([naam,aantal])=>'<div class="ktoprow"><span>'+esc(naam)+'</span><span class="ktn">'+aantal+'×</span></div>').join("") : '<p class="hloading">'+K.cGeen+'</p>')+
-    '</div>';
+    '</div>'+
+    maandBlok + expBlok;
+}
+function exportBestellingenCSV(){
+  const sel = document.getElementById("expMaand");
+  const maand = sel ? sel.value : "alle";
+  const rijen = _klantData.filter(b=>{
+    if(maand==="alle") return true;
+    if(!b.tijd) return false; const d=new Date(b.tijd); if(isNaN(d)) return false;
+    return (d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"))===maand;
+  }).sort((a,b)=> String(a.tijd||"").localeCompare(String(b.tijd||"")));
+  const esc2 = v => '"'+String(v==null?"":v).replace(/"/g,'""').replace(/\r?\n/g," / ")+'"';
+  const kop = ["Datum","Bestelnr","Naam","Telefoon","E-mail","Bestelling","Totaal","Betaling","Betaald","Afhaal"];
+  const fmtD = t => { const d=new Date(t); return isNaN(d)?"":d.toLocaleString("nl-NL"); };
+  const lines = [kop.join(";")].concat(rijen.map(b=>[
+    fmtD(b.tijd), b.id, b.naam, b.tel, b.email, b.bestelling, b.totaal, b.betaling, (b.betaald?"ja":"nee"), b.afhaal
+  ].map(esc2).join(";")));
+  const csv = "\ufeff"+lines.join("\r\n");   // BOM voor Excel
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "pinkthai-bestellingen-"+(maand==="alle"?"alles":maand)+".csv";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+  showToast(BT().kl.cGeexporteerd.replace("{n}", rijen.length), true);
 }
 async function renderBezoek(){
   const K = BT().kl;
