@@ -333,6 +333,15 @@
   .kexport label{font-weight:700;color:var(--forest)}
   .kexport select{border:1px solid var(--line);border-radius:8px;padding:7px;font:inherit;background:#fff}
   .kexport button{margin-left:auto;padding:8px 14px;border:none;border-radius:8px;background:var(--forest);color:#fff;font-family:inherit;font-weight:700;cursor:pointer}
+  .kqr-hint{font-size:.82rem;color:#6a7a70}
+  .qr-overlay{position:fixed;inset:0;z-index:9999;background:rgba(14,59,51,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+  .qr-box{background:#fff;border-radius:16px;padding:22px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .qr-box h3{margin:0 0 12px;color:var(--forest)}
+  .qr-box img{width:100%;max-width:280px;height:auto;border-radius:10px}
+  .qr-url{font-size:.82rem;color:#6a7a70;margin:8px 0 14px;word-break:break-all}
+  .qr-acts{display:flex;gap:10px;justify-content:center}
+  .qr-dl{padding:9px 16px;border-radius:9px;background:var(--forest);color:#fff;font-weight:700;text-decoration:none}
+  .qr-close{padding:9px 16px;border-radius:9px;border:1px solid var(--line);background:#fff;font-family:inherit;font-weight:700;cursor:pointer}
   .kooklijst{background:#fff5ef;border:1px solid #f0d8c8;border-radius:12px;padding:12px 14px;margin-bottom:16px}
   .kooktitel{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--forest);margin-bottom:8px;flex-wrap:wrap}
   .kooksub{font-weight:600;color:#8a6a55;font-size:.85rem}
@@ -1675,6 +1684,7 @@ async function initBeheer(){
     else if(a==="wa") waUitnodiging(btn.dataset.tel, btn.dataset.naam, btn.dataset.email, btn.dataset.taal);
     else if(a==="kookkopie") kopieerKooklijst();
     else if(a==="expcsv") exportBestellingenCSV();
+    else if(a==="qrshow") toonQR();
   });
   document.querySelectorAll(".ktab").forEach(t => t.onclick = () => {
     _kTab = t.dataset.tab;
@@ -2088,7 +2098,7 @@ const BEHEER_T = {
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
       markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", bedankBtn:"✉ Bedankmail", bedankAl:"✉ Al bedankt", delTitle:"Bestelling verwijderen",
       afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend", kooklijst:"Kooklijst", kookBest:"bestellingen", kookKopie:"📋 Kopieer", kookGekopieerd:"Kooklijst gekopieerd!",
-      cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.", cMaandOmzet:"Omzet per maand", cExportMaand:"Exporteren:", cAlle:"Alle", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} bestellingen geëxporteerd", maanden:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],
+      cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.", cMaandOmzet:"Omzet per maand", cExportMaand:"Exporteren:", cAlle:"Alle", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} bestellingen geëxporteerd", qrKnop:"QR-code van de site", qrHint:"Voor flyers of verpakking", qrTitel:"QR-code naar de website", qrDownload:"📥 Download PNG", qrSluiten:"Sluiten", qrFout:"QR-code laden mislukt — probeer opnieuw.", maanden:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],
       promptOnderwerp:"Onderwerp:", promptOnderwerpDef:"Bericht van Pink Thai TakeAway", promptBericht:"Bericht:",
       confBedank:"Bedankmail versturen naar deze klant?", confDelBest:"Deze bestelling verwijderen?", confDelKlant:"Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.",
       bulkOnderwerp:"Onderwerp van de mail aan alle klanten:", bulkOnderwerpDef:"Nieuws van Pink Thai TakeAway", bulkBericht:"Bericht aan alle klanten:", bulkConf:"Deze mail naar ALLE klanten met een e-mailadres versturen?", bulkBezig:"Bezig met versturen…",
@@ -2130,7 +2140,7 @@ const BEHEER_T = {
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
       markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", bedankBtn:"✉ Thank-you e-mail", bedankAl:"✉ Already thanked", delTitle:"Delete order",
       afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown", kooklijst:"Cooking list", kookBest:"orders", kookKopie:"📋 Copy", kookGekopieerd:"Cooking list copied!",
-      cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.", cMaandOmzet:"Revenue per month", cExportMaand:"Export:", cAlle:"All", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} orders exported", maanden:["January","February","March","April","May","June","July","August","September","October","November","December"],
+      cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.", cMaandOmzet:"Revenue per month", cExportMaand:"Export:", cAlle:"All", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} orders exported", qrKnop:"Site QR code", qrHint:"For flyers or packaging", qrTitel:"QR code to the website", qrDownload:"📥 Download PNG", qrSluiten:"Close", qrFout:"Failed to load QR code — try again.", maanden:["January","February","March","April","May","June","July","August","September","October","November","December"],
       promptOnderwerp:"Subject:", promptOnderwerpDef:"Message from Pink Thai TakeAway", promptBericht:"Message:",
       confBedank:"Send a thank-you e-mail to this customer?", confDelBest:"Delete this order?", confDelKlant:"Delete all data for this customer? This cannot be undone.",
       bulkOnderwerp:"Subject of the e-mail to all customers:", bulkOnderwerpDef:"News from Pink Thai TakeAway", bulkBericht:"Message to all customers:", bulkConf:"Send this e-mail to ALL customers with an e-mail address?", bulkBezig:"Sending…",
@@ -2172,7 +2182,7 @@ const BEHEER_T = {
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
       markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", bedankBtn:"✉ อีเมลขอบคุณ", bedankAl:"✉ ขอบคุณแล้ว", delTitle:"ลบออเดอร์",
       afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ", kooklijst:"รายการทำอาหาร", kookBest:"ออเดอร์", kookKopie:"📋 คัดลอก", kookGekopieerd:"คัดลอกรายการแล้ว!",
-      cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล", cMaandOmzet:"รายได้ต่อเดือน", cExportMaand:"ส่งออก:", cAlle:"ทั้งหมด", cExportCSV:"📥 ดาวน์โหลด CSV", cGeexporteerd:"ส่งออก {n} ออเดอร์แล้ว", maanden:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
+      cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล", cMaandOmzet:"รายได้ต่อเดือน", cExportMaand:"ส่งออก:", cAlle:"ทั้งหมด", cExportCSV:"📥 ดาวน์โหลด CSV", cGeexporteerd:"ส่งออก {n} ออเดอร์แล้ว", qrKnop:"QR โค้ดเว็บไซต์", qrHint:"สำหรับใบปลิวหรือบรรจุภัณฑ์", qrTitel:"QR โค้ดไปยังเว็บไซต์", qrDownload:"📥 ดาวน์โหลด PNG", qrSluiten:"ปิด", qrFout:"โหลด QR ไม่สำเร็จ ลองใหม่", maanden:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
       promptOnderwerp:"หัวข้อ:", promptOnderwerpDef:"ข้อความจาก Pink Thai TakeAway", promptBericht:"ข้อความ:",
       confBedank:"ส่งอีเมลขอบคุณถึงลูกค้ารายนี้?", confDelBest:"ลบออเดอร์นี้?", confDelKlant:"ลบข้อมูลทั้งหมดของลูกค้ารายนี้? ไม่สามารถกู้คืนได้",
       bulkOnderwerp:"หัวข้ออีเมลถึงลูกค้าทุกคน:", bulkOnderwerpDef:"ข่าวสารจาก Pink Thai TakeAway", bulkBericht:"ข้อความถึงลูกค้าทุกคน:", bulkConf:"ส่งอีเมลนี้ถึงลูกค้าทุกคนที่มีอีเมล?", bulkBezig:"กำลังส่ง…",
@@ -2648,7 +2658,8 @@ function renderCijfers(){
   const expBlok = '<div class="kexport"><label for="expMaand">'+esc(K.cExportMaand)+'</label>'+
       '<select id="expMaand"><option value="alle">'+esc(K.cAlle)+'</option>'+
       maanden.map(mk=>'<option value="'+mk+'"'+(mk===maand?' selected':'')+'>'+esc(maandNaam(mk))+'</option>').join("")+'</select>'+
-      '<button data-a="expcsv">'+esc(K.cExportCSV)+'</button></div>';
+      '<button data-a="expcsv">'+esc(K.cExportCSV)+'</button></div>'+
+      '<div class="kexport" style="justify-content:flex-start"><button data-a="qrshow">🔳 '+esc(K.qrKnop)+'</button><span class="kqr-hint">'+esc(K.qrHint)+'</span></div>';
   body.innerHTML =
     '<div class="kstat-grid">'+
       '<div class="kstat-card"><div class="kv">'+mBest+'</div><div class="kl">'+K.cBestMaand+'</div></div>'+
@@ -2660,6 +2671,29 @@ function renderCijfers(){
       (top.length ? top.map(([naam,aantal])=>'<div class="ktoprow"><span>'+esc(naam)+'</span><span class="ktn">'+aantal+'×</span></div>').join("") : '<p class="hloading">'+K.cGeen+'</p>')+
     '</div>'+
     maandBlok + expBlok;
+}
+function laadQRLib(){
+  return new Promise((resolve,reject)=>{
+    if(window.QRCode && QRCode.toDataURL) return resolve();
+    const s=document.createElement("script");
+    s.src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js";
+    s.onload=()=> (window.QRCode && QRCode.toDataURL) ? resolve() : reject(new Error("qr"));
+    s.onerror=()=>reject(new Error("qr"));
+    document.head.appendChild(s);
+  });
+}
+async function toonQR(){
+  const K = BT().kl, url = location.origin + "/";
+  try{
+    await laadQRLib();
+    const dataUrl = await QRCode.toDataURL(url, {width:640, margin:2, color:{dark:"#0E3B33", light:"#ffffff"}});
+    const ov=document.createElement("div"); ov.className="qr-overlay";
+    ov.innerHTML='<div class="qr-box"><h3>'+esc(K.qrTitel)+'</h3><img src="'+dataUrl+'" alt="QR"><div class="qr-url">'+esc(url)+'</div>'+
+      '<div class="qr-acts"><a class="qr-dl" href="'+dataUrl+'" download="pink-thai-qr.png">'+esc(K.qrDownload)+'</a>'+
+      '<button class="qr-close">'+esc(K.qrSluiten)+'</button></div></div>';
+    ov.addEventListener("click",(e)=>{ if(e.target===ov || e.target.classList.contains("qr-close")) ov.remove(); });
+    document.body.appendChild(ov);
+  }catch(e){ showToast(K.qrFout, false); }
 }
 function exportBestellingenCSV(){
   const sel = document.getElementById("expMaand");
