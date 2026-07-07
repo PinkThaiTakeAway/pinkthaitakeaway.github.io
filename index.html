@@ -558,7 +558,6 @@
 </div>
 
 <div id="beheerbar">
-  <span class="bstat"><span id="bTitle">Beheermodus</span> · <small id="bCount">0 / 0</small></span>
   <button class="sl" id="bAdd">Gerecht</button>
   <button class="sl" id="bTrash">🗑️ Prullenbak</button>
   <button class="sl" id="bPauze">⏸️ Bestellen</button>
@@ -1623,7 +1622,6 @@ async function resolvePhotos(){
 let chosen = {};
 function applyBeheerLang(){
   const A = T().adm, B = BT();
-  document.getElementById("bTitle").textContent = A.title;
   document.getElementById("bAdd").textContent = A.add;
   document.getElementById("bToken").textContent = A.tokenBtn;
   document.getElementById("bPublish").textContent = A.publish;
@@ -3216,7 +3214,7 @@ function handleFile(id, file){
   };
   reader.readAsDataURL(file);
 }
-function updateBeheerCount(){ const n=MENU.filter(m=>chosen[m.id]||PHOTO[m.id]).length; document.getElementById("bCount").textContent = T().adm.count(n, MENU.length); }
+function updateBeheerCount(){ /* teller verwijderd */ }
 function exportFotos(){
   const data={}; MENU.forEach(m => { const url = chosen[m.id] || PHOTO[m.id]; if(url) data[m.id]=url; });
   const n = Object.keys(data).length;
