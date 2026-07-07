@@ -1547,7 +1547,7 @@ document.getElementById("waBtn").onclick = async () => {
     if(r && r.ok===false && r.fout==="vol"){ msg.className="order-msg err"; msg.textContent=T().slotVolMsg; btn.disabled=false; laadSlots(); return; }
     if(!r || !r.ok) throw new Error("bestelling niet doorgekomen");
     let ingelogdNu = false;
-    if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); }
+    if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); if(typeof prefetchAccount==="function"){ _accountData=null; prefetchAccount(); } }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]);
     store.save();
@@ -2025,6 +2025,7 @@ function healthStatusVan(h){
   return err ? "err" : (warn ? "warn" : "ok");
 }
 let _laatsteHealthStatus = "ok";
+let _healthData = null;
 function zetHealthBadge(status){
   _laatsteHealthStatus = status || "ok";
   const btn = document.getElementById("bHealth");
@@ -2041,6 +2042,7 @@ async function haalHealthData(){
     if(r.ok) h = await r.json();
   }catch(e){}
   try{ const acc = await checkAccess(); h.groepen = [acc, ...(h.groepen||[])]; }catch(e){}
+  _healthData = h;
   return h;
 }
 async function updateHealthBadge(){
@@ -2055,15 +2057,25 @@ async function updateHealthBadge(){
     h.groepen = [acc, ...(h.groepen||[])];
     zetHealthBadge(healthStatusVan(h));               // verfijnen met token + e-mail
   }catch(e){}
+  _healthData = h;
 }
 async function laadHealth(){
   const body = document.getElementById("hBody");
   const upd = document.getElementById("hUpdated");
-  body.innerHTML = '<p class="hloading">'+BT().hl.laden+'</p>'; upd.textContent = "";
+  if(_healthData && (_healthData.groepen||[]).length) renderHealth(_healthData);
+  else { body.innerHTML = '<p class="hloading">'+BT().hl.laden+'</p>'; upd.textContent = ""; }
   const h = await haalHealthData();
   zetHealthBadge(healthStatusVan(h));
   if((h.groepen||[]).length) renderHealth(h);
-  else body.innerHTML = '<p class="hloading">'+BT().hl.geen+'</p>';
+  else if(!(_healthData && (_healthData.groepen||[]).length)) body.innerHTML = '<p class="hloading">'+BT().hl.geen+'</p>';
+}
+async function ververHealth(forceerRender){
+  if(document.hidden) return;
+  try{
+    const h = await haalHealthData();
+    zetHealthBadge(healthStatusVan(h));
+    if(forceerRender){ const ov=document.getElementById("healthOverlay"); if(ov && ov.classList.contains("open")) renderHealth(h); }
+  }catch(e){}
 }
 function renderHealth(h){
   const body = document.getElementById("hBody");
@@ -2342,16 +2354,34 @@ async function stuurInloglink(email){
 }
 function openAccount(){ document.getElementById("accountOverlay").classList.add("open"); laadAccount(); }
 function closeAccount(){ document.getElementById("accountOverlay").classList.remove("open"); }
+let _accountData = null, _accountFetch = null;
+function fetchAccount(){
+  if(_accountFetch) return _accountFetch;
+  const tok = acctToken();
+  _accountFetch = jsonp({actie:"account", token:tok});
+  Promise.resolve(_accountFetch).finally(()=>{ _accountFetch = null; });
+  return _accountFetch;
+}
+async function prefetchAccount(){
+  const tok = acctToken(); if(!tok) return;
+  try{ const r = await fetchAccount(); if(r && r.ok){ _accountData = {token:tok, r:r}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:tok, r:r})); }catch(e){} } }catch(e){}
+}
 async function laadAccount(){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   const body = document.getElementById("accountBody");
   document.getElementById("accountTitel").textContent = LT.accTitel;
   document.getElementById("accountLogout").textContent = LT.accUitloggen;
-  body.innerHTML = '<p class="hloading">'+esc(LT.accLaden)+'</p>';
   const tok = acctToken();
   if(!tok){ closeAccount(); openLogin(); return; }
-  const r = await jsonp({actie:"account", token:tok});
-  if(!r || !r.ok){ localStorage.removeItem("tta_klanttoken"); updateAcctBtn(); closeAccount(); openLogin(); return; }
+  // cache-first (alleen als het token matcht)
+  let cache = _accountData;
+  if(!cache){ try{ cache = JSON.parse(localStorage.getItem("tta_acctcache")||"null"); }catch(e){} }
+  if(cache && cache.token===tok && cache.r) renderAccount(cache.r);
+  else body.innerHTML = '<p class="hloading">'+esc(LT.accLaden)+'</p>';
+  const r = await fetchAccount();
+  if(!r || !r.ok){ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); _accountData=null; updateAcctBtn(); closeAccount(); openLogin(); return; }
+  _accountData = {token:tok, r:r};
+  try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:tok, r:r})); }catch(e){}
   renderAccount(r);
 }
 function renderAccount(a){
@@ -2395,7 +2425,7 @@ function renderAccount(a){
   const favBtn = document.getElementById("accFavBtn");
   if(favBtn){ favBtn.onclick = ()=>{ const b = best[+favBtn.dataset.i]; herstelMand(Object.assign({}, b, {naam:a.naam, tel:a.tel, email:a.email})); }; }
 }
-function uitloggen(){ localStorage.removeItem("tta_klanttoken"); updateAcctBtn(); closeAccount(); }
+function uitloggen(){ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); _accountData=null; updateAcctBtn(); closeAccount(); }
 async function toonBeheerder(){
   const el = document.getElementById("mgmtUser"); if(!el) return;
   const tok = acctToken(); if(!tok) return;
@@ -2468,7 +2498,7 @@ async function ververKlantCache(forceerRender){
 function startKlantAutoRefresh(){
   if(_klantAutoStarted || !BEHEER) return;
   _klantAutoStarted = true;
-  const verversAlles = ()=>{ ververKlantCache(true); ververBezoekCache(true); };
+  const verversAlles = ()=>{ ververKlantCache(true); ververBezoekCache(true); ververHealth(true); };
   setInterval(verversAlles, 120000);                               // elke 2 min stil verversen
   document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) verversAlles(); });
 }
@@ -3332,6 +3362,7 @@ function orderClosedMsg(st){
     openAccount();
   }
   if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); startKlantAutoRefresh(); } else resolvePhotos();
+  if(acctToken()) prefetchAccount();
 })();
 </script>
 </body>
