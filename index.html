@@ -322,6 +322,7 @@
   .closed-banner.show{display:inline-block}
   .kinlog{font-size:.8rem;color:#0e7a52;font-weight:700;margin-top:2px}
   .kuitg{font-size:.8rem;color:#128C7E;font-weight:700;margin-top:2px}
+  .order-hint{margin-top:10px;font-size:.9rem;color:var(--forest);font-weight:600;background:#f0f7f2;border-radius:10px;padding:8px 10px}
   .kbadge.bet{background:#0e7a52;color:#fff}
   .kbadge.onbet{background:#E8508E;color:#fff}
   .kviewtog{display:flex;gap:6px;margin-bottom:12px}
@@ -698,7 +699,7 @@ const I18N = {
     labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd",
     phName:"Voor- en achternaam", phEmail:"voor je bevestiging", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is naar het restaurant gestuurd en er is een bevestiging naar je e-mail onderweg.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
+    orderOk:"Bestelling verstuurd! 🌸 Je bestelling is naar het restaurant gestuurd en er is een bevestiging naar je e-mail onderweg.", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
     note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
     spice:["Mild pittig","Kruidig","Pittig"],
@@ -738,7 +739,7 @@ const I18N = {
     labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time",
     phName:"Full name", phEmail:"for your confirmation", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order sent! 🌸 Your order has been sent to the restaurant and a confirmation is on its way to your email.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
+    orderOk:"Order sent! 🌸 Your order has been sent to the restaurant and a confirmation is on its way to your email.", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
     orderErr:"Please enter your name, phone and a valid email address.",
     note:"Your order is sent to the restaurant by email.",
     spice:["Mild","Spicy","Hot"],
@@ -778,7 +779,7 @@ const I18N = {
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ",
     phName:"ชื่อ-นามสกุล", phEmail:"สำหรับการยืนยัน", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อให้ร้านแล้ว และกำลังส่งอีเมลยืนยันไปให้คุณ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
+    orderOk:"ส่งคำสั่งซื้อแล้ว! 🌸 ส่งคำสั่งซื้อให้ร้านแล้ว และกำลังส่งอีเมลยืนยันไปให้คุณ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
     note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
@@ -1468,12 +1469,14 @@ document.getElementById("waBtn").onclick = async () => {
       afhaal, taal: LANG, mand: JSON.stringify(cart)
     });
     if(!r || !r.ok) throw new Error("bestelling niet doorgekomen");
+    let ingelogdNu = false;
+    if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]);
     store.save();
     form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
     buildMenu(); updateBars();
-    sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p></div>`;
+    sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}</div>`;
     sheetFoot.style.display = "none";
   }catch(e){
     msg.className="order-msg err"; msg.textContent=T().orderFail;
