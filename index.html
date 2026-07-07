@@ -572,7 +572,6 @@
       <button class="exp" id="bPublish">⬆ Publiceren</button>
     </div>
   </div>
-  <button class="sl" id="bSluit">Sluiten</button>
 </div>
 
 <div id="healthOverlay" class="hoverlay">
@@ -1628,7 +1627,6 @@ function applyBeheerLang(){
   document.getElementById("bAdd").textContent = A.add;
   document.getElementById("bToken").textContent = A.tokenBtn;
   document.getElementById("bPublish").textContent = A.publish;
-  document.getElementById("bSluit").textContent = A.sluit;
   document.getElementById("bKlanten").textContent = B.bar.klanten;
   updateBeheerCount();
   updateTrashCount();
@@ -1726,7 +1724,6 @@ async function initBeheer(){
   document.getElementById("fSave").onclick = saveNewDish;
   document.getElementById("fSuggest").onclick = suggestDesc;
   document.getElementById("fTranslate").onclick = translateFromThai;
-  document.getElementById("bSluit").onclick = () => location.href = location.pathname;
   applyBeheerLang();
 }
 async function doSearch(id){
