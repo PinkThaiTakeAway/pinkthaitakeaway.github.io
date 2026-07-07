@@ -321,6 +321,7 @@
   .closed-banner{display:none;margin-top:20px;background:var(--amber);color:#fff;text-align:center;padding:9px 15px;border-radius:999px;font-weight:800;font-size:clamp(.68rem,2.2vw,.9rem);line-height:1.3;box-shadow:0 6px 20px rgba(0,0,0,.22)}
   .closed-banner.show{display:inline-block}
   .kinlog{font-size:.8rem;color:#0e7a52;font-weight:700;margin-top:2px}
+  .kuitg{font-size:.8rem;color:#128C7E;font-weight:700;margin-top:2px}
   .kbadge.bet{background:#0e7a52;color:#fff}
   .kbadge.onbet{background:#E8508E;color:#fff}
   .kviewtog{display:flex;gap:6px;margin-bottom:12px}
@@ -1616,7 +1617,7 @@ async function initBeheer(){
     else if(a==="kform"){ _kForm = (_kForm===btn.dataset.f)?null:btn.dataset.f; renderKlantenLijst(); }
     else if(a==="knieuw-ok") klantNieuwOpslaan();
     else if(a==="kimport-ok") klantImporteren();
-    else if(a==="wa") waUitnodiging(btn.dataset.tel, btn.dataset.naam);
+    else if(a==="wa") waUitnodiging(btn.dataset.tel, btn.dataset.naam, btn.dataset.email);
   });
   document.querySelectorAll(".ktab").forEach(t => t.onclick = () => {
     _kTab = t.dataset.tab;
@@ -2015,7 +2016,7 @@ const BEHEER_T = {
       zoek:"Zoek op naam, e-mail of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
       addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knEmailPh:"E-mail (of telefoon)", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan",
       impHint:"Eén klant per regel: naam, e-mail, telefoon (e-mail mag leeg — dan uitnodigen via WhatsApp)", impPlaceholder:"Jan Jansen, jan@mail.nl, 0612345678\nPiet Peters, , 0698765432", impBtn:"Importeren",
-      waInvite:"📲 WhatsApp-uitnodiging", waGeenTel:"Deze klant heeft geen telefoonnummer", emailOfTel:"Vul een e-mailadres of telefoonnummer in",
+      waInvite:"📲 WhatsApp-uitnodiging", waNogmaals:"📲 Nogmaals uitnodigen", uitgLabel:"uitgenodigd", waGeenTel:"Deze klant heeft geen telefoonnummer", emailOfTel:"Vul een e-mailadres of telefoonnummer in",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("Hoi "+naam+"!"):"Hoi!")+" Groot nieuws: "+zaak+" heeft een nieuwe website! 🥳\n\nJe kunt nu heel makkelijk online je verse Thaise gerechten bestellen en op zaterdag afhalen. 🍜\n\nBekijk het menu en bestel hier:\n"+link+"\n\nTot snel en eet smakelijk! 🌶️💚",
       emailFout:"Vul een geldig e-mailadres in", klantToegevoegd:"Klant toegevoegd", klantBijgewerkt:"Klant bijgewerkt",
       impLeeg:"Plak eerst een lijst", impGeenEmail:"Geen geldige e-mailadressen gevonden", impTeveel:"Te veel tegelijk — importeer in stukjes van max 100",
@@ -2057,7 +2058,7 @@ const BEHEER_T = {
       zoek:"Search by name, e-mail or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
       addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knEmailPh:"E-mail (or phone)", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer",
       impHint:"One customer per line: name, e-mail, phone (e-mail can be empty — then invite via WhatsApp)", impPlaceholder:"Jan Jansen, jan@mail.nl, 0612345678\nPiet Peters, , 0698765432", impBtn:"Import",
-      waInvite:"📲 WhatsApp invite", waGeenTel:"This customer has no phone number", emailOfTel:"Enter an e-mail address or phone number",
+      waInvite:"📲 WhatsApp invite", waNogmaals:"📲 Invite again", uitgLabel:"invited", waGeenTel:"This customer has no phone number", emailOfTel:"Enter an e-mail address or phone number",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("Hi "+naam+"!"):"Hi!")+" Great news: "+zaak+" has a brand-new website! 🥳\n\nYou can now easily order your fresh Thai dishes online and pick them up on Saturday. 🍜\n\nCheck the menu and order here:\n"+link+"\n\nSee you soon! 🌶️💚",
       emailFout:"Enter a valid e-mail address", klantToegevoegd:"Customer added", klantBijgewerkt:"Customer updated",
       impLeeg:"Paste a list first", impGeenEmail:"No valid e-mail addresses found", impTeveel:"Too many at once — import in batches of max 100",
@@ -2099,7 +2100,7 @@ const BEHEER_T = {
       zoek:"ค้นหาด้วยชื่อ อีเมล หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
       addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knEmailPh:"อีเมล (หรือเบอร์โทร)", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า",
       impHint:"หนึ่งคนต่อบรรทัด: ชื่อ, อีเมล, เบอร์โทร (เว้นอีเมลได้ — แล้วเชิญทาง WhatsApp)", impPlaceholder:"สมชาย, som@mail.com, 0812345678\nสมหญิง, , 0898765432", impBtn:"นำเข้า",
-      waInvite:"📲 เชิญทาง WhatsApp", waGeenTel:"ลูกค้ารายนี้ไม่มีเบอร์โทร", emailOfTel:"กรอกอีเมลหรือเบอร์โทร",
+      waInvite:"📲 เชิญทาง WhatsApp", waNogmaals:"📲 เชิญอีกครั้ง", uitgLabel:"เชิญแล้ว", waGeenTel:"ลูกค้ารายนี้ไม่มีเบอร์โทร", emailOfTel:"กรอกอีเมลหรือเบอร์โทร",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("สวัสดีคุณ "+naam+"!"):"สวัสดีค่ะ!")+" ข่าวดี! "+zaak+" มีเว็บไซต์ใหม่แล้ว 🥳\n\nตอนนี้สั่งอาหารไทยสด ๆ ออนไลน์ได้ง่าย ๆ และมารับในวันเสาร์ 🍜\n\nดูเมนูและสั่งได้ที่นี่:\n"+link+"\n\nแล้วพบกันนะคะ! 🌶️💚",
       emailFout:"กรุณากรอกอีเมลที่ถูกต้อง", klantToegevoegd:"เพิ่มลูกค้าแล้ว", klantBijgewerkt:"อัปเดตลูกค้าแล้ว",
       impLeeg:"วางรายชื่อก่อน", impGeenEmail:"ไม่พบอีเมลที่ถูกต้อง", impTeveel:"มากเกินไป — นำเข้าครั้งละไม่เกิน 100",
@@ -2362,7 +2363,7 @@ function klantAggregatie(){
   (_klantRecords||[]).forEach(k=>{
     const key = k.email ? ("e:"+String(k.email).toLowerCase()) : (k.tel ? ("t:"+String(k.tel).replace(/\D/g,"")) : (k.naam?("n:"+String(k.naam).toLowerCase()):""));
     if(!key) return;
-    if(!map[key]) map[key] = {naam:k.naam, email:k.email, tel:k.tel, notitie:k.notitie||"", laatstIngelogd:k.laatstIngelogd||"", bestellingen:[]};
+    if(!map[key]) map[key] = {naam:k.naam, email:k.email, tel:k.tel, notitie:k.notitie||"", laatstIngelogd:k.laatstIngelogd||"", uitgenodigd:k.uitgenodigd||0, laatstUitgenodigd:k.laatstUitgenodigd||"", bestellingen:[]};
   });
   _klantData.forEach(b=>{
     const key = b.email ? ("e:"+String(b.email).toLowerCase()) : (b.tel ? ("t:"+String(b.tel).replace(/\D/g,"")) : (b.naam?("n:"+String(b.naam).toLowerCase()):"?"));
@@ -2398,12 +2399,21 @@ function waNumber(tel){
   if(d[0]==="0") d="31"+d.slice(1);   // NL lokaal -> internationaal
   return d;
 }
-function waUitnodiging(tel, naam){
+function waUitnodiging(tel, naam, email){
   const num=waNumber(tel);
   if(!num){ showToast(BT().kl.waGeenTel,false); return; }
   const link = location.origin + "/";
   const msg = BT().kl.waBericht(naam||"", CONFIG.naam, link);
   window.open("https://wa.me/"+num+"?text="+encodeURIComponent(msg), "_blank");
+  registreerUitnodiging(email||"", tel);
+}
+async function registreerUitnodiging(email, tel){
+  const teln = String(tel||"").replace(/\D/g,"");
+  const rec = (_klantRecords||[]).find(k => (email && String(k.email||"").toLowerCase()===email.toLowerCase()) || (!email && teln && String(k.tel||"").replace(/\D/g,"")===teln));
+  if(rec){ rec.uitgenodigd=(rec.uitgenodigd||0)+1; rec.laatstUitgenodigd=new Date().toISOString(); }
+  try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
+  if(_kTab==="klanten" && !_kForm) renderKlanten();
+  try{ await jsonp({actie:"uitgenodigd", email:email||"", tel:tel||"", key:klantKey()}); }catch(e){}
 }
 async function klantNieuwOpslaan(){
   const naam=(document.getElementById("knNaam").value||"").trim();
@@ -2465,11 +2475,12 @@ function renderKlantenLijst(){
       '<div class="knaam">'+esc(k.naam||K.naamOnbekend)+vast+'</div>'+
       '<div class="kmeta">'+esc(k.email||"")+(k.tel?(' · '+esc(k.tel)):'')+'</div>'+
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
+      (k.uitgenodigd>0?('<div class="kuitg">📲 '+esc(K.uitgLabel)+' '+k.uitgenodigd+'×'+(k.laatstUitgenodigd?(' · '+esc(fmtInlog(k.laatstUitgenodigd))):'')+'</div>'):'')+
       '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+
       (k.email?('<div class="knotitie"><textarea placeholder="'+esc(K.notitiePh)+'">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-email="'+esc(k.email)+'">'+K.notitieSave+'</button></div>'):'')+
       (_kKlantView==="vol" ? k.bestellingen.map(bestelHtml).join("") : "")+
       '<div class="kacts" style="margin-top:8px">'+
-        (k.tel?('<button class="kwabtn" data-a="wa" data-tel="'+esc(k.tel)+'" data-naam="'+esc(k.naam||"")+'">'+K.waInvite+'</button>'):'')+
+        (k.tel?('<button class="kwabtn" data-a="wa" data-tel="'+esc(k.tel)+'" data-naam="'+esc(k.naam||"")+'" data-email="'+esc(k.email||"")+'">'+(k.uitgenodigd>0?K.waNogmaals:K.waInvite)+'</button>'):'')+
         (k.email?('<button data-a="mail" data-email="'+esc(k.email)+'">'+K.losseMail+'</button>'):'')+
         (k.email?('<button class="kdelbtn" data-a="delklant" data-email="'+esc(k.email)+'">'+K.klantVerw+'</button>'):'')+
       '</div>'+
