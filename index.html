@@ -2409,7 +2409,7 @@ function waUitnodiging(tel, naam, email, taal){
   const num=waNumber(tel);
   if(!num){ showToast(BT().kl.waGeenTel,false); return; }
   const link = location.origin + "/";
-  const K = ((taal && BEHEER_T[taal]) ? BEHEER_T[taal] : BT()).kl;   // bericht in de taal van de klant
+  const K = ((taal && BEHEER_T[taal]) ? BEHEER_T[taal] : BEHEER_T.nl).kl;   // klanttaal, anders standaard Nederlands
   const msg = K.waBericht(naam||"", CONFIG.naam, link);
   window.open("https://wa.me/"+num+"?text="+encodeURIComponent(msg), "_blank");
   registreerUitnodiging(email||"", tel);
