@@ -324,6 +324,12 @@
   .kuitg{font-size:.8rem;color:#128C7E;font-weight:700;margin-top:2px}
   .order-hint{margin-top:10px;font-size:.9rem;color:var(--forest);font-weight:600;background:#f0f7f2;border-radius:10px;padding:8px 10px}
   .order-share{margin-top:14px}
+  .kooklijst{background:#fff5ef;border:1px solid #f0d8c8;border-radius:12px;padding:12px 14px;margin-bottom:16px}
+  .kooktitel{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--forest);margin-bottom:8px;flex-wrap:wrap}
+  .kooksub{font-weight:600;color:#8a6a55;font-size:.85rem}
+  .kookkopie{margin-left:auto;padding:5px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-family:inherit;font-size:.8rem;font-weight:700;color:var(--forest);cursor:pointer}
+  .kookrow{display:flex;gap:8px;padding:3px 0;font-size:.98rem}
+  .kookrow .kookn{font-weight:800;color:var(--amber);min-width:2.4em}
   .kbadge.bet{background:#0e7a52;color:#fff}
   .kbadge.onbet{background:#E8508E;color:#fff}
   .kviewtog{display:flex;gap:6px;margin-bottom:12px}
@@ -1623,6 +1629,7 @@ async function initBeheer(){
     else if(a==="knieuw-ok") klantNieuwOpslaan();
     else if(a==="kimport-ok") klantImporteren();
     else if(a==="wa") waUitnodiging(btn.dataset.tel, btn.dataset.naam, btn.dataset.email, btn.dataset.taal);
+    else if(a==="kookkopie") kopieerKooklijst();
   });
   document.querySelectorAll(".ktab").forEach(t => t.onclick = () => {
     _kTab = t.dataset.tab;
@@ -2035,7 +2042,7 @@ const BEHEER_T = {
       badgeAfg:"afgehaald", badgeOpen:"open", badgeBedankt:"bedankt", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
       markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", bedankBtn:"✉ Bedankmail", bedankAl:"✉ Al bedankt", delTitle:"Bestelling verwijderen",
-      afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend",
+      afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend", kooklijst:"Kooklijst", kookBest:"bestellingen", kookKopie:"📋 Kopieer", kookGekopieerd:"Kooklijst gekopieerd!",
       cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.",
       promptOnderwerp:"Onderwerp:", promptOnderwerpDef:"Bericht van Pink Thai TakeAway", promptBericht:"Bericht:",
       confBedank:"Bedankmail versturen naar deze klant?", confDelBest:"Deze bestelling verwijderen?", confDelKlant:"Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.",
@@ -2077,7 +2084,7 @@ const BEHEER_T = {
       badgeAfg:"picked up", badgeOpen:"open", badgeBedankt:"thanked", badgeBetaald:"paid", badgeNietBet:"unpaid",
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
       markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", bedankBtn:"✉ Thank-you e-mail", bedankAl:"✉ Already thanked", delTitle:"Delete order",
-      afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown",
+      afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown", kooklijst:"Cooking list", kookBest:"orders", kookKopie:"📋 Copy", kookGekopieerd:"Cooking list copied!",
       cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.",
       promptOnderwerp:"Subject:", promptOnderwerpDef:"Message from Pink Thai TakeAway", promptBericht:"Message:",
       confBedank:"Send a thank-you e-mail to this customer?", confDelBest:"Delete this order?", confDelKlant:"Delete all data for this customer? This cannot be undone.",
@@ -2119,7 +2126,7 @@ const BEHEER_T = {
       badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBedankt:"ขอบคุณแล้ว", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
       markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", bedankBtn:"✉ อีเมลขอบคุณ", bedankAl:"✉ ขอบคุณแล้ว", delTitle:"ลบออเดอร์",
-      afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ",
+      afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ", kooklijst:"รายการทำอาหาร", kookBest:"ออเดอร์", kookKopie:"📋 คัดลอก", kookGekopieerd:"คัดลอกรายการแล้ว!",
       cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล",
       promptOnderwerp:"หัวข้อ:", promptOnderwerpDef:"ข้อความจาก Pink Thai TakeAway", promptBericht:"ข้อความ:",
       confBedank:"ส่งอีเมลขอบคุณถึงลูกค้ารายนี้?", confDelBest:"ลบออเดอร์นี้?", confDelKlant:"ลบข้อมูลทั้งหมดของลูกค้ารายนี้? ไม่สามารถกู้คืนได้",
@@ -2514,6 +2521,18 @@ function renderAfhaallijst(){
   const body = document.getElementById("kBody");
   const open = _klantData.filter(b => !b.afgehaald);
   if(!open.length){ body.innerHTML = '<p class="hloading">'+K.geenOpen+'</p>'; return; }
+  // Kooklijst: aantallen per gerecht over alle openstaande bestellingen
+  const kook = {};
+  open.forEach(b => parseGerechten(b.bestelling).forEach(g => { kook[g.naam] = (kook[g.naam]||0) + g.aantal; }));
+  const kookNamen = Object.keys(kook).sort((a,b)=>kook[b]-kook[a]);
+  let kookBlok = "";
+  if(kookNamen.length){
+    kookBlok = '<div class="kooklijst">'+
+      '<div class="kooktitel">🍳 '+esc(K.kooklijst)+' <span class="kooksub">('+open.length+' '+esc(K.kookBest)+')</span>'+
+        '<button class="kookkopie" data-a="kookkopie">'+esc(K.kookKopie)+'</button></div>'+
+      kookNamen.map(n=>'<div class="kookrow"><span class="kookn">'+kook[n]+'×</span> <span>'+esc(n)+'</span></div>').join("")+
+    '</div>';
+  }
   const groepen = {};
   open.forEach(b => {
     const af = b.afhaal || K.afhaalOnbekend;
@@ -2521,7 +2540,7 @@ function renderAfhaallijst(){
     const dag = m ? m[1] : af, tijd = m ? m[2] : "";
     (groepen[dag] = groepen[dag]||[]).push({b, tijd});
   });
-  body.innerHTML = Object.keys(groepen).sort().map(dag => {
+  body.innerHTML = kookBlok + Object.keys(groepen).sort().map(dag => {
     const items = groepen[dag].sort((a,b)=>(a.tijd||"").localeCompare(b.tijd||""));
     return '<div class="kafhaal-dag">🛍 '+esc(dag)+'</div>'+
       items.map(({b,tijd}) =>
@@ -2535,6 +2554,15 @@ function renderAfhaallijst(){
         '</div>'
       ).join("");
   }).join("");
+}
+function kopieerKooklijst(){
+  const open=_klantData.filter(b=>!b.afgehaald), kook={};
+  open.forEach(b=>parseGerechten(b.bestelling).forEach(g=>{kook[g.naam]=(kook[g.naam]||0)+g.aantal;}));
+  const namen=Object.keys(kook).sort((a,b)=>kook[b]-kook[a]);
+  if(!namen.length) return;
+  const txt = "🍳 "+BT().kl.kooklijst+"\n"+namen.map(n=>kook[n]+"× "+n).join("\n");
+  if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>showToast(BT().kl.kookGekopieerd,true)).catch(()=>showToast(txt,null)); }
+  else showToast(txt,null);
 }
 function parseBedrag(t){
   const s = String(t||"").replace(/[^\d.,]/g,"").replace(/\.(?=\d{3}(\D|$))/g,"").replace(",",".");
