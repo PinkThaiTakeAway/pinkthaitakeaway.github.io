@@ -1,0 +1,10 @@
+{
+  "opgeslagen": "2026-07-08T20:09:16Z",
+  "scriptVersie": 11,
+  "verwachteVersie": 11,
+  "versieOk": true,
+  "fouten": 0,
+  "waarschuwingen": 0,
+  "bron": "Scriptbestand = v11 en beheerder heeft in Health bevestigd dat het OK is. Het live script kon niet rechtstreeks vanuit deze omgeving worden bevraagd (script.google.com geblokkeerd).",
+  "opmerking": "Voor een live-geverifieerde uitslag kan de knop 'Health opslaan' in het Health-scherm worden gebruikt; die overschrijft dit bestand met de actuele scriptrespons."
+}
