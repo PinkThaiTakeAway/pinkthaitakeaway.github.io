@@ -605,7 +605,6 @@
     <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam, e-mail of telefoon…" autocomplete="off">
     <div id="kBody" class="hbody"></div>
     <div class="kfoot">
-      <button id="kBulk" class="hreload kbulk">✉ Mail alle klanten</button>
       <button id="kReload" class="hreload">Opnieuw laden</button>
     </div>
   </div>
@@ -747,7 +746,7 @@ const I18N = {
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
     orderOk:"Bestelling geplaatst! 🌸 Stuur \u2019m hieronder even via WhatsApp naar het restaurant, dan zien we je bestelling meteen.", orderWaBtn:"📲 Stuur je bestelling via WhatsApp", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", volBanner:"🌸 Volgeboekt voor komende zaterdag — bekijk gerust het menu", volgeboektMsg:"We zijn volgeboekt voor komende zaterdag. Kom volgende week weer terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
-    note:"Je bestelling wordt per e-mail naar het restaurant gestuurd.",
+    note:"Na het plaatsen bevestig je je bestelling met één tik via WhatsApp.",
     spice:["Mild pittig","Kruidig","Pittig"],
     diet:{ vega:"Vega", glutenvrij:"Glutenvrij", noten:"Bevat noten" },
     footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t} uur`,
@@ -788,7 +787,7 @@ const I18N = {
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
     orderOk:"Order placed! 🌸 Send it to the restaurant via WhatsApp below so we see it right away.", orderWaBtn:"📲 Send your order via WhatsApp", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", volBanner:"🌸 Fully booked for this Saturday — feel free to browse the menu", volgeboektMsg:"We\u2019re fully booked for this Saturday. Please come back next week! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
     orderErr:"Please enter your name, phone and a valid email address.",
-    note:"Your order is sent to the restaurant by email.",
+    note:"After placing, confirm your order with one tap via WhatsApp.",
     spice:["Mild","Spicy","Hot"],
     diet:{ vega:"Veggie", glutenvrij:"Gluten-free", noten:"Contains nuts" },
     footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
@@ -829,7 +828,7 @@ const I18N = {
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
     orderOk:"สั่งซื้อสำเร็จ! 🌸 กดส่งออเดอร์ทาง WhatsApp ด้านล่าง ร้านจะเห็นทันที", orderWaBtn:"📲 ส่งออเดอร์ทาง WhatsApp", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", volBanner:"🌸 เต็มแล้วสำหรับเสาร์นี้ — ดูเมนูได้", volgeboektMsg:"ออเดอร์เต็มแล้วสำหรับเสาร์นี้ กลับมาใหม่สัปดาห์หน้านะคะ! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
-    note:"คำสั่งซื้อจะถูกส่งไปยังร้านทางอีเมล",
+    note:"หลังจากสั่ง ยืนยันออเดอร์ด้วยการแตะ WhatsApp หนึ่งครั้ง",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
     diet:{ vega:"มังสวิรัติ", glutenvrij:"ไม่มีกลูเตน", noten:"มีถั่ว" },
     footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`,
@@ -1725,7 +1724,6 @@ async function initBeheer(){
     document.querySelectorAll(".ktab").forEach(x => x.classList.toggle("active", x===t));
     renderKlanten();
   });
-  document.getElementById("kBulk").onclick = klantBulk;
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
@@ -2118,9 +2116,9 @@ function openKlanten(){ document.getElementById("klantOverlay").classList.add("o
 function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
 
 const VOLG_T = {
-  nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link uit je bevestigingsmail.", laden:"Laden…", ver:"Status vernieuwen", opnieuw:"🔁 Opnieuw bestellen", hersteld:"Je bestelling staat weer in je mandje", nietsHersteld:"Kon de bestelling niet herstellen", geslotenMand:"Je mandje is gevuld — bestellen kan zodra we weer open zijn" },
-  en: { titel:"Your order", open:"🟠 We're preparing your order", klaar:"✅ Picked up", afhalen:"Pickup", totaal:"Total", betaling:"Payment", niet:"Order not found. Please check the link in your confirmation e-mail.", laden:"Loading…", ver:"Refresh status", opnieuw:"🔁 Order again", hersteld:"Your order is back in your cart", nietsHersteld:"Could not restore the order", geslotenMand:"Your cart is filled — you can order once we\u2019re open again" },
-  th: { titel:"ออเดอร์ของคุณ", open:"🟠 กำลังเตรียมออเดอร์ของคุณ", klaar:"✅ รับแล้ว", afhalen:"รับอาหาร", totaal:"รวม", betaling:"การชำระเงิน", niet:"ไม่พบออเดอร์ กรุณาตรวจสอบลิงก์ในอีเมลยืนยัน", laden:"กำลังโหลด…", ver:"รีเฟรชสถานะ", opnieuw:"🔁 สั่งอีกครั้ง", hersteld:"ออเดอร์ของคุณกลับเข้าตะกร้าแล้ว", nietsHersteld:"กู้คืนออเดอร์ไม่ได้", geslotenMand:"ใส่ตะกร้าแล้ว — สั่งได้เมื่อเราเปิดอีกครั้ง" }
+  nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link nog eens.", laden:"Laden…", ver:"Status vernieuwen", opnieuw:"🔁 Opnieuw bestellen", hersteld:"Je bestelling staat weer in je mandje", nietsHersteld:"Kon de bestelling niet herstellen", geslotenMand:"Je mandje is gevuld — bestellen kan zodra we weer open zijn" },
+  en: { titel:"Your order", open:"🟠 We're preparing your order", klaar:"✅ Picked up", afhalen:"Pickup", totaal:"Total", betaling:"Payment", niet:"Order not found. Please check the link again.", laden:"Loading…", ver:"Refresh status", opnieuw:"🔁 Order again", hersteld:"Your order is back in your cart", nietsHersteld:"Could not restore the order", geslotenMand:"Your cart is filled — you can order once we\u2019re open again" },
+  th: { titel:"ออเดอร์ของคุณ", open:"🟠 กำลังเตรียมออเดอร์ของคุณ", klaar:"✅ รับแล้ว", afhalen:"รับอาหาร", totaal:"รวม", betaling:"การชำระเงิน", niet:"ไม่พบออเดอร์ กรุณาตรวจสอบลิงก์อีกครั้ง", laden:"กำลังโหลด…", ver:"รีเฟรชสถานะ", opnieuw:"🔁 สั่งอีกครั้ง", hersteld:"ออเดอร์ของคุณกลับเข้าตะกร้าแล้ว", nietsHersteld:"กู้คืนออเดอร์ไม่ได้", geslotenMand:"ใส่ตะกร้าแล้ว — สั่งได้เมื่อเราเปิดอีกครั้ง" }
 };
 const BEHEER_T = {
   nl: {
@@ -2663,7 +2661,6 @@ function renderKlantenLijst(){
       (_kKlantView==="vol" ? k.bestellingen.map(bestelHtml).join("") : "")+
       '<div class="kacts" style="margin-top:8px">'+
         (k.tel?('<button class="kwabtn" data-a="wa" data-tel="'+esc(k.tel)+'" data-naam="'+esc(k.naam||"")+'" data-email="'+esc(k.email||"")+'" data-taal="'+esc(k.taal||"")+'">'+(k.uitgenodigd>0?K.waNogmaals:K.waInvite)+'</button>'):'')+
-        (k.email?('<button data-a="mail" data-email="'+esc(k.email)+'">'+K.losseMail+'</button>'):'')+
         (k.email?('<button class="kdelbtn" data-a="delklant" data-email="'+esc(k.email)+'">'+K.klantVerw+'</button>'):'')+
       '</div>'+
     '</div>';
@@ -2680,7 +2677,6 @@ function bestelHtml(b){
     '<div class="kacts">'+
       '<button data-a="afg" data-id="'+esc(b.id)+'" data-w="'+(b.afgehaald?'0':'1')+'">'+(b.afgehaald?K.markNiet:K.markAfg)+'</button>'+
       '<button data-a="bet" data-id="'+esc(b.id)+'" data-w="'+(b.betaald?'0':'1')+'">'+(b.betaald?K.markNietBet:K.markBetaald)+'</button>'+
-      (b.email?('<button class="prim" data-a="bedank" data-id="'+esc(b.id)+'"'+(b.bedankt?' disabled':'')+'>'+(b.bedankt?K.bedankAl:K.bedankBtn)+'</button>'):'')+
       '<button class="kdelbtn" data-a="del" data-id="'+esc(b.id)+'" title="'+esc(K.delTitle)+'">🗑</button>'+
     '</div></div>';
 }
