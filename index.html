@@ -711,7 +711,7 @@
 =================================================================== */
 const CONFIG = {
   naam: "Pink Thai TakeAway",
-  whatsapp: "66825834264",                       // +66 82-583-4264
+  whatsapp: "31628498822",                       // TEST: +31 6 28498822 (tijdelijk)
   email: "PinkThaiTakeAway@gmail.com",          // waar bestellingen binnenkomen
   adres: "Hakvoortseweg 30, 5084 HA Biest-Houtakker (voordeur aan de oprit)",
   telefoon: "06 48 55 58 42",
@@ -1565,7 +1565,9 @@ document.getElementById("waBtn").onclick = async () => {
     store.save();
     form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
     buildMenu(); updateBars();
+    const _waLink = waOrderLink({orderId, naam, afhaal, lines, totaal:fmt(sum), betaling, note});
     sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>`
+      + `<a class="wa-confirm" href="${_waLink}" target="_blank" rel="noopener">${T().orderWaBtn}</a>`
       + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
       + `<button class="share-btn order-share" id="orderShareBtn">📤 ${T().orderShareBtn}</button></div>`;
     { const osb = document.getElementById("orderShareBtn"); if(osb) osb.onclick = deelPagina; }
