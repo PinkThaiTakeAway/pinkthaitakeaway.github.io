@@ -2020,21 +2020,6 @@ async function checkAccess(){
     }
   }
   try{
-    const mc = await fetchMailCount();
-    if(mc && typeof mc.emails === "number"){
-      const best = (typeof mc.bestellingen === "number") ? H.mailBest(mc.bestellingen) : "";
-      items.push({naam:H.mailMaand(mc.emails, best), status:"ok"});
-      if(typeof mc.quota === "number"){
-        const st = mc.quota <= 0 ? "err" : (mc.quota < 20 ? "warn" : "ok");
-        items.push({naam:H.mailRuimte(mc.quota), status:st});
-      }
-    } else {
-      items.push({naam:H.mailNietBesch, status:"warn"});
-    }
-  }catch(e){
-    items.push({naam:H.mailNietOp, status:"warn"});
-  }
-  try{
     const v = await jsonp({actie:"versie"});
     const sv = (v && v.ok && typeof v.versie === "number") ? v.versie : 0;
     if(sv >= SCRIPT_VERSIE_VERWACHT) items.push({naam:H.scriptOk(sv), status:"ok"});
