@@ -544,7 +544,7 @@
       <div class="hero-portret">
         <picture>
           <source srcset="chef.webp" type="image/webp">
-          <img src="chef.jpg" alt="Pink — Pink Thai TakeAway" width="270" height="270" loading="eager">
+          <img id="heroChefImg" src="chef.jpg" alt="Pink — Pink Thai TakeAway" width="270" height="270" loading="eager">
         </picture>
         <span class="hero-portret-label" id="heroChef">Met liefde gekookt door Pink</span>
       </div>
@@ -733,6 +733,7 @@ const CONFIG = {
   email: "PinkThaiTakeAway@gmail.com",          // waar bestellingen binnenkomen
   adres: "Hakvoortseweg 30, 5084 HA Biest-Houtakker (voordeur aan de oprit)",
   telefoon: "06 48 55 58 42",
+  chefFoto: "chef.jpg",                          // foto van Pink bovenaan (leeg/standaard = chef.jpg)
   afhaal: { dag:6, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
   agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec",
   bestel: { dagen:[0,1,2,3,4,5,6], van:"00:00", tot:"23:59", cutoffDag:5, cutoffUur:23 }   // hele dag open; auto-pauze op cutoffDag (5=vr) om cutoffUur
@@ -1642,6 +1643,7 @@ function applyConfig(){
   document.getElementById("cfgAdres2").textContent = CONFIG.adres;
   document.getElementById("cfgTel").textContent    = CONFIG.telefoon;
   document.getElementById("year").textContent = new Date().getFullYear();
+  { const _cf=document.getElementById("heroChefImg"); if(_cf) _cf.src = CONFIG.chefFoto || "chef.jpg"; }
 }
 
 /* ---------- Foto's laden (online, met brede fallback) ---------- */
@@ -1997,6 +1999,14 @@ function renderInstellingen(){
     +   '<button class="kaddok" id="adrSaveBtn">'+esc(K.telOpslaan)+'</button>'
     + '</div>'
     + '<div class="kinstel-sec">'
+    +   '<h4 class="kinstel-h">\uD83D\uDDBC\uFE0F '+esc(K.fotoTitel)+'</h4>'
+    +   '<p class="kinstel-uit">'+esc(K.fotoUit2)+'</p>'
+    +   '<label class="kinstel-l">'+esc(K.fotoLabel)+'</label>'
+    +   '<input id="fotoIn" type="url" placeholder="https://…" value="'+esc(CONFIG.chefFoto||"")+'">'
+    +   '<img id="fotoPreview" src="'+esc(CONFIG.chefFoto||"chef.jpg")+'" alt="" style="max-width:120px;border-radius:12px;margin-top:10px;display:block">'
+    +   '<button class="kaddok" id="fotoSaveBtn">'+esc(K.telOpslaan)+'</button>'
+    + '</div>'
+    + '<div class="kinstel-sec">'
     +   '<h4 class="kinstel-h">\uD83D\uDD52 '+esc(K.afhTitel)+'</h4>'
     +   '<p class="kinstel-uit">'+esc(K.afhUit2)+'</p>'
     +   '<label class="kinstel-l">'+esc(K.afhDagL)+'</label>'
@@ -2059,6 +2069,8 @@ function renderInstellingen(){
   const pb=document.getElementById("pubBtn"); if(pb) pb.onclick = publishAll;
   const ab=document.getElementById("adrSaveBtn"); if(ab) ab.onclick = adresOpslaan;
   const afb=document.getElementById("afhSaveBtn"); if(afb) afb.onclick = afhaalOpslaan;
+  const fsb=document.getElementById("fotoSaveBtn"); if(fsb) fsb.onclick = fotoOpslaan;
+  { const fi=document.getElementById("fotoIn"), fp=document.getElementById("fotoPreview"); if(fi && fp) fi.addEventListener("input", ()=>{ fp.src = fi.value.trim() || "chef.jpg"; }); }
   const cs=document.getElementById("capSaveBtn"); if(cs) cs.onclick = capOpslaan;
   cbLaden(); capLaden();
 }
@@ -2110,7 +2122,7 @@ async function capOpslaan(){
 function _dagOpties(sel){ return (T().dagen||[]).map((d,i)=>'<option value="'+i+'"'+(i===sel?' selected':'')+'>'+esc(d)+'</option>').join(''); }
 function bedrijfData(){
   return {
-    naam: CONFIG.naam, adres: CONFIG.adres, telefoon: CONFIG.telefoon,
+    naam: CONFIG.naam, adres: CONFIG.adres, telefoon: CONFIG.telefoon, chefFoto: CONFIG.chefFoto,
     afhaal: { dag:CONFIG.afhaal.dag, van:CONFIG.afhaal.van, tot:CONFIG.afhaal.tot, slotMin:CONFIG.afhaal.slotMin },
     bestel: { cutoffDag:CONFIG.bestel.cutoffDag, cutoffUur:CONFIG.bestel.cutoffUur }
   };
@@ -2149,6 +2161,20 @@ async function afhaalOpslaan(){
     showToast(K.afhOk, true);
   }catch(e){
     showToast(String(e && e.message).indexOf("no-token")>=0 ? A.tokenNeed : K.afhFout, false);
+  }
+}
+async function fotoOpslaan(){
+  const A = T().adm, K = BT().kl;
+  if(!ghToken()){ showToast(A.tokenNeed, false); return; }
+  const url=(document.getElementById("fotoIn").value||"").trim();
+  showToast(A.saving, null);
+  try{
+    CONFIG.chefFoto = url || "chef.jpg";
+    await ghPut("bedrijf.json", bedrijfData(), "Foto van Pink bijwerken");
+    applyConfig();
+    showToast(K.fotoOk, true);
+  }catch(e){
+    showToast(String(e && e.message).indexOf("no-token")>=0 ? A.tokenNeed : K.fotoFout, false);
   }
 }
 async function ghPut(path, obj, message){
@@ -2336,7 +2362,7 @@ const BEHEER_T = {
     locale:"nl-NL",
     bar:{ tikkieOn:"💳 Tikkie: aan", tikkieOff:"💳 Tikkie: uit", orderOpen:"🟢 Bestellen: open", orderClosed:"🔴 Bestellen: dicht", health:"Health", klanten:"👥 Klanten", instellingen:"⚙️ Instellingen" },
     kl:{
-      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabInstel:"Instellingen", tikkieTitel:"Tikkie-betaling", tikkieUit2:"Laat klanten kiezen om via Tikkie te betalen in plaats van contant.", tikkieStatusAan:"Nu: aan", tikkieStatusUit:"Nu: uit", tikkieAanBtn:"Aanzetten", tikkieUitBtn:"Uitzetten", tokenTitel:"GitHub-token (technisch)", tokenUit2:"Nodig om wijzigingen zoals prijzen en menu live op te slaan. Wordt alleen op dit apparaat bewaard.", tokenStatusSet:"Ingesteld op dit apparaat ✓", tokenStatusNone:"Nog niet ingesteld", tokenSetBtn:"Token instellen / wijzigen", publiceerTitel:"Publiceren", publiceerUit2:"Zet alle wijzigingen (prijzen, menu, teksten) in één keer live op de website.", publiceerBtn:"⬆ Nu publiceren", adresTitel:"Adresgegevens", adresUit2:"Adres en telefoonnummer zoals ze op de website worden getoond.", adresLabel:"Adres", adresTelLabel:"Telefoon (zichtbaar op de site)", naamLabel:"Bedrijfsnaam", adresOk:"Adresgegevens opgeslagen ✓", adresFout:"Kon adresgegevens niet opslaan", afhTitel:"Afhaal & bestellen", afhUit2:"Afhaaldag, afhaaltijden en tot wanneer klanten kunnen bestellen.", afhDagL:"Afhaaldag", afhVanL:"Vanaf", afhTotL:"Tot", afhSlotL:"Tijdvak per (minuten)", afhCutDagL:"Bestellen kan t/m (dag)", afhCutUurL:"…tot dat uur (0–23)", afhOk:"Afhaal-instellingen opgeslagen ✓", afhFout:"Kon afhaal-instellingen niet opslaan", capTitel:"Capaciteit", capUit2:"Maximum aantal bestellingen per tijdvak en per afhaaldag (0 = geen limiet).", capSlotL:"Max per tijdvak", capDagL:"Max per afhaaldag", capOk:"Capaciteit opgeslagen ✓", capFout:"Kon capaciteit niet opslaan", mijnTel:"Mijn telefoonnummer", mijnTelUit:"Op dit nummer krijg je automatisch elke nieuwe bestelling binnen via WhatsApp.", telLabel:"Telefoonnummer (internationaal, alleen cijfers, bijv. 31612345678 of 66812345678)", keyLabel:"CallMeBot API-key", telOpslaan:"Opslaan", mijnTelHint:"Nieuw nummer? Activeer eerst CallMeBot op die telefoon: voeg contact +34 621 331 709 toe en stuur 'I allow callmebot to send me messages'. Je krijgt dan een API-key terug.",
+      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabInstel:"Instellingen", tikkieTitel:"Tikkie-betaling", tikkieUit2:"Laat klanten kiezen om via Tikkie te betalen in plaats van contant.", tikkieStatusAan:"Nu: aan", tikkieStatusUit:"Nu: uit", tikkieAanBtn:"Aanzetten", tikkieUitBtn:"Uitzetten", tokenTitel:"GitHub-token (technisch)", tokenUit2:"Nodig om wijzigingen zoals prijzen en menu live op te slaan. Wordt alleen op dit apparaat bewaard.", tokenStatusSet:"Ingesteld op dit apparaat ✓", tokenStatusNone:"Nog niet ingesteld", tokenSetBtn:"Token instellen / wijzigen", publiceerTitel:"Publiceren", publiceerUit2:"Zet alle wijzigingen (prijzen, menu, teksten) in één keer live op de website.", publiceerBtn:"⬆ Nu publiceren", adresTitel:"Adresgegevens", adresUit2:"Adres en telefoonnummer zoals ze op de website worden getoond.", adresLabel:"Adres", adresTelLabel:"Telefoon (zichtbaar op de site)", naamLabel:"Bedrijfsnaam", fotoTitel:"Foto van Pink", fotoUit2:"De foto bovenaan de homepage. Plak een link naar een afbeelding (leeg = standaardfoto).", fotoLabel:"Link naar de foto (URL)", fotoOk:"Foto opgeslagen ✓", fotoFout:"Kon foto niet opslaan", adresOk:"Adresgegevens opgeslagen ✓", adresFout:"Kon adresgegevens niet opslaan", afhTitel:"Afhaal & bestellen", afhUit2:"Afhaaldag, afhaaltijden en tot wanneer klanten kunnen bestellen.", afhDagL:"Afhaaldag", afhVanL:"Vanaf", afhTotL:"Tot", afhSlotL:"Tijdvak per (minuten)", afhCutDagL:"Bestellen kan t/m (dag)", afhCutUurL:"…tot dat uur (0–23)", afhOk:"Afhaal-instellingen opgeslagen ✓", afhFout:"Kon afhaal-instellingen niet opslaan", capTitel:"Capaciteit", capUit2:"Maximum aantal bestellingen per tijdvak en per afhaaldag (0 = geen limiet).", capSlotL:"Max per tijdvak", capDagL:"Max per afhaaldag", capOk:"Capaciteit opgeslagen ✓", capFout:"Kon capaciteit niet opslaan", mijnTel:"Mijn telefoonnummer", mijnTelUit:"Op dit nummer krijg je automatisch elke nieuwe bestelling binnen via WhatsApp.", telLabel:"Telefoonnummer (internationaal, alleen cijfers, bijv. 31612345678 of 66812345678)", keyLabel:"CallMeBot API-key", telOpslaan:"Opslaan", mijnTelHint:"Nieuw nummer? Activeer eerst CallMeBot op die telefoon: voeg contact +34 621 331 709 toe en stuur 'I allow callmebot to send me messages'. Je krijgt dan een API-key terug.",
       bzLaden:"Bezoek laden…", bzGeen:"Nog geen bezoekgegevens.", bzVandaag:"vandaag", bzWeek:"deze week", bzMaand:"deze maand", bzTotaal:"totaal", bzPerDag:"Bezoeken per dag (30 dagen)", bzType:"Type bezoek", bzKlant:"klant", bzBeheer:"beheer", bzVolg:"volglink", bzTaal:"Taal", bzHerkomst:"Herkomst", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"overig", bzToestel:"Toestel", bzMobiel:"mobiel", bzDesktop:"desktop", bzVasteKlanten:"Terugkerende klanten", laatstInlog:"laatst ingelogd:", bzBeheerders:"In beheer ingelogd", bzInlogLog:"Inloggeschiedenis", bzDeelLijst:"Binnengekomen via delen", bzDeelLog:"Deelgeschiedenis", bzVia:"via",
       zoek:"Zoek op naam of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
       addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan", telVerplicht:"Vul een telefoonnummer in",
@@ -2378,7 +2404,7 @@ const BEHEER_T = {
     locale:"en-GB",
     bar:{ tikkieOn:"💳 Tikkie: on", tikkieOff:"💳 Tikkie: off", orderOpen:"🟢 Ordering: open", orderClosed:"🔴 Ordering: closed", health:"Health", klanten:"👥 Customers", instellingen:"⚙️ Settings" },
     kl:{
-      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabInstel:"Settings", tikkieTitel:"Tikkie payment", tikkieUit2:"Let customers choose to pay via Tikkie instead of cash.", tikkieStatusAan:"Now: on", tikkieStatusUit:"Now: off", tikkieAanBtn:"Turn on", tikkieUitBtn:"Turn off", tokenTitel:"GitHub token (technical)", tokenUit2:"Needed to save changes like prices and menu live. Stored only on this device.", tokenStatusSet:"Set on this device ✓", tokenStatusNone:"Not set yet", tokenSetBtn:"Set / change token", publiceerTitel:"Publish", publiceerUit2:"Push all changes (prices, menu, texts) live to the website at once.", publiceerBtn:"⬆ Publish now", adresTitel:"Address details", adresUit2:"Address and phone number as shown on the website.", adresLabel:"Address", adresTelLabel:"Phone (shown on the site)", naamLabel:"Business name", adresOk:"Address saved ✓", adresFout:"Could not save address", afhTitel:"Pickup & ordering", afhUit2:"Pickup day, pickup times and the deadline for customers to order.", afhDagL:"Pickup day", afhVanL:"From", afhTotL:"Until", afhSlotL:"Time slot length (minutes)", afhCutDagL:"Ordering open until (day)", afhCutUurL:"…until this hour (0–23)", afhOk:"Pickup settings saved ✓", afhFout:"Could not save pickup settings", capTitel:"Capacity", capUit2:"Maximum orders per time slot and per pickup day (0 = no limit).", capSlotL:"Max per time slot", capDagL:"Max per pickup day", capOk:"Capacity saved ✓", capFout:"Could not save capacity", mijnTel:"My phone number", mijnTelUit:"This number automatically receives every new order via WhatsApp.", telLabel:"Phone number (international, digits only, e.g. 31612345678 or 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"Save", mijnTelHint:"New number? First activate CallMeBot on that phone: add contact +34 621 331 709 and send 'I allow callmebot to send me messages'. You will receive an API key.",
+      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabInstel:"Settings", tikkieTitel:"Tikkie payment", tikkieUit2:"Let customers choose to pay via Tikkie instead of cash.", tikkieStatusAan:"Now: on", tikkieStatusUit:"Now: off", tikkieAanBtn:"Turn on", tikkieUitBtn:"Turn off", tokenTitel:"GitHub token (technical)", tokenUit2:"Needed to save changes like prices and menu live. Stored only on this device.", tokenStatusSet:"Set on this device ✓", tokenStatusNone:"Not set yet", tokenSetBtn:"Set / change token", publiceerTitel:"Publish", publiceerUit2:"Push all changes (prices, menu, texts) live to the website at once.", publiceerBtn:"⬆ Publish now", adresTitel:"Address details", adresUit2:"Address and phone number as shown on the website.", adresLabel:"Address", adresTelLabel:"Phone (shown on the site)", naamLabel:"Business name", fotoTitel:"Photo of Pink", fotoUit2:"The photo at the top of the homepage. Paste an image link (empty = default photo).", fotoLabel:"Image link (URL)", fotoOk:"Photo saved ✓", fotoFout:"Could not save photo", adresOk:"Address saved ✓", adresFout:"Could not save address", afhTitel:"Pickup & ordering", afhUit2:"Pickup day, pickup times and the deadline for customers to order.", afhDagL:"Pickup day", afhVanL:"From", afhTotL:"Until", afhSlotL:"Time slot length (minutes)", afhCutDagL:"Ordering open until (day)", afhCutUurL:"…until this hour (0–23)", afhOk:"Pickup settings saved ✓", afhFout:"Could not save pickup settings", capTitel:"Capacity", capUit2:"Maximum orders per time slot and per pickup day (0 = no limit).", capSlotL:"Max per time slot", capDagL:"Max per pickup day", capOk:"Capacity saved ✓", capFout:"Could not save capacity", mijnTel:"My phone number", mijnTelUit:"This number automatically receives every new order via WhatsApp.", telLabel:"Phone number (international, digits only, e.g. 31612345678 or 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"Save", mijnTelHint:"New number? First activate CallMeBot on that phone: add contact +34 621 331 709 and send 'I allow callmebot to send me messages'. You will receive an API key.",
       bzLaden:"Loading visits…", bzGeen:"No visit data yet.", bzVandaag:"today", bzWeek:"this week", bzMaand:"this month", bzTotaal:"total", bzPerDag:"Visits per day (30 days)", bzType:"Visit type", bzKlant:"customer", bzBeheer:"admin", bzVolg:"tracking link", bzTaal:"Language", bzHerkomst:"Source", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"other", bzToestel:"Device", bzMobiel:"mobile", bzDesktop:"desktop", bzVasteKlanten:"Returning customers", laatstInlog:"last login:", bzBeheerders:"Logged into admin", bzInlogLog:"Login history", bzDeelLijst:"Arrived via sharing", bzDeelLog:"Share history", bzVia:"via",
       zoek:"Search by name or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
       addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer", telVerplicht:"Enter a phone number",
@@ -2420,7 +2446,7 @@ const BEHEER_T = {
     locale:"th-TH",
     bar:{ tikkieOn:"💳 Tikkie: เปิด", tikkieOff:"💳 Tikkie: ปิด", orderOpen:"🟢 รับออเดอร์: เปิด", orderClosed:"🔴 รับออเดอร์: ปิด", health:"สถานะ", klanten:"👥 ลูกค้า", instellingen:"⚙️ การตั้งค่า" },
     kl:{
-      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabInstel:"การตั้งค่า", tikkieTitel:"การชำระด้วย Tikkie", tikkieUit2:"ให้ลูกค้าเลือกจ่ายผ่าน Tikkie แทนเงินสด", tikkieStatusAan:"ตอนนี้: เปิด", tikkieStatusUit:"ตอนนี้: ปิด", tikkieAanBtn:"เปิด", tikkieUitBtn:"ปิด", tokenTitel:"โทเคน GitHub (ทางเทคนิค)", tokenUit2:"จำเป็นสำหรับบันทึกการเปลี่ยนแปลง เช่น ราคาและเมนู แบบสด เก็บในเครื่องนี้เท่านั้น", tokenStatusSet:"ตั้งค่าในเครื่องนี้แล้ว ✓", tokenStatusNone:"ยังไม่ได้ตั้งค่า", tokenSetBtn:"ตั้งค่า / เปลี่ยนโทเคน", publiceerTitel:"เผยแพร่", publiceerUit2:"อัปเดตการเปลี่ยนแปลงทั้งหมด (ราคา เมนู ข้อความ) ขึ้นเว็บไซต์พร้อมกัน", publiceerBtn:"⬆ เผยแพร่ตอนนี้", adresTitel:"ที่อยู่ร้าน", adresUit2:"ที่อยู่และเบอร์โทรที่แสดงบนเว็บไซต์", adresLabel:"ที่อยู่", adresTelLabel:"เบอร์โทร (แสดงบนเว็บไซต์)", naamLabel:"ชื่อร้าน", adresOk:"บันทึกที่อยู่แล้ว ✓", adresFout:"บันทึกที่อยู่ไม่สำเร็จ", afhTitel:"การรับอาหาร & การสั่ง", afhUit2:"วันรับอาหาร เวลารับ และกำหนดเวลาสุดท้ายที่ลูกค้าสั่งได้", afhDagL:"วันรับอาหาร", afhVanL:"ตั้งแต่", afhTotL:"ถึง", afhSlotL:"ช่วงเวลาต่อ (นาที)", afhCutDagL:"สั่งได้ถึง (วัน)", afhCutUurL:"…ถึงเวลานี้ (0–23)", afhOk:"บันทึกการตั้งค่าการรับอาหารแล้ว ✓", afhFout:"บันทึกไม่สำเร็จ", capTitel:"ความจุ", capUit2:"จำนวนออเดอร์สูงสุดต่อช่วงเวลาและต่อวันรับอาหาร (0 = ไม่จำกัด)", capSlotL:"สูงสุดต่อช่วงเวลา", capDagL:"สูงสุดต่อวันรับ", capOk:"บันทึกความจุแล้ว ✓", capFout:"บันทึกไม่สำเร็จ", mijnTel:"เบอร์โทรของฉัน", mijnTelUit:"เบอร์นี้จะรับออเดอร์ใหม่ทุกครั้งทาง WhatsApp โดยอัตโนมัติ", telLabel:"เบอร์โทร (สากล เฉพาะตัวเลข เช่น 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"บันทึก", mijnTelHint:"เบอร์ใหม่? เปิดใช้งาน CallMeBot บนเครื่องนั้นก่อน: เพิ่มผู้ติดต่อ +34 621 331 709 แล้วส่งข้อความ 'I allow callmebot to send me messages' คุณจะได้รับ API key",
+      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabInstel:"การตั้งค่า", tikkieTitel:"การชำระด้วย Tikkie", tikkieUit2:"ให้ลูกค้าเลือกจ่ายผ่าน Tikkie แทนเงินสด", tikkieStatusAan:"ตอนนี้: เปิด", tikkieStatusUit:"ตอนนี้: ปิด", tikkieAanBtn:"เปิด", tikkieUitBtn:"ปิด", tokenTitel:"โทเคน GitHub (ทางเทคนิค)", tokenUit2:"จำเป็นสำหรับบันทึกการเปลี่ยนแปลง เช่น ราคาและเมนู แบบสด เก็บในเครื่องนี้เท่านั้น", tokenStatusSet:"ตั้งค่าในเครื่องนี้แล้ว ✓", tokenStatusNone:"ยังไม่ได้ตั้งค่า", tokenSetBtn:"ตั้งค่า / เปลี่ยนโทเคน", publiceerTitel:"เผยแพร่", publiceerUit2:"อัปเดตการเปลี่ยนแปลงทั้งหมด (ราคา เมนู ข้อความ) ขึ้นเว็บไซต์พร้อมกัน", publiceerBtn:"⬆ เผยแพร่ตอนนี้", adresTitel:"ที่อยู่ร้าน", adresUit2:"ที่อยู่และเบอร์โทรที่แสดงบนเว็บไซต์", adresLabel:"ที่อยู่", adresTelLabel:"เบอร์โทร (แสดงบนเว็บไซต์)", naamLabel:"ชื่อร้าน", fotoTitel:"รูปของ Pink", fotoUit2:"รูปด้านบนของหน้าแรก วางลิงก์รูปภาพ (เว้นว่าง = รูปเริ่มต้น)", fotoLabel:"ลิงก์รูปภาพ (URL)", fotoOk:"บันทึกรูปแล้ว ✓", fotoFout:"บันทึกรูปไม่สำเร็จ", adresOk:"บันทึกที่อยู่แล้ว ✓", adresFout:"บันทึกที่อยู่ไม่สำเร็จ", afhTitel:"การรับอาหาร & การสั่ง", afhUit2:"วันรับอาหาร เวลารับ และกำหนดเวลาสุดท้ายที่ลูกค้าสั่งได้", afhDagL:"วันรับอาหาร", afhVanL:"ตั้งแต่", afhTotL:"ถึง", afhSlotL:"ช่วงเวลาต่อ (นาที)", afhCutDagL:"สั่งได้ถึง (วัน)", afhCutUurL:"…ถึงเวลานี้ (0–23)", afhOk:"บันทึกการตั้งค่าการรับอาหารแล้ว ✓", afhFout:"บันทึกไม่สำเร็จ", capTitel:"ความจุ", capUit2:"จำนวนออเดอร์สูงสุดต่อช่วงเวลาและต่อวันรับอาหาร (0 = ไม่จำกัด)", capSlotL:"สูงสุดต่อช่วงเวลา", capDagL:"สูงสุดต่อวันรับ", capOk:"บันทึกความจุแล้ว ✓", capFout:"บันทึกไม่สำเร็จ", mijnTel:"เบอร์โทรของฉัน", mijnTelUit:"เบอร์นี้จะรับออเดอร์ใหม่ทุกครั้งทาง WhatsApp โดยอัตโนมัติ", telLabel:"เบอร์โทร (สากล เฉพาะตัวเลข เช่น 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"บันทึก", mijnTelHint:"เบอร์ใหม่? เปิดใช้งาน CallMeBot บนเครื่องนั้นก่อน: เพิ่มผู้ติดต่อ +34 621 331 709 แล้วส่งข้อความ 'I allow callmebot to send me messages' คุณจะได้รับ API key",
       bzLaden:"กำลังโหลดการเข้าชม…", bzGeen:"ยังไม่มีข้อมูลการเข้าชม", bzVandaag:"วันนี้", bzWeek:"สัปดาห์นี้", bzMaand:"เดือนนี้", bzTotaal:"ทั้งหมด", bzPerDag:"การเข้าชมต่อวัน (30 วัน)", bzType:"ประเภทการเข้าชม", bzKlant:"ลูกค้า", bzBeheer:"ผู้ดูแล", bzVolg:"ลิงก์ติดตาม", bzTaal:"ภาษา", bzHerkomst:"ที่มา", bzDirect:"เข้าตรง", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"อื่นๆ", bzToestel:"อุปกรณ์", bzMobiel:"มือถือ", bzDesktop:"เดสก์ท็อป", bzVasteKlanten:"ลูกค้าประจำ", laatstInlog:"เข้าสู่ระบบล่าสุด:", bzBeheerders:"เข้าสู่ระบบผู้ดูแล", bzInlogLog:"ประวัติการเข้าสู่ระบบ", bzDeelLijst:"เข้ามาผ่านการแชร์", bzDeelLog:"ประวัติการแชร์", bzVia:"โดย",
       zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
       addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า", telVerplicht:"กรุณากรอกเบอร์โทร",
@@ -3521,7 +3547,7 @@ async function loadPauze(){
 }
 async function loadBedrijf(){
   try{ const r = await fetch("bedrijf.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object"){
-    if(p.naam) CONFIG.naam = p.naam; if(p.adres) CONFIG.adres = p.adres; if(p.telefoon) CONFIG.telefoon = p.telefoon;
+    if(p.naam) CONFIG.naam = p.naam; if(p.adres) CONFIG.adres = p.adres; if(p.telefoon) CONFIG.telefoon = p.telefoon; if(p.chefFoto) CONFIG.chefFoto = p.chefFoto;
     if(p.afhaal && typeof p.afhaal==="object"){ const a=p.afhaal; if(typeof a.dag==="number")CONFIG.afhaal.dag=a.dag; if(a.van)CONFIG.afhaal.van=a.van; if(a.tot)CONFIG.afhaal.tot=a.tot; if(typeof a.slotMin==="number"&&a.slotMin>0)CONFIG.afhaal.slotMin=a.slotMin; }
     if(p.bestel && typeof p.bestel==="object"){ const b=p.bestel; if(typeof b.cutoffDag==="number")CONFIG.bestel.cutoffDag=b.cutoffDag; if(typeof b.cutoffUur==="number")CONFIG.bestel.cutoffUur=b.cutoffUur; }
   } } }catch(e){}
