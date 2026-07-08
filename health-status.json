@@ -1,10 +1,238 @@
 {
-  "opgeslagen": "2026-07-08T20:09:16Z",
+  "opgeslagen": "2026-07-08T20:09:58.076Z",
   "scriptVersie": 11,
   "verwachteVersie": 11,
   "versieOk": true,
   "fouten": 0,
   "waarschuwingen": 0,
-  "bron": "Scriptbestand = v11 en beheerder heeft in Health bevestigd dat het OK is. Het live script kon niet rechtstreeks vanuit deze omgeving worden bevraagd (script.google.com geblokkeerd).",
-  "opmerking": "Voor een live-geverifieerde uitslag kan de knop 'Health opslaan' in het Health-scherm worden gebruikt; die overschrijft dit bestand met de actuele scriptrespons."
+  "onderdelen": [
+    {
+      "naam": "Toegang & limieten",
+      "items": [
+        {
+          "naam": "Publicatie-token: geldig",
+          "status": "ok"
+        },
+        {
+          "naam": "Apps Script: bijgewerkt (v11)",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "naam": "Bronbestanden",
+      "items": [
+        {
+          "naam": "index.html aanwezig met verwachte inhoud",
+          "status": "ok"
+        },
+        {
+          "naam": "JavaScript-syntax geldig",
+          "status": "ok"
+        },
+        {
+          "naam": "bestelpauze.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "extra.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "fotos.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "namen.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "nummers.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "omschrijvingen.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "pittigheid.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "prijzen.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "recepten.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "serveertips.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "tikkie.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "verborgen.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "verwijderd.json: geldige JSON",
+          "status": "ok"
+        },
+        {
+          "naam": "76 gerechten in het menu herkend",
+          "status": "ok"
+        },
+        {
+          "naam": "prijzen.json: 3 vermelding(en) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "nummers.json: 66 vermelding(en) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "pittigheid.json: 0 vermelding(en) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "fotos.json: 67 vermelding(en) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "namen.json: 0 vermelding(en) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "omschrijvingen.json: 0 vermelding(en) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "recepten.json: 67 vermelding(en) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "serveertips.json: 0 vermelding(en) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "verwijderd.json: 3 id('s) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "verborgen.json: 0 id('s) gecontroleerd",
+          "status": "ok"
+        },
+        {
+          "naam": "tikkie.json: geldig (enabled=False)",
+          "status": "ok"
+        },
+        {
+          "naam": "bestelpauze.json: geldig (manualPause=True)",
+          "status": "ok"
+        },
+        {
+          "naam": "pink-thai-og.png aanwezig",
+          "status": "ok"
+        },
+        {
+          "naam": ".nojekyll aanwezig",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "naam": "Beheer-acties",
+      "items": [
+        {
+          "naam": "Prijs aanpassen",
+          "status": "ok"
+        },
+        {
+          "naam": "Pittigheid aanpassen",
+          "status": "ok"
+        },
+        {
+          "naam": "Naam aanpassen",
+          "status": "ok"
+        },
+        {
+          "naam": "Omschrijving aanpassen",
+          "status": "ok"
+        },
+        {
+          "naam": "Recept aanpassen",
+          "status": "ok"
+        },
+        {
+          "naam": "Serveertip aanpassen",
+          "status": "ok"
+        },
+        {
+          "naam": "Foto instellen",
+          "status": "ok"
+        },
+        {
+          "naam": "Gerecht verbergen",
+          "status": "ok"
+        },
+        {
+          "naam": "Gerecht weer tonen",
+          "status": "ok"
+        },
+        {
+          "naam": "Gerecht verwijderen",
+          "status": "ok"
+        },
+        {
+          "naam": "Gerecht herstellen",
+          "status": "ok"
+        },
+        {
+          "naam": "Tikkie omschakelen",
+          "status": "ok"
+        },
+        {
+          "naam": "Bestellen pauzeren/openen",
+          "status": "ok"
+        },
+        {
+          "naam": "Nieuw gerecht toevoegen",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "naam": "Live site & diensten",
+      "items": [
+        {
+          "naam": "live site bereikbaar (200) met juiste inhoud",
+          "status": "ok"
+        },
+        {
+          "naam": "live prijzen.json: bereikbaar en geldig",
+          "status": "ok"
+        },
+        {
+          "naam": "live bestelpauze.json: bereikbaar en geldig",
+          "status": "ok"
+        },
+        {
+          "naam": "live tikkie.json: bereikbaar en geldig",
+          "status": "ok"
+        },
+        {
+          "naam": "deelbanner bereikbaar",
+          "status": "ok"
+        },
+        {
+          "naam": "bestelkoppeling reageert (status 200)",
+          "status": "ok"
+        }
+      ]
+    }
+  ]
 }
