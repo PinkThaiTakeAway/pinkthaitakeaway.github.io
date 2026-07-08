@@ -1464,7 +1464,6 @@ function renderSheet(){
       <div class="field"><label for="fName">${T().labelName} <span class="req">*</span></label><input id="fName" type="text" placeholder="${T().phName}" autocomplete="name" value="${esc(form.naam)}"></div>
       <div class="field"><label for="fPhone">${T().labelPhone} <span class="req">*</span></label><input id="fPhone" type="tel" placeholder="06 ..." autocomplete="tel" value="${esc(form.tel)}"></div>
       <div class="field"><label for="fSlot">${T().labelSlot}</label><select id="fSlot">${slots}</select></div>
-      <div class="field"><label for="fEmail">${T().labelEmail} <span class="opt">(${T().optioneel})</span></label><input id="fEmail" type="email" placeholder="${T().phEmail}" autocomplete="email" value="${esc(form.email)}"></div>
       <div class="field"><label for="fNote">${T().labelNote}</label><textarea id="fNote" placeholder="${T().phNote}">${esc(form.note)}</textarea></div>
       <div class="field"><label>${T().payLabel}</label>
         <div class="payopts">
@@ -1476,8 +1475,8 @@ function renderSheet(){
   sheetBody.innerHTML = html;
   sheetBody.querySelectorAll("[data-m]").forEach(b => b.onclick = () => change(b.dataset.m, -1));
   sheetBody.querySelectorAll("[data-p]").forEach(b => b.onclick = () => change(b.dataset.p, 1));
-  const map={fName:"naam",fPhone:"tel",fEmail:"email",fNote:"note",fSlot:"slot"};
-  ["fName","fPhone","fEmail","fNote","fSlot"].forEach(idf => { const el=document.getElementById(idf); const ev = idf==="fSlot"?"onchange":"oninput"; el[ev]=e=>form[map[idf]]=e.target.value; });
+  const map={fName:"naam",fPhone:"tel",fNote:"note",fSlot:"slot"};
+  ["fName","fPhone","fNote","fSlot"].forEach(idf => { const el=document.getElementById(idf); const ev = idf==="fSlot"?"onchange":"oninput"; el[ev]=e=>form[map[idf]]=e.target.value; });
   if(!form.slot) form.slot = pickupSlots()[0];
   if(!form.pay || (!TIKKIE_ON && form.pay==="tikkie")) form.pay = "contant";
   sheetBody.querySelectorAll(".payopt").forEach(b => b.onclick = () => {
@@ -1542,7 +1541,7 @@ document.getElementById("waBtn").onclick = async () => {
   const emailOk = !email || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
   const telDigits = tel.replace(/\D/g,"");
   const telOk = telDigits.length >= 9 && telDigits.length <= 15 && !/^(\d)\1+$/.test(telDigits);
-  let bad = !naam ? "fName" : !telOk ? "fPhone" : !emailOk ? "fEmail" : null;
+  let bad = !naam ? "fName" : !telOk ? "fPhone" : null;
   document.querySelectorAll(".field input").forEach(i=>i.classList.remove("invalid"));
   if(bad){ const f=document.getElementById(bad); f.classList.add("invalid"); f.focus(); msg.className="order-msg err"; msg.textContent=T().orderErr; return; }
   const {lines, sum} = buildOrder();
@@ -2340,15 +2339,15 @@ function herstelMand(order){
 const LOGIN_T = {
   nl: { lblInloggen:"Inloggen", lblAccount:"Mijn account",
     inTitel:"Inloggen", inUitleg:"Vul je e-mailadres in, dan sturen we je een persoonlijke inloglink.", inPh:"jouw@e-mail.nl", inKnop:"Stuur inloglink",
-    inVerzonden:"Als dit adres bij ons bekend is, hebben we je een inloglink gemaild. Kijk even in je mailbox (ook je spam).", inFoutEmail:"Vul een geldig e-mailadres in.",
+    inVerzonden:"", inFoutEmail:"", inGeenLogin:"Je wordt automatisch ingelogd zodra je op dit apparaat een bestelling plaatst. Daarna zie je hier je bestellingen en kun je met één tik opnieuw bestellen. Tip: bewaar deze site als favoriet op je telefoon.",
     accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen" },
   en: { lblInloggen:"Log in", lblAccount:"My account",
     inTitel:"Log in", inUitleg:"Enter your e-mail address and we'll send you a personal login link.", inPh:"you@email.com", inKnop:"Send login link",
-    inVerzonden:"If this address is known to us, we've e-mailed you a login link. Please check your mailbox (and spam).", inFoutEmail:"Please enter a valid e-mail address.",
+    inVerzonden:"", inFoutEmail:"", inGeenLogin:"You are logged in automatically once you place an order on this device. After that you can see your orders here and reorder in one tap. Tip: bookmark this site on your phone.",
     accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out" },
   th: { lblInloggen:"เข้าสู่ระบบ", lblAccount:"บัญชีของฉัน",
     inTitel:"เข้าสู่ระบบ", inUitleg:"กรอกอีเมลของคุณ แล้วเราจะส่งลิงก์เข้าสู่ระบบส่วนตัวให้คุณ", inPh:"you@email.com", inKnop:"ส่งลิงก์เข้าสู่ระบบ",
-    inVerzonden:"หากอีเมลนี้อยู่ในระบบของเรา เราได้ส่งลิงก์เข้าสู่ระบบให้แล้ว กรุณาตรวจสอบกล่องอีเมล (และโฟลเดอร์สแปม)", inFoutEmail:"กรุณากรอกอีเมลที่ถูกต้อง",
+    inVerzonden:"", inFoutEmail:"", inGeenLogin:"คุณจะเข้าสู่ระบบอัตโนมัติเมื่อสั่งซื้อบนอุปกรณ์นี้ จากนั้นดูออเดอร์และสั่งซ้ำได้ในแตะเดียว เคล็ดลับ: บันทึกเว็บนี้ไว้ในหน้าจอหลัก",
     accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ" }
 };
 function acctToken(){ return localStorage.getItem("tta_klanttoken") || ""; }
@@ -2362,14 +2361,7 @@ function closeLogin(){ document.getElementById("loginOverlay").classList.remove(
 function renderLoginForm(msg){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   document.getElementById("loginTitel").textContent = LT.inTitel;
-  document.getElementById("loginBody").innerHTML =
-    '<p>'+esc(LT.inUitleg)+'</p>'+
-    '<input id="loginEmail" type="email" inputmode="email" autocomplete="email" placeholder="'+esc(LT.inPh)+'" style="width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:10px;padding:11px 13px;font-family:inherit;font-size:1rem;margin:10px 0">'+
-    '<button id="loginSend" class="hreload" style="background:var(--amber)">'+esc(LT.inKnop)+'</button>'+
-    (msg ? '<p style="margin-top:12px;color:#c0142c;font-weight:600">'+esc(msg)+'</p>' : '');
-  const send = document.getElementById("loginSend"), inp = document.getElementById("loginEmail");
-  send.onclick = ()=> stuurInloglink(inp.value);
-  inp.addEventListener("keydown", e=>{ if(e.key==="Enter") send.click(); });
+  document.getElementById("loginBody").innerHTML = '<p>'+esc(LT.inGeenLogin)+'</p>';
 }
 async function stuurInloglink(email){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
