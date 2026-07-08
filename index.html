@@ -1706,8 +1706,8 @@ async function initBeheer(){
     else if(a==="bedank") klantBedank(btn.dataset.id);
     else if(a==="mail") klantMail(btn.dataset.email);
     else if(a==="del") klantVerwijder(btn.dataset.id);
-    else if(a==="delklant") klantVerwijderKlant(btn.dataset.email);
-    else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.email, ta ? ta.value : ""); }
+    else if(a==="delklant") klantVerwijderKlant(btn.dataset.tel);
+    else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.tel, ta ? ta.value : ""); }
     else if(a==="kview"){ _kKlantView = btn.dataset.v; renderKlantenLijst(); }
     else if(a==="kform"){ _kForm = (_kForm===btn.dataset.f)?null:btn.dataset.f; renderKlantenLijst(); }
     else if(a==="knieuw-ok") klantNieuwOpslaan();
@@ -1983,7 +1983,7 @@ function jsonp(params){
   });
 }
 function fetchMailCount(){ return jsonp({actie:"mailcount"}); }
-const SCRIPT_VERSIE_VERWACHT = 5;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 6;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
@@ -2655,11 +2655,11 @@ function renderKlantenLijst(){
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
       (k.uitgenodigd>0?('<div class="kuitg">📲 '+esc(K.uitgLabel)+' '+k.uitgenodigd+'×'+(k.laatstUitgenodigd?(' · '+esc(fmtInlog(k.laatstUitgenodigd))):'')+'</div>'):'')+
       '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+
-      (k.email?('<div class="knotitie"><textarea placeholder="'+esc(K.notitiePh)+'">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-email="'+esc(k.email)+'">'+K.notitieSave+'</button></div>'):'')+
+      (k.tel?('<div class="knotitie"><textarea placeholder="'+esc(K.notitiePh)+'">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>'):'')+
       (_kKlantView==="vol" ? k.bestellingen.map(bestelHtml).join("") : "")+
       '<div class="kacts" style="margin-top:8px">'+
         (k.tel?('<button class="kwabtn" data-a="wa" data-tel="'+esc(k.tel)+'" data-naam="'+esc(k.naam||"")+'" data-email="'+esc(k.email||"")+'" data-taal="'+esc(k.taal||"")+'">'+(k.uitgenodigd>0?K.waNogmaals:K.waInvite)+'</button>'):'')+
-        (k.email?('<button class="kdelbtn" data-a="delklant" data-email="'+esc(k.email)+'">'+K.klantVerw+'</button>'):'')+
+        (k.tel?('<button class="kdelbtn" data-a="delklant" data-tel="'+esc(k.tel)+'">'+K.klantVerw+'</button>'):'')+
       '</div>'+
     '</div>';
   }).join("");
@@ -2944,9 +2944,9 @@ async function klantMail(email){
   if(r && r.ok) showToast(K.tMailVerz, true);
   else showToast(K.tMailFout, false);
 }
-async function klantNotitie(email, tekst){
-  const r = await jsonp({actie:"notitie", email, notitie:tekst, key:klantKey()});
-  if(r && r.ok){ _klantData.forEach(x=>{ if(String(x.email||"").toLowerCase()===email.toLowerCase()) x.notitie=tekst; }); showToast(BT().kl.tNotitieOk, true); }
+async function klantNotitie(tel, tekst){
+  const r = await jsonp({actie:"notitie", tel, notitie:tekst, key:klantKey()});
+  if(r && r.ok){ const t=String(tel||"").replace(/\D/g,""); _klantData.forEach(x=>{ if(String(x.tel||"").replace(/\D/g,"")===t) x.notitie=tekst; }); showToast(BT().kl.tNotitieOk, true); }
   else showToast(BT().kl.tNotitieFout, false);
 }
 async function klantVerwijder(id){
@@ -2955,10 +2955,10 @@ async function klantVerwijder(id){
   if(r && r.ok){ _klantData = _klantData.filter(x=>x.id!==id); renderKlanten(); showToast(BT().kl.tBestVerw, true); }
   else showToast(BT().kl.tVerwFout, false);
 }
-async function klantVerwijderKlant(email){
+async function klantVerwijderKlant(tel){
   if(!confirm(BT().kl.confDelKlant)) return;
-  const r = await jsonp({actie:"verwijderklant", email, key:klantKey()});
-  if(r && r.ok){ _klantData = _klantData.filter(x=>String(x.email||"").toLowerCase()!==email.toLowerCase()); renderKlanten(); showToast(BT().kl.tKlantVerw, true); }
+  const r = await jsonp({actie:"verwijderklant", tel, key:klantKey()});
+  if(r && r.ok){ const t=String(tel||"").replace(/\D/g,""); _klantData = _klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")!==t); renderKlanten(); showToast(BT().kl.tKlantVerw, true); }
   else showToast(BT().kl.tVerwFout, false);
 }
 async function klantBulk(){
