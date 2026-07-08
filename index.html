@@ -730,8 +730,6 @@
 =================================================================== */
 const CONFIG = {
   naam: "Pink Thai TakeAway",
-  whatsapp: "31628498822",                       // TEST: +31 6 28498822 (tijdelijk)
-  email: "PinkThaiTakeAway@gmail.com",          // waar bestellingen binnenkomen
   adres: "Hakvoortseweg 30, 5084 HA Biest-Houtakker (voordeur aan de oprit)",
   telefoon: "06 48 55 58 42",
   chefFoto: "chef.jpg",                          // foto van Pink bovenaan (leeg/standaard = chef.jpg)
@@ -1531,30 +1529,6 @@ function buildOrder(){
   ids.forEach(id => { const m=byId(baseId(id)), q=cart[id]; sum+=m.price*q; lines.push(`${q}× ${m.nr?"#"+m.nr+" ":""}${m.name.nl}${variantNL(id)} — ${fmt(m.price*q)}`); });
   return {lines, sum};
 }
-const WA_T = {
-  nl:{titel:"Bestelling Pink Thai TakeAway", nr:"Bestelnr", naam:"Naam", tel:"Telefoon", afhalen:"Afhalen", bestelling:"Bestelling", totaal:"Totaal", betaling:"Betaling", opmerking:"Opmerking"},
-  en:{titel:"Order Pink Thai TakeAway", nr:"Order no.", naam:"Name", tel:"Phone", afhalen:"Pickup", bestelling:"Order", totaal:"Total", betaling:"Payment", opmerking:"Note"},
-  th:{titel:"ออเดอร์ Pink Thai TakeAway", nr:"เลขที่", naam:"ชื่อ", tel:"เบอร์โทร", afhalen:"รับ", bestelling:"รายการ", totaal:"รวม", betaling:"ชำระเงิน", opmerking:"หมายเหตุ"}
-};
-function waOrderText(o){
-  const L = WA_T[LANG] || WA_T.nl;
-  const div = "\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501";
-  const E = { bloem:"\uD83C\uDF38", bon:"\uD83E\uDDFE", persoon:"\uD83D\uDC64", tel:"\uD83D\uDCDE", klok:"\uD83D\uDD52", eten:"\uD83C\uDF5C", geld:"\uD83D\uDCB0", cash:"\uD83D\uDCB5", kaart:"\uD83D\uDCB3", memo:"\uD83D\uDCDD" };
-  let t = "*"+E.bloem+" "+L.titel+"*\n"+div+"\n";
-  t += E.bon+" *"+L.nr+":* #"+o.orderId+"\n";
-  t += E.persoon+" *"+L.naam+":* "+o.naam+"\n";
-  t += E.tel+" *"+L.tel+":* "+(o.tel||"")+"\n";
-  t += E.klok+" *"+L.afhalen+":* "+o.afhaal+"\n";
-  t += div+"\n"+E.eten+" *"+L.bestelling+":*\n";
-  t += o.lines.map(r=>"\u2022 "+r).join("\n")+"\n";
-  t += div+"\n";
-  t += E.geld+" *"+L.totaal+":* "+o.totaal+"\n";
-  t += (/tikkie/i.test(o.betaling)?E.kaart:E.cash)+" *"+L.betaling+":* "+o.betaling;
-  if(o.note) t += "\n"+E.memo+" *"+L.opmerking+":* "+o.note;
-  t += "\n"+div+"\n"+E.bloem+" _Pink Thai TakeAway_\n"+(location.origin+location.pathname);
-  return t;
-}
-function waOrderLink(o){ return "https://wa.me/"+String(CONFIG.whatsapp).replace(/\D/g,"")+"?text="+encodeURIComponent(waOrderText(o)); }
 document.getElementById("waBtn").onclick = async () => {
   if(!Object.keys(cart).length) return;
   // Anti-bot: honeypot (verborgen veld dat alleen bots invullen)
