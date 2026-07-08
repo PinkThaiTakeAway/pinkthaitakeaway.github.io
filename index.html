@@ -1542,7 +1542,6 @@ function waOrderText(o){
   return t;
 }
 function waOrderLink(o){ return "https://wa.me/"+String(CONFIG.whatsapp).replace(/\D/g,"")+"?text="+encodeURIComponent(waOrderText(o)); }
-let _pendingOrder = null;
 document.getElementById("waBtn").onclick = async () => {
   if(!Object.keys(cart).length) return;
   // Anti-bot: honeypot (verborgen veld dat alleen bots invullen)
@@ -1573,54 +1572,17 @@ document.getElementById("waBtn").onclick = async () => {
   const cash = form.pay === "contant";
   const betaling = cash ? `Contant bij ophalen (${fmt(sum)})` : `Tikkie sturen naar ${tel} (${fmt(sum)})`;
   const orderId = Math.floor(10000 + Math.random()*90000);
-  _pendingOrder = { orderId, naam, tel, email, slot, note, lines, sum, afhaal, betaling, mand: JSON.stringify(cart) };
-  toonBestelVoorbeeld(_pendingOrder);
-};
-
-function waPreviewHtml(o){
-  let txt = waOrderText({orderId:o.orderId, naam:o.naam, tel:o.tel, afhaal:o.afhaal, lines:o.lines, totaal:fmt(o.sum), betaling:o.betaling, note:o.note});
-  txt = txt.replace(/\n?https?:\/\/\S+\s*$/,"");           // de link-regel niet in het voorbeeld tonen
-  const safe = esc(txt)
-      .replace(/\*([^*\n]+)\*/g, "<strong>$1</strong>")     // *vet* -> vet
-      .replace(/_([^_\n]+)_/g, "<em>$1</em>")               // _schuin_ -> schuin
-      .replace(/\n/g, "<br>");
-  return '<img class="wa-bubble-img" src="pink-thai-og.png" alt="" loading="lazy">'
-       + '<div class="wa-bubble-text">'+safe+'</div>';
-}
-
-function toonBestelVoorbeeld(o){
-  const waLink = waOrderLink({orderId:o.orderId, naam:o.naam, tel:o.tel, afhaal:o.afhaal, lines:o.lines, totaal:fmt(o.sum), betaling:o.betaling, note:o.note});
-  sheetBody.innerHTML =
-      `<div class="wa-preview-wrap">`
-    + `<p class="wa-preview-lead">${T().previewLead}</p>`
-    + `<div class="wa-bubble">${waPreviewHtml(o)}</div>`
-    + `<a class="wa-confirm" id="orderWaBtn" href="${waLink}" target="_blank" rel="noopener">${T().previewSend}</a>`
-    + `<button class="preview-back" id="previewBack">${T().previewBack}</button>`
-    + `</div>`;
-  sheetFoot.style.display = "none";
-  const bk = document.getElementById("previewBack");
-  if(bk) bk.onclick = ()=>{ sheetFoot.style.display=""; renderSheet(); };
-  const cbtn = document.getElementById("orderWaBtn");
-  if(cbtn) cbtn.addEventListener("click", ()=>{ bevestigEnVerstuur(cbtn); });
-}
-
-async function bevestigEnVerstuur(btn){
-  if(btn.dataset.busy) return; btn.dataset.busy="1";
-  const o = _pendingOrder;
-  if(!o){ return; }
-  // De opslag bij Google wordt METEEN (synchroon) gestart; WhatsApp opent tegelijk via de href van de knop.
-  const opslag = jsonp({
-    actie:"bestelling", start:pickupISO(o.slot), order_id:o.orderId,
-    naam:o.naam, tel:o.tel, email:o.email, bestelling:o.lines.join("\n"),
-    totaal:fmt(o.sum), betaling:o.betaling, opmerking:o.note, afhaal:o.afhaal,
-    taal:LANG, mand:o.mand
-  });
-  setTimeout(()=>{ btn.classList.add("done"); btn.style.pointerEvents="none"; btn.style.opacity="0.55"; btn.removeAttribute("href"); btn.textContent=T().orderWaSent; }, 300);
+  const btn = document.getElementById("waBtn");
+  btn.disabled = true; msg.className="order-msg"; msg.textContent = T().orderSending;
   try{
-    const r = await opslag;
-    if(r && r.ok===false && (r.fout==="vol"||r.fout==="volgeboekt")){
-      toonBestelResultaat(o, false, (r.fout==="vol"?T().slotVolMsg:T().volgeboektMsg), true); return;
-    }
+    const r = await jsonp({
+      actie: "bestelling",
+      start: pickupISO(slot), order_id: orderId, naam, tel, email,
+      bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
+      afhaal, taal: LANG, mand: JSON.stringify(cart)
+    });
+    if(r && r.ok===false && r.fout==="volgeboekt"){ msg.className="order-msg err"; msg.textContent=T().volgeboektMsg; btn.disabled=false; _zaterdagVol=true; refreshOrderingUI(); return; }
+    if(r && r.ok===false && r.fout==="vol"){ msg.className="order-msg err"; msg.textContent=T().slotVolMsg; btn.disabled=false; laadSlots(); return; }
     if(!r || !r.ok) throw new Error("bestelling niet doorgekomen");
     let ingelogdNu = false;
     if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); if(typeof prefetchAccount==="function"){ _accountData=null; prefetchAccount(); } }
@@ -1628,24 +1590,16 @@ async function bevestigEnVerstuur(btn){
     Object.keys(cart).forEach(k => delete cart[k]); store.save();
     form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
     buildMenu(); updateBars();
-    toonBestelResultaat(o, ingelogdNu, null, false);
-  }catch(e){
-    toonBestelResultaat(o, false, T().orderSaveFail, true);
-  }
-}
-
-function toonBestelResultaat(o, ingelogdNu, foutTekst, isFout){
-  if(isFout){
-    sheetBody.innerHTML = `<div class="empty"><div class="big">⚠️</div><p style="max-width:320px;margin:0 auto 8px">${foutTekst}</p><p class="ordernr">${T().orderNr}: #${o.orderId}</p></div>`;
+    sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>`
+      + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
+      + `<button class="share-btn order-share" id="orderShareBtn">📤 ${T().orderShareBtn}</button></div>`;
+    { const osb = document.getElementById("orderShareBtn"); if(osb) osb.onclick = deelPagina; }
     sheetFoot.style.display = "none";
-    return;
+  }catch(e){
+    msg.className="order-msg err"; msg.textContent=T().orderFail;
+    btn.disabled = false;
   }
-  sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${o.orderId}</p>`
-    + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
-    + `<button class="share-btn order-share" id="orderShareBtn">📤 ${T().orderShareBtn}</button></div>`;
-  { const osb = document.getElementById("orderShareBtn"); if(osb) osb.onclick = deelPagina; }
-  sheetFoot.style.display = "none";
-}
+};
 
 /* ---------- Teksten + config toepassen ---------- */
 function applyLang(){
