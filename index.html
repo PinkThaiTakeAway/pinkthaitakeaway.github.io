@@ -2083,8 +2083,8 @@ async function cbLaden(){
     if(r && r.ok){
       _cbCache = {tel:r.tel||"", key:r.key||""}; try{ localStorage.setItem("tta_cbcache", JSON.stringify(_cbCache)); }catch(e){}
       const t=document.getElementById("cbTelIn"), k=document.getElementById("cbKeyIn");
-      if(t && !t.value) t.value=_cbCache.tel;
-      if(k && !k.value) k.value=_cbCache.key;
+      if(t && document.activeElement!==t) t.value=_cbCache.tel;
+      if(k && document.activeElement!==k) k.value=_cbCache.key;
     }
   }catch(e){}
 }
@@ -2106,8 +2106,8 @@ async function capLaden(){
     if(r && r.ok){
       _capCache = {slot:(r.slot==null?"":String(r.slot)), dag:(r.dag==null?"":String(r.dag))}; try{ localStorage.setItem("tta_capcache", JSON.stringify(_capCache)); }catch(e){}
       const a=document.getElementById("maxSlotIn"), b=document.getElementById("maxDagIn");
-      if(a && a.value==="") a.value=_capCache.slot;
-      if(b && b.value==="") b.value=_capCache.dag;
+      if(a && document.activeElement!==a) a.value=_capCache.slot;
+      if(b && document.activeElement!==b) b.value=_capCache.dag;
     }
   }catch(e){}
 }
