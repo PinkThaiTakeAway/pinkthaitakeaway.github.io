@@ -2689,6 +2689,17 @@ async function prefetchKlanten(){
     }
   }catch(e){}
 }
+async function prefetchInstellingen(){
+  if(!klantKey()) return;
+  try{
+    const [cb, mx] = await Promise.all([
+      jsonp({actie:"cbget", key:klantKey()}),
+      jsonp({actie:"maxget", key:klantKey()})
+    ]);
+    if(cb && cb.ok) _cbCache = {tel:cb.tel||"", key:cb.key||""};
+    if(mx && mx.ok) _capCache = {slot:(mx.slot==null?"":String(mx.slot)), dag:(mx.dag==null?"":String(mx.dag))};
+  }catch(e){}
+}
 let _klantAutoStarted = false;
 async function ververKlantCache(forceerRender){
   if(!klantKey() || document.hidden) return;
@@ -3592,7 +3603,7 @@ function orderClosedMsg(st){
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); startKlantAutoRefresh(); } else resolvePhotos();
+  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); startKlantAutoRefresh(); } else resolvePhotos();
   if(acctToken()) prefetchAccount();
 })();
 </script>
