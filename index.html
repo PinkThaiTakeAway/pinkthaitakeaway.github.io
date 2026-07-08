@@ -459,6 +459,13 @@
   .ktabs{display:flex;gap:6px;margin-bottom:12px}
   .ktab{flex:1;padding:9px 6px;border:1px solid #ddd;background:#fff;border-radius:9px;font-family:inherit;font-weight:700;font-size:.85rem;color:#555;cursor:pointer}
   .ktab.active{background:var(--forest);color:#fff;border-color:var(--forest)}
+  .kinstel{max-width:420px}
+  .kinstel-h{margin:4px 0 6px;font-size:1.05rem}
+  .kinstel-uit{font-size:.9rem;color:#555;margin:0 0 14px;line-height:1.45}
+  .kinstel-l{display:block;font-size:.82rem;font-weight:700;color:#444;margin:10px 0 4px}
+  .kinstel input{width:100%;padding:11px 12px;border:1px solid #ccc;border-radius:9px;font-family:inherit;font-size:1rem;box-sizing:border-box}
+  .kinstel .kaddok{margin-top:14px}
+  .kinstel-hint{font-size:.82rem;color:#777;margin:12px 0 0;line-height:1.5;background:#f6f6f4;border-radius:9px;padding:10px 12px}
   .kfoot{display:flex;flex-direction:column;gap:8px}
   .kbulk{background:var(--amber)!important}
   .klabel{display:inline-block;background:#fff3e0;color:#9a6a00;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:6px}
@@ -578,7 +585,6 @@
       <button class="sl" id="bHealth">🩺 Health</button>
       <button class="sl" id="bKlanten">👥 Klanten</button>
       <button class="sl" id="bToken">🔑 Token</button>
-      <button class="sl" id="bMelding">📲 Melding</button>
       <button class="exp" id="bPublish">⬆ Publiceren</button>
     </div>
   </div>
@@ -607,6 +613,7 @@
       <button class="ktab" data-tab="afhaal">Afhaallijst</button>
       <button class="ktab" data-tab="cijfers">Cijfers</button>
       <button class="ktab" data-tab="bezoek">Bezoek</button>
+      <button class="ktab" data-tab="instel">Instellingen</button>
     </div>
     <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam of telefoon…" autocomplete="off">
     <div id="kBody" class="hbody"></div>
@@ -1681,6 +1688,7 @@ function applyBeheerLang(){
     else if(t.dataset.tab==="afhaal") t.textContent = B.kl.tabAfhaal;
     else if(t.dataset.tab==="cijfers") t.textContent = B.kl.tabCijfers;
     else if(t.dataset.tab==="bezoek") t.textContent = B.kl.tabBezoek;
+    else if(t.dataset.tab==="instel") t.textContent = B.kl.tabInstel;
   });
   // Health-paneel labels
   const ht = document.getElementById("hTitle"); if(ht) ht.textContent = B.hl.title;
@@ -1750,7 +1758,6 @@ async function initBeheer(){
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
-  { const bm=document.getElementById("bMelding"); if(bm){ bm.textContent=T().adm.cbBtn; bm.onclick = meldingInstellen; } }
   document.getElementById("bPublish").onclick = publishAll;
   (function(){
     const sysBtn=document.getElementById("bSystem"), sysMenu=document.getElementById("sysMenu");
@@ -1961,18 +1968,43 @@ async function askToken(){
     showToast(r.ok ? T().adm.tokenOk : T().adm.tokenBad + " (" + r.status + ")", r.ok);
   }catch(e){ showToast(T().adm.tokenBad, false); }
 }
-async function meldingInstellen(){
+let _cbCache = {tel:"", key:""};
+function renderInstellingen(){
+  const K = BT().kl;
+  const body = document.getElementById("kBody");
+  body.innerHTML = '<div class="kinstel">'
+    + '<h4 class="kinstel-h">\uD83D\uDCF2 '+esc(K.mijnTel)+'</h4>'
+    + '<p class="kinstel-uit">'+esc(K.mijnTelUit)+'</p>'
+    + '<label class="kinstel-l">'+esc(K.telLabel)+'</label>'
+    + '<input id="cbTelIn" type="tel" inputmode="numeric" placeholder="31612345678" value="'+esc(_cbCache.tel||"")+'">'
+    + '<label class="kinstel-l">'+esc(K.keyLabel)+'</label>'
+    + '<input id="cbKeyIn" value="'+esc(_cbCache.key||"")+'">'
+    + '<button class="kaddok" id="cbSaveBtn">'+esc(K.telOpslaan)+'</button>'
+    + '<p class="kinstel-hint">'+esc(K.mijnTelHint)+'</p>'
+    + '</div>';
+  const sb=document.getElementById("cbSaveBtn"); if(sb) sb.onclick = cbOpslaan;
+  cbLaden();
+}
+async function cbLaden(){
+  try{
+    const r = await jsonp({actie:"cbget", key:klantKey()});
+    if(r && r.ok){
+      _cbCache = {tel:r.tel||"", key:r.key||""};
+      const t=document.getElementById("cbTelIn"), k=document.getElementById("cbKeyIn");
+      if(t && !t.value) t.value=_cbCache.tel;
+      if(k && !k.value) k.value=_cbCache.key;
+    }
+  }catch(e){}
+}
+async function cbOpslaan(){
   const A = T().adm;
-  let cur = {tel:"", key:""};
-  try{ const r = await jsonp({actie:"cbget", key:klantKey()}); if(r && r.ok){ cur.tel=r.tel||""; cur.key=r.key||""; } }catch(e){}
-  const tel = prompt(A.cbTelAsk, cur.tel);
-  if(tel===null) return;
-  const key = prompt(A.cbKeyAsk, cur.key);
-  if(key===null) return;
+  const tel=(document.getElementById("cbTelIn").value||"").trim();
+  const key=(document.getElementById("cbKeyIn").value||"").trim();
   showToast(A.saving, null);
   try{
-    const r = await jsonp({actie:"cbset", cbtel:String(tel).trim(), cbkey:String(key).trim(), key:klantKey()});
-    showToast(r && r.ok ? A.cbOk : A.cbFout, !!(r && r.ok));
+    const r = await jsonp({actie:"cbset", cbtel:tel, cbkey:key, key:klantKey()});
+    if(r && r.ok){ _cbCache={tel:r.tel||"", key:r.key||""}; showToast(A.cbOk, true); }
+    else showToast(A.cbFout, false);
   }catch(e){ showToast(A.cbFout, false); }
 }
 async function ghPut(path, obj, message){
@@ -2158,7 +2190,7 @@ const BEHEER_T = {
     locale:"nl-NL",
     bar:{ tikkieOn:"💳 Tikkie: aan", tikkieOff:"💳 Tikkie: uit", orderOpen:"🟢 Bestellen: open", orderClosed:"🔴 Bestellen: dicht", health:"Health", klanten:"👥 Klanten" },
     kl:{
-      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek",
+      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabInstel:"Instellingen", mijnTel:"Mijn telefoonnummer", mijnTelUit:"Op dit nummer krijg je automatisch elke nieuwe bestelling binnen via WhatsApp.", telLabel:"Telefoonnummer (internationaal, alleen cijfers, bijv. 31612345678 of 66812345678)", keyLabel:"CallMeBot API-key", telOpslaan:"Opslaan", mijnTelHint:"Nieuw nummer? Activeer eerst CallMeBot op die telefoon: voeg contact +34 621 331 709 toe en stuur 'I allow callmebot to send me messages'. Je krijgt dan een API-key terug.",
       bzLaden:"Bezoek laden…", bzGeen:"Nog geen bezoekgegevens.", bzVandaag:"vandaag", bzWeek:"deze week", bzMaand:"deze maand", bzTotaal:"totaal", bzPerDag:"Bezoeken per dag (30 dagen)", bzType:"Type bezoek", bzKlant:"klant", bzBeheer:"beheer", bzVolg:"volglink", bzTaal:"Taal", bzHerkomst:"Herkomst", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"overig", bzToestel:"Toestel", bzMobiel:"mobiel", bzDesktop:"desktop", bzVasteKlanten:"Terugkerende klanten", laatstInlog:"laatst ingelogd:", bzBeheerders:"In beheer ingelogd", bzInlogLog:"Inloggeschiedenis", bzDeelLijst:"Binnengekomen via delen", bzDeelLog:"Deelgeschiedenis", bzVia:"via",
       zoek:"Zoek op naam of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
       addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan", telVerplicht:"Vul een telefoonnummer in",
@@ -2200,7 +2232,7 @@ const BEHEER_T = {
     locale:"en-GB",
     bar:{ tikkieOn:"💳 Tikkie: on", tikkieOff:"💳 Tikkie: off", orderOpen:"🟢 Ordering: open", orderClosed:"🔴 Ordering: closed", health:"Health", klanten:"👥 Customers" },
     kl:{
-      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits",
+      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabInstel:"Settings", mijnTel:"My phone number", mijnTelUit:"This number automatically receives every new order via WhatsApp.", telLabel:"Phone number (international, digits only, e.g. 31612345678 or 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"Save", mijnTelHint:"New number? First activate CallMeBot on that phone: add contact +34 621 331 709 and send 'I allow callmebot to send me messages'. You will receive an API key.",
       bzLaden:"Loading visits…", bzGeen:"No visit data yet.", bzVandaag:"today", bzWeek:"this week", bzMaand:"this month", bzTotaal:"total", bzPerDag:"Visits per day (30 days)", bzType:"Visit type", bzKlant:"customer", bzBeheer:"admin", bzVolg:"tracking link", bzTaal:"Language", bzHerkomst:"Source", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"other", bzToestel:"Device", bzMobiel:"mobile", bzDesktop:"desktop", bzVasteKlanten:"Returning customers", laatstInlog:"last login:", bzBeheerders:"Logged into admin", bzInlogLog:"Login history", bzDeelLijst:"Arrived via sharing", bzDeelLog:"Share history", bzVia:"via",
       zoek:"Search by name or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
       addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer", telVerplicht:"Enter a phone number",
@@ -2242,7 +2274,7 @@ const BEHEER_T = {
     locale:"th-TH",
     bar:{ tikkieOn:"💳 Tikkie: เปิด", tikkieOff:"💳 Tikkie: ปิด", orderOpen:"🟢 รับออเดอร์: เปิด", orderClosed:"🔴 รับออเดอร์: ปิด", health:"สถานะ", klanten:"👥 ลูกค้า" },
     kl:{
-      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม",
+      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabInstel:"การตั้งค่า", mijnTel:"เบอร์โทรของฉัน", mijnTelUit:"เบอร์นี้จะรับออเดอร์ใหม่ทุกครั้งทาง WhatsApp โดยอัตโนมัติ", telLabel:"เบอร์โทร (สากล เฉพาะตัวเลข เช่น 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"บันทึก", mijnTelHint:"เบอร์ใหม่? เปิดใช้งาน CallMeBot บนเครื่องนั้นก่อน: เพิ่มผู้ติดต่อ +34 621 331 709 แล้วส่งข้อความ 'I allow callmebot to send me messages' คุณจะได้รับ API key",
       bzLaden:"กำลังโหลดการเข้าชม…", bzGeen:"ยังไม่มีข้อมูลการเข้าชม", bzVandaag:"วันนี้", bzWeek:"สัปดาห์นี้", bzMaand:"เดือนนี้", bzTotaal:"ทั้งหมด", bzPerDag:"การเข้าชมต่อวัน (30 วัน)", bzType:"ประเภทการเข้าชม", bzKlant:"ลูกค้า", bzBeheer:"ผู้ดูแล", bzVolg:"ลิงก์ติดตาม", bzTaal:"ภาษา", bzHerkomst:"ที่มา", bzDirect:"เข้าตรง", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"อื่นๆ", bzToestel:"อุปกรณ์", bzMobiel:"มือถือ", bzDesktop:"เดสก์ท็อป", bzVasteKlanten:"ลูกค้าประจำ", laatstInlog:"เข้าสู่ระบบล่าสุด:", bzBeheerders:"เข้าสู่ระบบผู้ดูแล", bzInlogLog:"ประวัติการเข้าสู่ระบบ", bzDeelLijst:"เข้ามาผ่านการแชร์", bzDeelLog:"ประวัติการแชร์", bzVia:"โดย",
       zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
       addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า", telVerplicht:"กรุณากรอกเบอร์โทร",
@@ -2568,6 +2600,7 @@ function renderKlanten(){
   if(_kTab==="afhaal") renderAfhaallijst();
   else if(_kTab==="cijfers") renderCijfers();
   else if(_kTab==="bezoek") renderBezoek();
+  else if(_kTab==="instel") renderInstellingen();
   else renderKlantenLijst();
 }
 function klantAggregatie(){
