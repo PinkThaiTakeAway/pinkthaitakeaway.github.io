@@ -1979,7 +1979,7 @@ function jsonp(params){
     for(const k in (params||{})){ qs += "&" + encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }
     s.src = CONFIG.agendaUrl + (CONFIG.agendaUrl.indexOf("?")>=0 ? "&" : "?") + qs;
     document.body.appendChild(s);
-    setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 12000);
+    setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
   });
 }
 function fetchMailCount(){ return jsonp({actie:"mailcount"}); }
