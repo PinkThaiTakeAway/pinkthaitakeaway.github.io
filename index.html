@@ -339,6 +339,13 @@
   .order-hint{margin-top:10px;font-size:.9rem;color:var(--forest);font-weight:600;background:#f0f7f2;border-radius:10px;padding:8px 10px}
   .wa-confirm{display:block;margin:16px auto 6px;max-width:320px;background:#25D366;color:#fff;font-weight:800;text-align:center;padding:14px 18px;border-radius:12px;text-decoration:none;font-size:1.02rem;box-shadow:0 6px 18px rgba(37,211,102,.35)}
   .wa-confirm:active{transform:translateY(1px)}
+  .wa-preview-wrap{max-width:360px;margin:6px auto 0;text-align:center}
+  .wa-preview-lead{font-size:.95rem;color:#555;margin:2px 0 12px;line-height:1.45}
+  .wa-bubble{text-align:left;background:#e7ffdb;border:1px solid #cdebc0;border-radius:16px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.08);margin-bottom:16px}
+  .wa-bubble-img{display:block;width:100%;height:auto}
+  .wa-bubble-text{padding:12px 14px;font-size:.92rem;line-height:1.5;color:#111;word-break:break-word}
+  .wa-bubble-text strong{font-weight:800}
+  .preview-back{display:inline-block;margin-top:2px;background:none;border:none;color:#8a8a8a;font-size:.92rem;cursor:pointer;text-decoration:underline;padding:6px}
   .field .opt{color:#9aa;font-weight:400;font-size:.85em}
   .order-share{margin-top:14px}
   .accfav{display:flex;flex-direction:column;gap:3px;width:100%;text-align:left;margin:0 0 16px;padding:14px 16px;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,var(--amber),#c93a75);color:#fff;box-shadow:0 8px 22px rgba(232,80,142,.32);font-family:inherit}
@@ -742,7 +749,7 @@ const I18N = {
     labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd", slotVol:"vol", slotVolMsg:"Dit tijdvak is net vol geraakt. Kies een ander afhaaltijdstip.",
     phName:"Voor- en achternaam", phEmail:"optioneel", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", orderWaBtn:"📲 Stuur je bestelling via WhatsApp", orderWaSent:"✓ Verzonden via WhatsApp", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", volBanner:"🌸 Volgeboekt voor komende zaterdag — bekijk gerust het menu", volgeboektMsg:"We zijn volgeboekt voor komende zaterdag. Kom volgende week weer terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
+    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", orderWaBtn:"📲 Stuur je bestelling via WhatsApp", orderWaSent:"✓ Verzonden via WhatsApp", previewLead:"Zo ziet je bestelling eruit. Eén tik verstuurt 'm naar Pink én legt de bestelling vast:", previewSend:"✅ Versturen via WhatsApp", previewBack:"← Terug om aan te passen", orderSaveFail:"Je bericht is naar Pink verstuurd via WhatsApp. Het automatisch vastleggen lukte net niet — Pink heeft je bestelling wél via WhatsApp ontvangen.", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", volBanner:"🌸 Volgeboekt voor komende zaterdag — bekijk gerust het menu", volgeboektMsg:"We zijn volgeboekt voor komende zaterdag. Kom volgende week weer terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
     note:"Je bestelling wordt direct aan het restaurant doorgegeven.",
     spice:["Mild pittig","Kruidig","Pittig"],
@@ -783,7 +790,7 @@ const I18N = {
     labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time", slotVol:"full", slotVolMsg:"This time slot just filled up. Please choose another pickup time.",
     phName:"Full name", phEmail:"optional", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", orderWaBtn:"📲 Send your order via WhatsApp", orderWaSent:"✓ Sent via WhatsApp", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", volBanner:"🌸 Fully booked for this Saturday — feel free to browse the menu", volgeboektMsg:"We\u2019re fully booked for this Saturday. Please come back next week! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
+    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", orderWaBtn:"📲 Send your order via WhatsApp", orderWaSent:"✓ Sent via WhatsApp", previewLead:"Here's your order. One tap sends it to Pink and records the order:", previewSend:"✅ Send via WhatsApp", previewBack:"← Back to edit", orderSaveFail:"Your message was sent to Pink via WhatsApp. Automatic recording just failed — but Pink did receive your order via WhatsApp.", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", volBanner:"🌸 Fully booked for this Saturday — feel free to browse the menu", volgeboektMsg:"We\u2019re fully booked for this Saturday. Please come back next week! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
     orderErr:"Please enter your name, phone and a valid email address.",
     note:"Your order is sent to the restaurant right away.",
     spice:["Mild","Spicy","Hot"],
@@ -824,7 +831,7 @@ const I18N = {
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ", slotVol:"เต็ม", slotVolMsg:"ช่วงเวลานี้เต็มแล้ว กรุณาเลือกเวลารับอื่น",
     phName:"ชื่อ-นามสกุล", phEmail:"ไม่บังคับ", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", orderWaBtn:"📲 ส่งออเดอร์ทาง WhatsApp", orderWaSent:"✓ ส่งทาง WhatsApp แล้ว", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", volBanner:"🌸 เต็มแล้วสำหรับเสาร์นี้ — ดูเมนูได้", volgeboektMsg:"ออเดอร์เต็มแล้วสำหรับเสาร์นี้ กลับมาใหม่สัปดาห์หน้านะคะ! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
+    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", orderWaBtn:"📲 ส่งออเดอร์ทาง WhatsApp", orderWaSent:"✓ ส่งทาง WhatsApp แล้ว", previewLead:"นี่คือออเดอร์ของคุณ แตะครั้งเดียวเพื่อส่งให้ร้านและบันทึกออเดอร์:", previewSend:"✅ ส่งทาง WhatsApp", previewBack:"← กลับไปแก้ไข", orderSaveFail:"ส่งข้อความให้ร้านทาง WhatsApp แล้ว แต่บันทึกอัตโนมัติไม่สำเร็จ — ร้านได้รับออเดอร์ทาง WhatsApp เรียบร้อยแล้ว", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", volBanner:"🌸 เต็มแล้วสำหรับเสาร์นี้ — ดูเมนูได้", volgeboektMsg:"ออเดอร์เต็มแล้วสำหรับเสาร์นี้ กลับมาใหม่สัปดาห์หน้านะคะ! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
     note:"คำสั่งซื้อจะถูกส่งให้ร้านทันที",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
@@ -1535,6 +1542,7 @@ function waOrderText(o){
   return t;
 }
 function waOrderLink(o){ return "https://wa.me/"+String(CONFIG.whatsapp).replace(/\D/g,"")+"?text="+encodeURIComponent(waOrderText(o)); }
+let _pendingOrder = null;
 document.getElementById("waBtn").onclick = async () => {
   if(!Object.keys(cart).length) return;
   // Anti-bot: honeypot (verborgen veld dat alleen bots invullen)
@@ -1565,38 +1573,79 @@ document.getElementById("waBtn").onclick = async () => {
   const cash = form.pay === "contant";
   const betaling = cash ? `Contant bij ophalen (${fmt(sum)})` : `Tikkie sturen naar ${tel} (${fmt(sum)})`;
   const orderId = Math.floor(10000 + Math.random()*90000);
-  const btn = document.getElementById("waBtn");
-  btn.disabled = true; msg.className="order-msg"; msg.textContent = T().orderSending;
+  _pendingOrder = { orderId, naam, tel, email, slot, note, lines, sum, afhaal, betaling, mand: JSON.stringify(cart) };
+  toonBestelVoorbeeld(_pendingOrder);
+};
+
+function waPreviewHtml(o){
+  let txt = waOrderText({orderId:o.orderId, naam:o.naam, tel:o.tel, afhaal:o.afhaal, lines:o.lines, totaal:fmt(o.sum), betaling:o.betaling, note:o.note});
+  txt = txt.replace(/\n?https?:\/\/\S+\s*$/,"");           // de link-regel niet in het voorbeeld tonen
+  const safe = esc(txt)
+      .replace(/\*([^*\n]+)\*/g, "<strong>$1</strong>")     // *vet* -> vet
+      .replace(/_([^_\n]+)_/g, "<em>$1</em>")               // _schuin_ -> schuin
+      .replace(/\n/g, "<br>");
+  return '<img class="wa-bubble-img" src="pink-thai-og.png" alt="" loading="lazy">'
+       + '<div class="wa-bubble-text">'+safe+'</div>';
+}
+
+function toonBestelVoorbeeld(o){
+  const waLink = waOrderLink({orderId:o.orderId, naam:o.naam, tel:o.tel, afhaal:o.afhaal, lines:o.lines, totaal:fmt(o.sum), betaling:o.betaling, note:o.note});
+  sheetBody.innerHTML =
+      `<div class="wa-preview-wrap">`
+    + `<p class="wa-preview-lead">${T().previewLead}</p>`
+    + `<div class="wa-bubble">${waPreviewHtml(o)}</div>`
+    + `<a class="wa-confirm" id="orderWaBtn" href="${waLink}" target="_blank" rel="noopener">${T().previewSend}</a>`
+    + `<button class="preview-back" id="previewBack">${T().previewBack}</button>`
+    + `</div>`;
+  sheetFoot.style.display = "none";
+  const bk = document.getElementById("previewBack");
+  if(bk) bk.onclick = ()=>{ sheetFoot.style.display=""; renderSheet(); };
+  const cbtn = document.getElementById("orderWaBtn");
+  if(cbtn) cbtn.addEventListener("click", ()=>{ bevestigEnVerstuur(cbtn); });
+}
+
+async function bevestigEnVerstuur(btn){
+  if(btn.dataset.busy) return; btn.dataset.busy="1";
+  const o = _pendingOrder;
+  if(!o){ return; }
+  // De opslag bij Google wordt METEEN (synchroon) gestart; WhatsApp opent tegelijk via de href van de knop.
+  const opslag = jsonp({
+    actie:"bestelling", start:pickupISO(o.slot), order_id:o.orderId,
+    naam:o.naam, tel:o.tel, email:o.email, bestelling:o.lines.join("\n"),
+    totaal:fmt(o.sum), betaling:o.betaling, opmerking:o.note, afhaal:o.afhaal,
+    taal:LANG, mand:o.mand
+  });
+  setTimeout(()=>{ btn.classList.add("done"); btn.style.pointerEvents="none"; btn.style.opacity="0.55"; btn.removeAttribute("href"); btn.textContent=T().orderWaSent; }, 300);
   try{
-    const r = await jsonp({
-      actie: "bestelling",
-      start: pickupISO(slot), order_id: orderId, naam, tel, email,
-      bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
-      afhaal, taal: LANG, mand: JSON.stringify(cart)
-    });
-    if(r && r.ok===false && r.fout==="volgeboekt"){ msg.className="order-msg err"; msg.textContent=T().volgeboektMsg; btn.disabled=false; _zaterdagVol=true; refreshOrderingUI(); return; }
-    if(r && r.ok===false && r.fout==="vol"){ msg.className="order-msg err"; msg.textContent=T().slotVolMsg; btn.disabled=false; laadSlots(); return; }
+    const r = await opslag;
+    if(r && r.ok===false && (r.fout==="vol"||r.fout==="volgeboekt")){
+      toonBestelResultaat(o, false, (r.fout==="vol"?T().slotVolMsg:T().volgeboektMsg), true); return;
+    }
     if(!r || !r.ok) throw new Error("bestelling niet doorgekomen");
     let ingelogdNu = false;
     if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); if(typeof prefetchAccount==="function"){ _accountData=null; prefetchAccount(); } }
     saveJSON("tta_lastorder", {t: Date.now()});
-    Object.keys(cart).forEach(k => delete cart[k]);
-    store.save();
+    Object.keys(cart).forEach(k => delete cart[k]); store.save();
     form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
     buildMenu(); updateBars();
-    const _waLink = waOrderLink({orderId, naam, tel, afhaal, lines, totaal:fmt(sum), betaling, note});
-    sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>`
-      + `<a class="wa-confirm" id="orderWaBtn" href="${_waLink}" target="_blank" rel="noopener">${T().orderWaBtn}</a>`
-      + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
-      + `<button class="share-btn order-share" id="orderShareBtn">📤 ${T().orderShareBtn}</button></div>`;
-    { const osb = document.getElementById("orderShareBtn"); if(osb) osb.onclick = deelPagina; }
-    { const wcb = document.getElementById("orderWaBtn"); if(wcb) wcb.addEventListener("click", ()=>{ setTimeout(()=>{ wcb.classList.add("done"); wcb.style.pointerEvents="none"; wcb.style.opacity="0.55"; wcb.removeAttribute("href"); wcb.textContent = T().orderWaSent; }, 400); }); }
-    sheetFoot.style.display = "none";
+    toonBestelResultaat(o, ingelogdNu, null, false);
   }catch(e){
-    msg.className="order-msg err"; msg.textContent=T().orderFail;
-    btn.disabled = false;
+    toonBestelResultaat(o, false, T().orderSaveFail, true);
   }
-};
+}
+
+function toonBestelResultaat(o, ingelogdNu, foutTekst, isFout){
+  if(isFout){
+    sheetBody.innerHTML = `<div class="empty"><div class="big">⚠️</div><p style="max-width:320px;margin:0 auto 8px">${foutTekst}</p><p class="ordernr">${T().orderNr}: #${o.orderId}</p></div>`;
+    sheetFoot.style.display = "none";
+    return;
+  }
+  sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${o.orderId}</p>`
+    + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
+    + `<button class="share-btn order-share" id="orderShareBtn">📤 ${T().orderShareBtn}</button></div>`;
+  { const osb = document.getElementById("orderShareBtn"); if(osb) osb.onclick = deelPagina; }
+  sheetFoot.style.display = "none";
+}
 
 /* ---------- Teksten + config toepassen ---------- */
 function applyLang(){
