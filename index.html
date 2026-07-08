@@ -742,9 +742,9 @@ const I18N = {
     labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd", slotVol:"vol", slotVolMsg:"Dit tijdvak is net vol geraakt. Kies een ander afhaaltijdstip.",
     phName:"Voor- en achternaam", phEmail:"optioneel", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling geplaatst! 🌸 Stuur \u2019m hieronder even via WhatsApp naar het restaurant, dan zien we je bestelling meteen.", orderWaBtn:"📲 Stuur je bestelling via WhatsApp", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", volBanner:"🌸 Volgeboekt voor komende zaterdag — bekijk gerust het menu", volgeboektMsg:"We zijn volgeboekt voor komende zaterdag. Kom volgende week weer terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
+    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", orderWaBtn:"📲 Stuur je bestelling via WhatsApp", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", volBanner:"🌸 Volgeboekt voor komende zaterdag — bekijk gerust het menu", volgeboektMsg:"We zijn volgeboekt voor komende zaterdag. Kom volgende week weer terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
     orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
-    note:"Na het plaatsen bevestig je je bestelling met één tik via WhatsApp.",
+    note:"Je bestelling wordt direct aan het restaurant doorgegeven.",
     spice:["Mild pittig","Kruidig","Pittig"],
     diet:{ vega:"Vega", glutenvrij:"Glutenvrij", noten:"Bevat noten" },
     footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t} uur`,
@@ -783,9 +783,9 @@ const I18N = {
     labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time", slotVol:"full", slotVolMsg:"This time slot just filled up. Please choose another pickup time.",
     phName:"Full name", phEmail:"optional", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order placed! 🌸 Send it to the restaurant via WhatsApp below so we see it right away.", orderWaBtn:"📲 Send your order via WhatsApp", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", volBanner:"🌸 Fully booked for this Saturday — feel free to browse the menu", volgeboektMsg:"We\u2019re fully booked for this Saturday. Please come back next week! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
+    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", orderWaBtn:"📲 Send your order via WhatsApp", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", volBanner:"🌸 Fully booked for this Saturday — feel free to browse the menu", volgeboektMsg:"We\u2019re fully booked for this Saturday. Please come back next week! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
     orderErr:"Please enter your name, phone and a valid email address.",
-    note:"After placing, confirm your order with one tap via WhatsApp.",
+    note:"Your order is sent to the restaurant right away.",
     spice:["Mild","Spicy","Hot"],
     diet:{ vega:"Veggie", glutenvrij:"Gluten-free", noten:"Contains nuts" },
     footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
@@ -824,9 +824,9 @@ const I18N = {
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ", slotVol:"เต็ม", slotVolMsg:"ช่วงเวลานี้เต็มแล้ว กรุณาเลือกเวลารับอื่น",
     phName:"ชื่อ-นามสกุล", phEmail:"ไม่บังคับ", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"สั่งซื้อสำเร็จ! 🌸 กดส่งออเดอร์ทาง WhatsApp ด้านล่าง ร้านจะเห็นทันที", orderWaBtn:"📲 ส่งออเดอร์ทาง WhatsApp", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", volBanner:"🌸 เต็มแล้วสำหรับเสาร์นี้ — ดูเมนูได้", volgeboektMsg:"ออเดอร์เต็มแล้วสำหรับเสาร์นี้ กลับมาใหม่สัปดาห์หน้านะคะ! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
+    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", orderWaBtn:"📲 ส่งออเดอร์ทาง WhatsApp", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", volBanner:"🌸 เต็มแล้วสำหรับเสาร์นี้ — ดูเมนูได้", volgeboektMsg:"ออเดอร์เต็มแล้วสำหรับเสาร์นี้ กลับมาใหม่สัปดาห์หน้านะคะ! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
     orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
-    note:"หลังจากสั่ง ยืนยันออเดอร์ด้วยการแตะ WhatsApp หนึ่งครั้ง",
+    note:"คำสั่งซื้อจะถูกส่งให้ร้านทันที",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
     diet:{ vega:"มังสวิรัติ", glutenvrij:"ไม่มีกลูเตน", noten:"มีถั่ว" },
     footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`,
@@ -1565,9 +1565,7 @@ document.getElementById("waBtn").onclick = async () => {
     store.save();
     form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
     buildMenu(); updateBars();
-    const _waLink = waOrderLink({orderId, naam, afhaal, lines, totaal:fmt(sum), betaling, note});
     sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>`
-      + `<a class="wa-confirm" href="${_waLink}" target="_blank" rel="noopener">${T().orderWaBtn}</a>`
       + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
       + `<button class="share-btn order-share" id="orderShareBtn">📤 ${T().orderShareBtn}</button></div>`;
     { const osb = document.getElementById("orderShareBtn"); if(osb) osb.onclick = deelPagina; }
