@@ -578,6 +578,7 @@
       <button class="sl" id="bHealth">🩺 Health</button>
       <button class="sl" id="bKlanten">👥 Klanten</button>
       <button class="sl" id="bToken">🔑 Token</button>
+      <button class="sl" id="bMelding">📲 Melding</button>
       <button class="exp" id="bPublish">⬆ Publiceren</button>
     </div>
   </div>
@@ -770,7 +771,7 @@ const I18N = {
       cDel:"Dit gerecht uit het menu halen? Je kunt het terugzetten via de prullenbak.", trash:"Prullenbak", trashTitle:"Verwijderde gerechten", trashEmpty:"De prullenbak is leeg.", restore:"↩️ Terugzetten", cWis:"Lokale fotokeuzes wissen?",
       cExport:(n,t)=>`${n} van de ${t} gerechten heeft een foto. Sommige foto's zijn misschien nog aan het laden. Toch exporteren?`,
       savePrice:"Prijs opslaan", nrLabel:"Bestelnr.", nrSave:"Nr. opslaan", nrInvalid:"Vul een nummer van 1 of hoger in.", nrDup:"Let op: dit nummer is ook in gebruik bij", priceErr:"Ongeldige prijs.", pushOk:"✓ Opgeslagen", pushErr:"Opslaan mislukt — controleer token/internet.",
-      tokenBtn:"🔑 Token", tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", tokenSaved:"Token opgeslagen. Sla je prijs nu opnieuw op.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publish:"⬆ Publiceren", publishOk:"Alles gepubliceerd ✓"}
+      tokenBtn:"🔑 Token", tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", tokenSaved:"Token opgeslagen. Sla je prijs nu opnieuw op.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publish:"⬆ Publiceren", publishOk:"Alles gepubliceerd ✓", cbTelAsk:"Telefoonnummer dat de WhatsApp-melding ontvangt (internationaal, alleen cijfers, bijv. 31628498822 of 66825834264):", cbKeyAsk:"CallMeBot API-key van dat nummer:", cbOk:"Melding-instellingen opgeslagen ✓", cbFout:"Kon instellingen niet opslaan", cbBtn:"📲 Melding"}
   },
   en: {
     locale:"en-GB", zaterdag:"Saturday", vrijdag:"Friday",
@@ -811,7 +812,7 @@ const I18N = {
       cDel:"Remove this dish from the menu? You can restore it from the trash.", trash:"Trash", trashTitle:"Deleted dishes", trashEmpty:"The trash is empty.", restore:"↩️ Restore", cWis:"Clear local photo choices?",
       cExport:(n,t)=>`${n} of ${t} dishes have a photo. Some may still be loading. Export anyway?`,
       savePrice:"Save price", nrLabel:"Order no.", nrSave:"Save no.", nrInvalid:"Enter a number of 1 or higher.", nrDup:"Note: this number is also used by", priceErr:"Invalid price.", pushOk:"✓ Saved", pushErr:"Save failed — check token/internet.",
-      tokenBtn:"🔑 Token", tokenAsk:"Paste your GitHub token (stored only on this device, not online):", tokenSaved:"Token saved. Save your price again now.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publish:"⬆ Publish", publishOk:"All published ✓"}
+      tokenBtn:"🔑 Token", tokenAsk:"Paste your GitHub token (stored only on this device, not online):", tokenSaved:"Token saved. Save your price again now.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publish:"⬆ Publish", publishOk:"All published ✓", cbTelAsk:"Phone number that receives the WhatsApp alert (international, digits only, e.g. 31628498822 or 66825834264):", cbKeyAsk:"CallMeBot API key for that number:", cbOk:"Alert settings saved ✓", cbFout:"Could not save settings", cbBtn:"📲 Alert"}
   },
   th: {
     locale:"th-TH", zaterdag:"วันเสาร์", vrijdag:"วันศุกร์",
@@ -852,7 +853,7 @@ const I18N = {
       cDel:"นำเมนูนี้ออกจากเมนูหรือไม่? กู้คืนได้จากถังขยะ", trash:"ถังขยะ", trashTitle:"เมนูที่ลบ", trashEmpty:"ถังขยะว่างเปล่า", restore:"↩️ กู้คืน", cWis:"ล้างการเลือกรูปในเครื่องหรือไม่?",
       cExport:(n,t)=>`มีรูป ${n} จาก ${t} เมนู บางรูปอาจกำลังโหลด ส่งออกเลยหรือไม่?`,
       savePrice:"บันทึกราคา", nrLabel:"หมายเลข", nrSave:"บันทึกหมายเลข", nrInvalid:"กรุณาใส่หมายเลขตั้งแต่ 1 ขึ้นไป", nrDup:"หมายเหตุ: หมายเลขนี้ถูกใช้กับ", priceErr:"ราคาไม่ถูกต้อง", pushOk:"✓ บันทึกแล้ว", pushErr:"บันทึกไม่สำเร็จ — ตรวจสอบโทเคน/อินเทอร์เน็ต",
-      tokenBtn:"🔑 โทเคน", tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", tokenSaved:"บันทึกโทเคนแล้ว บันทึกราคาอีกครั้ง", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publish:"⬆ เผยแพร่", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓"}
+      tokenBtn:"🔑 โทเคน", tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", tokenSaved:"บันทึกโทเคนแล้ว บันทึกราคาอีกครั้ง", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publish:"⬆ เผยแพร่", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓", cbTelAsk:"เบอร์โทรที่รับแจ้งเตือน WhatsApp (สากล เฉพาะตัวเลข เช่น 66825834264):", cbKeyAsk:"CallMeBot API key ของเบอร์นั้น:", cbOk:"บันทึกการตั้งค่าแล้ว ✓", cbFout:"บันทึกไม่สำเร็จ", cbBtn:"📲 แจ้งเตือน"}
   }
 };
 
@@ -1749,6 +1750,7 @@ async function initBeheer(){
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
   document.getElementById("bToken").onclick = askToken;
+  { const bm=document.getElementById("bMelding"); if(bm){ bm.textContent=T().adm.cbBtn; bm.onclick = meldingInstellen; } }
   document.getElementById("bPublish").onclick = publishAll;
   (function(){
     const sysBtn=document.getElementById("bSystem"), sysMenu=document.getElementById("sysMenu");
@@ -1959,6 +1961,20 @@ async function askToken(){
     showToast(r.ok ? T().adm.tokenOk : T().adm.tokenBad + " (" + r.status + ")", r.ok);
   }catch(e){ showToast(T().adm.tokenBad, false); }
 }
+async function meldingInstellen(){
+  const A = T().adm;
+  let cur = {tel:"", key:""};
+  try{ const r = await jsonp({actie:"cbget", key:klantKey()}); if(r && r.ok){ cur.tel=r.tel||""; cur.key=r.key||""; } }catch(e){}
+  const tel = prompt(A.cbTelAsk, cur.tel);
+  if(tel===null) return;
+  const key = prompt(A.cbKeyAsk, cur.key);
+  if(key===null) return;
+  showToast(A.saving, null);
+  try{
+    const r = await jsonp({actie:"cbset", cbtel:String(tel).trim(), cbkey:String(key).trim(), key:klantKey()});
+    showToast(r && r.ok ? A.cbOk : A.cbFout, !!(r && r.ok));
+  }catch(e){ showToast(A.cbFout, false); }
+}
 async function ghPut(path, obj, message){
   const token = ghToken(); if(!token) throw new Error("no-token");
   let sha;
@@ -2002,7 +2018,7 @@ function jsonp(params){
   });
 }
 function fetchMailCount(){ return jsonp({actie:"mailcount"}); }
-const SCRIPT_VERSIE_VERWACHT = 9;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 10;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
