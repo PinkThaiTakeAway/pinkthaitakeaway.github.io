@@ -1970,7 +1970,7 @@ async function askToken(){
     showToast(r.ok ? T().adm.tokenOk : T().adm.tokenBad + " (" + r.status + ")", r.ok);
   }catch(e){ showToast(T().adm.tokenBad, false); }
 }
-let _cbCache = {tel:"", key:""};
+let _cbCache = (function(){ try{ var c=JSON.parse(localStorage.getItem("tta_cbcache")); if(c && typeof c==="object") return {tel:c.tel||"", key:c.key||""}; }catch(e){} return {tel:"", key:""}; })();
 function renderInstellingen(){
   const K = BT().kl;
   const body = document.getElementById("kBody");
@@ -2081,7 +2081,7 @@ async function cbLaden(){
   try{
     const r = await jsonp({actie:"cbget", key:klantKey()});
     if(r && r.ok){
-      _cbCache = {tel:r.tel||"", key:r.key||""};
+      _cbCache = {tel:r.tel||"", key:r.key||""}; try{ localStorage.setItem("tta_cbcache", JSON.stringify(_cbCache)); }catch(e){}
       const t=document.getElementById("cbTelIn"), k=document.getElementById("cbKeyIn");
       if(t && !t.value) t.value=_cbCache.tel;
       if(k && !k.value) k.value=_cbCache.key;
@@ -2095,16 +2095,16 @@ async function cbOpslaan(){
   showToast(A.saving, null);
   try{
     const r = await jsonp({actie:"cbset", cbtel:tel, cbkey:key, key:klantKey()});
-    if(r && r.ok){ _cbCache={tel:r.tel||"", key:r.key||""}; showToast(A.cbOk, true); }
+    if(r && r.ok){ _cbCache={tel:r.tel||"", key:r.key||""}; try{ localStorage.setItem("tta_cbcache", JSON.stringify(_cbCache)); }catch(e){} showToast(A.cbOk, true); }
     else showToast(A.cbFout, false);
   }catch(e){ showToast(A.cbFout, false); }
 }
-let _capCache = {slot:"", dag:""};
+let _capCache = (function(){ try{ var c=JSON.parse(localStorage.getItem("tta_capcache")); if(c && typeof c==="object") return {slot:c.slot||"", dag:c.dag||""}; }catch(e){} return {slot:"", dag:""}; })();
 async function capLaden(){
   try{
     const r = await jsonp({actie:"maxget", key:klantKey()});
     if(r && r.ok){
-      _capCache = {slot:(r.slot==null?"":String(r.slot)), dag:(r.dag==null?"":String(r.dag))};
+      _capCache = {slot:(r.slot==null?"":String(r.slot)), dag:(r.dag==null?"":String(r.dag))}; try{ localStorage.setItem("tta_capcache", JSON.stringify(_capCache)); }catch(e){}
       const a=document.getElementById("maxSlotIn"), b=document.getElementById("maxDagIn");
       if(a && a.value==="") a.value=_capCache.slot;
       if(b && b.value==="") b.value=_capCache.dag;
@@ -2118,7 +2118,7 @@ async function capOpslaan(){
   showToast(A.saving, null);
   try{
     const r = await jsonp({actie:"maxset", maxslot:slot, maxdag:dag, key:klantKey()});
-    if(r && r.ok){ _capCache={slot:String(r.slot), dag:String(r.dag)}; showToast(K.capOk, true); }
+    if(r && r.ok){ _capCache={slot:String(r.slot), dag:String(r.dag)}; try{ localStorage.setItem("tta_capcache", JSON.stringify(_capCache)); }catch(e){} showToast(K.capOk, true); }
     else showToast(K.capFout, false);
   }catch(e){ showToast(K.capFout, false); }
 }
@@ -2772,14 +2772,8 @@ async function prefetchKlanten(){
 }
 async function prefetchInstellingen(){
   if(!klantKey()) return;
-  try{
-    const [cb, mx] = await Promise.all([
-      jsonp({actie:"cbget", key:klantKey()}),
-      jsonp({actie:"maxget", key:klantKey()})
-    ]);
-    if(cb && cb.ok) _cbCache = {tel:cb.tel||"", key:cb.key||""};
-    if(mx && mx.ok) _capCache = {slot:(mx.slot==null?"":String(mx.slot)), dag:(mx.dag==null?"":String(mx.dag))};
-  }catch(e){}
+  try{ const cb = await jsonp({actie:"cbget", key:klantKey()}); if(cb && cb.ok){ _cbCache = {tel:cb.tel||"", key:cb.key||""}; try{ localStorage.setItem("tta_cbcache", JSON.stringify(_cbCache)); }catch(e){} } }catch(e){}
+  try{ const mx = await jsonp({actie:"maxget", key:klantKey()}); if(mx && mx.ok){ _capCache = {slot:(mx.slot==null?"":String(mx.slot)), dag:(mx.dag==null?"":String(mx.dag))}; try{ localStorage.setItem("tta_capcache", JSON.stringify(_capCache)); }catch(e){} } }catch(e){}
 }
 let _klantAutoStarted = false;
 async function ververKlantCache(forceerRender){
