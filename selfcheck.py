@@ -164,15 +164,15 @@ def check_live(html):
     st, _ = http(SITE + "/pink-thai-og.png")
     ok("deelbanner bereikbaar") if st == 200 else warn(f"deelbanner status {st}")
 
-    # 10. De agenda-koppeling (Apps Script) — verzorgt nu ook alle e-mail
+    # 10. De bestelkoppeling (Apps Script) — verwerkt bestellingen, agenda en klanten
     m = re.search(r'agendaUrl:\s*"([^"]+)"', html or "")
     if m:
         st, _ = http(m.group(1))
         # Apps Script antwoordt op een GET vaak met 200/302/405 - elk is 'leeft'
         if st is not None:
-            ok(f"bestel- & e-mailkoppeling reageert (status {st})")
+            ok(f"bestelkoppeling reageert (status {st})")
         else:
-            warn("bestel- & e-mailkoppeling reageerde niet")
+            warn("bestelkoppeling reageerde niet")
 
 # ----------------------------------------------------------------------------
 def write_health(groep, items, reset=False):
