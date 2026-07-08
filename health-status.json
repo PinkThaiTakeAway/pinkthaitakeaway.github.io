@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-08T20:28:50Z",
+  "opgeslagen": "2026-07-08T20:29:43Z",
   "scriptVersie": 12,
   "verwachteVersie": 12,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-08T20:28:49.316365+00:00",
+    "updated": "2026-07-08T20:29:42.876550+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -205,10 +205,6 @@
         "naam": "Live site & diensten",
         "items": [
           {
-            "naam": "live bedrijf.json: nog niet aanwezig of niet bereikbaar (status 404)",
-            "status": "warn"
-          },
-          {
             "naam": "live site bereikbaar (200) met juiste inhoud",
             "status": "ok"
           },
@@ -230,6 +226,18 @@
           },
           {
             "naam": "bestelkoppeling reageert (status 200)",
+            "status": "ok"
+          },
+          {
+            "naam": "live bedrijf.json: bereikbaar en geldig",
+            "status": "ok"
+          },
+          {
+            "naam": "bedrijf.json: afhaaltijden en deadline logisch",
+            "status": "ok"
+          },
+          {
+            "naam": "foto van Pink bereikbaar",
             "status": "ok"
           },
           {
