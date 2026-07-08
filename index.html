@@ -1424,7 +1424,14 @@ async function laadSlots(){
     if(r && r.ok){ _slotTellingen = r.tellingen||{}; _slotMax = r.max||0; _zaterdagVol = !!r.vol; if(typeof refreshOrderingUI==="function") refreshOrderingUI(); if(sheet.classList.contains("open")) renderSheet(); }
   }catch(e){}
 }
-function openSheet(){ renderSheet(); overlay.classList.add("open"); sheet.classList.add("open"); _orderShownAt = Date.now(); laadSlots(); }
+function openSheet(){ prefillKlant(); renderSheet(); overlay.classList.add("open"); sheet.classList.add("open"); _orderShownAt = Date.now(); laadSlots(); }
+function prefillKlant(){
+  if(form.naam || form.tel) return;            // niet overschrijven wat de klant al invulde
+  if(!acctToken()) return;                      // alleen bij een bekende (ingelogde) klant
+  let r = (_accountData && _accountData.r) ? _accountData.r : null;
+  if(!r){ try{ const c = JSON.parse(localStorage.getItem("tta_acctcache")||"null"); if(c && c.r) r = c.r; }catch(e){} }
+  if(r){ if(r.naam) form.naam = r.naam; if(r.tel) form.tel = r.tel; }
+}
 function closeSheet(){ overlay.classList.remove("open"); sheet.classList.remove("open"); }
 document.getElementById("cartBtn").onclick = openSheet;
 document.getElementById("fbGo").onclick = openSheet;
