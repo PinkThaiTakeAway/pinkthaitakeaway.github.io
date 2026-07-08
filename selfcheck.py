@@ -174,6 +174,62 @@ def check_live(html):
         else:
             warn("bestelkoppeling reageerde niet")
 
+    # 11. Bedrijfsgegevens (bedrijf.json): bereikbaar, geldig en logisch
+    st, body = http(f"{SITE}/bedrijf.json?t=selfcheck")
+    if st == 200:
+        try:
+            b = json.loads(body.decode())
+            ok("live bedrijf.json: bereikbaar en geldig")
+            af = b.get("afhaal") or {}
+            be = b.get("bestel") or {}
+            problemen = []
+            if af.get("van") and af.get("tot") and str(af["van"]) >= str(af["tot"]):
+                problemen.append("afhaal 'vanaf' ligt niet vóór 'tot'")
+            if af.get("slotMin") is not None and not (isinstance(af["slotMin"], int) and af["slotMin"] > 0):
+                problemen.append("tijdvak-lengte ongeldig")
+            if af.get("dag") is not None and not (isinstance(af["dag"], int) and 0 <= af["dag"] <= 6):
+                problemen.append("afhaaldag buiten 0-6")
+            if be.get("cutoffUur") is not None and not (isinstance(be["cutoffUur"], int) and 0 <= be["cutoffUur"] <= 23):
+                problemen.append("deadline-uur buiten 0-23")
+            if be.get("cutoffDag") is not None and not (isinstance(be["cutoffDag"], int) and 0 <= be["cutoffDag"] <= 6):
+                problemen.append("deadline-dag buiten 0-6")
+            warn("bedrijf.json: " + "; ".join(problemen)) if problemen else ok("bedrijf.json: afhaaltijden en deadline logisch")
+            # foto van Pink bereikbaar
+            cf = b.get("chefFoto")
+            if cf:
+                fu = cf if str(cf).startswith("http") else f"{SITE}/{str(cf).lstrip('/')}"
+                fst, _ = http(fu)
+                ok("foto van Pink bereikbaar") if fst == 200 else warn(f"foto van Pink niet bereikbaar (status {fst})")
+        except Exception:
+            err("live bedrijf.json: bereikbaar maar geen geldige JSON")
+    else:
+        warn(f"live bedrijf.json: nog niet aanwezig of niet bereikbaar (status {st})")
+
+    # 12. Standaard chef-foto aanwezig (fallback als er geen eigen foto is ingesteld)
+    st, _ = http(f"{SITE}/chef.jpg")
+    ok("standaard chef-foto (chef.jpg) aanwezig") if st == 200 else warn(f"chef.jpg status {st}")
+
+    # 13. CallMeBot-melding + capaciteit (via veilige publieke statuscheck; vereist script v12+)
+    if m:
+        sep = "&" if "?" in m.group(1) else "?"
+        st2, body2 = http(m.group(1) + sep + "actie=statuscheck&t=selfcheck")
+        conf = None
+        if st2 and body2:
+            try:
+                d = json.loads(body2.decode())
+                if d.get("ok"):
+                    conf = d
+            except Exception:
+                pass
+        if conf is not None:
+            if conf.get("cbConfigured"):
+                ok("CallMeBot-melding: telefoon en key ingesteld")
+            else:
+                warn("CallMeBot-melding: geen telefoon/key ingesteld — bestellingen sturen geen WhatsApp")
+            ok("capaciteitslimieten: eigen waarden ingesteld" if conf.get("maxConfigured") else "capaciteitslimieten: standaardwaarden actief")
+        else:
+            warn("CallMeBot/capaciteit-status kon niet worden opgevraagd (script mogelijk nog niet op v12)")
+
 # ----------------------------------------------------------------------------
 def write_health(groep, items, reset=False):
     """Voegt de bevindingen toe aan health.json (dashboard in beheer)."""
