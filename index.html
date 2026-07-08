@@ -1531,7 +1531,7 @@ function waOrderText(o){
   t += E.geld+" *"+L.totaal+":* "+o.totaal+"\n";
   t += (/tikkie/i.test(o.betaling)?E.kaart:E.cash)+" *"+L.betaling+":* "+o.betaling;
   if(o.note) t += "\n"+E.memo+" *"+L.opmerking+":* "+o.note;
-  t += "\n"+div+"\n"+E.bloem+" _Pink Thai TakeAway_";
+  t += "\n"+div+"\n"+E.bloem+" _Pink Thai TakeAway_\n"+(location.origin+location.pathname);
   return t;
 }
 function waOrderLink(o){ return "https://wa.me/"+String(CONFIG.whatsapp).replace(/\D/g,"")+"?text="+encodeURIComponent(waOrderText(o)); }
