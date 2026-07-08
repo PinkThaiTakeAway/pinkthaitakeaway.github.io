@@ -1511,8 +1511,19 @@ const WA_T = {
 };
 function waOrderText(o){
   const L = WA_T[LANG] || WA_T.nl;
-  let t = "🌸 "+L.titel+"\n"+L.nr+": #"+o.orderId+"\n"+L.naam+": "+o.naam+"\n"+L.tel+": "+(o.tel||"")+"\n"+L.afhalen+": "+o.afhaal+"\n"+L.bestelling+":\n"+o.lines.join("\n")+"\n"+L.totaal+": "+o.totaal+"\n"+L.betaling+": "+o.betaling;
-  if(o.note) t += "\n"+L.opmerking+": "+o.note;
+  const div = "━━━━━━━━━━━━━";
+  let t = "*🌸 "+L.titel+"*\n"+div+"\n";
+  t += "🧾 *"+L.nr+":* #"+o.orderId+"\n";
+  t += "👤 *"+L.naam+":* "+o.naam+"\n";
+  t += "📞 *"+L.tel+":* "+(o.tel||"")+"\n";
+  t += "🕒 *"+L.afhalen+":* "+o.afhaal+"\n";
+  t += div+"\n🍽️ *"+L.bestelling+":*\n";
+  t += o.lines.map(r=>"• "+r).join("\n")+"\n";
+  t += div+"\n";
+  t += "💰 *"+L.totaal+":* "+o.totaal+"\n";
+  t += (/tikkie/i.test(o.betaling)?"💳 *":"💵 *")+L.betaling+":* "+o.betaling;
+  if(o.note) t += "\n📝 *"+L.opmerking+":* "+o.note;
+  t += "\n"+div+"\n🌸 _Pink Thai TakeAway_";
   return t;
 }
 function waOrderLink(o){ return "https://wa.me/"+String(CONFIG.whatsapp).replace(/\D/g,"")+"?text="+encodeURIComponent(waOrderText(o)); }
