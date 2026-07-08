@@ -1954,12 +1954,7 @@ async function laadDeelcode(){
 }
 async function deelPagina(){
   const url = location.origin + location.pathname + (_deelcode ? ("?via=" + _deelcode) : "");
-  if(navigator.share){
-    try{ await navigator.share({ title:"Pink Thai TakeAway", text:T().shareText, url }); }catch(e){}
-    return;
-  }
-  try{ await navigator.clipboard.writeText(url); showToast(T().shareCopied, true); }
-  catch(e){ showToast(url, null); }
+  window.open("https://wa.me/?text=" + encodeURIComponent(T().shareText + " " + url), "_blank");
 }
 function wireShare(){
   const btn = document.getElementById("shareBtn"); if(!btn) return;
