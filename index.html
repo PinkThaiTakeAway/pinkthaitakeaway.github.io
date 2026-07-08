@@ -466,6 +466,11 @@
   .kinstel input{width:100%;padding:11px 12px;border:1px solid #ccc;border-radius:9px;font-family:inherit;font-size:1rem;box-sizing:border-box}
   .kinstel .kaddok{margin-top:14px}
   .kinstel-hint{font-size:.82rem;color:#777;margin:12px 0 0;line-height:1.5;background:#f6f6f4;border-radius:9px;padding:10px 12px}
+  .kinstel-sec{margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid #eee}
+  .kinstel-sec:last-child{border-bottom:none;margin-bottom:0}
+  .kinstel-status{font-size:.92rem;font-weight:700;margin:8px 0 10px}
+  .kinstel-status.on{color:#0a7d2c}
+  .kinstel-status.off{color:#999}
   .kfoot{display:flex;flex-direction:column;gap:8px}
   .kbulk{background:var(--amber)!important}
   .klabel{display:inline-block;background:#fff3e0;color:#9a6a00;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:6px}
@@ -581,10 +586,8 @@
   <div class="sysmenu-wrap">
     <button class="sl" id="bSystem" aria-haspopup="true" aria-expanded="false">⚙️ System <span class="sysdot" id="sysDot"></span></button>
     <div class="sysmenu" id="sysMenu">
-      <button class="sl" id="bTikkie">💳 Tikkie</button>
       <button class="sl" id="bHealth">🩺 Health</button>
       <button class="sl" id="bKlanten">👥 Klanten</button>
-      <button class="sl" id="bToken">🔑 Token</button>
       <button class="exp" id="bPublish">⬆ Publiceren</button>
     </div>
   </div>
@@ -1671,7 +1674,6 @@ let chosen = {};
 function applyBeheerLang(){
   const A = T().adm, B = BT();
   document.getElementById("bAdd").textContent = A.add;
-  document.getElementById("bToken").textContent = A.tokenBtn;
   document.getElementById("bPublish").textContent = A.publish;
   document.getElementById("bKlanten").textContent = B.bar.klanten;
   updateBeheerCount();
@@ -1716,7 +1718,6 @@ async function initBeheer(){
   updateBeheerCount();
   document.getElementById("bAdd").onclick = openAddModal;
   document.getElementById("bTrash").onclick = openTrash;
-  document.getElementById("bTikkie").onclick = toggleTikkie;
   updateTikkieBtn();
   document.getElementById("bPauze").onclick = togglePauze;
   updatePauzeBtn();
@@ -1757,7 +1758,6 @@ async function initBeheer(){
   });
   document.getElementById("tmClose").onclick = () => document.getElementById("trashModal").classList.remove("open");
   updateTrashCount();
-  document.getElementById("bToken").onclick = askToken;
   document.getElementById("bPublish").onclick = publishAll;
   (function(){
     const sysBtn=document.getElementById("bSystem"), sysMenu=document.getElementById("sysMenu");
@@ -1972,17 +1972,48 @@ let _cbCache = {tel:"", key:""};
 function renderInstellingen(){
   const K = BT().kl;
   const body = document.getElementById("kBody");
+  const tikAan = TIKKIE_ON;
+  const tokenSet = !!ghToken();
   body.innerHTML = '<div class="kinstel">'
-    + '<h4 class="kinstel-h">\uD83D\uDCF2 '+esc(K.mijnTel)+'</h4>'
-    + '<p class="kinstel-uit">'+esc(K.mijnTelUit)+'</p>'
-    + '<label class="kinstel-l">'+esc(K.telLabel)+'</label>'
-    + '<input id="cbTelIn" type="tel" inputmode="numeric" placeholder="31612345678" value="'+esc(_cbCache.tel||"")+'">'
-    + '<label class="kinstel-l">'+esc(K.keyLabel)+'</label>'
-    + '<input id="cbKeyIn" value="'+esc(_cbCache.key||"")+'">'
-    + '<button class="kaddok" id="cbSaveBtn">'+esc(K.telOpslaan)+'</button>'
-    + '<p class="kinstel-hint">'+esc(K.mijnTelHint)+'</p>'
+    + '<div class="kinstel-sec">'
+    +   '<h4 class="kinstel-h">\uD83D\uDCF2 '+esc(K.mijnTel)+'</h4>'
+    +   '<p class="kinstel-uit">'+esc(K.mijnTelUit)+'</p>'
+    +   '<label class="kinstel-l">'+esc(K.telLabel)+'</label>'
+    +   '<input id="cbTelIn" type="tel" inputmode="numeric" placeholder="31612345678" value="'+esc(_cbCache.tel||"")+'">'
+    +   '<label class="kinstel-l">'+esc(K.keyLabel)+'</label>'
+    +   '<input id="cbKeyIn" value="'+esc(_cbCache.key||"")+'">'
+    +   '<button class="kaddok" id="cbSaveBtn">'+esc(K.telOpslaan)+'</button>'
+    +   '<p class="kinstel-hint">'+esc(K.mijnTelHint)+'</p>'
+    + '</div>'
+    + '<div class="kinstel-sec">'
+    +   '<h4 class="kinstel-h">\uD83D\uDCB3 '+esc(K.tikkieTitel)+'</h4>'
+    +   '<p class="kinstel-uit">'+esc(K.tikkieUit2)+'</p>'
+    +   '<p class="kinstel-status '+(tikAan?"on":"off")+'" id="tikStatus">'+esc(tikAan?K.tikkieStatusAan:K.tikkieStatusUit)+'</p>'
+    +   '<button class="kaddok" id="tikToggle">'+esc(tikAan?K.tikkieUitBtn:K.tikkieAanBtn)+'</button>'
+    + '</div>'
+    + '<div class="kinstel-sec">'
+    +   '<h4 class="kinstel-h">\uD83D\uDD11 '+esc(K.tokenTitel)+'</h4>'
+    +   '<p class="kinstel-uit">'+esc(K.tokenUit2)+'</p>'
+    +   '<p class="kinstel-status '+(tokenSet?"on":"off")+'" id="tokStatus">'+esc(tokenSet?K.tokenStatusSet:K.tokenStatusNone)+'</p>'
+    +   '<button class="kaddok" id="tokenSetBtn">'+esc(K.tokenSetBtn)+'</button>'
+    + '</div>'
     + '</div>';
   const sb=document.getElementById("cbSaveBtn"); if(sb) sb.onclick = cbOpslaan;
+  const tt=document.getElementById("tikToggle");
+  if(tt) tt.onclick = ()=>{
+    toggleTikkie();
+    const on=TIKKIE_ON, KK=BT().kl;
+    tt.textContent = on?KK.tikkieUitBtn:KK.tikkieAanBtn;
+    const st=document.getElementById("tikStatus");
+    if(st){ st.textContent = on?KK.tikkieStatusAan:KK.tikkieStatusUit; st.className="kinstel-status "+(on?"on":"off"); }
+  };
+  const tk=document.getElementById("tokenSetBtn");
+  if(tk) tk.onclick = async ()=>{
+    await askToken();
+    const set=!!ghToken(), KK=BT().kl;
+    const st=document.getElementById("tokStatus");
+    if(st){ st.textContent = set?KK.tokenStatusSet:KK.tokenStatusNone; st.className="kinstel-status "+(set?"on":"off"); }
+  };
   cbLaden();
 }
 async function cbLaden(){
@@ -2190,7 +2221,7 @@ const BEHEER_T = {
     locale:"nl-NL",
     bar:{ tikkieOn:"💳 Tikkie: aan", tikkieOff:"💳 Tikkie: uit", orderOpen:"🟢 Bestellen: open", orderClosed:"🔴 Bestellen: dicht", health:"Health", klanten:"👥 Klanten" },
     kl:{
-      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabInstel:"Instellingen", mijnTel:"Mijn telefoonnummer", mijnTelUit:"Op dit nummer krijg je automatisch elke nieuwe bestelling binnen via WhatsApp.", telLabel:"Telefoonnummer (internationaal, alleen cijfers, bijv. 31612345678 of 66812345678)", keyLabel:"CallMeBot API-key", telOpslaan:"Opslaan", mijnTelHint:"Nieuw nummer? Activeer eerst CallMeBot op die telefoon: voeg contact +34 621 331 709 toe en stuur 'I allow callmebot to send me messages'. Je krijgt dan een API-key terug.",
+      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabInstel:"Instellingen", tikkieTitel:"Tikkie-betaling", tikkieUit2:"Laat klanten kiezen om via Tikkie te betalen in plaats van contant.", tikkieStatusAan:"Nu: aan", tikkieStatusUit:"Nu: uit", tikkieAanBtn:"Aanzetten", tikkieUitBtn:"Uitzetten", tokenTitel:"GitHub-token (technisch)", tokenUit2:"Nodig om wijzigingen zoals prijzen en menu live op te slaan. Wordt alleen op dit apparaat bewaard.", tokenStatusSet:"Ingesteld op dit apparaat ✓", tokenStatusNone:"Nog niet ingesteld", tokenSetBtn:"Token instellen / wijzigen", mijnTel:"Mijn telefoonnummer", mijnTelUit:"Op dit nummer krijg je automatisch elke nieuwe bestelling binnen via WhatsApp.", telLabel:"Telefoonnummer (internationaal, alleen cijfers, bijv. 31612345678 of 66812345678)", keyLabel:"CallMeBot API-key", telOpslaan:"Opslaan", mijnTelHint:"Nieuw nummer? Activeer eerst CallMeBot op die telefoon: voeg contact +34 621 331 709 toe en stuur 'I allow callmebot to send me messages'. Je krijgt dan een API-key terug.",
       bzLaden:"Bezoek laden…", bzGeen:"Nog geen bezoekgegevens.", bzVandaag:"vandaag", bzWeek:"deze week", bzMaand:"deze maand", bzTotaal:"totaal", bzPerDag:"Bezoeken per dag (30 dagen)", bzType:"Type bezoek", bzKlant:"klant", bzBeheer:"beheer", bzVolg:"volglink", bzTaal:"Taal", bzHerkomst:"Herkomst", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"overig", bzToestel:"Toestel", bzMobiel:"mobiel", bzDesktop:"desktop", bzVasteKlanten:"Terugkerende klanten", laatstInlog:"laatst ingelogd:", bzBeheerders:"In beheer ingelogd", bzInlogLog:"Inloggeschiedenis", bzDeelLijst:"Binnengekomen via delen", bzDeelLog:"Deelgeschiedenis", bzVia:"via",
       zoek:"Zoek op naam of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
       addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan", telVerplicht:"Vul een telefoonnummer in",
@@ -2232,7 +2263,7 @@ const BEHEER_T = {
     locale:"en-GB",
     bar:{ tikkieOn:"💳 Tikkie: on", tikkieOff:"💳 Tikkie: off", orderOpen:"🟢 Ordering: open", orderClosed:"🔴 Ordering: closed", health:"Health", klanten:"👥 Customers" },
     kl:{
-      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabInstel:"Settings", mijnTel:"My phone number", mijnTelUit:"This number automatically receives every new order via WhatsApp.", telLabel:"Phone number (international, digits only, e.g. 31612345678 or 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"Save", mijnTelHint:"New number? First activate CallMeBot on that phone: add contact +34 621 331 709 and send 'I allow callmebot to send me messages'. You will receive an API key.",
+      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabInstel:"Settings", tikkieTitel:"Tikkie payment", tikkieUit2:"Let customers choose to pay via Tikkie instead of cash.", tikkieStatusAan:"Now: on", tikkieStatusUit:"Now: off", tikkieAanBtn:"Turn on", tikkieUitBtn:"Turn off", tokenTitel:"GitHub token (technical)", tokenUit2:"Needed to save changes like prices and menu live. Stored only on this device.", tokenStatusSet:"Set on this device ✓", tokenStatusNone:"Not set yet", tokenSetBtn:"Set / change token", mijnTel:"My phone number", mijnTelUit:"This number automatically receives every new order via WhatsApp.", telLabel:"Phone number (international, digits only, e.g. 31612345678 or 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"Save", mijnTelHint:"New number? First activate CallMeBot on that phone: add contact +34 621 331 709 and send 'I allow callmebot to send me messages'. You will receive an API key.",
       bzLaden:"Loading visits…", bzGeen:"No visit data yet.", bzVandaag:"today", bzWeek:"this week", bzMaand:"this month", bzTotaal:"total", bzPerDag:"Visits per day (30 days)", bzType:"Visit type", bzKlant:"customer", bzBeheer:"admin", bzVolg:"tracking link", bzTaal:"Language", bzHerkomst:"Source", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"other", bzToestel:"Device", bzMobiel:"mobile", bzDesktop:"desktop", bzVasteKlanten:"Returning customers", laatstInlog:"last login:", bzBeheerders:"Logged into admin", bzInlogLog:"Login history", bzDeelLijst:"Arrived via sharing", bzDeelLog:"Share history", bzVia:"via",
       zoek:"Search by name or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
       addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer", telVerplicht:"Enter a phone number",
@@ -2274,7 +2305,7 @@ const BEHEER_T = {
     locale:"th-TH",
     bar:{ tikkieOn:"💳 Tikkie: เปิด", tikkieOff:"💳 Tikkie: ปิด", orderOpen:"🟢 รับออเดอร์: เปิด", orderClosed:"🔴 รับออเดอร์: ปิด", health:"สถานะ", klanten:"👥 ลูกค้า" },
     kl:{
-      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabInstel:"การตั้งค่า", mijnTel:"เบอร์โทรของฉัน", mijnTelUit:"เบอร์นี้จะรับออเดอร์ใหม่ทุกครั้งทาง WhatsApp โดยอัตโนมัติ", telLabel:"เบอร์โทร (สากล เฉพาะตัวเลข เช่น 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"บันทึก", mijnTelHint:"เบอร์ใหม่? เปิดใช้งาน CallMeBot บนเครื่องนั้นก่อน: เพิ่มผู้ติดต่อ +34 621 331 709 แล้วส่งข้อความ 'I allow callmebot to send me messages' คุณจะได้รับ API key",
+      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabInstel:"การตั้งค่า", tikkieTitel:"การชำระด้วย Tikkie", tikkieUit2:"ให้ลูกค้าเลือกจ่ายผ่าน Tikkie แทนเงินสด", tikkieStatusAan:"ตอนนี้: เปิด", tikkieStatusUit:"ตอนนี้: ปิด", tikkieAanBtn:"เปิด", tikkieUitBtn:"ปิด", tokenTitel:"โทเคน GitHub (ทางเทคนิค)", tokenUit2:"จำเป็นสำหรับบันทึกการเปลี่ยนแปลง เช่น ราคาและเมนู แบบสด เก็บในเครื่องนี้เท่านั้น", tokenStatusSet:"ตั้งค่าในเครื่องนี้แล้ว ✓", tokenStatusNone:"ยังไม่ได้ตั้งค่า", tokenSetBtn:"ตั้งค่า / เปลี่ยนโทเคน", mijnTel:"เบอร์โทรของฉัน", mijnTelUit:"เบอร์นี้จะรับออเดอร์ใหม่ทุกครั้งทาง WhatsApp โดยอัตโนมัติ", telLabel:"เบอร์โทร (สากล เฉพาะตัวเลข เช่น 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"บันทึก", mijnTelHint:"เบอร์ใหม่? เปิดใช้งาน CallMeBot บนเครื่องนั้นก่อน: เพิ่มผู้ติดต่อ +34 621 331 709 แล้วส่งข้อความ 'I allow callmebot to send me messages' คุณจะได้รับ API key",
       bzLaden:"กำลังโหลดการเข้าชม…", bzGeen:"ยังไม่มีข้อมูลการเข้าชม", bzVandaag:"วันนี้", bzWeek:"สัปดาห์นี้", bzMaand:"เดือนนี้", bzTotaal:"ทั้งหมด", bzPerDag:"การเข้าชมต่อวัน (30 วัน)", bzType:"ประเภทการเข้าชม", bzKlant:"ลูกค้า", bzBeheer:"ผู้ดูแล", bzVolg:"ลิงก์ติดตาม", bzTaal:"ภาษา", bzHerkomst:"ที่มา", bzDirect:"เข้าตรง", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"อื่นๆ", bzToestel:"อุปกรณ์", bzMobiel:"มือถือ", bzDesktop:"เดสก์ท็อป", bzVasteKlanten:"ลูกค้าประจำ", laatstInlog:"เข้าสู่ระบบล่าสุด:", bzBeheerders:"เข้าสู่ระบบผู้ดูแล", bzInlogLog:"ประวัติการเข้าสู่ระบบ", bzDeelLijst:"เข้ามาผ่านการแชร์", bzDeelLog:"ประวัติการแชร์", bzVia:"โดย",
       zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
       addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า", telVerplicht:"กรุณากรอกเบอร์โทร",
