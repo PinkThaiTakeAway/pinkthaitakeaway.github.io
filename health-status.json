@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-08T20:23:13Z",
-  "scriptVersie": 11,
+  "opgeslagen": "2026-07-08T20:28:50Z",
+  "scriptVersie": 12,
   "verwachteVersie": 12,
-  "versieOk": false,
+  "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-08T20:23:12.309371+00:00",
+    "updated": "2026-07-08T20:28:49.316365+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -16,6 +16,10 @@
           },
           {
             "naam": "JavaScript-syntax geldig",
+            "status": "ok"
+          },
+          {
+            "naam": "bedrijf.json: geldige JSON",
             "status": "ok"
           },
           {
@@ -205,10 +209,6 @@
             "status": "warn"
           },
           {
-            "naam": "CallMeBot/capaciteit-status kon niet worden opgevraagd (script mogelijk nog niet op v12)",
-            "status": "warn"
-          },
-          {
             "naam": "live site bereikbaar (200) met juiste inhoud",
             "status": "ok"
           },
@@ -234,6 +234,14 @@
           },
           {
             "naam": "standaard chef-foto (chef.jpg) aanwezig",
+            "status": "ok"
+          },
+          {
+            "naam": "CallMeBot-melding: telefoon en key ingesteld",
+            "status": "ok"
+          },
+          {
+            "naam": "capaciteitslimieten: standaardwaarden actief",
             "status": "ok"
           }
         ]
