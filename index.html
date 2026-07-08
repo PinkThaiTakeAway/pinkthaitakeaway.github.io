@@ -600,7 +600,7 @@
       <button class="ktab" data-tab="cijfers">Cijfers</button>
       <button class="ktab" data-tab="bezoek">Bezoek</button>
     </div>
-    <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam, e-mail of telefoon…" autocomplete="off">
+    <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam of telefoon…" autocomplete="off">
     <div id="kBody" class="hbody"></div>
     <div class="kfoot">
       <button id="kReload" class="hreload">Opnieuw laden</button>
@@ -2126,12 +2126,12 @@ const BEHEER_T = {
       title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek",
       bzLaden:"Bezoek laden…", bzGeen:"Nog geen bezoekgegevens.", bzVandaag:"vandaag", bzWeek:"deze week", bzMaand:"deze maand", bzTotaal:"totaal", bzPerDag:"Bezoeken per dag (30 dagen)", bzType:"Type bezoek", bzKlant:"klant", bzBeheer:"beheer", bzVolg:"volglink", bzTaal:"Taal", bzHerkomst:"Herkomst", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"overig", bzToestel:"Toestel", bzMobiel:"mobiel", bzDesktop:"desktop", bzVasteKlanten:"Terugkerende klanten", laatstInlog:"laatst ingelogd:", bzBeheerders:"In beheer ingelogd", bzInlogLog:"Inloggeschiedenis", bzDeelLijst:"Binnengekomen via delen", bzDeelLog:"Deelgeschiedenis", bzVia:"via",
       zoek:"Zoek op naam of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
-      addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knEmailPh:"E-mail (of telefoon)", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan",
-      impHint:"Eén klant per regel: naam, e-mail, telefoon (e-mail mag leeg — dan uitnodigen via WhatsApp)", impPlaceholder:"Jan Jansen, jan@mail.nl, 0612345678\nPiet Peters, , 0698765432", impBtn:"Importeren",
+      addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan", telVerplicht:"Vul een telefoonnummer in",
+      impHint:"Eén klant per regel: naam en telefoon", impPlaceholder:"Jan Jansen, 0612345678\nPiet Peters, 0698765432", impBtn:"Importeren",
       waInvite:"📲 WhatsApp-uitnodiging", waNogmaals:"📲 Nogmaals uitnodigen", uitgLabel:"uitgenodigd", waGeenTel:"Deze klant heeft geen telefoonnummer", emailOfTel:"Vul een e-mailadres of telefoonnummer in",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("Hoi "+naam+"!"):"Hoi!")+" Groot nieuws: "+zaak+" heeft een nieuwe website! 🥳\n\nJe kunt nu heel makkelijk online je verse Thaise gerechten bestellen en op zaterdag afhalen. 🍜\n\nBekijk het menu en bestel hier:\n"+link+"\n\nTot snel en eet smakelijk! 🌶️💚",
       emailFout:"Vul een geldig e-mailadres in", klantToegevoegd:"Klant toegevoegd", klantBijgewerkt:"Klant bijgewerkt",
-      impLeeg:"Plak eerst een lijst", impGeenEmail:"Geen geldige e-mailadressen gevonden", impTeveel:"Te veel tegelijk — importeer in stukjes van max 100",
+      impLeeg:"Plak eerst een lijst", impGeenEmail:"Geen bruikbare regels — zet naam en telefoon", impTeveel:"Te veel tegelijk — importeer in stukjes van max 100",
       impKlaar:(n,b)=>n+" nieuw, "+b+" bijgewerkt",
       laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
       nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
@@ -2168,12 +2168,12 @@ const BEHEER_T = {
       title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits",
       bzLaden:"Loading visits…", bzGeen:"No visit data yet.", bzVandaag:"today", bzWeek:"this week", bzMaand:"this month", bzTotaal:"total", bzPerDag:"Visits per day (30 days)", bzType:"Visit type", bzKlant:"customer", bzBeheer:"admin", bzVolg:"tracking link", bzTaal:"Language", bzHerkomst:"Source", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"other", bzToestel:"Device", bzMobiel:"mobile", bzDesktop:"desktop", bzVasteKlanten:"Returning customers", laatstInlog:"last login:", bzBeheerders:"Logged into admin", bzInlogLog:"Login history", bzDeelLijst:"Arrived via sharing", bzDeelLog:"Share history", bzVia:"via",
       zoek:"Search by name or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
-      addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knEmailPh:"E-mail (or phone)", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer",
-      impHint:"One customer per line: name, e-mail, phone (e-mail can be empty — then invite via WhatsApp)", impPlaceholder:"Jan Jansen, jan@mail.nl, 0612345678\nPiet Peters, , 0698765432", impBtn:"Import",
+      addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer", telVerplicht:"Enter a phone number",
+      impHint:"One customer per line: name and phone", impPlaceholder:"Jan Jansen, 0612345678\nPiet Peters, 0698765432", impBtn:"Import",
       waInvite:"📲 WhatsApp invite", waNogmaals:"📲 Invite again", uitgLabel:"invited", waGeenTel:"This customer has no phone number", emailOfTel:"Enter an e-mail address or phone number",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("Hi "+naam+"!"):"Hi!")+" Great news: "+zaak+" has a brand-new website! 🥳\n\nYou can now easily order your fresh Thai dishes online and pick them up on Saturday. 🍜\n\nCheck the menu and order here:\n"+link+"\n\nSee you soon! 🌶️💚",
       emailFout:"Enter a valid e-mail address", klantToegevoegd:"Customer added", klantBijgewerkt:"Customer updated",
-      impLeeg:"Paste a list first", impGeenEmail:"No valid e-mail addresses found", impTeveel:"Too many at once — import in batches of max 100",
+      impLeeg:"Paste a list first", impGeenEmail:"No usable rows — provide name and phone", impTeveel:"Too many at once — import in batches of max 100",
       impKlaar:(n,b)=>n+" new, "+b+" updated",
       laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
       nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
@@ -2210,12 +2210,12 @@ const BEHEER_T = {
       title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม",
       bzLaden:"กำลังโหลดการเข้าชม…", bzGeen:"ยังไม่มีข้อมูลการเข้าชม", bzVandaag:"วันนี้", bzWeek:"สัปดาห์นี้", bzMaand:"เดือนนี้", bzTotaal:"ทั้งหมด", bzPerDag:"การเข้าชมต่อวัน (30 วัน)", bzType:"ประเภทการเข้าชม", bzKlant:"ลูกค้า", bzBeheer:"ผู้ดูแล", bzVolg:"ลิงก์ติดตาม", bzTaal:"ภาษา", bzHerkomst:"ที่มา", bzDirect:"เข้าตรง", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"อื่นๆ", bzToestel:"อุปกรณ์", bzMobiel:"มือถือ", bzDesktop:"เดสก์ท็อป", bzVasteKlanten:"ลูกค้าประจำ", laatstInlog:"เข้าสู่ระบบล่าสุด:", bzBeheerders:"เข้าสู่ระบบผู้ดูแล", bzInlogLog:"ประวัติการเข้าสู่ระบบ", bzDeelLijst:"เข้ามาผ่านการแชร์", bzDeelLog:"ประวัติการแชร์", bzVia:"โดย",
       zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
-      addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knEmailPh:"อีเมล (หรือเบอร์โทร)", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า",
-      impHint:"หนึ่งคนต่อบรรทัด: ชื่อ, อีเมล, เบอร์โทร (เว้นอีเมลได้ — แล้วเชิญทาง WhatsApp)", impPlaceholder:"สมชาย, som@mail.com, 0812345678\nสมหญิง, , 0898765432", impBtn:"นำเข้า",
+      addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า", telVerplicht:"กรุณากรอกเบอร์โทร",
+      impHint:"หนึ่งคนต่อบรรทัด: ชื่อ และเบอร์โทร", impPlaceholder:"สมชาย, 0812345678\nสมหญิง, 0898765432", impBtn:"นำเข้า",
       waInvite:"📲 เชิญทาง WhatsApp", waNogmaals:"📲 เชิญอีกครั้ง", uitgLabel:"เชิญแล้ว", waGeenTel:"ลูกค้ารายนี้ไม่มีเบอร์โทร", emailOfTel:"กรอกอีเมลหรือเบอร์โทร",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("สวัสดีคุณ "+naam+"!"):"สวัสดีค่ะ!")+" ข่าวดี! "+zaak+" มีเว็บไซต์ใหม่แล้ว 🥳\n\nตอนนี้สั่งอาหารไทยสด ๆ ออนไลน์ได้ง่าย ๆ และมารับในวันเสาร์ 🍜\n\nดูเมนูและสั่งได้ที่นี่:\n"+link+"\n\nแล้วพบกันนะคะ! 🌶️💚",
       emailFout:"กรุณากรอกอีเมลที่ถูกต้อง", klantToegevoegd:"เพิ่มลูกค้าแล้ว", klantBijgewerkt:"อัปเดตลูกค้าแล้ว",
-      impLeeg:"วางรายชื่อก่อน", impGeenEmail:"ไม่พบอีเมลที่ถูกต้อง", impTeveel:"มากเกินไป — นำเข้าครั้งละไม่เกิน 100",
+      impLeeg:"วางรายชื่อก่อน", impGeenEmail:"ไม่พบข้อมูลที่ใช้ได้ — ใส่ชื่อและเบอร์โทร", impTeveel:"มากเกินไป — นำเข้าครั้งละไม่เกิน 100",
       impKlaar:(n,b)=>n+" ใหม่, "+b+" อัปเดต",
       laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
       nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
@@ -2595,11 +2595,9 @@ async function registreerUitnodiging(email, tel){
 }
 async function klantNieuwOpslaan(){
   const naam=(document.getElementById("knNaam").value||"").trim();
-  const email=(document.getElementById("knEmail").value||"").trim();
   const tel=(document.getElementById("knTel").value||"").trim();
-  const emailOk = email && email.indexOf("@")>0;
-  if(!emailOk && !tel){ showToast(BT().kl.emailOfTel, false); return; }
-  const r = await jsonp({actie:"klantnieuw", email:(emailOk?email:""), naam, tel, key:klantKey()});
+  if(!tel){ showToast(BT().kl.telVerplicht, false); return; }
+  const r = await jsonp({actie:"klantnieuw", naam, tel, key:klantKey()});
   if(r && r.ok){ _kForm=null; localStorage.removeItem("tta_klantcache"); showToast(r.bestond?BT().kl.klantBijgewerkt:BT().kl.klantToegevoegd, true); laadKlanten(); }
   else showToast((r&&r.fout)||BT().kl.tNietBij, false);
 }
@@ -2625,7 +2623,6 @@ function renderKlantenLijst(){
   if(_kForm==="nieuw"){
     formHtml = '<div class="kaddform">'+
       '<input id="knNaam" placeholder="'+esc(K.knNaamPh)+'">'+
-      '<input id="knEmail" type="email" placeholder="'+esc(K.knEmailPh)+'">'+
       '<input id="knTel" type="tel" placeholder="'+esc(K.knTelPh)+'">'+
       '<button class="kaddok" data-a="knieuw-ok">'+esc(K.knOpslaan)+'</button>'+
     '</div>';
