@@ -1505,13 +1505,13 @@ function buildOrder(){
   return {lines, sum};
 }
 const WA_T = {
-  nl:{titel:"Bestelling Pink Thai TakeAway", nr:"Bestelnr", naam:"Naam", afhalen:"Afhalen", bestelling:"Bestelling", totaal:"Totaal", betaling:"Betaling", opmerking:"Opmerking"},
-  en:{titel:"Order Pink Thai TakeAway", nr:"Order no.", naam:"Name", afhalen:"Pickup", bestelling:"Order", totaal:"Total", betaling:"Payment", opmerking:"Note"},
-  th:{titel:"ออเดอร์ Pink Thai TakeAway", nr:"เลขที่", naam:"ชื่อ", afhalen:"รับ", bestelling:"รายการ", totaal:"รวม", betaling:"ชำระเงิน", opmerking:"หมายเหตุ"}
+  nl:{titel:"Bestelling Pink Thai TakeAway", nr:"Bestelnr", naam:"Naam", tel:"Telefoon", afhalen:"Afhalen", bestelling:"Bestelling", totaal:"Totaal", betaling:"Betaling", opmerking:"Opmerking"},
+  en:{titel:"Order Pink Thai TakeAway", nr:"Order no.", naam:"Name", tel:"Phone", afhalen:"Pickup", bestelling:"Order", totaal:"Total", betaling:"Payment", opmerking:"Note"},
+  th:{titel:"ออเดอร์ Pink Thai TakeAway", nr:"เลขที่", naam:"ชื่อ", tel:"เบอร์โทร", afhalen:"รับ", bestelling:"รายการ", totaal:"รวม", betaling:"ชำระเงิน", opmerking:"หมายเหตุ"}
 };
 function waOrderText(o){
   const L = WA_T[LANG] || WA_T.nl;
-  let t = "🌸 "+L.titel+"\n"+L.nr+": #"+o.orderId+"\n"+L.naam+": "+o.naam+"\n"+L.afhalen+": "+o.afhaal+"\n"+L.bestelling+":\n"+o.lines.join("\n")+"\n"+L.totaal+": "+o.totaal+"\n"+L.betaling+": "+o.betaling;
+  let t = "🌸 "+L.titel+"\n"+L.nr+": #"+o.orderId+"\n"+L.naam+": "+o.naam+"\n"+L.tel+": "+(o.tel||"")+"\n"+L.afhalen+": "+o.afhaal+"\n"+L.bestelling+":\n"+o.lines.join("\n")+"\n"+L.totaal+": "+o.totaal+"\n"+L.betaling+": "+o.betaling;
   if(o.note) t += "\n"+L.opmerking+": "+o.note;
   return t;
 }
@@ -1565,7 +1565,7 @@ document.getElementById("waBtn").onclick = async () => {
     store.save();
     form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
     buildMenu(); updateBars();
-    const _waLink = waOrderLink({orderId, naam, afhaal, lines, totaal:fmt(sum), betaling, note});
+    const _waLink = waOrderLink({orderId, naam, tel, afhaal, lines, totaal:fmt(sum), betaling, note});
     sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>`
       + `<a class="wa-confirm" href="${_waLink}" target="_blank" rel="noopener">${T().orderWaBtn}</a>`
       + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
