@@ -4,12 +4,14 @@ name: Deploy static content to Pages
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - 'health-status.json'   # voorkomt herhaling door de auto-commit
   workflow_dispatch:
   schedule:
     - cron: '0 5 * * *'   # dagelijkse zelfcontrole (± 07:00 NL)
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -38,6 +40,17 @@ jobs:
         continue-on-error: true
       - name: Zelfcontrole (live site)
         run: python3 selfcheck.py --live
+        continue-on-error: true
+
+      # --- Health-status (incl. live scriptversie) vastleggen in de repo ---
+      - name: Health-status opslaan (live scriptversie)
+        run: |
+          python3 health-status.py || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add health-status.json
+          git commit -m "health-status.json automatisch bijgewerkt" || echo "geen wijziging"
+          git push || echo "push overgeslagen"
         continue-on-error: true
 
       # --- Publiceren met automatische herhaling (health.json gaat mee) ---
