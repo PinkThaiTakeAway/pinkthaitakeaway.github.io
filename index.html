@@ -3279,7 +3279,7 @@ function tekenAdmins(r){
   if(!rows.length){ body.innerHTML = '<p class="hloading">'+K.adGeen+'</p>'; return; }
   let out = '<p class="kinstel-uit" style="margin:4px 2px 12px">'+esc(K.adUit)+'</p>';
   out += '<table class="adtab"><thead><tr><th>'+esc(K.adNaam)+'</th><th>'+esc(K.adWanneer)+'</th><th>'+esc(K.adApparaat)+'</th></tr></thead><tbody>';
-  rows.forEach(x=>{ out += '<tr><td>'+esc(x.naam||K.adOnbekend)+'</td><td>'+esc(x.tijd||"")+'</td><td>'+esc(x.app||"")+'</td></tr>'; });
+  rows.forEach(x=>{ const tt = fmtInlog(x.tijd) || String(x.tijd||"").replace(/\s*GMT.*$/,"").trim(); out += '<tr><td>'+esc(x.naam||K.adOnbekend)+'</td><td>'+esc(tt)+'</td><td>'+esc(x.app||"")+'</td></tr>'; });
   out += '</tbody></table>';
   body.innerHTML = out;
 }
