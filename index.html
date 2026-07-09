@@ -608,6 +608,7 @@
     <div id="hBody" class="hbody"></div>
     <button id="hReload" class="hreload">Opnieuw laden</button>
     <button id="hSaveBtn" class="hreload">💾 Health opslaan</button>
+    <button id="hRunBtn" class="hreload">▶ Volledige check uitvoeren</button>
   </div>
 </div>
 
@@ -1679,6 +1680,7 @@ function applyBeheerLang(){
   const ht = document.getElementById("hTitle"); if(ht) ht.textContent = B.hl.title;
   const hr = document.getElementById("hReload"); if(hr) hr.textContent = B.hl.reload;
   { const hs=document.getElementById("hSaveBtn"); if(hs) hs.textContent = B.hl.opslaan; }
+  { const hru=document.getElementById("hRunBtn"); if(hru) hru.textContent = B.hl.runNu; }
   // Volg-scherm knop (klant)
   const vr = document.getElementById("volgReload"); if(vr) vr.textContent = (VOLG_T[LANG]||VOLG_T.nl).ver;
   // open panelen meteen opnieuw tekenen in de nieuwe taal
@@ -1710,6 +1712,7 @@ async function initBeheer(){
   document.getElementById("hClose").onclick = closeHealth;
   document.getElementById("hReload").onclick = laadHealth;
   { const hs=document.getElementById("hSaveBtn"); if(hs) hs.onclick = healthOpslaan; }
+  { const hru=document.getElementById("hRunBtn"); if(hru) hru.onclick = healthRun; }
   document.getElementById("healthOverlay").addEventListener("click", (e) => { if(e.target.id === "healthOverlay") closeHealth(); });
   document.getElementById("bKlanten").onclick = ()=>{ _kTab="klanten"; _markTab(); openKlanten(); };
   { const bi=document.getElementById("bInstellingen"); if(bi) bi.onclick = openInstellingen; }
@@ -2408,6 +2411,16 @@ async function healthOpslaan(){
     showToast(String(e && e.message).indexOf("no-token")>=0 ? A.tokenNeed : H.opslaanFout, false);
   }
 }
+async function healthRun(){
+  const H = BT().hl, A = T().adm;
+  if(!ghToken()){ showToast(A.tokenNeed || "Stel eerst je GitHub-token in", false); return; }
+  showToast(H.running, null);
+  try{
+    // minicommit triggert de GitHub Actions-workflow (volledige selfcheck -> health-status.json)
+    await ghPut(".healthrun", { tijd:new Date().toISOString(), door:(localStorage.getItem("tta_adminname")||"") }, "Handmatige volledige health-check gestart");
+    showToast(H.runOk, true);
+  }catch(e){ showToast(H.runFout, false); }
+}
 
 function klantKey(){ return localStorage.getItem("tta_klantkey") || ""; }
 let _klantData = [];
@@ -2458,7 +2471,7 @@ const BEHEER_T = {
       tBulkKlaar:(v,k)=>v+" van "+k+" mails verstuurd", tBulkFout:"Kon niet versturen"
     },
     hl:{
-      title:"🩺 Systeemstatus", reload:"Opnieuw laden", opslaan:"💾 Health opslaan", opgeslagen:"Health-status opgeslagen ✓", opslaanFout:"Kon health-status niet opslaan", laden:"Bezig met laden…",
+      title:"🩺 Systeemstatus", reload:"Opnieuw laden", opslaan:"💾 Health opslaan", opgeslagen:"Health-status opgeslagen ✓", opslaanFout:"Kon health-status niet opslaan", laden:"Bezig met laden…", runNu:"▶ Volledige check uitvoeren", running:"Volledige check starten…", runOk:"Check gestart — health-status wordt over ±1–2 min automatisch bijgewerkt", runFout:"Kon de check niet starten",
       geen:"Nog geen controlegegevens beschikbaar.<br>De eerste controle draait automatisch (dagelijks en na elke wijziging).", geenOnderdelen:"Geen onderdelen gevonden.",
       samOk:"alles in orde", samWarn:"let op", samErr:(n)=>n+" probleem"+(n>1?"en":""), laatste:"Laatste controle:",
       accGroup:"Toegang & limieten",
@@ -2500,7 +2513,7 @@ const BEHEER_T = {
       tBulkKlaar:(v,k)=>v+" of "+k+" e-mails sent", tBulkFout:"Could not send"
     },
     hl:{
-      title:"🩺 System status", reload:"Reload", opslaan:"💾 Save health", opgeslagen:"Health status saved ✓", opslaanFout:"Could not save health status", laden:"Loading…",
+      title:"🩺 System status", reload:"Reload", opslaan:"💾 Save health", opgeslagen:"Health status saved ✓", opslaanFout:"Could not save health status", laden:"Loading…", runNu:"▶ Run full check", running:"Starting full check…", runOk:"Check started — health status updates automatically in ~1–2 min", runFout:"Could not start the check",
       geen:"No check data available yet.<br>The first check runs automatically (daily and after every change).", geenOnderdelen:"No items found.",
       samOk:"all good", samWarn:"attention", samErr:(n)=>n+" issue"+(n>1?"s":""), laatste:"Last check:",
       accGroup:"Access & limits",
@@ -2542,7 +2555,7 @@ const BEHEER_T = {
       tBulkKlaar:(v,k)=>"ส่งแล้ว "+v+" จาก "+k+" อีเมล", tBulkFout:"ส่งไม่ได้"
     },
     hl:{
-      title:"🩺 สถานะระบบ", reload:"โหลดใหม่", opslaan:"💾 บันทึกสถานะ", opgeslagen:"บันทึกสถานะระบบแล้ว ✓", opslaanFout:"บันทึกสถานะไม่สำเร็จ", laden:"กำลังโหลด…",
+      title:"🩺 สถานะระบบ", reload:"โหลดใหม่", opslaan:"💾 บันทึกสถานะ", opgeslagen:"บันทึกสถานะระบบแล้ว ✓", opslaanFout:"บันทึกสถานะไม่สำเร็จ", laden:"กำลังโหลด…", runNu:"▶ รันตรวจสอบทั้งหมด", running:"กำลังเริ่มการตรวจสอบ…", runOk:"เริ่มการตรวจสอบแล้ว — สถานะจะอัปเดตใน ~1–2 นาที", runFout:"เริ่มการตรวจสอบไม่สำเร็จ",
       geen:"ยังไม่มีข้อมูลการตรวจสอบ<br>การตรวจสอบครั้งแรกจะทำงานอัตโนมัติ (ทุกวันและหลังการเปลี่ยนแปลงทุกครั้ง)", geenOnderdelen:"ไม่พบรายการ",
       samOk:"ทุกอย่างปกติ", samWarn:"ควรตรวจสอบ", samErr:(n)=>n+" ปัญหา", laatste:"ตรวจสอบล่าสุด:",
       accGroup:"การเข้าถึงและขีดจำกัด",
