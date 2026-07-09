@@ -3314,11 +3314,17 @@ function tekenBezoek(r){
     }).join("");
     return '<div class="ktop"><h4>'+esc(titel)+'</h4>'+rijen+'</div>';
   };
+  // laatste login-tijd per ingelogde klant (inlogLog is nieuwste-eerst -> eerste voorkomen = meest recent)
+  const _laatstKlant = {};
+  (r.inlogLog || []).forEach(e=>{ if(e && e.type!=="beheer" && e.naam && !_laatstKlant[e.naam]) _laatstKlant[e.naam]=e.tijd; });
   const klantLijst = r.klantLijst || [];
   let klantBlok = "";
   if(klantLijst.length){
     klantBlok = '<div class="ktop"><h4>'+esc(K.bzVasteKlanten)+' ('+(r.ingelogd||0)+')</h4>'+
-      klantLijst.map(k=>'<div class="ktoprow"><span>⭐ '+esc(k.naam)+'</span><span class="ktn">'+k.aantal+'×</span></div>').join("")+'</div>';
+      klantLijst.map(k=>{
+        const lt = _laatstKlant[k.naam];
+        return '<div class="ktoprow"><span>⭐ '+esc(k.naam)+' ('+k.aantal+'×)</span><span class="ktn">'+(lt?('🔓 '+esc(fmtInlog(lt))):'')+'</span></div>';
+      }).join("")+'</div>';
   }
   const beheerLijst = r.beheerLijst || [];
   let beheerBlok = "";
