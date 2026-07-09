@@ -446,6 +446,18 @@
   .ksleutel{text-align:center;padding:18px 0}
   .ksleutel input{width:100%;box-sizing:border-box;padding:11px 14px;margin:10px 0;border:1px solid #ddd;border-radius:10px;font-family:inherit}
   .ksleutel button{background:var(--forest);color:#fff;border:none;padding:11px 20px;border-radius:10px;font-weight:700;font-family:inherit;cursor:pointer}
+  #adminGate{position:fixed;inset:0;background:#000;z-index:100000;display:none;align-items:center;justify-content:center;padding:24px}
+  #adminGate.open{display:flex}
+  #adminGate .agcard{width:100%;max-width:360px;color:#fff;font-family:inherit;text-align:left}
+  #adminGate h2{margin:0 0 6px;font-size:1.3rem;color:#fff}
+  #adminGate .agsub{margin:0 0 22px;color:#bbb;font-size:.92rem;line-height:1.45}
+  #adminGate .agl{display:block;margin:12px 0 5px;font-size:.85rem;color:#ccc}
+  #adminGate .agin{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #333;border-radius:10px;background:#111;color:#fff;font-family:inherit;font-size:1rem}
+  #adminGate .agin:focus{outline:none;border-color:#FF6C00}
+  #adminGate .agbtn{width:100%;margin-top:18px;padding:13px;border:none;border-radius:10px;background:#FF6C00;color:#fff;font-weight:700;font-size:1rem;font-family:inherit;cursor:pointer}
+  #adminGate .agbtn:disabled{opacity:.5}
+  #adminGate .agerr{display:none;margin-top:12px;color:#ff8080;font-size:.9rem;line-height:1.4}
+  #adminGate .agbezig{display:none;margin-top:12px;color:#FF6C00;font-size:.9rem}
   .acct-btn{background:transparent;border:1px solid var(--forest);color:var(--forest);border-radius:999px;padding:7px 13px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer;display:flex;align-items:center;white-space:nowrap}
   .acct-btn:hover{background:rgba(14,59,51,.06)}
   body.beheer .acct-btn{display:none!important}
@@ -527,6 +539,19 @@
 </script>
 </head>
 <body>
+<div id="adminGate">
+  <div class="agcard">
+    <h2 id="agTitle">Beheer-login</h2>
+    <p id="agSub" class="agsub">Voer je naam en GitHub-token in om toegang te krijgen.</p>
+    <label id="agNaamL" class="agl">Naam</label>
+    <input id="agNaam" class="agin" type="text" autocomplete="off">
+    <label id="agTokenL" class="agl">GitHub-token</label>
+    <input id="agToken" class="agin" type="password" autocomplete="off">
+    <div id="agErr" class="agerr"></div>
+    <div id="agBezig" class="agbezig"></div>
+    <button id="agOk" class="agbtn">Toegang</button>
+  </div>
+</div>
 
 <header>
   <div class="bar">
@@ -787,7 +812,7 @@ const I18N = {
       cDel:"Dit gerecht uit het menu halen? Je kunt het terugzetten via de prullenbak.", trash:"Prullenbak", trashTitle:"Verwijderde gerechten", trashEmpty:"De prullenbak is leeg.", restore:"↩️ Terugzetten", cWis:"Lokale fotokeuzes wissen?",
       cExport:(n,t)=>`${n} van de ${t} gerechten heeft een foto. Sommige foto's zijn misschien nog aan het laden. Toch exporteren?`,
       savePrice:"Prijs opslaan", nrLabel:"Bestelnr.", nrSave:"Nr. opslaan", nrInvalid:"Vul een nummer van 1 of hoger in.", nrDup:"Let op: dit nummer is ook in gebruik bij", priceErr:"Ongeldige prijs.", pushOk:"✓ Opgeslagen", pushErr:"Opslaan mislukt — controleer token/internet.",
-      tokenBtn:"🔑 Token", tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", adminNaamAsk:"Wat is je naam? (wordt vastgelegd bij je logins)", tokenSaved:"Token opgeslagen. Sla je prijs nu opnieuw op.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publish:"⬆ Publiceren", publishOk:"Alles gepubliceerd ✓", cbTelAsk:"Telefoonnummer dat de WhatsApp-melding ontvangt (internationaal, alleen cijfers, bijv. 31628498822 of 66825834264):", cbKeyAsk:"CallMeBot API-key van dat nummer:", cbOk:"Melding-instellingen opgeslagen ✓", cbFout:"Kon instellingen niet opslaan", cbBtn:"📲 Melding"}
+      tokenBtn:"🔑 Token", tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", adminNaamAsk:"Wat is je naam? (wordt vastgelegd bij je logins)", gateTitle:"Beheer-login", gateSub:"Voer je naam en GitHub-token in om toegang te krijgen tot de beheersite.", gateNaamL:"Naam", gateTokenL:"GitHub-token", gateNaamPh:"Je naam", gateTokenPh:"Plak je GitHub-token", gateBtn:"Toegang", gateVul:"Vul zowel je naam als je token in.", gateCheck:"Token controleren…", gateBad:"Token ongeldig of geen toegang tot de repo. Controleer en probeer opnieuw.", tokenSaved:"Token opgeslagen. Sla je prijs nu opnieuw op.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publish:"⬆ Publiceren", publishOk:"Alles gepubliceerd ✓", cbTelAsk:"Telefoonnummer dat de WhatsApp-melding ontvangt (internationaal, alleen cijfers, bijv. 31628498822 of 66825834264):", cbKeyAsk:"CallMeBot API-key van dat nummer:", cbOk:"Melding-instellingen opgeslagen ✓", cbFout:"Kon instellingen niet opslaan", cbBtn:"📲 Melding"}
   },
   en: {
     locale:"en-GB", zaterdag:"Saturday", vrijdag:"Friday",
@@ -828,7 +853,7 @@ const I18N = {
       cDel:"Remove this dish from the menu? You can restore it from the trash.", trash:"Trash", trashTitle:"Deleted dishes", trashEmpty:"The trash is empty.", restore:"↩️ Restore", cWis:"Clear local photo choices?",
       cExport:(n,t)=>`${n} of ${t} dishes have a photo. Some may still be loading. Export anyway?`,
       savePrice:"Save price", nrLabel:"Order no.", nrSave:"Save no.", nrInvalid:"Enter a number of 1 or higher.", nrDup:"Note: this number is also used by", priceErr:"Invalid price.", pushOk:"✓ Saved", pushErr:"Save failed — check token/internet.",
-      tokenBtn:"🔑 Token", tokenAsk:"Paste your GitHub token (stored only on this device, not online):", adminNaamAsk:"What is your name? (recorded with your logins)", tokenSaved:"Token saved. Save your price again now.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publish:"⬆ Publish", publishOk:"All published ✓", cbTelAsk:"Phone number that receives the WhatsApp alert (international, digits only, e.g. 31628498822 or 66825834264):", cbKeyAsk:"CallMeBot API key for that number:", cbOk:"Alert settings saved ✓", cbFout:"Could not save settings", cbBtn:"📲 Alert"}
+      tokenBtn:"🔑 Token", tokenAsk:"Paste your GitHub token (stored only on this device, not online):", adminNaamAsk:"What is your name? (recorded with your logins)", gateTitle:"Admin login", gateSub:"Enter your name and GitHub token to access the admin site.", gateNaamL:"Name", gateTokenL:"GitHub token", gateNaamPh:"Your name", gateTokenPh:"Paste your GitHub token", gateBtn:"Access", gateVul:"Please enter both your name and token.", gateCheck:"Checking token…", gateBad:"Invalid token or no access to the repo. Please check and try again.", tokenSaved:"Token saved. Save your price again now.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publish:"⬆ Publish", publishOk:"All published ✓", cbTelAsk:"Phone number that receives the WhatsApp alert (international, digits only, e.g. 31628498822 or 66825834264):", cbKeyAsk:"CallMeBot API key for that number:", cbOk:"Alert settings saved ✓", cbFout:"Could not save settings", cbBtn:"📲 Alert"}
   },
   th: {
     locale:"th-TH", zaterdag:"วันเสาร์", vrijdag:"วันศุกร์",
@@ -869,7 +894,7 @@ const I18N = {
       cDel:"นำเมนูนี้ออกจากเมนูหรือไม่? กู้คืนได้จากถังขยะ", trash:"ถังขยะ", trashTitle:"เมนูที่ลบ", trashEmpty:"ถังขยะว่างเปล่า", restore:"↩️ กู้คืน", cWis:"ล้างการเลือกรูปในเครื่องหรือไม่?",
       cExport:(n,t)=>`มีรูป ${n} จาก ${t} เมนู บางรูปอาจกำลังโหลด ส่งออกเลยหรือไม่?`,
       savePrice:"บันทึกราคา", nrLabel:"หมายเลข", nrSave:"บันทึกหมายเลข", nrInvalid:"กรุณาใส่หมายเลขตั้งแต่ 1 ขึ้นไป", nrDup:"หมายเหตุ: หมายเลขนี้ถูกใช้กับ", priceErr:"ราคาไม่ถูกต้อง", pushOk:"✓ บันทึกแล้ว", pushErr:"บันทึกไม่สำเร็จ — ตรวจสอบโทเคน/อินเทอร์เน็ต",
-      tokenBtn:"🔑 โทเคน", tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", adminNaamAsk:"คุณชื่ออะไร? (บันทึกพร้อมการเข้าสู่ระบบ)", tokenSaved:"บันทึกโทเคนแล้ว บันทึกราคาอีกครั้ง", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publish:"⬆ เผยแพร่", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓", cbTelAsk:"เบอร์โทรที่รับแจ้งเตือน WhatsApp (สากล เฉพาะตัวเลข เช่น 66825834264):", cbKeyAsk:"CallMeBot API key ของเบอร์นั้น:", cbOk:"บันทึกการตั้งค่าแล้ว ✓", cbFout:"บันทึกไม่สำเร็จ", cbBtn:"📲 แจ้งเตือน"}
+      tokenBtn:"🔑 โทเคน", tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", adminNaamAsk:"คุณชื่ออะไร? (บันทึกพร้อมการเข้าสู่ระบบ)", gateTitle:"เข้าสู่ระบบผู้ดูแล", gateSub:"กรอกชื่อและโทเคน GitHub เพื่อเข้าถึงระบบผู้ดูแล", gateNaamL:"ชื่อ", gateTokenL:"โทเคน GitHub", gateNaamPh:"ชื่อของคุณ", gateTokenPh:"วางโทเคน GitHub", gateBtn:"เข้าถึง", gateVul:"กรุณากรอกทั้งชื่อและโทเคน", gateCheck:"กำลังตรวจสอบโทเคน…", gateBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง repo กรุณาลองใหม่", tokenSaved:"บันทึกโทเคนแล้ว บันทึกราคาอีกครั้ง", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publish:"⬆ เผยแพร่", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓", cbTelAsk:"เบอร์โทรที่รับแจ้งเตือน WhatsApp (สากล เฉพาะตัวเลข เช่น 66825834264):", cbKeyAsk:"CallMeBot API key ของเบอร์นั้น:", cbOk:"บันทึกการตั้งค่าแล้ว ✓", cbFout:"บันทึกไม่สำเร็จ", cbBtn:"📲 แจ้งเตือน"}
   }
 };
 
@@ -3180,20 +3205,46 @@ async function logAdminLogin(){
   if(typeof _kTab!=="undefined" && _kTab==="admins") renderAdmins();
 }
 let _adminGelogd = false, _adminPrompted = false;
-async function ensureAdminEnLog(){
-  if(!klantKey()) return;                       // pas nadat beheer ontgrendeld is
-  const naam = localStorage.getItem("tta_adminname") || "";
-  const adminid = localStorage.getItem("tta_adminid") || "";
-  if(!naam || !adminid){                        // onbekende admin -> token + naam afdwingen
-    if(_adminPrompted) return;                  // niet blijven pop-uppen binnen dezelfde sessie
-    _adminPrompted = true;
-    await askToken();                           // vraagt token én naam, slaat de combinatie op, logt bij succes
-    _adminGelogd = true;
-    return;
-  }
-  if(_adminGelogd) return;                       // per pagina-load één keer loggen
-  _adminGelogd = true;
-  logAdminLogin();
+function adminBekend(){ return !!(localStorage.getItem("tta_adminname") && localStorage.getItem("tta_adminid")); }
+function verbergAdminGate(){ const g=document.getElementById("adminGate"); if(g) g.classList.remove("open"); }
+async function _gateSubmit(){
+  const A=T().adm;
+  const naam=(document.getElementById("agNaam").value||"").trim();
+  const tok=(document.getElementById("agToken").value||"").trim();
+  const err=document.getElementById("agErr");
+  if(!naam || !tok){ err.textContent=A.gateVul; err.style.display="block"; return; }
+  const btn=document.getElementById("agOk"), bezig=document.getElementById("agBezig");
+  btn.disabled=true; err.style.display="none"; if(bezig){ bezig.textContent=A.gateCheck; bezig.style.display="block"; }
+  let okToken=false;
+  try{ const r=await fetch(`https://api.github.com/repos/${GH_REPO}?t=`+Date.now(), {headers:{Authorization:"token "+tok}}); okToken=r.ok; }catch(e){ okToken=false; }
+  if(bezig) bezig.style.display="none"; btn.disabled=false;
+  if(!okToken){ err.textContent=A.gateBad; err.style.display="block"; return; }
+  localStorage.setItem("tta_ghtoken", tok);
+  localStorage.setItem("tta_adminname", naam);
+  localStorage.setItem("tta_adminid", _tokenFingerprint(tok));
+  verbergAdminGate();
+  ensureAdminEnLog();          // logt indien de beheersleutel al aanwezig is
+}
+function toonAdminGate(){
+  const g=document.getElementById("adminGate"); if(!g) return;
+  const A=T().adm;
+  document.getElementById("agTitle").textContent=A.gateTitle;
+  document.getElementById("agSub").textContent=A.gateSub;
+  document.getElementById("agNaamL").textContent=A.gateNaamL;
+  document.getElementById("agTokenL").textContent=A.gateTokenL;
+  const nin=document.getElementById("agNaam"); nin.placeholder=A.gateNaamPh; if(!nin.value) nin.value=localStorage.getItem("tta_adminname")||"";
+  const tin=document.getElementById("agToken"); tin.placeholder=A.gateTokenPh;
+  document.getElementById("agOk").textContent=A.gateBtn;
+  document.getElementById("agErr").style.display="none";
+  document.getElementById("agOk").onclick=_gateSubmit;
+  nin.onkeydown=tin.onkeydown=(e)=>{ if(e.key==="Enter") _gateSubmit(); };
+  g.classList.add("open");
+}
+function ensureAdminEnLog(){
+  if(!BEHEER) return;
+  if(!adminBekend()){ toonAdminGate(); return; }   // zolang naam+token onbekend -> zwarte login-gate
+  verbergAdminGate();
+  if(klantKey() && !_adminGelogd){ _adminGelogd = true; logAdminLogin(); }
 }
 let _adminData = null, _adminFetch = null;
 function fetchAdmins(){
