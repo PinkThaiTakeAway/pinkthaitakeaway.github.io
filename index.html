@@ -1205,7 +1205,6 @@ const fmt = n => "€ " + n.toFixed(2).replace(".", ",");
 const byId = id => MENU.find(m => m.id === id);
 function loadJSON(k){ try{ return JSON.parse(localStorage.getItem(k)||"{}"); }catch(e){ return {}; } }
 function saveJSON(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
-function loadStr(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 const store = { save(){ saveJSON("tta_cart", cart); }, load(){ return loadJSON("tta_cart"); } };
 function goTo(id){ const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
 function esc(s){ return String(s==null?"":s).replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
@@ -1824,11 +1823,6 @@ function toggleHidden(id){
   buildMenu(); reapplyPhotos();
   livePush("verborgen.json", ()=>[...HIDDEN], "Zichtbaarheid bijgewerkt");
 }
-function exportHidden(){
-  const blob=new Blob([JSON.stringify([...HIDDEN],null,2)],{type:"application/json"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="verborgen.json"; a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
 const val = id => document.getElementById(id).value;
 function openAddModal(){
   const A = T().adm;
@@ -1959,11 +1953,6 @@ function renderTrash(){
   box.querySelectorAll("[data-restore]").forEach(b => b.onclick = () => restoreDish(b.dataset.restore));
 }
 function openTrash(){ document.getElementById("tmTitle").textContent = T().adm.trashTitle; renderTrash(); document.getElementById("trashModal").classList.add("open"); }
-function exportExtra(){
-  const blob=new Blob([JSON.stringify(EXTRA,null,2)],{type:"application/json"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="extra.json"; a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
 function ghToken(){ return localStorage.getItem("tta_ghtoken") || ""; }
 async function askToken(){
   const t = prompt(T().adm.tokenAsk, ghToken());
@@ -3573,30 +3562,6 @@ async function saveServe(id, container, btn){
     if(e.message!=="no-token") showToast(A.pushErr + " (" + e.message + ")", false);
   }
 }
-async function saveNummer(id, value, btn){
-  const A = T().adm;
-  const m = byId(id); if(!m) return;
-  let n = parseInt(value,10);
-  if(isNaN(n) || n < 1){ showToast(A.nrInvalid, false); return; }
-  const dup = Object.keys(NUMS).find(k => k!==id && NUMS[k]===n && !DELETED.has(k));
-  NUMS[id] = n; m.nr = n;
-  if(!ghToken()){ alert(A.tokenNeed); askToken(); }
-  const card = btn ? btn.closest(".card") : null;
-  if(card){
-    const thumb = card.querySelector(".thumb");
-    if(thumb){ const b = thumb.querySelector(".badge-nr"); if(b) b.textContent = "#"+n; else thumb.insertAdjacentHTML("afterbegin", `<span class="badge-nr">#${n}</span>`); }
-  }
-  const label = btn ? btn.textContent : "";
-  if(btn){ btn.disabled = true; btn.textContent = "…"; }
-  try{
-    await ghPut("nummers.json", NUMS, `Bestelnummer ${m.name.nl} → ${n}`);
-    if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
-    if(dup){ const other = byId(dup); showToast(A.nrDup + (other ? " " + other.name.nl : ""), false); }
-  }catch(e){
-    if(btn){ btn.textContent = label; btn.disabled=false; }
-    if(e.message!=="no-token") showToast(A.pushErr + " (" + e.message + ")", false);
-  }
-}
 async function savePittigheid(id, value, sel){
   const A = T().adm;
   const m = byId(id); if(!m) return;
@@ -3649,14 +3614,6 @@ function handleFile(id, file){
   reader.readAsDataURL(file);
 }
 function updateBeheerCount(){ /* teller verwijderd */ }
-function exportFotos(){
-  const data={}; MENU.forEach(m => { const url = chosen[m.id] || PHOTO[m.id]; if(url) data[m.id]=url; });
-  const n = Object.keys(data).length;
-  if(n < MENU.length && !confirm(T().adm.cExport(n, MENU.length))) return;
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="fotos.json"; a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
 
 /* ---------- Taalwissel ---------- */
 function setLang(l){
