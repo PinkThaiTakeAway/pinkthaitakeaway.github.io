@@ -2760,6 +2760,7 @@ async function laadKlanten(){
   }
   _klantData = r.bestellingen || [];
   _klantRecords = r.klanten || [];
+  ensureAdminEnLog();   // sleutel klopt -> dwing identiteit af bij onbekende admin (of log één keer)
   const verseStr = JSON.stringify({bestellingen:_klantData, klanten:_klantRecords});
   try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
   let oudStr = ""; try{ const cc = JSON.parse(cacheStr||"null"); if(cc) oudStr = JSON.stringify({bestellingen:cc.bestellingen, klanten:cc.klanten||[]}); }catch(e){}
@@ -3164,6 +3165,22 @@ async function logAdminLogin(){
   try{ await jsonp({actie:"adminlog", key:klantKey(), naam, adminid, app:_deviceType(), ua:(navigator.userAgent||"").slice(0,90)}); }catch(e){}
   _adminData = null;
   if(typeof _kTab!=="undefined" && _kTab==="admins") renderAdmins();
+}
+let _adminGelogd = false, _adminPrompted = false;
+async function ensureAdminEnLog(){
+  if(!klantKey()) return;                       // pas nadat beheer ontgrendeld is
+  const naam = localStorage.getItem("tta_adminname") || "";
+  const adminid = localStorage.getItem("tta_adminid") || "";
+  if(!naam || !adminid){                        // onbekende admin -> token + naam afdwingen
+    if(_adminPrompted) return;                  // niet blijven pop-uppen binnen dezelfde sessie
+    _adminPrompted = true;
+    await askToken();                           // vraagt token én naam, slaat de combinatie op, logt bij succes
+    _adminGelogd = true;
+    return;
+  }
+  if(_adminGelogd) return;                       // per pagina-load één keer loggen
+  _adminGelogd = true;
+  logAdminLogin();
 }
 let _adminData = null, _adminFetch = null;
 function fetchAdmins(){
@@ -3756,7 +3773,7 @@ function orderClosedMsg(st){
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); logAdminLogin(); startKlantAutoRefresh(); } else resolvePhotos();
+  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); ensureAdminEnLog(); startKlantAutoRefresh(); } else resolvePhotos();
   if(acctToken()) prefetchAccount();
 })();
 </script>
