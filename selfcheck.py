@@ -428,6 +428,217 @@ def write_health(groep, items, reset=False):
         print("kon health.json niet schrijven:", e)
 
 # ----------------------------------------------------------------------------
+# Restant-/opruimingscontrole: spoort achtergebleven onderdelen op in index.html
+# (dode mailfuncties/teksten, taalblok-asymmetrie, verweesde vertaalsleutels en
+#  ongebruikte data-/beeldbestanden). Alles als waarschuwing: blokkeert deploy niet.
+# ----------------------------------------------------------------------------
+def _skip_string(s, i, q):
+    i += 1; n = len(s)
+    while i < n:
+        c = s[i]
+        if c == "\\": i += 2; continue
+        if q == "`" and c == "$" and i + 1 < n and s[i + 1] == "{":
+            i = _match_brace(s, i + 1) + 1; continue
+        if c == q: return i
+        i += 1
+    return n - 1
+
+def _match_brace(s, oi):
+    open_c = s[oi]; depth = 0; i = oi; n = len(s)
+    while i < n:
+        c = s[i]
+        if c in "'\"`":
+            i = _skip_string(s, i, c); i += 1; continue
+        if c == "/" and i + 1 < n and s[i + 1] == "/":
+            j = s.find("\n", i); i = n if j < 0 else j; continue
+        if c == "/" and i + 1 < n and s[i + 1] == "*":
+            j = s.find("*/", i); i = n if j < 0 else j + 2; continue
+        if c in "{[": depth += 1
+        elif c in "}]":
+            depth -= 1
+            if depth == 0: return i
+        i += 1
+    return n - 1
+
+def _collect_keys(body):
+    """Alle sleutels op elke diepte binnen objectliteralen, recursief."""
+    keys = []; i = 0; n = len(body); stack = [("{", True)]
+    while i < n:
+        c = body[i]; typ, expect = stack[-1]
+        if c in "'\"`":
+            end = _skip_string(body, i, c)
+            if typ == "{" and expect:
+                j = end + 1
+                while j < n and body[j] in " \t\r\n": j += 1
+                if j < n and body[j] == ":":
+                    keys.append(body[i + 1:end]); stack[-1] = ("{", False); i = j + 1; continue
+            i = end + 1; continue
+        if c == "/" and i + 1 < n and body[i + 1] == "/":
+            j = body.find("\n", i); i = n if j < 0 else j; continue
+        if c == "/" and i + 1 < n and body[i + 1] == "*":
+            j = body.find("*/", i); i = n if j < 0 else j + 2; continue
+        if c in "{[(":
+            stack.append((c if c != "(" else "(", c == "{")); i += 1; continue
+        if c in "}])":
+            if len(stack) > 1: stack.pop()
+            i += 1; continue
+        if typ == "{":
+            if c == ",": stack[-1] = ("{", True); i += 1; continue
+            if expect and (c.isalpha() or c in "_$"):
+                m = re.match(r"[A-Za-z_$][\w$]*", body[i:]); ident = m.group(0)
+                j = i + len(ident); k = j
+                while k < n and body[k] in " \t\r\n": k += 1
+                if k < n and body[k] == ":":
+                    keys.append(ident); stack[-1] = ("{", False); i = k + 1; continue
+                i = j; continue
+        i += 1
+    return keys
+
+def _top_level_entries(body):
+    entries = []; i = 0; n = len(body); depth = 0; expect = True; cur = None
+    while i < n:
+        c = body[i]
+        if c in "'\"`":
+            end = _skip_string(body, i, c)
+            if depth == 0 and expect:
+                j = end + 1
+                while j < n and body[j] in " \t\r\n": j += 1
+                if j < n and body[j] == ":":
+                    cur = [body[i + 1:end], j + 1, None]; expect = False; i = j + 1; continue
+            i = end + 1; continue
+        if c == "/" and i + 1 < n and body[i + 1] == "/":
+            j = body.find("\n", i); i = n if j < 0 else j; continue
+        if c == "/" and i + 1 < n and body[i + 1] == "*":
+            j = body.find("*/", i); i = n if j < 0 else j + 2; continue
+        if c in "{[(": depth += 1; i += 1; continue
+        if c in "}])": depth -= 1; i += 1; continue
+        if depth == 0:
+            if c == ",":
+                if cur: cur[2] = i; entries.append(cur); cur = None
+                expect = True; i += 1; continue
+            if expect and (c.isalpha() or c in "_$"):
+                m = re.match(r"[A-Za-z_$][\w$]*", body[i:]); ident = m.group(0)
+                j = i + len(ident); k = j
+                while k < n and body[k] in " \t\r\n": k += 1
+                if k < n and body[k] == ":":
+                    cur = [ident, k + 1, None]; expect = False; i = k + 1; continue
+                i = j; continue
+        i += 1
+    if cur: cur[2] = n; entries.append(cur)
+    return entries
+
+def _dict_lang_keys(html, name):
+    try:
+        m = re.search(r"const\s+" + re.escape(name) + r"\s*=\s*\{", html)
+        if not m: return None
+        obj_open = html.index("{", m.end() - 1)
+        body = html[obj_open + 1:_match_brace(html, obj_open)]
+        out = {}
+        for key, vs, ve in _top_level_entries(body):
+            if key in ("nl", "en", "th"):
+                val = body[vs:ve].strip()
+                if val.startswith("{"):
+                    out[key] = _collect_keys(val[1:_match_brace(val, 0)])
+        return out
+    except Exception:
+        return None
+
+_DICTS = ("I18N", "VOLG_T", "BEHEER_T", "LOGIN_T")
+_MAIL_MARKERS = [
+    (r"MailApp", "MailApp"), (r"GmailApp", "GmailApp"), (r"\.sendEmail\b", "sendEmail"),
+    (r"createDraft", "createDraft"), (r"getInboxThreads", "getInboxThreads"),
+    (r'actie\s*:\s*"bedankmail"', 'actie:bedankmail'), (r'actie\s*:\s*"bulkmail"', 'actie:bulkmail'),
+    (r'actie\s*:\s*"inloglink"', 'actie:inloglink'), (r'actie\s*:\s*"mailcount"', 'actie:mailcount'),
+    (r"fetchMailCount", "fetchMailCount"), (r"stuurInloglink", "stuurInloglink"),
+    (r"klantBulk", "klantBulk"), (r"klantBedank", "klantBedank"),
+    (r"\bbedankBtn\b", "bedankBtn"), (r"\bbedankAl\b", "bedankAl"), (r"confBedank", "confBedank"),
+    (r"badgeBedankt", "badgeBedankt"), (r"bulkOnderwerp", "bulkOnderwerp"), (r"bulkBericht", "bulkBericht"),
+    (r"bulkConf", "bulkConf"), (r"bulkBezig", "bulkBezig"), (r"\bbulk\s*:", "bulk"),
+    (r"tBedankVerz", "tBedankVerz"), (r"tMailVerz", "tMailVerz"), (r"tMailFout", "tMailFout"),
+    (r"tGeenMail", "tGeenMail"), (r"tBulkKlaar", "tBulkKlaar"), (r"tBulkFout", "tBulkFout"),
+    (r"promptOnderwerp", "promptOnderwerp"), (r"promptBericht", "promptBericht"),
+    (r"losseMail", "losseMail"), (r"emailFout", "emailFout"), (r"emailOfTel", "emailOfTel"),
+    (r"impGeenEmail", "impGeenEmail"),
+    (r"labelEmail", "labelEmail"), (r"phEmail", "phEmail"), (r'"fEmail"', "fEmail-veld"), (r"\bemailOk\b", "emailOk"),
+]
+_MAIL_KEY_NAMES = {
+    "bedankBtn", "bedankAl", "confBedank", "badgeBedankt", "bulkOnderwerp", "bulkOnderwerpDef",
+    "bulkBericht", "bulkConf", "bulkBezig", "bulk", "tBedankVerz", "tMailVerz", "tMailFout",
+    "tGeenMail", "tBulkKlaar", "tBulkFout", "promptOnderwerp", "promptOnderwerpDef", "promptBericht",
+    "losseMail", "emailFout", "emailOfTel", "impGeenEmail", "labelEmail", "phEmail",
+}
+
+def restant_checks(html):
+    """Geeft een lijst met health-items (naam/status) voor de groep 'Opruiming (restanten)'."""
+    items = []
+    if not html:
+        return [{"naam": "restant-controle overgeslagen (geen index.html)", "status": "warn"}]
+
+    # 1. Dode mailfuncties, mail-teksten en het klant-e-mailveld
+    present, voork = [], 0
+    for pat, label in _MAIL_MARKERS:
+        c = len(re.findall(pat, html))
+        if c: present.append(label); voork += c
+    if present:
+        vb = ", ".join(present[:5]) + (f" (+{len(present) - 5})" if len(present) > 5 else "")
+        items.append({"naam": f"mail-restanten: {len(present)} soort(en), {voork} voorkomen(s) in index.html — {vb}", "status": "warn"})
+    else:
+        items.append({"naam": "geen mail-restanten in index.html", "status": "ok"})
+
+    # 2. Taalpariteit nl/en/th per woordenboek
+    defined = set(); parity_problem = False
+    for name in _DICTS:
+        lk = _dict_lang_keys(html, name)
+        if not lk: continue
+        for v in lk.values(): defined.update(v)
+        if "nl" not in lk: continue
+        base = set(lk["nl"]); msgs = []
+        for lang in ("en", "th"):
+            s = set(lk.get(lang, []))
+            miss = sorted(base - s); extra = sorted(s - base)
+            if miss:  msgs.append(f"{lang} mist {len(miss)} ({', '.join(miss[:4])})")
+            if extra: msgs.append(f"{lang} heeft {len(extra)} extra ({', '.join(extra[:4])})")
+        if msgs:
+            parity_problem = True
+            items.append({"naam": f"taalblok {name}: " + "; ".join(msgs), "status": "warn"})
+    if not parity_problem:
+        items.append({"naam": "taalblokken nl/en/th in balans", "status": "ok"})
+
+    # 3. Verweesde vertaalsleutels (conservatief: alleen als de naam nergens
+    #    anders dan in de definitie voorkomt; mail-sleutels al gemeld bij 1)
+    orphans = []
+    for key in sorted(defined):
+        if len(key) < 4 or key in _MAIL_KEY_NAMES: continue
+        total = len(re.findall(r"\b" + re.escape(key) + r"\b", html))
+        asdef = len(re.findall(r"\b" + re.escape(key) + r"\s*:", html))
+        if total <= asdef: orphans.append(key)
+    if orphans:
+        vb = ", ".join(orphans[:8]) + (f" (+{len(orphans) - 8})" if len(orphans) > 8 else "")
+        items.append({"naam": f"{len(orphans)} vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): {vb}", "status": "warn"})
+    else:
+        items.append({"naam": "geen verweesde vertaalsleutels", "status": "ok"})
+
+    # 4. Ongebruikte data-/beeldbestanden in de repo
+    corpus = html
+    for extra in ("selfcheck.py", "health-status.py", ".github/workflows/static.yml",
+                  "sitemap.xml", "robots.txt", "mutatietest.js"):
+        try: corpus += "\n" + open(extra, encoding="utf-8", errors="replace").read()
+        except Exception: pass
+    allow = {"health.json", "health-status.json"}
+    try:
+        files = [f for f in os.listdir(".")
+                 if "." in f and f.rsplit(".", 1)[-1].lower() in ("json", "png", "jpg", "jpeg", "webp", "gif")]
+    except Exception:
+        files = []
+    orphan_files = sorted(f for f in files if f not in allow and f not in corpus)
+    if orphan_files:
+        items.append({"naam": f"{len(orphan_files)} ongebruikt bestand(en) in de repo: {', '.join(orphan_files[:6])}", "status": "warn"})
+    else:
+        items.append({"naam": "geen ongebruikte data-/beeldbestanden", "status": "ok"})
+
+    return items
+
+# ----------------------------------------------------------------------------
 def main():
     live = "--live" in sys.argv
     if live:
@@ -435,7 +646,7 @@ def main():
         check_live(html)
         title = "LIVE-CONTROLE"
     else:
-        check_repo()
+        html = check_repo()
         title = "REPO-CONTROLE"
 
     print(f"\n=== {title}: RESULTAAT ===")
@@ -465,6 +676,25 @@ def main():
              [{"naam": m, "status": "warn"} for m in warnings] +
              [{"naam": m, "status": "ok"}   for m in oks])
     write_health(groep, items, reset=(not live))
+
+    # Opruiming (restanten): aparte groep, alleen in repo-modus. Waarschuwingen
+    # hier blokkeren de publicatie niet (tellen niet mee in de exitcode).
+    if not live:
+        ritems = restant_checks(html)
+        write_health("Opruiming (restanten)", ritems, reset=False)
+        sym_c = {"ok": "\u2713", "warn": "\u26a0", "err": "\u2717"}
+        print("\n=== OPRUIMING (RESTANTEN) ===")
+        for it in ritems:
+            print("  " + sym_c[it["status"]] + " " + it["naam"])
+        if summ:
+            sym_s = {"ok": "\u2705", "warn": "\u26a0\ufe0f", "err": "\u274c"}
+            rwarn = sum(1 for it in ritems if it["status"] != "ok")
+            with open(summ, "a", encoding="utf-8") as f:
+                f.write("## OPRUIMING (RESTANTEN) \u2014 " +
+                        ("\u26a0\ufe0f " + str(rwarn) + " aandachtspunt(en)" if rwarn else "\u2705 schoon") + "\n\n")
+                for it in ritems:
+                    f.write(f"- {sym_s[it['status']]} {it['naam']}\n")
+                f.write("\n")
 
     sys.exit(1 if errors else 0)
 
