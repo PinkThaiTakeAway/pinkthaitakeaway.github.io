@@ -2563,14 +2563,14 @@ const BEHEER_T = {
       waInvite:"📲 WhatsApp-uitnodiging", waNogmaals:"📲 Nogmaals uitnodigen", uitgLabel:"uitgenodigd", waGeenTel:"Deze klant heeft geen telefoonnummer",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("Hoi "+naam+"!"):"Hoi!")+" Groot nieuws: "+zaak+" heeft een nieuwe website! 🥳\n\nJe kunt nu heel makkelijk online je verse Thaise gerechten bestellen en op zaterdag afhalen. 🍜\n\nBekijk het menu en bestel hier:\n"+link+"\n\nTot snel en eet smakelijk! 🌶️💚",
  klantToegevoegd:"Klant toegevoegd", klantBijgewerkt:"Klant bijgewerkt",
-      impLeeg:"Plak eerst een lijst", impGeenEmail:"Geen bruikbare regels — zet naam en telefoon", impTeveel:"Te veel tegelijk — importeer in stukjes van max 100",
+      impLeeg:"Plak eerst een lijst", impGeenRegels:"Geen bruikbare regels — zet naam en telefoon", impTeveel:"Te veel tegelijk — importeer in stukjes van max 100",
       impKlaar:(n,b)=>n+" nieuw, "+b+" bijgewerkt",
       laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
       nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
       sleutelVraag:"Voer je beheersleutel in om het klantenbestand te bekijken.", sleutelFout:"De sleutel klopt niet. Probeer opnieuw.", sleutelPh:"Beheersleutel", sleutelOpen:"Openen",
       naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"),
       notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", klantVerw:"🗑 Klant verwijderen", alleBestVerw:"🗑 Alle bestellingen wissen",
-      badgeAfg:"afgehaald", badgeOpen:"open", badgeBedankt:"bedankt", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
+      badgeAfg:"afgehaald", badgeOpen:"open", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
       markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", delTitle:"Bestelling verwijderen",
       afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend", kooklijst:"Kooklijst", kookBest:"bestellingen", kookKopie:"📋 Kopieer", kookGekopieerd:"Kooklijst gekopieerd!",
@@ -2603,14 +2603,14 @@ const BEHEER_T = {
       waInvite:"📲 WhatsApp invite", waNogmaals:"📲 Invite again", uitgLabel:"invited", waGeenTel:"This customer has no phone number",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("Hi "+naam+"!"):"Hi!")+" Great news: "+zaak+" has a brand-new website! 🥳\n\nYou can now easily order your fresh Thai dishes online and pick them up on Saturday. 🍜\n\nCheck the menu and order here:\n"+link+"\n\nSee you soon! 🌶️💚",
  klantToegevoegd:"Customer added", klantBijgewerkt:"Customer updated",
-      impLeeg:"Paste a list first", impGeenEmail:"No usable rows — provide name and phone", impTeveel:"Too many at once — import in batches of max 100",
+      impLeeg:"Paste a list first", impGeenRegels:"No usable rows — provide name and phone", impTeveel:"Too many at once — import in batches of max 100",
       impKlaar:(n,b)=>n+" new, "+b+" updated",
       laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
       nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
       sleutelVraag:"Enter your admin key to view the customer file.", sleutelFout:"That key is incorrect. Please try again.", sleutelPh:"Admin key", sleutelOpen:"Open",
       naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"),
       notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", klantVerw:"🗑 Delete customer", alleBestVerw:"🗑 Delete all orders",
-      badgeAfg:"picked up", badgeOpen:"open", badgeBedankt:"thanked", badgeBetaald:"paid", badgeNietBet:"unpaid",
+      badgeAfg:"picked up", badgeOpen:"open", badgeBetaald:"paid", badgeNietBet:"unpaid",
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
       markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", delTitle:"Delete order",
       afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown", kooklijst:"Cooking list", kookBest:"orders", kookKopie:"📋 Copy", kookGekopieerd:"Cooking list copied!",
@@ -2643,14 +2643,14 @@ const BEHEER_T = {
       waInvite:"📲 เชิญทาง WhatsApp", waNogmaals:"📲 เชิญอีกครั้ง", uitgLabel:"เชิญแล้ว", waGeenTel:"ลูกค้ารายนี้ไม่มีเบอร์โทร",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("สวัสดีคุณ "+naam+"!"):"สวัสดีค่ะ!")+" ข่าวดี! "+zaak+" มีเว็บไซต์ใหม่แล้ว 🥳\n\nตอนนี้สั่งอาหารไทยสด ๆ ออนไลน์ได้ง่าย ๆ และมารับในวันเสาร์ 🍜\n\nดูเมนูและสั่งได้ที่นี่:\n"+link+"\n\nแล้วพบกันนะคะ! 🌶️💚",
  klantToegevoegd:"เพิ่มลูกค้าแล้ว", klantBijgewerkt:"อัปเดตลูกค้าแล้ว",
-      impLeeg:"วางรายชื่อก่อน", impGeenEmail:"ไม่พบข้อมูลที่ใช้ได้ — ใส่ชื่อและเบอร์โทร", impTeveel:"มากเกินไป — นำเข้าครั้งละไม่เกิน 100",
+      impLeeg:"วางรายชื่อก่อน", impGeenRegels:"ไม่พบข้อมูลที่ใช้ได้ — ใส่ชื่อและเบอร์โทร", impTeveel:"มากเกินไป — นำเข้าครั้งละไม่เกิน 100",
       impKlaar:(n,b)=>n+" ใหม่, "+b+" อัปเดต",
       laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
       nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
       sleutelVraag:"กรอกรหัสผู้ดูแลเพื่อดูข้อมูลลูกค้า", sleutelFout:"รหัสไม่ถูกต้อง กรุณาลองใหม่", sleutelPh:"รหัสผู้ดูแล", sleutelOpen:"เปิด",
       naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์",
       notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", klantVerw:"🗑 ลบลูกค้า", alleBestVerw:"🗑 ลบออเดอร์ทั้งหมด",
-      badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBedankt:"ขอบคุณแล้ว", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
+      badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
       markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", delTitle:"ลบออเดอร์",
       afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ", kooklijst:"รายการทำอาหาร", kookBest:"ออเดอร์", kookKopie:"📋 คัดลอก", kookGekopieerd:"คัดลอกรายการแล้ว!",
@@ -3030,7 +3030,7 @@ async function klantImporteren(){
   const txt=(document.getElementById("kimpTxt").value||"").trim();
   if(!txt){ showToast(BT().kl.impLeeg, false); return; }
   const lijst = parseKlantImport(txt);
-  if(!lijst.length){ showToast(BT().kl.impGeenEmail, false); return; }
+  if(!lijst.length){ showToast(BT().kl.impGeenRegels, false); return; }
   if(lijst.length>100){ showToast(BT().kl.impTeveel, false); return; }
   const r = await jsonp({actie:"klantimport", data: JSON.stringify(lijst), key:klantKey()});
   if(r && r.ok){ _kForm=null; localStorage.removeItem("tta_klantcache"); showToast(BT().kl.impKlaar(r.nieuw||0, r.bijgewerkt||0), true); laadKlanten(); }
@@ -3094,7 +3094,7 @@ function bestelHtml(b){
   return '<div class="kbest">'+
     '<div class="kbreg"><span class="kbtijd">#'+esc(b.id)+' · '+esc(tijd)+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
     (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
-    '<div>'+(b.afgehaald?'<span class="kbadge afg">'+K.badgeAfg+'</span>':'<span class="kbadge open">'+K.badgeOpen+'</span>')+(b.betaald?'<span class="kbadge bet">'+K.badgeBetaald+'</span>':'<span class="kbadge onbet">'+K.badgeNietBet+'</span>')+(b.bedankt?'<span class="kbadge bdk">'+K.badgeBedankt+'</span>':'')+'</div>'+
+    '<div>'+(b.afgehaald?'<span class="kbadge afg">'+K.badgeAfg+'</span>':'<span class="kbadge open">'+K.badgeOpen+'</span>')+(b.betaald?'<span class="kbadge bet">'+K.badgeBetaald+'</span>':'<span class="kbadge onbet">'+K.badgeNietBet+'</span>')+'</div>'+
     '<div class="kacts">'+
       '<button data-a="afg" data-id="'+esc(b.id)+'" data-w="'+(b.afgehaald?'0':'1')+'">'+(b.afgehaald?K.markNiet:K.markAfg)+'</button>'+
       '<button data-a="bet" data-id="'+esc(b.id)+'" data-w="'+(b.betaald?'0':'1')+'">'+(b.betaald?K.markNietBet:K.markBetaald)+'</button>'+
