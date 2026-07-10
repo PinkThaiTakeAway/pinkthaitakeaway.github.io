@@ -1197,6 +1197,7 @@ const SERVE_EDITS = {};
 const NUMS = {};
 let _numsDirty = false;
 const GH_REPO = "PinkThaiTakeAway/pinkthaitakeaway.github.io";
+const SITE_HOME = "https://pinkthaitakeaway.nl/";
 const RH_LABELS = {curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"};
 const BEHEER = new URLSearchParams(location.search).has("beheer");
 let LANG = "nl";
@@ -2919,7 +2920,7 @@ function waNumber(tel){
 function waUitnodiging(tel, naam, email, taal){
   const num=waNumber(tel);
   if(!num){ showToast(BT().kl.waGeenTel,false); return; }
-  const link = location.origin + "/";
+  const link = SITE_HOME;
   const K = ((taal && BEHEER_T[taal]) ? BEHEER_T[taal] : BEHEER_T.nl).kl;   // klanttaal, anders standaard Nederlands
   const msg = K.waBericht(naam||"", CONFIG.naam, link);
   window.open("https://wa.me/"+num+"?text="+encodeURIComponent(msg), "_blank");
@@ -3128,7 +3129,7 @@ function laadQRLib(){
   });
 }
 async function toonQR(){
-  const K = BT().kl, url = location.origin + "/";
+  const K = BT().kl, url = SITE_HOME;
   try{
     await laadQRLib();
     const qr = window.qrcode(0, "M");
