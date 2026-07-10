@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T06:11:33Z",
+  "opgeslagen": "2026-07-10T06:27:32Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T06:11:32.239722+00:00",
+    "updated": "2026-07-10T06:27:30.984468+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -16,6 +16,14 @@
           },
           {
             "naam": "JavaScript-syntax geldig",
+            "status": "ok"
+          },
+          {
+            "naam": "CNAME aanwezig en correct (pinkthaitakeaway.nl)",
+            "status": "ok"
+          },
+          {
+            "naam": "geen onveilige http://-bronnen op de pagina",
             "status": "ok"
           },
           {
@@ -250,6 +258,18 @@
           },
           {
             "naam": "capaciteitslimieten: standaardwaarden actief",
+            "status": "ok"
+          },
+          {
+            "naam": "TLS-certificaat geldig, nog 89 dagen (tot 08-10-2026)",
+            "status": "ok"
+          },
+          {
+            "naam": "http stuurt door naar https",
+            "status": "ok"
+          },
+          {
+            "naam": "oud github.io-adres stuurt door naar eigen domein",
             "status": "ok"
           }
         ]
