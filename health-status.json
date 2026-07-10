@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:07:50Z",
+  "opgeslagen": "2026-07-10T13:16:15Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:07:49.415303+00:00",
+    "updated": "2026-07-10T13:16:14.362414+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -188,8 +188,8 @@
             "status": "warn"
           },
           {
-            "naam": "taalblok I18N: en mist 18 (descEdit, descSave, nameEdit, nameSave)",
-            "status": "warn"
+            "naam": "taalblokken nl/en/th in balans",
+            "status": "ok"
           },
           {
             "naam": "50 vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): cExport, cWis, cbBtn, cbKeyAsk, cbTelAsk, expE, expF, expH (+42)",
