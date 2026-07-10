@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T12:37:37Z",
+  "opgeslagen": "2026-07-10T13:07:50Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T12:37:36.111872+00:00",
+    "updated": "2026-07-10T13:07:49.415303+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -176,6 +176,27 @@
           },
           {
             "naam": ".nojekyll aanwezig",
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "naam": "Opruiming (restanten)",
+        "items": [
+          {
+            "naam": "mail-restanten: 25 soort(en), 79 voorkomen(s) in index.html — bedankBtn, bedankAl, confBedank, badgeBedankt, bulkOnderwerp (+20)",
+            "status": "warn"
+          },
+          {
+            "naam": "taalblok I18N: en mist 18 (descEdit, descSave, nameEdit, nameSave)",
+            "status": "warn"
+          },
+          {
+            "naam": "50 vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): cExport, cWis, cbBtn, cbKeyAsk, cbTelAsk, expE, expF, expH (+42)",
+            "status": "warn"
+          },
+          {
+            "naam": "geen ongebruikte data-/beeldbestanden",
             "status": "ok"
           }
         ]
