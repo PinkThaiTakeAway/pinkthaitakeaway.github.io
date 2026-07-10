@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:57:18Z",
+  "opgeslagen": "2026-07-10T13:59:11Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:57:17.319722+00:00",
+    "updated": "2026-07-10T13:59:10.418257+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -268,8 +268,8 @@
             "status": "ok"
           },
           {
-            "naam": "18 dubbel gedefinieerde vertaalsleutel(s): I18N.nl.adm.translateBtn, I18N.nl.adm.trBusy, I18N.nl.adm.trFail, I18N.nl.adm.trEmpty, I18N.nl.adm.recipeTitle, I18N.nl.adm.recipeNeed (+12)",
-            "status": "warn"
+            "naam": "geen dubbel gedefinieerde vertaalsleutels",
+            "status": "ok"
           },
           {
             "naam": "template-placeholders (${...}) consistent tussen nl/en/th",
