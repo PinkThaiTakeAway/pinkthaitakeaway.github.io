@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:31:24Z",
+  "opgeslagen": "2026-07-10T13:35:46Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:31:23.553655+00:00",
+    "updated": "2026-07-10T13:35:45.748153+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -119,7 +119,7 @@
             "status": "ok"
           },
           {
-            "naam": "30 gerechten in het menu herkend",
+            "naam": "20 gerechten in het menu herkend",
             "status": "ok"
           },
           {
