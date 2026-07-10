@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T11:46:08Z",
+  "opgeslagen": "2026-07-10T11:51:31Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T11:46:07.101901+00:00",
+    "updated": "2026-07-10T11:51:29.657074+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -107,7 +107,7 @@
             "status": "ok"
           },
           {
-            "naam": "fotos.json: 67 vermelding(en) gecontroleerd",
+            "naam": "fotos.json: 20 vermelding(en) gecontroleerd",
             "status": "ok"
           },
           {
@@ -127,7 +127,7 @@
             "status": "ok"
           },
           {
-            "naam": "verwijderd.json: 47 id('s) gecontroleerd",
+            "naam": "verwijderd.json: 0 id('s) gecontroleerd",
             "status": "ok"
           },
           {
