@@ -800,11 +800,11 @@ const I18N = {
     payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
     payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
     payMsgCash:t=>`💵 Je betaalt <b>${t}</b> <b>contant</b> bij het ophalen. Gepast betalen wordt gewaardeerd.`,
-    labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd", slotVol:"vol", slotVolMsg:"Dit tijdvak is net vol geraakt. Kies een ander afhaaltijdstip.",
-    phName:"Voor- en achternaam", phEmail:"optioneel", phNote:"Bijv. niet te pittig, geen pinda's...",
+    labelName:"Je naam", labelPhone:"Telefoon", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd", slotVol:"vol", slotVolMsg:"Dit tijdvak is net vol geraakt. Kies een ander afhaaltijdstip.",
+    phName:"Voor- en achternaam", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
     orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", orderWaBtn:"📲 Stuur je bestelling via WhatsApp", orderWaSent:"✓ Verzonden via WhatsApp", previewLead:"Zo ziet je bestelling eruit. Eén tik verstuurt 'm naar Pink én legt de bestelling vast:", previewSend:"✅ Versturen via WhatsApp", previewBack:"← Terug om aan te passen", orderSaveFail:"Je bericht is naar Pink verstuurd via WhatsApp. Het automatisch vastleggen lukte net niet — Pink heeft je bestelling wél via WhatsApp ontvangen.", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", volBanner:"🌸 Volgeboekt voor komende zaterdag — bekijk gerust het menu", volgeboektMsg:"We zijn volgeboekt voor komende zaterdag. Kom volgende week weer terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
-    orderErr:"Vul je naam, telefoon en een geldig e-mailadres in.",
+    orderErr:"Vul je naam en telefoon in.",
     note:"Je bestelling wordt direct aan het restaurant doorgegeven.",
     spice:["Mild pittig","Kruidig","Pittig"],
     diet:{ vega:"Vega", glutenvrij:"Glutenvrij", noten:"Bevat noten" },
@@ -841,11 +841,11 @@ const I18N = {
     payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
     payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
     payMsgCash:t=>`💵 You'll pay <b>${t}</b> in <b>cash</b> on pickup. Exact change appreciated.`,
-    labelName:"Your name", labelPhone:"Phone", labelEmail:"Email", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time", slotVol:"full", slotVolMsg:"This time slot just filled up. Please choose another pickup time.",
-    phName:"Full name", phEmail:"optional", phNote:"E.g. not too spicy, no peanuts...",
+    labelName:"Your name", labelPhone:"Phone", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time", slotVol:"full", slotVolMsg:"This time slot just filled up. Please choose another pickup time.",
+    phName:"Full name", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
     orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", orderWaBtn:"📲 Send your order via WhatsApp", orderWaSent:"✓ Sent via WhatsApp", previewLead:"Here's your order. One tap sends it to Pink and records the order:", previewSend:"✅ Send via WhatsApp", previewBack:"← Back to edit", orderSaveFail:"Your message was sent to Pink via WhatsApp. Automatic recording just failed — but Pink did receive your order via WhatsApp.", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", volBanner:"🌸 Fully booked for this Saturday — feel free to browse the menu", volgeboektMsg:"We\u2019re fully booked for this Saturday. Please come back next week! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
-    orderErr:"Please enter your name, phone and a valid email address.",
+    orderErr:"Please enter your name and phone.",
     note:"Your order is sent to the restaurant right away.",
     spice:["Mild","Spicy","Hot"],
     diet:{ vega:"Veggie", glutenvrij:"Gluten-free", noten:"Contains nuts" },
@@ -883,11 +883,11 @@ const I18N = {
     payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
     payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
     payMsgCash:t=>`💵 ชำระ <b>${t}</b> <b>เงินสด</b> ตอนรับอาหาร`,
-    labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ", slotVol:"เต็ม", slotVolMsg:"ช่วงเวลานี้เต็มแล้ว กรุณาเลือกเวลารับอื่น",
-    phName:"ชื่อ-นามสกุล", phEmail:"ไม่บังคับ", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
+    labelName:"ชื่อ", labelPhone:"โทรศัพท์", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ", slotVol:"เต็ม", slotVolMsg:"ช่วงเวลานี้เต็มแล้ว กรุณาเลือกเวลารับอื่น",
+    phName:"ชื่อ-นามสกุล", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
     orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", orderWaBtn:"📲 ส่งออเดอร์ทาง WhatsApp", orderWaSent:"✓ ส่งทาง WhatsApp แล้ว", previewLead:"นี่คือออเดอร์ของคุณ แตะครั้งเดียวเพื่อส่งให้ร้านและบันทึกออเดอร์:", previewSend:"✅ ส่งทาง WhatsApp", previewBack:"← กลับไปแก้ไข", orderSaveFail:"ส่งข้อความให้ร้านทาง WhatsApp แล้ว แต่บันทึกอัตโนมัติไม่สำเร็จ — ร้านได้รับออเดอร์ทาง WhatsApp เรียบร้อยแล้ว", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", volBanner:"🌸 เต็มแล้วสำหรับเสาร์นี้ — ดูเมนูได้", volgeboektMsg:"ออเดอร์เต็มแล้วสำหรับเสาร์นี้ กลับมาใหม่สัปดาห์หน้านะคะ! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
-    orderErr:"กรุณากรอกชื่อ เบอร์โทร และอีเมลให้ถูกต้อง",
+    orderErr:"กรุณากรอกชื่อและเบอร์โทร",
     note:"คำสั่งซื้อจะถูกส่งให้ร้านทันที",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
     diet:{ vega:"มังสวิรัติ", glutenvrij:"ไม่มีกลูเตน", noten:"มีถั่ว" },
@@ -1359,7 +1359,7 @@ document.getElementById("cartBtn").onclick = openSheet;
 document.getElementById("fbGo").onclick = openSheet;
 document.getElementById("closeBtn").onclick = closeSheet;
 overlay.onclick = closeSheet;
-const form = { naam:"", email:"", tel:"", slot:"", note:"", pay:"contant" };
+const form = { naam:"", tel:"", slot:"", note:"", pay:"contant" };
 
 function renderSheet(){
   const ids = Object.keys(cart);
@@ -1443,7 +1443,6 @@ document.getElementById("waBtn").onclick = async () => {
   if(_zaterdagVol){ const m0=document.getElementById("orderMsg"); if(m0){ m0.className="order-msg err"; m0.textContent=T().volgeboektMsg; } return; }
   const naam=(document.getElementById("fName")?.value||"").trim();
   const tel =(document.getElementById("fPhone")?.value||"").trim();
-  const email=(document.getElementById("fEmail")?.value||"").trim();
   const slot= document.getElementById("fSlot")?.value || pickupSlots()[0];
   const note=(document.getElementById("fNote")?.value||"").trim();
   const msg = document.getElementById("orderMsg");
@@ -1452,7 +1451,6 @@ document.getElementById("waBtn").onclick = async () => {
   // Cooldown: niet te snel opnieuw bestellen vanaf hetzelfde apparaat
   const last = +(loadJSON("tta_lastorder").t || 0);
   if(last && Date.now() - last < 120000){ msg.className="order-msg err"; msg.textContent=T().orderCooldown; return; }
-  const emailOk = !email || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
   const telDigits = tel.replace(/\D/g,"");
   const telOk = telDigits.length >= 9 && telDigits.length <= 15 && !/^(\d)\1+$/.test(telDigits);
   let bad = !naam ? "fName" : !telOk ? "fPhone" : null;
@@ -1468,7 +1466,7 @@ document.getElementById("waBtn").onclick = async () => {
   try{
     const r = await jsonp({
       actie: "bestelling",
-      start: pickupISO(slot), order_id: orderId, naam, tel, email,
+      start: pickupISO(slot), order_id: orderId, naam, tel,
       bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
       afhaal, taal: LANG, mand: JSON.stringify(cart)
     });
@@ -1479,7 +1477,7 @@ document.getElementById("waBtn").onclick = async () => {
     if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); if(typeof prefetchAccount==="function"){ _accountData=null; prefetchAccount(); } }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]); store.save();
-    form.naam=""; form.tel=""; form.email=""; form.note=""; form.slot=""; form.pay="contant";
+    form.naam=""; form.tel=""; form.note=""; form.slot=""; form.pay="contant";
     buildMenu(); updateBars();
     sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>`
       + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
@@ -2559,31 +2557,29 @@ const BEHEER_T = {
     kl:{
       title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabAdmins:"Admins", adLaden:"Admins laden…", adGeen:"Nog geen logins vastgelegd.", adUit:"Elke keer dat beheer wordt geopend, wordt hier vastgelegd wie, wanneer en op welk apparaat.", adNaam:"Admin", adWanneer:"Wanneer", adApparaat:"Apparaat", adOnbekend:"onbekend", tabInstel:"Instellingen", tikkieTitel:"Tikkie-betaling", tikkieUit2:"Laat klanten kiezen om via Tikkie te betalen in plaats van contant.", tikkieStatusAan:"Nu: aan", tikkieStatusUit:"Nu: uit", tikkieAanBtn:"Aanzetten", tikkieUitBtn:"Uitzetten", tokenTitel:"GitHub-token (technisch)", tokenUit2:"Nodig om wijzigingen zoals prijzen en menu live op te slaan. Wordt alleen op dit apparaat bewaard.", tokenStatusSet:"Ingesteld op dit apparaat ✓", tokenStatusNone:"Nog niet ingesteld", tokenSetBtn:"Token instellen / wijzigen", publiceerTitel:"Publiceren", publiceerUit2:"Zet alle wijzigingen (prijzen, menu, teksten) in één keer live op de website.", publiceerBtn:"⬆ Nu publiceren", adresTitel:"Adresgegevens", adresUit2:"Adres en telefoonnummer zoals ze op de website worden getoond.", adresLabel:"Adres", adresTelLabel:"Telefoon (zichtbaar op de site)", naamLabel:"Bedrijfsnaam", fotoTitel:"Foto van Pink", fotoUit2:"De foto bovenaan de homepage. Plak een link naar een afbeelding (leeg = standaardfoto).", fotoLabel:"Link naar de foto (URL)", fotoUpload:"…of upload een foto (van je telefoon)", fotoBezig:"Foto uploaden…", fotoOk:"Foto opgeslagen ✓", fotoFout:"Kon foto niet opslaan", adresOk:"Adresgegevens opgeslagen ✓", adresFout:"Kon adresgegevens niet opslaan", seoTitel:"Vindbaarheid (Google)", seoUit:"Deze gegevens bepalen hoe je zaak in Google verschijnt (keuken, bediend gebied, prijsklasse en foto).", seoKeuken:"Keuken", seoGebied:"Bediend gebied (plaatsen, komma-gescheiden)", seoPrijs:"Prijsklasse (bijv. €, €€ of €€€)", seoAfb:"Foto voor Google/delen (URL)", seoOk:"Vindbaarheid opgeslagen ✓", seoFout:"Kon vindbaarheid niet opslaan", afhTitel:"Afhaal & bestellen", afhUit2:"Afhaaldag, afhaaltijden en tot wanneer klanten kunnen bestellen.", afhDagL:"Afhaaldag", afhVanL:"Vanaf", afhTotL:"Tot", afhSlotL:"Tijdvak per (minuten)", afhCutDagL:"Bestellen kan t/m (dag)", afhCutUurL:"…tot dat uur (0–23)", afhOk:"Afhaal-instellingen opgeslagen ✓", afhFout:"Kon afhaal-instellingen niet opslaan", capTitel:"Capaciteit", capUit2:"Maximum aantal bestellingen per tijdvak en per afhaaldag (0 = geen limiet).", capSlotL:"Max per tijdvak", capDagL:"Max per afhaaldag", capOk:"Capaciteit opgeslagen ✓", capFout:"Kon capaciteit niet opslaan", mijnTel:"Mijn telefoonnummer", mijnTelUit:"Op dit nummer krijg je automatisch elke nieuwe bestelling binnen via WhatsApp.", telLabel:"Telefoonnummer (internationaal, alleen cijfers, bijv. 31612345678 of 66812345678)", keyLabel:"CallMeBot API-key", telOpslaan:"Opslaan", zatTestBtn:"▶ Stuur zaterdag-overzicht nu (test)", zatTestBezig:"Overzicht versturen…", zatTestOk:"Zaterdag-overzicht verstuurd via WhatsApp ✓", zatTestFout:"Kon het overzicht niet versturen (telefoon + key ingesteld?)", zatTestLeeg:"Geen openstaande bestellingen — geen overzicht verstuurd", mijnTelHint:"Nieuw nummer? Activeer eerst CallMeBot op die telefoon: voeg contact +34 621 331 709 toe en stuur 'I allow callmebot to send me messages'. Je krijgt dan een API-key terug.",
       bzLaden:"Bezoek laden…", bzReset:"🗑 Bezoek resetten", bzResetConf:"Weet je zeker dat je ALLE bezoekgegevens wilt wissen? Dit kan niet ongedaan worden gemaakt.", bzResetOk:"Bezoekgegevens gewist ✓", bzResetFout:"Kon bezoek niet resetten", bzGeen:"Nog geen bezoekgegevens.", bzVandaag:"vandaag", bzWeek:"deze week", bzMaand:"deze maand", bzTotaal:"totaal", bzPerDag:"Bezoeken per dag (30 dagen)", bzType:"Type bezoek", bzKlant:"klant", bzBeheer:"beheer", bzVolg:"volglink", bzTaal:"Taal", bzHerkomst:"Herkomst", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"overig", bzToestel:"Toestel", bzMobiel:"mobiel", bzDesktop:"desktop", bzVasteKlanten:"Terugkerende klanten", laatstInlog:"laatst ingelogd:", bzBeheerders:"In beheer ingelogd", bzInlogLog:"Inloggeschiedenis", bzDeelLijst:"Binnengekomen via delen", bzDeelLog:"Deelgeschiedenis", bzVia:"via",
-      zoek:"Zoek op naam of telefoon…", bulk:"✉ Mail alle klanten", reload:"Opnieuw laden",
+      zoek:"Zoek op naam of telefoon…", reload:"Opnieuw laden",
       addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan", telVerplicht:"Vul een telefoonnummer in",
       impHint:"Eén klant per regel: naam en telefoon", impPlaceholder:"Jan Jansen, 0612345678\nPiet Peters, 0698765432", impBtn:"Importeren",
-      waInvite:"📲 WhatsApp-uitnodiging", waNogmaals:"📲 Nogmaals uitnodigen", uitgLabel:"uitgenodigd", waGeenTel:"Deze klant heeft geen telefoonnummer", emailOfTel:"Vul een e-mailadres of telefoonnummer in",
+      waInvite:"📲 WhatsApp-uitnodiging", waNogmaals:"📲 Nogmaals uitnodigen", uitgLabel:"uitgenodigd", waGeenTel:"Deze klant heeft geen telefoonnummer",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("Hoi "+naam+"!"):"Hoi!")+" Groot nieuws: "+zaak+" heeft een nieuwe website! 🥳\n\nJe kunt nu heel makkelijk online je verse Thaise gerechten bestellen en op zaterdag afhalen. 🍜\n\nBekijk het menu en bestel hier:\n"+link+"\n\nTot snel en eet smakelijk! 🌶️💚",
-      emailFout:"Vul een geldig e-mailadres in", klantToegevoegd:"Klant toegevoegd", klantBijgewerkt:"Klant bijgewerkt",
+ klantToegevoegd:"Klant toegevoegd", klantBijgewerkt:"Klant bijgewerkt",
       impLeeg:"Plak eerst een lijst", impGeenEmail:"Geen bruikbare regels — zet naam en telefoon", impTeveel:"Te veel tegelijk — importeer in stukjes van max 100",
       impKlaar:(n,b)=>n+" nieuw, "+b+" bijgewerkt",
       laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
       nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
       sleutelVraag:"Voer je beheersleutel in om het klantenbestand te bekijken.", sleutelFout:"De sleutel klopt niet. Probeer opnieuw.", sleutelPh:"Beheersleutel", sleutelOpen:"Openen",
       naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"),
-      notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", losseMail:"✉ Losse mail", klantVerw:"🗑 Klant verwijderen", alleBestVerw:"🗑 Alle bestellingen wissen",
+      notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", klantVerw:"🗑 Klant verwijderen", alleBestVerw:"🗑 Alle bestellingen wissen",
       badgeAfg:"afgehaald", badgeOpen:"open", badgeBedankt:"bedankt", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
-      markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", bedankBtn:"✉ Bedankmail", bedankAl:"✉ Al bedankt", delTitle:"Bestelling verwijderen",
+      markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", delTitle:"Bestelling verwijderen",
       afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend", kooklijst:"Kooklijst", kookBest:"bestellingen", kookKopie:"📋 Kopieer", kookGekopieerd:"Kooklijst gekopieerd!",
       cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGeen:"Nog geen gegevens.", cMaandOmzet:"Omzet per maand", cExportMaand:"Exporteren:", cAlle:"Alle", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} bestellingen geëxporteerd", qrKnop:"QR-code van de site", qrHint:"Voor flyers of verpakking", qrTitel:"QR-code naar de website", qrDownload:"📥 Download afbeelding", qrSluiten:"Sluiten", qrFout:"QR-code laden mislukt — probeer opnieuw.", maanden:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],
-      promptOnderwerp:"Onderwerp:", promptOnderwerpDef:"Bericht van Pink Thai TakeAway", promptBericht:"Bericht:",
-      confBedank:"Bedankmail versturen naar deze klant?", confDelBest:"Deze bestelling verwijderen?", confDelKlant:"Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.", confDelAlleBest:(n)=>"Alle "+n+" bestelling(en) van deze klant verwijderen? De klant zelf blijft bestaan.",
-      bulkOnderwerp:"Onderwerp van de mail aan alle klanten:", bulkOnderwerpDef:"Nieuws van Pink Thai TakeAway", bulkBericht:"Bericht aan alle klanten:", bulkConf:"Deze mail naar ALLE klanten met een e-mailadres versturen?", bulkBezig:"Bezig met versturen…",
-      tBijgewerkt:"Bijgewerkt", tNietBij:"Kon niet bijwerken", tBedankVerz:"Bedankmail verstuurd", tGeenMail:"Klant heeft geen e-mail", tMailFout:"Kon mail niet versturen", tMailVerz:"Mail verstuurd",
-      tNotitieOk:"Notitie opgeslagen", tNotitieFout:"Kon notitie niet opslaan", tBestVerw:"Bestelling verwijderd", tVerwFout:"Kon niet verwijderen", tKlantVerw:"Klant verwijderd", tAlleBestVerw:(n)=>n+" bestelling(en) verwijderd",
-      tBulkKlaar:(v,k)=>v+" van "+k+" mails verstuurd", tBulkFout:"Kon niet versturen"
-    },
+
+ confDelBest:"Deze bestelling verwijderen?", confDelKlant:"Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.", confDelAlleBest:(n)=>"Alle "+n+" bestelling(en) van deze klant verwijderen? De klant zelf blijft bestaan.",
+
+      tBijgewerkt:"Bijgewerkt", tNietBij:"Kon niet bijwerken",
+      tNotitieOk:"Notitie opgeslagen", tNotitieFout:"Kon notitie niet opslaan", tBestVerw:"Bestelling verwijderd", tVerwFout:"Kon niet verwijderen", tKlantVerw:"Klant verwijderd", tAlleBestVerw:(n)=>n+" bestelling(en) verwijderd"},
     hl:{
       title:"🩺 Systeemstatus", reload:"Opnieuw laden", opslaan:"💾 Health opslaan", opgeslagen:"Health-status opgeslagen ✓", opslaanFout:"Kon health-status niet opslaan", laden:"Bezig met laden…", runNu:"▶ Volledige check uitvoeren", running:"Volledige check starten…", runOk:"Check gestart — health-status wordt over ±1–2 min automatisch bijgewerkt", runFout:"Kon de check niet starten",
       geen:"Nog geen controlegegevens beschikbaar.<br>De eerste controle draait automatisch (dagelijks en na elke wijziging).", geenOnderdelen:"Geen onderdelen gevonden.",
@@ -2601,31 +2597,29 @@ const BEHEER_T = {
     kl:{
       title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabAdmins:"Admins", adLaden:"Loading admins…", adGeen:"No logins recorded yet.", adUit:"Every time the admin page is opened, this records who, when and on which device.", adNaam:"Admin", adWanneer:"When", adApparaat:"Device", adOnbekend:"unknown", tabInstel:"Settings", tikkieTitel:"Tikkie payment", tikkieUit2:"Let customers choose to pay via Tikkie instead of cash.", tikkieStatusAan:"Now: on", tikkieStatusUit:"Now: off", tikkieAanBtn:"Turn on", tikkieUitBtn:"Turn off", tokenTitel:"GitHub token (technical)", tokenUit2:"Needed to save changes like prices and menu live. Stored only on this device.", tokenStatusSet:"Set on this device ✓", tokenStatusNone:"Not set yet", tokenSetBtn:"Set / change token", publiceerTitel:"Publish", publiceerUit2:"Push all changes (prices, menu, texts) live to the website at once.", publiceerBtn:"⬆ Publish now", adresTitel:"Address details", adresUit2:"Address and phone number as shown on the website.", adresLabel:"Address", adresTelLabel:"Phone (shown on the site)", naamLabel:"Business name", fotoTitel:"Photo of Pink", fotoUit2:"The photo at the top of the homepage. Paste an image link (empty = default photo).", fotoLabel:"Image link (URL)", fotoUpload:"…or upload a photo (from your phone)", fotoBezig:"Uploading photo…", fotoOk:"Photo saved ✓", fotoFout:"Could not save photo", adresOk:"Address saved ✓", adresFout:"Could not save address", seoTitel:"Visibility (Google)", seoUit:"These details control how your business appears in Google (cuisine, area served, price range and photo).", seoKeuken:"Cuisine", seoGebied:"Area served (places, comma-separated)", seoPrijs:"Price range (e.g. €, €€ or €€€)", seoAfb:"Photo for Google/sharing (URL)", seoOk:"Visibility saved ✓", seoFout:"Could not save visibility", afhTitel:"Pickup & ordering", afhUit2:"Pickup day, pickup times and the deadline for customers to order.", afhDagL:"Pickup day", afhVanL:"From", afhTotL:"Until", afhSlotL:"Time slot length (minutes)", afhCutDagL:"Ordering open until (day)", afhCutUurL:"…until this hour (0–23)", afhOk:"Pickup settings saved ✓", afhFout:"Could not save pickup settings", capTitel:"Capacity", capUit2:"Maximum orders per time slot and per pickup day (0 = no limit).", capSlotL:"Max per time slot", capDagL:"Max per pickup day", capOk:"Capacity saved ✓", capFout:"Could not save capacity", mijnTel:"My phone number", mijnTelUit:"This number automatically receives every new order via WhatsApp.", telLabel:"Phone number (international, digits only, e.g. 31612345678 or 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"Save", zatTestBtn:"▶ Send Saturday summary now (test)", zatTestBezig:"Sending summary…", zatTestOk:"Saturday summary sent via WhatsApp ✓", zatTestFout:"Could not send the summary (phone + key set?)", zatTestLeeg:"No open orders — no summary sent", mijnTelHint:"New number? First activate CallMeBot on that phone: add contact +34 621 331 709 and send 'I allow callmebot to send me messages'. You will receive an API key.",
       bzLaden:"Loading visits…", bzReset:"🗑 Reset visits", bzResetConf:"Are you sure you want to erase ALL visit data? This cannot be undone.", bzResetOk:"Visit data cleared ✓", bzResetFout:"Could not reset visits", bzGeen:"No visit data yet.", bzVandaag:"today", bzWeek:"this week", bzMaand:"this month", bzTotaal:"total", bzPerDag:"Visits per day (30 days)", bzType:"Visit type", bzKlant:"customer", bzBeheer:"admin", bzVolg:"tracking link", bzTaal:"Language", bzHerkomst:"Source", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"other", bzToestel:"Device", bzMobiel:"mobile", bzDesktop:"desktop", bzVasteKlanten:"Returning customers", laatstInlog:"last login:", bzBeheerders:"Logged into admin", bzInlogLog:"Login history", bzDeelLijst:"Arrived via sharing", bzDeelLog:"Share history", bzVia:"via",
-      zoek:"Search by name or phone…", bulk:"✉ E-mail all customers", reload:"Reload",
+      zoek:"Search by name or phone…", reload:"Reload",
       addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer", telVerplicht:"Enter a phone number",
       impHint:"One customer per line: name and phone", impPlaceholder:"Jan Jansen, 0612345678\nPiet Peters, 0698765432", impBtn:"Import",
-      waInvite:"📲 WhatsApp invite", waNogmaals:"📲 Invite again", uitgLabel:"invited", waGeenTel:"This customer has no phone number", emailOfTel:"Enter an e-mail address or phone number",
+      waInvite:"📲 WhatsApp invite", waNogmaals:"📲 Invite again", uitgLabel:"invited", waGeenTel:"This customer has no phone number",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("Hi "+naam+"!"):"Hi!")+" Great news: "+zaak+" has a brand-new website! 🥳\n\nYou can now easily order your fresh Thai dishes online and pick them up on Saturday. 🍜\n\nCheck the menu and order here:\n"+link+"\n\nSee you soon! 🌶️💚",
-      emailFout:"Enter a valid e-mail address", klantToegevoegd:"Customer added", klantBijgewerkt:"Customer updated",
+ klantToegevoegd:"Customer added", klantBijgewerkt:"Customer updated",
       impLeeg:"Paste a list first", impGeenEmail:"No usable rows — provide name and phone", impTeveel:"Too many at once — import in batches of max 100",
       impKlaar:(n,b)=>n+" new, "+b+" updated",
       laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
       nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
       sleutelVraag:"Enter your admin key to view the customer file.", sleutelFout:"That key is incorrect. Please try again.", sleutelPh:"Admin key", sleutelOpen:"Open",
       naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"),
-      notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", losseMail:"✉ Send e-mail", klantVerw:"🗑 Delete customer", alleBestVerw:"🗑 Delete all orders",
+      notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", klantVerw:"🗑 Delete customer", alleBestVerw:"🗑 Delete all orders",
       badgeAfg:"picked up", badgeOpen:"open", badgeBedankt:"thanked", badgeBetaald:"paid", badgeNietBet:"unpaid",
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
-      markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", bedankBtn:"✉ Thank-you e-mail", bedankAl:"✉ Already thanked", delTitle:"Delete order",
+      markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", delTitle:"Delete order",
       afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown", kooklijst:"Cooking list", kookBest:"orders", kookKopie:"📋 Copy", kookGekopieerd:"Cooking list copied!",
       cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGeen:"No data yet.", cMaandOmzet:"Revenue per month", cExportMaand:"Export:", cAlle:"All", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} orders exported", qrKnop:"Site QR code", qrHint:"For flyers or packaging", qrTitel:"QR code to the website", qrDownload:"📥 Download image", qrSluiten:"Close", qrFout:"Failed to load QR code — try again.", maanden:["January","February","March","April","May","June","July","August","September","October","November","December"],
-      promptOnderwerp:"Subject:", promptOnderwerpDef:"Message from Pink Thai TakeAway", promptBericht:"Message:",
-      confBedank:"Send a thank-you e-mail to this customer?", confDelBest:"Delete this order?", confDelKlant:"Delete all data for this customer? This cannot be undone.", confDelAlleBest:(n)=>"Delete all "+n+" order(s) for this customer? The customer will be kept.",
-      bulkOnderwerp:"Subject of the e-mail to all customers:", bulkOnderwerpDef:"News from Pink Thai TakeAway", bulkBericht:"Message to all customers:", bulkConf:"Send this e-mail to ALL customers with an e-mail address?", bulkBezig:"Sending…",
-      tBijgewerkt:"Updated", tNietBij:"Could not update", tBedankVerz:"Thank-you e-mail sent", tGeenMail:"Customer has no e-mail", tMailFout:"Could not send e-mail", tMailVerz:"E-mail sent",
-      tNotitieOk:"Note saved", tNotitieFout:"Could not save note", tBestVerw:"Order deleted", tVerwFout:"Could not delete", tKlantVerw:"Customer deleted", tAlleBestVerw:(n)=>n+" order(s) deleted",
-      tBulkKlaar:(v,k)=>v+" of "+k+" e-mails sent", tBulkFout:"Could not send"
-    },
+
+ confDelBest:"Delete this order?", confDelKlant:"Delete all data for this customer? This cannot be undone.", confDelAlleBest:(n)=>"Delete all "+n+" order(s) for this customer? The customer will be kept.",
+
+      tBijgewerkt:"Updated", tNietBij:"Could not update",
+      tNotitieOk:"Note saved", tNotitieFout:"Could not save note", tBestVerw:"Order deleted", tVerwFout:"Could not delete", tKlantVerw:"Customer deleted", tAlleBestVerw:(n)=>n+" order(s) deleted"},
     hl:{
       title:"🩺 System status", reload:"Reload", opslaan:"💾 Save health", opgeslagen:"Health status saved ✓", opslaanFout:"Could not save health status", laden:"Loading…", runNu:"▶ Run full check", running:"Starting full check…", runOk:"Check started — health status updates automatically in ~1–2 min", runFout:"Could not start the check",
       geen:"No check data available yet.<br>The first check runs automatically (daily and after every change).", geenOnderdelen:"No items found.",
@@ -2643,31 +2637,29 @@ const BEHEER_T = {
     kl:{
       title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabAdmins:"ผู้ดูแล", adLaden:"กำลังโหลด…", adGeen:"ยังไม่มีบันทึกการเข้าสู่ระบบ", adUit:"ทุกครั้งที่เปิดหน้าผู้ดูแล ระบบจะบันทึกว่าใคร เมื่อไร และอุปกรณ์ใด", adNaam:"ผู้ดูแล", adWanneer:"เมื่อไร", adApparaat:"อุปกรณ์", adOnbekend:"ไม่ทราบ", tabInstel:"การตั้งค่า", tikkieTitel:"การชำระด้วย Tikkie", tikkieUit2:"ให้ลูกค้าเลือกจ่ายผ่าน Tikkie แทนเงินสด", tikkieStatusAan:"ตอนนี้: เปิด", tikkieStatusUit:"ตอนนี้: ปิด", tikkieAanBtn:"เปิด", tikkieUitBtn:"ปิด", tokenTitel:"โทเคน GitHub (ทางเทคนิค)", tokenUit2:"จำเป็นสำหรับบันทึกการเปลี่ยนแปลง เช่น ราคาและเมนู แบบสด เก็บในเครื่องนี้เท่านั้น", tokenStatusSet:"ตั้งค่าในเครื่องนี้แล้ว ✓", tokenStatusNone:"ยังไม่ได้ตั้งค่า", tokenSetBtn:"ตั้งค่า / เปลี่ยนโทเคน", publiceerTitel:"เผยแพร่", publiceerUit2:"อัปเดตการเปลี่ยนแปลงทั้งหมด (ราคา เมนู ข้อความ) ขึ้นเว็บไซต์พร้อมกัน", publiceerBtn:"⬆ เผยแพร่ตอนนี้", adresTitel:"ที่อยู่ร้าน", adresUit2:"ที่อยู่และเบอร์โทรที่แสดงบนเว็บไซต์", adresLabel:"ที่อยู่", adresTelLabel:"เบอร์โทร (แสดงบนเว็บไซต์)", naamLabel:"ชื่อร้าน", fotoTitel:"รูปของ Pink", fotoUit2:"รูปด้านบนของหน้าแรก วางลิงก์รูปภาพ (เว้นว่าง = รูปเริ่มต้น)", fotoLabel:"ลิงก์รูปภาพ (URL)", fotoUpload:"…หรืออัปโหลดรูป (จากมือถือ)", fotoBezig:"กำลังอัปโหลดรูป…", fotoOk:"บันทึกรูปแล้ว ✓", fotoFout:"บันทึกรูปไม่สำเร็จ", adresOk:"บันทึกที่อยู่แล้ว ✓", adresFout:"บันทึกที่อยู่ไม่สำเร็จ", seoTitel:"การค้นพบ (Google)", seoUit:"ข้อมูลนี้กำหนดว่าร้านจะแสดงใน Google อย่างไร (ประเภทอาหาร พื้นที่ให้บริการ ระดับราคา และรูปภาพ)", seoKeuken:"ประเภทอาหาร", seoGebied:"พื้นที่ให้บริการ (คั่นด้วยจุลภาค)", seoPrijs:"ระดับราคา (เช่น €, €€ หรือ €€€)", seoAfb:"รูปภาพสำหรับ Google/แชร์ (URL)", seoOk:"บันทึกแล้ว ✓", seoFout:"บันทึกไม่สำเร็จ", afhTitel:"การรับอาหาร & การสั่ง", afhUit2:"วันรับอาหาร เวลารับ และกำหนดเวลาสุดท้ายที่ลูกค้าสั่งได้", afhDagL:"วันรับอาหาร", afhVanL:"ตั้งแต่", afhTotL:"ถึง", afhSlotL:"ช่วงเวลาต่อ (นาที)", afhCutDagL:"สั่งได้ถึง (วัน)", afhCutUurL:"…ถึงเวลานี้ (0–23)", afhOk:"บันทึกการตั้งค่าการรับอาหารแล้ว ✓", afhFout:"บันทึกไม่สำเร็จ", capTitel:"ความจุ", capUit2:"จำนวนออเดอร์สูงสุดต่อช่วงเวลาและต่อวันรับอาหาร (0 = ไม่จำกัด)", capSlotL:"สูงสุดต่อช่วงเวลา", capDagL:"สูงสุดต่อวันรับ", capOk:"บันทึกความจุแล้ว ✓", capFout:"บันทึกไม่สำเร็จ", mijnTel:"เบอร์โทรของฉัน", mijnTelUit:"เบอร์นี้จะรับออเดอร์ใหม่ทุกครั้งทาง WhatsApp โดยอัตโนมัติ", telLabel:"เบอร์โทร (สากล เฉพาะตัวเลข เช่น 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"บันทึก", zatTestBtn:"▶ ส่งสรุปวันเสาร์ตอนนี้ (ทดสอบ)", zatTestBezig:"กำลังส่งสรุป…", zatTestOk:"ส่งสรุปวันเสาร์ทาง WhatsApp แล้ว ✓", zatTestFout:"ส่งสรุปไม่สำเร็จ (ตั้งค่าเบอร์ + คีย์แล้วหรือยัง?)", zatTestLeeg:"ไม่มีออเดอร์ค้าง — ไม่ได้ส่งสรุป", mijnTelHint:"เบอร์ใหม่? เปิดใช้งาน CallMeBot บนเครื่องนั้นก่อน: เพิ่มผู้ติดต่อ +34 621 331 709 แล้วส่งข้อความ 'I allow callmebot to send me messages' คุณจะได้รับ API key",
       bzLaden:"กำลังโหลดการเข้าชม…", bzReset:"🗑 ล้างข้อมูลการเข้าชม", bzResetConf:"แน่ใจหรือไม่ว่าต้องการลบข้อมูลการเข้าชมทั้งหมด? ไม่สามารถย้อนกลับได้", bzResetOk:"ล้างข้อมูลการเข้าชมแล้ว ✓", bzResetFout:"ล้างข้อมูลไม่สำเร็จ", bzGeen:"ยังไม่มีข้อมูลการเข้าชม", bzVandaag:"วันนี้", bzWeek:"สัปดาห์นี้", bzMaand:"เดือนนี้", bzTotaal:"ทั้งหมด", bzPerDag:"การเข้าชมต่อวัน (30 วัน)", bzType:"ประเภทการเข้าชม", bzKlant:"ลูกค้า", bzBeheer:"ผู้ดูแล", bzVolg:"ลิงก์ติดตาม", bzTaal:"ภาษา", bzHerkomst:"ที่มา", bzDirect:"เข้าตรง", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"อื่นๆ", bzToestel:"อุปกรณ์", bzMobiel:"มือถือ", bzDesktop:"เดสก์ท็อป", bzVasteKlanten:"ลูกค้าประจำ", laatstInlog:"เข้าสู่ระบบล่าสุด:", bzBeheerders:"เข้าสู่ระบบผู้ดูแล", bzInlogLog:"ประวัติการเข้าสู่ระบบ", bzDeelLijst:"เข้ามาผ่านการแชร์", bzDeelLog:"ประวัติการแชร์", bzVia:"โดย",
-      zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", bulk:"✉ ส่งอีเมลถึงลูกค้าทุกคน", reload:"โหลดใหม่",
+      zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", reload:"โหลดใหม่",
       addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า", telVerplicht:"กรุณากรอกเบอร์โทร",
       impHint:"หนึ่งคนต่อบรรทัด: ชื่อ และเบอร์โทร", impPlaceholder:"สมชาย, 0812345678\nสมหญิง, 0898765432", impBtn:"นำเข้า",
-      waInvite:"📲 เชิญทาง WhatsApp", waNogmaals:"📲 เชิญอีกครั้ง", uitgLabel:"เชิญแล้ว", waGeenTel:"ลูกค้ารายนี้ไม่มีเบอร์โทร", emailOfTel:"กรอกอีเมลหรือเบอร์โทร",
+      waInvite:"📲 เชิญทาง WhatsApp", waNogmaals:"📲 เชิญอีกครั้ง", uitgLabel:"เชิญแล้ว", waGeenTel:"ลูกค้ารายนี้ไม่มีเบอร์โทร",
       waBericht:(naam,zaak,link)=>"🎉 "+(naam?("สวัสดีคุณ "+naam+"!"):"สวัสดีค่ะ!")+" ข่าวดี! "+zaak+" มีเว็บไซต์ใหม่แล้ว 🥳\n\nตอนนี้สั่งอาหารไทยสด ๆ ออนไลน์ได้ง่าย ๆ และมารับในวันเสาร์ 🍜\n\nดูเมนูและสั่งได้ที่นี่:\n"+link+"\n\nแล้วพบกันนะคะ! 🌶️💚",
-      emailFout:"กรุณากรอกอีเมลที่ถูกต้อง", klantToegevoegd:"เพิ่มลูกค้าแล้ว", klantBijgewerkt:"อัปเดตลูกค้าแล้ว",
+ klantToegevoegd:"เพิ่มลูกค้าแล้ว", klantBijgewerkt:"อัปเดตลูกค้าแล้ว",
       impLeeg:"วางรายชื่อก่อน", impGeenEmail:"ไม่พบข้อมูลที่ใช้ได้ — ใส่ชื่อและเบอร์โทร", impTeveel:"มากเกินไป — นำเข้าครั้งละไม่เกิน 100",
       impKlaar:(n,b)=>n+" ใหม่, "+b+" อัปเดต",
       laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
       nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
       sleutelVraag:"กรอกรหัสผู้ดูแลเพื่อดูข้อมูลลูกค้า", sleutelFout:"รหัสไม่ถูกต้อง กรุณาลองใหม่", sleutelPh:"รหัสผู้ดูแล", sleutelOpen:"เปิด",
       naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์",
-      notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", losseMail:"✉ ส่งอีเมล", klantVerw:"🗑 ลบลูกค้า", alleBestVerw:"🗑 ลบออเดอร์ทั้งหมด",
+      notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", klantVerw:"🗑 ลบลูกค้า", alleBestVerw:"🗑 ลบออเดอร์ทั้งหมด",
       badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBedankt:"ขอบคุณแล้ว", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
-      markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", bedankBtn:"✉ อีเมลขอบคุณ", bedankAl:"✉ ขอบคุณแล้ว", delTitle:"ลบออเดอร์",
+      markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", delTitle:"ลบออเดอร์",
       afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ", kooklijst:"รายการทำอาหาร", kookBest:"ออเดอร์", kookKopie:"📋 คัดลอก", kookGekopieerd:"คัดลอกรายการแล้ว!",
       cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGeen:"ยังไม่มีข้อมูล", cMaandOmzet:"รายได้ต่อเดือน", cExportMaand:"ส่งออก:", cAlle:"ทั้งหมด", cExportCSV:"📥 ดาวน์โหลด CSV", cGeexporteerd:"ส่งออก {n} ออเดอร์แล้ว", qrKnop:"QR โค้ดเว็บไซต์", qrHint:"สำหรับใบปลิวหรือบรรจุภัณฑ์", qrTitel:"QR โค้ดไปยังเว็บไซต์", qrDownload:"📥 ดาวน์โหลดรูป", qrSluiten:"ปิด", qrFout:"โหลด QR ไม่สำเร็จ ลองใหม่", maanden:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
-      promptOnderwerp:"หัวข้อ:", promptOnderwerpDef:"ข้อความจาก Pink Thai TakeAway", promptBericht:"ข้อความ:",
-      confBedank:"ส่งอีเมลขอบคุณถึงลูกค้ารายนี้?", confDelBest:"ลบออเดอร์นี้?", confDelKlant:"ลบข้อมูลทั้งหมดของลูกค้ารายนี้? ไม่สามารถกู้คืนได้", confDelAlleBest:(n)=>"ลบออเดอร์ทั้งหมด "+n+" รายการของลูกค้ารายนี้? ข้อมูลลูกค้าจะยังอยู่",
-      bulkOnderwerp:"หัวข้ออีเมลถึงลูกค้าทุกคน:", bulkOnderwerpDef:"ข่าวสารจาก Pink Thai TakeAway", bulkBericht:"ข้อความถึงลูกค้าทุกคน:", bulkConf:"ส่งอีเมลนี้ถึงลูกค้าทุกคนที่มีอีเมล?", bulkBezig:"กำลังส่ง…",
-      tBijgewerkt:"อัปเดตแล้ว", tNietBij:"อัปเดตไม่ได้", tBedankVerz:"ส่งอีเมลขอบคุณแล้ว", tGeenMail:"ลูกค้าไม่มีอีเมล", tMailFout:"ส่งอีเมลไม่ได้", tMailVerz:"ส่งอีเมลแล้ว",
-      tNotitieOk:"บันทึกโน้ตแล้ว", tNotitieFout:"บันทึกโน้ตไม่ได้", tBestVerw:"ลบออเดอร์แล้ว", tVerwFout:"ลบไม่ได้", tKlantVerw:"ลบลูกค้าแล้ว", tAlleBestVerw:(n)=>"ลบออเดอร์ "+n+" รายการแล้ว",
-      tBulkKlaar:(v,k)=>"ส่งแล้ว "+v+" จาก "+k+" อีเมล", tBulkFout:"ส่งไม่ได้"
-    },
+
+ confDelBest:"ลบออเดอร์นี้?", confDelKlant:"ลบข้อมูลทั้งหมดของลูกค้ารายนี้? ไม่สามารถกู้คืนได้", confDelAlleBest:(n)=>"ลบออเดอร์ทั้งหมด "+n+" รายการของลูกค้ารายนี้? ข้อมูลลูกค้าจะยังอยู่",
+
+      tBijgewerkt:"อัปเดตแล้ว", tNietBij:"อัปเดตไม่ได้",
+      tNotitieOk:"บันทึกโน้ตแล้ว", tNotitieFout:"บันทึกโน้ตไม่ได้", tBestVerw:"ลบออเดอร์แล้ว", tVerwFout:"ลบไม่ได้", tKlantVerw:"ลบลูกค้าแล้ว", tAlleBestVerw:(n)=>"ลบออเดอร์ "+n+" รายการแล้ว"},
     hl:{
       title:"🩺 สถานะระบบ", reload:"โหลดใหม่", opslaan:"💾 บันทึกสถานะ", opgeslagen:"บันทึกสถานะระบบแล้ว ✓", opslaanFout:"บันทึกสถานะไม่สำเร็จ", laden:"กำลังโหลด…", runNu:"▶ รันตรวจสอบทั้งหมด", running:"กำลังเริ่มการตรวจสอบ…", runOk:"เริ่มการตรวจสอบแล้ว — สถานะจะอัปเดตใน ~1–2 นาที", runFout:"เริ่มการตรวจสอบไม่สำเร็จ",
       geen:"ยังไม่มีข้อมูลการตรวจสอบ<br>การตรวจสอบครั้งแรกจะทำงานอัตโนมัติ (ทุกวันและหลังการเปลี่ยนแปลงทุกครั้ง)", geenOnderdelen:"ไม่พบรายการ",
@@ -2740,7 +2732,6 @@ function herstelMand(order){
   try{
     if(d.naam)  form.naam  = d.naam;
     if(d.tel)   form.tel   = d.tel;
-    if(d.email) form.email = d.email;
     form.pay = String(d.betaling||"").toLowerCase().includes("tikkie") ? "tikkie" : "contant";
   }catch(e){}
   try{ store.save(); }catch(e){}
@@ -2996,7 +2987,7 @@ function parseKlantImport(txt){
     let email="", tel="", naam=[];
     parts.forEach(pp=>{
       if(!email && pp.indexOf("@")>0) email=pp;
-      else if(!tel && /^[+()\d][\d\s()+-]{5,}$/.test(pp)) tel=pp;
+      else if(!tel && /^[+()\d][\d\s()+-]{5}$/.test(pp)) tel=pp;
       else naam.push(pp);
     });
     if(email || tel) out.push({naam:naam.join(" "), email, tel});
