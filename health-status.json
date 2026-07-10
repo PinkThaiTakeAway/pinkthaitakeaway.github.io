@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:35:46Z",
+  "opgeslagen": "2026-07-10T13:38:58Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:35:45.748153+00:00",
+    "updated": "2026-07-10T13:38:56.860015+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -184,8 +184,8 @@
         "naam": "Opruiming (restanten)",
         "items": [
           {
-            "naam": "mail-restanten: 2 soort(en), 8 voorkomen(s) in index.html — badgeBedankt, impGeenEmail",
-            "status": "warn"
+            "naam": "geen mail-restanten in index.html",
+            "status": "ok"
           },
           {
             "naam": "taalblokken nl/en/th in balans",
