@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T12:20:06Z",
+  "opgeslagen": "2026-07-10T12:32:11Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T12:20:05.047235+00:00",
+    "updated": "2026-07-10T12:32:10.413454+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -24,6 +24,18 @@
           },
           {
             "naam": "geen onveilige http://-bronnen op de pagina",
+            "status": "ok"
+          },
+          {
+            "naam": "MENU-broncode telt 20 gerechten",
+            "status": "ok"
+          },
+          {
+            "naam": "geen definitief verwijderde gerechten meer in de broncode",
+            "status": "ok"
+          },
+          {
+            "naam": "geen verweesde gegevens in de databestanden",
             "status": "ok"
           },
           {
