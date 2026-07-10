@@ -1650,6 +1650,68 @@ function applyLang(){
   if(typeof updateAcctBtn==="function") updateAcctBtn();
   if(typeof refreshOrderingUI==="function") refreshOrderingUI();
 }
+function _phoneIntl(t){
+  let s = String(t||"").replace(/[^\d+]/g,"");
+  if(s[0]==="+") return s;
+  if(s.slice(0,2)==="00") return "+"+s.slice(2);
+  if(s[0]==="0") return "+31"+s.slice(1);
+  return s;
+}
+function _parseAdres(a){
+  const clean = String(a||"").replace(/\([^)]*\)/g,"").trim().replace(/\s+/g," ").replace(/,\s*$/,"");
+  const out = { street: clean, postcode:"", plaats:"" };
+  const i = clean.indexOf(",");
+  if(i>=0){
+    out.street = clean.slice(0,i).trim();
+    let rest = clean.slice(i+1).trim();
+    const m = rest.match(/(\d{4}\s?[A-Za-z]{2})/);
+    if(m){ out.postcode = m[1].toUpperCase(); rest = rest.replace(m[1],"").trim(); }
+    out.plaats = rest.replace(/(^,)|(,$)/g,"").trim();
+  }
+  return out;
+}
+function _dagEngels(d){ return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][((d%7)+7)%7] || "Saturday"; }
+// Structured data (schema.org) bijwerken vanuit CONFIG = bedrijf.json (beheer is leidend)
+function updateStructuredData(){
+  const el = document.querySelector('script[type="application/ld+json"]');
+  if(!el) return;
+  const ad = _parseAdres(CONFIG.adres);
+  const addr = { "@type":"PostalAddress" };
+  if(ad.street)   addr.streetAddress   = ad.street;
+  if(ad.postcode) addr.postalCode      = ad.postcode;
+  if(ad.plaats)   addr.addressLocality = ad.plaats;
+  addr.addressRegion  = "Noord-Brabant";
+  addr.addressCountry = "NL";
+  const data = {
+    "@context":"https://schema.org",
+    "@type":"FoodEstablishment",
+    "@id":"https://pinkthaitakeaway.nl/#afhaalzaak",
+    "name": CONFIG.naam || "Pink Thai TakeAway",
+    "description":"Thaise afhaalzaak in Biest-Houtakker. Uitsluitend afhalen \u2014 geen restaurant: bestel door de week online en haal je verse, huisgemaakte gerechten af.",
+    "servesCuisine":"Thai",
+    "image":"https://pinkthaitakeaway.nl/pink-thai-og.png",
+    "url":"https://pinkthaitakeaway.nl/",
+    "hasMenu":"https://pinkthaitakeaway.nl/",
+    "telephone": _phoneIntl(CONFIG.telefoon),
+    "priceRange":"\u20AC\u20AC",
+    "currenciesAccepted":"EUR",
+    "address": addr,
+    "areaServed":["Biest-Houtakker","Hilvarenbeek","Diessen","Tilburg"],
+    "openingHoursSpecification":[{
+      "@type":"OpeningHoursSpecification",
+      "dayOfWeek": _dagEngels(CONFIG.afhaal.dag),
+      "opens": CONFIG.afhaal.van || "17:00",
+      "closes": CONFIG.afhaal.tot || "19:00"
+    }],
+    "acceptsReservations": false,
+    "potentialAction":{
+      "@type":"OrderAction",
+      "target":"https://pinkthaitakeaway.nl/",
+      "deliveryMethod":"http://purl.org/goodrelations/v1#DeliveryModePickUp"
+    }
+  };
+  try{ el.textContent = JSON.stringify(data, null, 2); }catch(e){}
+}
 function applyConfig(){
   document.querySelectorAll(".brandname").forEach(n => { if(n.firstChild) n.firstChild.textContent = CONFIG.naam; });
   document.getElementById("cfgAdres").textContent  = CONFIG.adres;
@@ -1657,6 +1719,7 @@ function applyConfig(){
   document.getElementById("cfgTel").textContent    = CONFIG.telefoon;
   document.getElementById("year").textContent = new Date().getFullYear();
   { const _cf=document.getElementById("heroChefImg"); if(_cf) _cf.src = CONFIG.chefFoto || "chef.jpg"; }
+  updateStructuredData();
 }
 
 /* ---------- Foto's laden (online, met brede fallback) ---------- */
