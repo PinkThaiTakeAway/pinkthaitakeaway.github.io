@@ -640,8 +640,53 @@ def restant_checks(html):
     return items
 
 # ----------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Aanvullende controlegroepen (alleen repo-modus). Elke functie krijgt de
+# index.html-inhoud en geeft een lijst {naam,status} terug. 'err'-items
+# blokkeren de publicatie (tellen mee in de exitcode); 'warn' niet.
+# ---------------------------------------------------------------------------
+_SKIP_DIRS = {".git", "node_modules", "__pycache__", ".github"}
+_BIN_EXT = (".png", ".jpg", ".jpeg", ".webp", ".gif", ".ico",
+            ".woff", ".woff2", ".ttf", ".otf", ".pdf", ".zip")
+_SECRET_PATTERNS = [
+    (re.compile(r"ghp_[A-Za-z0-9]{36}"), "GitHub PAT (classic)"),
+    (re.compile(r"github_pat_[A-Za-z0-9_]{60,}"), "GitHub PAT (fine-grained)"),
+    (re.compile(r"gh[osru]_[A-Za-z0-9]{36}"), "GitHub-token"),
+    (re.compile(r"AIza[A-Za-z0-9_\-]{35}"), "Google API-sleutel"),
+    (re.compile(r"AKIA[A-Z0-9]{16}"), "AWS access key"),
+    (re.compile(r"xox[baprs]-[A-Za-z0-9-]{10,}"), "Slack-token"),
+    (re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"), "private key"),
+]
+
+def security_checks(html):
+    """Scant alle tekstbestanden in de repo op per ongeluk gecommitte geheimen.
+    Meldt NOOIT de aangetroffen waarde (health.json staat in een publieke repo)."""
+    hits = []
+    for root, dirs, files in os.walk("."):
+        dirs[:] = [d for d in dirs if d not in _SKIP_DIRS]
+        for fn in files:
+            if fn.lower().endswith(_BIN_EXT): continue
+            p = os.path.join(root, fn)
+            try: txt = open(p, encoding="utf-8", errors="ignore").read()
+            except Exception: continue
+            for rx, label in _SECRET_PATTERNS:
+                if rx.search(txt):
+                    hits.append((os.path.relpath(p, "."), label))
+    if hits:
+        seen = sorted({f"{f} ({lab})" for f, lab in hits})
+        return [{"naam": "mogelijke geheime sleutel(s) gevonden: " + ", ".join(seen[:6]) +
+                 (f" (+{len(seen)-6})" if len(seen) > 6 else "") +
+                 " — verwijderen uit git-historie en roteren", "status": "err"}]
+    return [{"naam": "geen tokens/sleutels in repobestanden aangetroffen", "status": "ok"}]
+
+# Register van extra groepen (repo-modus). Nieuwe groepen worden hier toegevoegd.
+EXTRA_GROUPS = [
+    ("Beveiliging", security_checks),
+]
+
 def main():
     live = "--live" in sys.argv
+    extra_block = False
     if live:
         html = open("index.html", encoding="utf-8").read() if os.path.exists("index.html") else ""
         check_live(html)
@@ -697,7 +742,30 @@ def main():
                     f.write(f"- {sym_s[it['status']]} {it['naam']}\n")
                 f.write("\n")
 
-    sys.exit(1 if errors else 0)
+    # Aanvullende controlegroepen (alleen repo-modus)
+    if not live:
+        sym_c = {"ok": "\u2713", "warn": "\u26a0", "err": "\u2717"}
+        sym_s = {"ok": "\u2705", "warn": "\u26a0\ufe0f", "err": "\u274c"}
+        for gnaam, gfn in EXTRA_GROUPS:
+            try:
+                gitems = gfn(html)
+            except Exception as e:
+                gitems = [{"naam": f"{gnaam}: controle mislukt ({e})", "status": "warn"}]
+            write_health(gnaam, gitems, reset=False)
+            if any(it["status"] == "err" for it in gitems): extra_block = True
+            print(f"\n=== {gnaam.upper()} ===")
+            for it in gitems:
+                print("  " + sym_c[it["status"]] + " " + it["naam"])
+            if summ:
+                nprob = sum(1 for it in gitems if it["status"] != "ok")
+                with open(summ, "a", encoding="utf-8") as f:
+                    f.write(f"## {gnaam.upper()} \u2014 " +
+                            ("\u274c/\u26a0\ufe0f " + str(nprob) + " aandachtspunt(en)" if nprob else "\u2705 in orde") + "\n\n")
+                    for it in gitems:
+                        f.write(f"- {sym_s[it['status']]} {it['naam']}\n")
+                    f.write("\n")
+
+    sys.exit(1 if (errors or extra_block) else 0)
 
 if __name__ == "__main__":
     main()
