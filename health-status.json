@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:38:58Z",
+  "opgeslagen": "2026-07-10T13:48:19Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:38:56.860015+00:00",
+    "updated": "2026-07-10T13:48:18.892037+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -197,6 +197,15 @@
           },
           {
             "naam": "geen ongebruikte data-/beeldbestanden",
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "naam": "Beveiliging",
+        "items": [
+          {
+            "naam": "geen tokens/sleutels in repobestanden aangetroffen",
             "status": "ok"
           }
         ]
