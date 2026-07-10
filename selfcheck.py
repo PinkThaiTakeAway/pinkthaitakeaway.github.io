@@ -213,7 +213,7 @@ def check_repo():
             err(f"{f}: ONgeldige JSON ({e})")
 
     # 4. Alle gerecht-id's uit het menu (index.html) + eventuele extra gerechten
-    menu_ids = set(re.findall(r'\bid:"([^"]+)"', html))
+    menu_ids = set(_menu_ids(html) or [])
     extra = data.get("extra.json", [])
     if isinstance(extra, list):
         for it in extra:
