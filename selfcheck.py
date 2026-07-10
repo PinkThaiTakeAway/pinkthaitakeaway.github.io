@@ -838,11 +838,111 @@ def seo_checks(html):
                   "status": "warn" if miss else "ok"})
     return items
 
+_EXPECTED_ACTIES = {
+    "account", "adminget", "adminlog", "afgehaald", "bestelling", "betaald", "bezoek",
+    "bezoekreset", "bezoekstats", "cbget", "cbset", "klanten", "klantimport", "klantnieuw",
+    "maxget", "maxset", "notitie", "slots", "taal", "uitgenodigd", "versie", "verwijder",
+    "verwijderklant", "volg", "zatnu",
+}
+
+def _dict_body(html, name):
+    m = re.search(r'const\s+' + name + r'\s*=\s*\{', html)
+    if not m: return None
+    o = html.index("{", m.end() - 1)
+    return html[o + 1:_match_brace(html, o)]
+
+def _obj_dup_keys(body, path=""):
+    dups = []; seen = {}
+    for k, vs, ve in _top_level_entries(body):
+        seen[k] = seen.get(k, 0) + 1
+        val = body[vs:ve].strip().rstrip(",").strip()
+        if val.startswith("{"):
+            dups += _obj_dup_keys(val[1:_match_brace(val, 0)], path + k + ".")
+    dups += [path + k for k, c in seen.items() if c > 1]
+    return dups
+
+def _kv_pairs(body, prefix=""):
+    out = {}
+    for k, vs, ve in _top_level_entries(body):
+        val = body[vs:ve].strip().rstrip(",").strip()
+        if val.startswith("{"):
+            out.update(_kv_pairs(val[1:_match_brace(val, 0)], prefix + k + "."))
+        else:
+            out[prefix + k] = val
+    return out
+
+def maintenance_checks(html):
+    """Operationele hygiëne: versheid van de laatste run, bestandsgrootte,
+    dubbele vertaalsleutels, placeholder-consistentie en client/GAS-contract."""
+    items = []
+
+    # 1. Versheid van de laatste Action-run
+    try:
+        hs = json.load(open("health-status.json", encoding="utf-8"))
+        ts = hs.get("opgeslagen") or hs.get("selfcheck", {}).get("updated")
+        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+        age = (datetime.now(timezone.utc) - dt).days
+        items.append({"naam": (f"laatste Health-run {age} dag(en) geleden \u2014 controle lijkt gestopt"
+                               if age > 3 else f"laatste Health-run is recent ({age} dag(en) geleden)"),
+                      "status": "warn" if age > 3 else "ok"})
+    except Exception:
+        items.append({"naam": "kon versheid van health-status.json niet bepalen", "status": "warn"})
+
+    # 2. Bestandsgrootte + zware inline-afbeeldingen
+    kb = len(html.encode("utf-8")) / 1024
+    big = [m for m in re.findall(r'data:image/[^;]+;base64,([A-Za-z0-9+/=]+)', html) if len(m) > 60000]
+    msgs = []
+    if kb > 450: msgs.append(f"index.html is {kb:.0f} KB (boven 450)")
+    if big: msgs.append(f"{len(big)} grote inline-afbeelding(en) ingebed")
+    items.append({"naam": ("; ".join(msgs)) if msgs
+                  else f"index.html compact ({kb:.0f} KB, geen zware inline-afbeeldingen)",
+                  "status": "warn" if msgs else "ok"})
+
+    # 3. Dubbele sleutels binnen één taalobject
+    alldups = []
+    for name in ("I18N", "VOLG_T", "BEHEER_T", "LOGIN_T"):
+        b = _dict_body(html, name)
+        if b: alldups += [name + "." + d for d in _obj_dup_keys(b)]
+    items.append({"naam": (f"{len(alldups)} dubbel gedefinieerde vertaalsleutel(s): " +
+                           ", ".join(alldups[:6]) + (f" (+{len(alldups)-6})" if len(alldups) > 6 else ""))
+                  if alldups else "geen dubbel gedefinieerde vertaalsleutels",
+                  "status": "warn" if alldups else "ok"})
+
+    # 4. Placeholder-consistentie ${...} tussen nl/en/th
+    mism = []
+    for name in ("I18N", "VOLG_T", "BEHEER_T", "LOGIN_T"):
+        b = _dict_body(html, name)
+        if not b: continue
+        lb = {}
+        for k, vs, ve in _top_level_entries(b):
+            if k in ("nl", "en", "th"):
+                v = b[vs:ve].strip().rstrip(",").strip()
+                if v.startswith("{"): lb[k] = _kv_pairs(v[1:_match_brace(v, 0)])
+        for path, val in lb.get("nl", {}).items():
+            if "${" not in val: continue
+            want = sorted(re.findall(r'\$\{([^}]+)\}', val))
+            for l in ("en", "th"):
+                ov = lb.get(l, {}).get(path)
+                if ov is not None and sorted(re.findall(r'\$\{([^}]+)\}', ov)) != want:
+                    mism.append(f"{name}.{path} ({l})")
+    items.append({"naam": ("placeholder-verschil tussen talen: " + ", ".join(mism[:6])) if mism
+                  else "template-placeholders (${...}) consistent tussen nl/en/th",
+                  "status": "warn" if mism else "ok"})
+
+    # 5. Client-acties vs verwacht GAS-contract
+    acties = set(re.findall(r'actie\s*:\s*"([^"]+)"', html))
+    onbekend = sorted(acties - _EXPECTED_ACTIES)
+    items.append({"naam": ("onbekende client-actie(s) t.o.v. verwacht GAS-contract: " + ", ".join(onbekend))
+                  if onbekend else f"alle {len(acties)} client-acties staan in het verwachte GAS-contract",
+                  "status": "warn" if onbekend else "ok"})
+    return items
+
 # Register van extra groepen (repo-modus). Nieuwe groepen worden hier toegevoegd.
 EXTRA_GROUPS = [
     ("Beveiliging", security_checks),
     ("Gerechten & data", dish_checks),
     ("SEO & vindbaarheid", seo_checks),
+    ("Onderhoud", maintenance_checks),
 ]
 
 def main():
