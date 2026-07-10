@@ -1789,8 +1789,9 @@ async function initBeheer(){
   const _cb = document.getElementById("cartBtn"); if(_cb) _cb.style.display = "none";
   try{ const r = await fetch("fotos.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok) chosen = {...await r.json()}; }catch(e){}
   Object.assign(chosen, loadJSON("tta_fotos"));
-  const localHidden = loadJSON("tta_hidden");
-  if(localHidden && Array.isArray(localHidden.ids)){ HIDDEN.clear(); localHidden.ids.forEach(id => HIDDEN.add(id)); }
+  const okHid = await loadHidden();                 // verborgen.json (server) is leidend
+  if(!okHid){ const lh = loadJSON("tta_hidden"); if(lh && Array.isArray(lh.ids)){ HIDDEN.clear(); lh.ids.forEach(id => HIDDEN.add(id)); } }  // alleen terugval als ophalen faalt
+  saveJSON("tta_hidden", {ids:[...HIDDEN]});         // lokale cache gelijktrekken met server
   buildMenu();
   for(const m of MENU){
     if(chosen[m.id]) setPhoto(m.id, chosen[m.id]);
@@ -3740,7 +3741,8 @@ document.querySelectorAll("#langsw button").forEach(b => b.onclick = () => setLa
 
 /* ---------- Init ---------- */
 async function loadHidden(){
-  try{ const r = await fetch("verborgen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) a.forEach(id => HIDDEN.add(id)); } }catch(e){}
+  try{ const r = await fetch("verborgen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)){ HIDDEN.clear(); a.forEach(id => HIDDEN.add(id)); return true; } } }catch(e){}
+  return false;
 }
 async function loadExtra(){
   let items = [];
