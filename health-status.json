@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:48:19Z",
+  "opgeslagen": "2026-07-10T13:50:16Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:48:18.892037+00:00",
+    "updated": "2026-07-10T13:50:15.648542+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -206,6 +206,31 @@
         "items": [
           {
             "naam": "geen tokens/sleutels in repobestanden aangetroffen",
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "naam": "Gerechten & data",
+        "items": [
+          {
+            "naam": "alle 20 bestelbare gerechten hebben een geldige prijs",
+            "status": "ok"
+          },
+          {
+            "naam": "alle gerechten verwijzen naar een bestaande categorie",
+            "status": "ok"
+          },
+          {
+            "naam": "pittigheid van alle gerechten is geldig (0–3)",
+            "status": "ok"
+          },
+          {
+            "naam": "alle bestelbare gerechten hebben een foto",
+            "status": "ok"
+          },
+          {
+            "naam": "alle gerechten hebben een naam in nl/en/th",
             "status": "ok"
           }
         ]
