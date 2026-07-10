@@ -12,5 +12,16 @@
     "cutoffDag": 5,
     "cutoffUur": 23
   },
-  "chefFoto": "chef.jpg"
+  "chefFoto": "chef.jpg",
+  "seo": {
+    "keuken": "Thai",
+    "gebied": [
+      "Biest-Houtakker",
+      "Hilvarenbeek",
+      "Diessen",
+      "Tilburg"
+    ],
+    "prijsklasse": "€€",
+    "afbeelding": "https://pinkthaitakeaway.nl/pink-thai-og.png"
+  }
 }
