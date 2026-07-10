@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:22:22Z",
+  "opgeslagen": "2026-07-10T13:31:24Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:22:21.532619+00:00",
+    "updated": "2026-07-10T13:31:23.553655+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -192,8 +192,8 @@
             "status": "ok"
           },
           {
-            "naam": "50 vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): cExport, cWis, cbBtn, cbKeyAsk, cbTelAsk, expE, expF, expH (+42)",
-            "status": "warn"
+            "naam": "geen verweesde vertaalsleutels",
+            "status": "ok"
           },
           {
             "naam": "geen ongebruikte data-/beeldbestanden",
