@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:51:46Z",
+  "opgeslagen": "2026-07-10T13:54:22Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:51:45.035313+00:00",
+    "updated": "2026-07-10T13:54:21.546760+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -256,6 +256,31 @@
           },
           {
             "naam": "title, meta-description, og-tags en canonical aanwezig",
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "naam": "Onderhoud",
+        "items": [
+          {
+            "naam": "laatste Health-run is recent (0 dag(en) geleden)",
+            "status": "ok"
+          },
+          {
+            "naam": "index.html compact (295 KB, geen zware inline-afbeeldingen)",
+            "status": "ok"
+          },
+          {
+            "naam": "18 dubbel gedefinieerde vertaalsleutel(s): I18N.nl.adm.translateBtn, I18N.nl.adm.trBusy, I18N.nl.adm.trFail, I18N.nl.adm.trEmpty, I18N.nl.adm.recipeTitle, I18N.nl.adm.recipeNeed (+12)",
+            "status": "warn"
+          },
+          {
+            "naam": "template-placeholders (${...}) consistent tussen nl/en/th",
+            "status": "ok"
+          },
+          {
+            "naam": "alle 25 client-acties staan in het verwachte GAS-contract",
             "status": "ok"
           }
         ]
