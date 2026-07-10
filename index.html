@@ -511,12 +511,16 @@
 {
   "@context": "https://schema.org",
   "@type": "Restaurant",
+  "@id": "https://pinkthaitakeaway.nl/#restaurant",
   "name": "Pink Thai TakeAway",
+  "description": "Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker. Bestel door de week online, afhalen op zaterdag.",
   "servesCuisine": "Thai",
   "image": "https://pinkthaitakeaway.nl/pink-thai-og.png",
   "url": "https://pinkthaitakeaway.nl/",
+  "hasMenu": "https://pinkthaitakeaway.nl/",
   "telephone": "+31648555842",
   "priceRange": "€€",
+  "currenciesAccepted": "EUR",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Hakvoortseweg 30",
@@ -532,7 +536,12 @@
     "opens": "17:00",
     "closes": "19:00"
   }],
-  "acceptsReservations": false
+  "acceptsReservations": false,
+  "potentialAction": {
+    "@type": "OrderAction",
+    "target": "https://pinkthaitakeaway.nl/",
+    "deliveryMethod": "http://purl.org/goodrelations/v1#DeliveryModePickUp"
+  }
 }
 </script>
 </head>
