@@ -767,10 +767,82 @@ def dish_checks(html):
         items.append({"naam": "alle gerechten hebben een naam in nl/en/th", "status": "ok"})
     return items
 
+def seo_checks(html):
+    """robots.txt (blokkeert de site niet?), sitemap.xml (geldig + eigen domein),
+    JSON-LD structured data en de belangrijkste meta-/og-tags."""
+    import xml.etree.ElementTree as ET
+    items = []
+    dom = "pinkthaitakeaway.nl"
+    try:
+        cn = open("CNAME", encoding="utf-8").read().strip()
+        if cn: dom = cn
+    except Exception: pass
+
+    # robots.txt
+    try: rob = open("robots.txt", encoding="utf-8").read()
+    except Exception: rob = None
+    if rob is None:
+        items.append({"naam": "robots.txt ontbreekt", "status": "warn"})
+    else:
+        dis = any(re.match(r'\s*Disallow:\s*/\s*$', ln, re.I) for ln in rob.splitlines())
+        alw = any(re.match(r'\s*Allow:\s*/\s*$', ln, re.I) for ln in rob.splitlines())
+        items.append({"naam": "robots.txt blokkeert de hele site (Disallow: /)" if (dis and not alw)
+                      else "robots.txt in orde (site niet geblokkeerd)",
+                      "status": "err" if (dis and not alw) else "ok"})
+        sm = re.search(r'(?im)^\s*Sitemap:\s*(\S+)', rob)
+        if sm and dom not in sm.group(1):
+            items.append({"naam": f"robots.txt-sitemap staat op ander domein dan {dom}: {sm.group(1)}", "status": "warn"})
+
+    # sitemap.xml
+    try: sx = open("sitemap.xml", encoding="utf-8").read()
+    except Exception: sx = None
+    if sx is None:
+        items.append({"naam": "sitemap.xml ontbreekt", "status": "warn"})
+    else:
+        try: ET.fromstring(sx); valid = True
+        except Exception: valid = False
+        locs = re.findall(r'<loc>\s*([^<]+?)\s*</loc>', sx)
+        if not valid:
+            items.append({"naam": "sitemap.xml is geen geldige XML", "status": "err"})
+        elif not locs:
+            items.append({"naam": "sitemap.xml bevat geen <loc>-URL's", "status": "warn"})
+        elif any(dom not in u for u in locs):
+            items.append({"naam": f"sitemap.xml gebruikt niet (overal) het eigen domein {dom}", "status": "warn"})
+        else:
+            items.append({"naam": f"sitemap.xml geldig ({len(locs)} URL(s), eigen domein)", "status": "ok"})
+
+    # JSON-LD
+    m = re.search(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html, re.S)
+    if not m:
+        items.append({"naam": "geen JSON-LD (structured data) op de pagina", "status": "warn"})
+    else:
+        try: ld = json.loads(m.group(1))
+        except Exception: ld = None
+        if not isinstance(ld, dict):
+            items.append({"naam": "JSON-LD aanwezig maar geen geldige JSON", "status": "warn"})
+        else:
+            mis = [k for k in ("name", "address", "telephone") if not ld.get(k)]
+            items.append({"naam": ("JSON-LD mist veld(en): " + ", ".join(mis)) if mis
+                          else f"JSON-LD compleet (@type {ld.get('@type', '?')})",
+                          "status": "warn" if mis else "ok"})
+
+    # Meta-/og-tags
+    meta = {"title": re.search(r'<title>([^<]*)</title>', html),
+            "meta-description": re.search(r'<meta name="description" content="([^"]*)"', html),
+            "og:title": re.search(r'<meta property="og:title" content="([^"]*)"', html),
+            "og:image": re.search(r'<meta property="og:image" content="([^"]*)"', html),
+            "canonical": re.search(r'<link rel="canonical" href="([^"]*)"', html)}
+    miss = [k for k, v in meta.items() if not (v and v.group(1).strip())]
+    items.append({"naam": ("meta-tags ontbreken/leeg: " + ", ".join(miss)) if miss
+                  else "title, meta-description, og-tags en canonical aanwezig",
+                  "status": "warn" if miss else "ok"})
+    return items
+
 # Register van extra groepen (repo-modus). Nieuwe groepen worden hier toegevoegd.
 EXTRA_GROUPS = [
     ("Beveiliging", security_checks),
     ("Gerechten & data", dish_checks),
+    ("SEO & vindbaarheid", seo_checks),
 ]
 
 def main():
