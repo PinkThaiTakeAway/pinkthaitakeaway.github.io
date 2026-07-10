@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:16:15Z",
+  "opgeslagen": "2026-07-10T13:22:22Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:16:14.362414+00:00",
+    "updated": "2026-07-10T13:22:21.532619+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -184,7 +184,7 @@
         "naam": "Opruiming (restanten)",
         "items": [
           {
-            "naam": "mail-restanten: 25 soort(en), 79 voorkomen(s) in index.html — bedankBtn, bedankAl, confBedank, badgeBedankt, bulkOnderwerp (+20)",
+            "naam": "mail-restanten: 2 soort(en), 8 voorkomen(s) in index.html — badgeBedankt, impGeenEmail",
             "status": "warn"
           },
           {
