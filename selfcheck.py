@@ -13,7 +13,7 @@ alarmen bij tijdelijke, externe hikjes te voorkomen).
 import json, os, re, subprocess, sys, hashlib, urllib.request
 from datetime import datetime, timezone
 
-SITE = "https://pinkthaitakeaway.github.io"
+SITE = "https://pinkthaitakeaway.nl"
 oks, warnings, errors = [], [], []
 def ok(m):   oks.append(m)
 def warn(m): warnings.append(m)
