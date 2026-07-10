@@ -10,7 +10,7 @@ Fouten (✗) laten de controle mislukken -> GitHub stuurt automatisch een e-mail
 Waarschuwingen (⚠) worden gemeld maar laten de controle slagen (om valse
 alarmen bij tijdelijke, externe hikjes te voorkomen).
 """
-import json, os, re, subprocess, sys, hashlib, urllib.request
+import json, os, re, subprocess, sys, hashlib, urllib.request, ssl, socket
 from datetime import datetime, timezone
 
 SITE = "https://pinkthaitakeaway.nl"
@@ -29,6 +29,21 @@ def http(url, timeout=25):
         return e.code, b""
     except Exception as e:
         return None, str(e).encode()
+
+def redirect_target(url, timeout=20):
+    """Geeft (status, Location) van de eerste reactie ZONDER redirects te volgen."""
+    class _NoRedir(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, *a, **k): return None
+    try:
+        opener = urllib.request.build_opener(_NoRedir)
+        req = urllib.request.Request(url, headers={"User-Agent": "selfcheck"})
+        try:
+            r = opener.open(req, timeout=timeout)
+            return r.getcode(), r.headers.get("Location")
+        except urllib.error.HTTPError as e:
+            return e.code, e.headers.get("Location")
+    except Exception as e:
+        return None, str(e)
 
 # ----------------------------------------------------------------------------
 def check_repo():
@@ -55,6 +70,25 @@ def check_repo():
             err("JavaScript-syntaxfout: " + last)
     else:
         warn("geen <script>-blok gevonden om te controleren")
+
+    # 2b. Eigen domein: CNAME-bestand aanwezig en correct
+    if os.path.exists("CNAME"):
+        cn = open("CNAME", encoding="utf-8").read().strip()
+        if cn == "pinkthaitakeaway.nl":
+            ok("CNAME aanwezig en correct (pinkthaitakeaway.nl)")
+        else:
+            err(f"CNAME bevat onverwacht domein '{cn}' (verwacht pinkthaitakeaway.nl)")
+    else:
+        err("CNAME ontbreekt \u2014 eigen domein kan bij een deploy worden losgelaten")
+
+    # 2c. Geen onveilige (http://) bronnen op de pagina (mixed content)
+    mixed = re.findall(r'\ssrc\s*=\s*"(http://[^"]+)"', html)
+    mixed += re.findall(r'<link[^>]+href\s*=\s*"(http://[^"]+)"', html)
+    mixed += re.findall(r'url\(\s*(http://[^)]+)\)', html)
+    if mixed:
+        warn(f"onveilige http://-bron(nen) op de pagina: {len(mixed)}\u00d7 \u2014 bijv. {mixed[0][:60]}")
+    else:
+        ok("geen onveilige http://-bronnen op de pagina")
 
     # 3. Alle aanwezige JSON-bestanden zijn geldig
     data = {}
@@ -229,6 +263,40 @@ def check_live(html):
             ok("capaciteitslimieten: eigen waarden ingesteld" if conf.get("maxConfigured") else "capaciteitslimieten: standaardwaarden actief")
         else:
             warn("CallMeBot/capaciteit-status kon niet worden opgevraagd (script mogelijk nog niet op v12)")
+
+    # 14. TLS-certificaat: vervaldatum bewaken
+    try:
+        host = SITE.split("://", 1)[-1].split("/", 1)[0]
+        ctx = ssl.create_default_context()
+        with socket.create_connection((host, 443), timeout=20) as sock:
+            with ctx.wrap_socket(sock, server_hostname=host) as ss:
+                cert = ss.getpeercert()
+        na = cert.get("notAfter")
+        exp = datetime.fromtimestamp(ssl.cert_time_to_seconds(na), timezone.utc)
+        dagen = (exp - datetime.now(timezone.utc)).days
+        datum = exp.strftime("%d-%m-%Y")
+        if dagen < 0:
+            err(f"TLS-certificaat is VERLOPEN (sinds {datum})")
+        elif dagen <= 21:
+            warn(f"TLS-certificaat verloopt binnenkort: nog {dagen} dagen (tot {datum})")
+        else:
+            ok(f"TLS-certificaat geldig, nog {dagen} dagen (tot {datum})")
+    except Exception as e:
+        warn(f"TLS-certificaat kon niet worden gecontroleerd ({e})")
+
+    # 15. Doorverwijzingen: http\u2192https en oud github.io\u2192eigen domein
+    st, loc = redirect_target("http://pinkthaitakeaway.nl/")
+    if st in (301, 302, 307, 308) and (loc or "").startswith("https://"):
+        ok("http stuurt door naar https")
+    elif st == 200:
+        warn("http wordt niet doorgestuurd naar https (staat 'Enforce HTTPS' aan?)")
+    else:
+        warn(f"http-doorverwijzing onduidelijk (status {st})")
+    st, loc = redirect_target("https://pinkthaitakeaway.github.io/")
+    if st in (301, 302, 307, 308) and "pinkthaitakeaway.nl" in (loc or ""):
+        ok("oud github.io-adres stuurt door naar eigen domein")
+    else:
+        warn(f"github.io stuurt (nog) niet door naar eigen domein (status {st})")
 
 # ----------------------------------------------------------------------------
 def write_health(groep, items, reset=False):
