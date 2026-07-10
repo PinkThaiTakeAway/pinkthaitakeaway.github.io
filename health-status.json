@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T11:25:27Z",
+  "opgeslagen": "2026-07-10T11:32:42Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T11:25:25.912415+00:00",
+    "updated": "2026-07-10T11:32:40.953991+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -84,6 +84,10 @@
           },
           {
             "naam": "verwijderd.json: geldige JSON",
+            "status": "ok"
+          },
+          {
+            "naam": "verwijderdweg.json: geldige JSON",
             "status": "ok"
           },
           {
