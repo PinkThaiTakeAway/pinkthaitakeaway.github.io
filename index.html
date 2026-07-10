@@ -800,18 +800,18 @@ const I18N = {
     payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
     payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
     payMsgCash:t=>`💵 Je betaalt <b>${t}</b> <b>contant</b> bij het ophalen. Gepast betalen wordt gewaardeerd.`,
-    labelName:"Je naam", labelPhone:"Telefoon", optNote:"(optioneel)", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd", slotVol:"vol", slotVolMsg:"Dit tijdvak is net vol geraakt. Kies een ander afhaaltijdstip.",
+    labelName:"Je naam", labelPhone:"Telefoon", labelNote:"Opmerking (optioneel)", labelSlot:"Afhaaltijd", slotVol:"vol", slotVolMsg:"Dit tijdvak is net vol geraakt. Kies een ander afhaaltijdstip.",
     phName:"Voor- en achternaam", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", orderWaBtn:"📲 Stuur je bestelling via WhatsApp", orderWaSent:"✓ Verzonden via WhatsApp", previewLead:"Zo ziet je bestelling eruit. Eén tik verstuurt 'm naar Pink én legt de bestelling vast:", previewSend:"✅ Versturen via WhatsApp", previewBack:"← Terug om aan te passen", orderSaveFail:"Je bericht is naar Pink verstuurd via WhatsApp. Het automatisch vastleggen lukte net niet — Pink heeft je bestelling wél via WhatsApp ontvangen.", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", volBanner:"🌸 Volgeboekt voor komende zaterdag — bekijk gerust het menu", volgeboektMsg:"We zijn volgeboekt voor komende zaterdag. Kom volgende week weer terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
+    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderIngelogd:"✅ Je bent nu ingelogd — bekijk je bestellingen en bestel sneller opnieuw via 'Mijn account'.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", volBanner:"🌸 Volgeboekt voor komende zaterdag — bekijk gerust het menu", volgeboektMsg:"We zijn volgeboekt voor komende zaterdag. Kom volgende week weer terug! 🌸", orderClosedHours:(v,t)=>`Bestellen is nu gesloten. Je kunt bestellen tussen ${v} en ${t} uur.`,
     orderErr:"Vul je naam en telefoon in.",
     note:"Je bestelling wordt direct aan het restaurant doorgegeven.",
     spice:["Mild pittig","Kruidig","Pittig"],
     diet:{ vega:"Vega", glutenvrij:"Glutenvrij", noten:"Bevat noten" },
     footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t} uur`,
-    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸", shareCopied:"Link gekopieerd!",
+    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
-    adm:{title:"Beheermodus", add:"Gerecht", expF:"⬇ foto's", expH:"⬇ verborgen", expE:"⬇ extra", wis:"Wis keuzes", sluit:"Sluiten",
+    adm:{title:"Beheermodus", add:"Gerecht", wis:"Wis keuzes",
       count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN",
       phTerm:"Zoekterm", search:"🔍 Zoek", phUrl:"of plak een eigen foto-URL", setUrl:"Zet", ownPhoto:"📷 Eigen foto van je toestel",
       makeHidden:"🚫 Niet bestelbaar maken", makeShown:"✅ Weer bestelbaar maken", del:"🗑️ Dit gerecht verwijderen",
@@ -821,10 +821,10 @@ const I18N = {
       spiceOpts:["Niet pittig","Mild","Pittig","Heel pittig"], cancel:"Annuleren", addBtn:"Toevoegen",
       rhLabels:{curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"},
       aNaam:"Vul een naam in.", aPrijs:"Vul een geldige prijs in.", aImg:"Dit bestand is geen geldige afbeelding.", aImgProc:"Foto kon niet verwerkt worden.",
-      cDel:"Dit gerecht uit het menu halen? Je kunt het terugzetten via de prullenbak.", trash:"Prullenbak", trashTitle:"Verwijderde gerechten", trashEmpty:"De prullenbak is leeg.", restore:"↩️ Terugzetten", purge:"✕ Definitief", cPurge:"Dit gerecht definitief verwijderen? Het is daarna niet meer terug te zetten.", emptyTrash:"🗑️ Prullenbak legen", cEmptyTrash:"De hele prullenbak definitief legen? Geen van de verwijderde gerechten is daarna nog terug te zetten.", cWis:"Lokale fotokeuzes wissen?",
-      cExport:(n,t)=>`${n} van de ${t} gerechten heeft een foto. Sommige foto's zijn misschien nog aan het laden. Toch exporteren?`,
-      savePrice:"Prijs opslaan", nrLabel:"Bestelnr.", nrSave:"Nr. opslaan", nrInvalid:"Vul een nummer van 1 of hoger in.", nrDup:"Let op: dit nummer is ook in gebruik bij", priceErr:"Ongeldige prijs.", pushOk:"✓ Opgeslagen", pushErr:"Opslaan mislukt — controleer token/internet.",
-      tokenBtn:"🔑 Token", tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", adminNaamAsk:"Wat is je naam? (wordt vastgelegd bij je logins)", gateTitle:"Beheer-login", gateSub:"Voer je naam en GitHub-token in om toegang te krijgen tot de beheersite.", gateNaamL:"Naam", gateTokenL:"GitHub-token", gateNaamPh:"Je naam", gateTokenPh:"Plak je GitHub-token", gateBtn:"Toegang", gateVul:"Vul zowel je naam als je token in.", gateCheck:"Token controleren…", gateBad:"Token ongeldig of geen toegang tot de repo. Controleer en probeer opnieuw.", tokenSaved:"Token opgeslagen. Sla je prijs nu opnieuw op.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publish:"⬆ Publiceren", publishOk:"Alles gepubliceerd ✓", cbTelAsk:"Telefoonnummer dat de WhatsApp-melding ontvangt (internationaal, alleen cijfers, bijv. 31628498822 of 66825834264):", cbKeyAsk:"CallMeBot API-key van dat nummer:", cbOk:"Melding-instellingen opgeslagen ✓", cbFout:"Kon instellingen niet opslaan", cbBtn:"📲 Melding"}
+      cDel:"Dit gerecht uit het menu halen? Je kunt het terugzetten via de prullenbak.", trash:"Prullenbak", trashTitle:"Verwijderde gerechten", trashEmpty:"De prullenbak is leeg.", restore:"↩️ Terugzetten", purge:"✕ Definitief", cPurge:"Dit gerecht definitief verwijderen? Het is daarna niet meer terug te zetten.", emptyTrash:"🗑️ Prullenbak legen", cEmptyTrash:"De hele prullenbak definitief legen? Geen van de verwijderde gerechten is daarna nog terug te zetten.",
+
+      savePrice:"Prijs opslaan", priceErr:"Ongeldige prijs.", pushOk:"✓ Opgeslagen", pushErr:"Opslaan mislukt — controleer token/internet.",
+ tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", adminNaamAsk:"Wat is je naam? (wordt vastgelegd bij je logins)", gateTitle:"Beheer-login", gateSub:"Voer je naam en GitHub-token in om toegang te krijgen tot de beheersite.", gateNaamL:"Naam", gateTokenL:"GitHub-token", gateNaamPh:"Je naam", gateTokenPh:"Plak je GitHub-token", gateBtn:"Toegang", gateVul:"Vul zowel je naam als je token in.", gateCheck:"Token controleren…", gateBad:"Token ongeldig of geen toegang tot de repo. Controleer en probeer opnieuw.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publishOk:"Alles gepubliceerd ✓", cbOk:"Melding-instellingen opgeslagen ✓", cbFout:"Kon instellingen niet opslaan"}
   },
   en: {
     locale:"en-GB", zaterdag:"Saturday", vrijdag:"Friday",
@@ -841,19 +841,19 @@ const I18N = {
     payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
     payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
     payMsgCash:t=>`💵 You'll pay <b>${t}</b> in <b>cash</b> on pickup. Exact change appreciated.`,
-    labelName:"Your name", labelPhone:"Phone", optNote:"(optional)", labelNote:"Note (optional)", labelSlot:"Pickup time", slotVol:"full", slotVolMsg:"This time slot just filled up. Please choose another pickup time.",
+    labelName:"Your name", labelPhone:"Phone", labelNote:"Note (optional)", labelSlot:"Pickup time", slotVol:"full", slotVolMsg:"This time slot just filled up. Please choose another pickup time.",
     phName:"Full name", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", orderWaBtn:"📲 Send your order via WhatsApp", orderWaSent:"✓ Sent via WhatsApp", previewLead:"Here's your order. One tap sends it to Pink and records the order:", previewSend:"✅ Send via WhatsApp", previewBack:"← Back to edit", orderSaveFail:"Your message was sent to Pink via WhatsApp. Automatic recording just failed — but Pink did receive your order via WhatsApp.", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", volBanner:"🌸 Fully booked for this Saturday — feel free to browse the menu", volgeboektMsg:"We\u2019re fully booked for this Saturday. Please come back next week! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
+    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderIngelogd:"✅ You're now logged in — view your orders and reorder faster via 'My account'.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", volBanner:"🌸 Fully booked for this Saturday — feel free to browse the menu", volgeboektMsg:"We\u2019re fully booked for this Saturday. Please come back next week! 🌸", orderClosedHours:(v,t)=>`Ordering is currently closed. You can order between ${v} and ${t}.`,
     orderErr:"Please enter your name and phone.",
     note:"Your order is sent to the restaurant right away.",
     spice:["Mild","Spicy","Hot"],
     diet:{ vega:"Veggie", glutenvrij:"Gluten-free", noten:"Contains nuts" },
     footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
-    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸", shareCopied:"Link copied!",
+    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸",
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
-      descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", trBusy:"Translating…", trEmpty:"Enter the Thai name or description first.", trFail:"Translation failed — try again or fill in manually.", translateBtn:"🌐 Translate Thai → NL/EN", expF:"⬇ photos", expH:"⬇ hidden", expE:"⬇ extra", wis:"Clear choices", sluit:"Close",
+      descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", trBusy:"Translating…", trEmpty:"Enter the Thai name or description first.", trFail:"Translation failed — try again or fill in manually.", translateBtn:"🌐 Translate Thai → NL/EN", wis:"Clear choices",
       count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN",
       phTerm:"Search term", search:"🔍 Search", phUrl:"or paste your own photo URL", setUrl:"Set", ownPhoto:"📷 Your own photo",
       makeHidden:"🚫 Make unavailable", makeShown:"✅ Make available again", del:"🗑️ Delete this dish",
@@ -863,10 +863,10 @@ const I18N = {
       spiceOpts:["Not spicy","Mild","Spicy","Very spicy"], cancel:"Cancel", addBtn:"Add",
       rhLabels:{curry:"Curry / sauce",soup:"Soup",fried:"Fried / crispy",wok:"Wok / stir-fried",rice:"Rice dish",grill:"Grilled meat",salad:"Salad (cold)",rotiwarm:"Roti / pan-warm",cold:"Cold (ice/dessert)",sticky:"Mango sticky rice",stickyplain:"Sticky rice",drink:"Drink"},
       aNaam:"Please enter a name.", aPrijs:"Please enter a valid price.", aImg:"This file is not a valid image.", aImgProc:"The photo could not be processed.",
-      cDel:"Remove this dish from the menu? You can restore it from the trash.", trash:"Trash", trashTitle:"Deleted dishes", trashEmpty:"The trash is empty.", restore:"↩️ Restore", purge:"✕ Delete", cPurge:"Permanently delete this dish? It cannot be restored afterwards.", emptyTrash:"🗑️ Empty trash", cEmptyTrash:"Permanently empty the entire trash? None of the deleted dishes can be restored afterwards.", cWis:"Clear local photo choices?",
-      cExport:(n,t)=>`${n} of ${t} dishes have a photo. Some may still be loading. Export anyway?`,
-      savePrice:"Save price", nrLabel:"Order no.", nrSave:"Save no.", nrInvalid:"Enter a number of 1 or higher.", nrDup:"Note: this number is also used by", priceErr:"Invalid price.", pushOk:"✓ Saved", pushErr:"Save failed — check token/internet.",
-      tokenBtn:"🔑 Token", tokenAsk:"Paste your GitHub token (stored only on this device, not online):", adminNaamAsk:"What is your name? (recorded with your logins)", gateTitle:"Admin login", gateSub:"Enter your name and GitHub token to access the admin site.", gateNaamL:"Name", gateTokenL:"GitHub token", gateNaamPh:"Your name", gateTokenPh:"Paste your GitHub token", gateBtn:"Access", gateVul:"Please enter both your name and token.", gateCheck:"Checking token…", gateBad:"Invalid token or no access to the repo. Please check and try again.", tokenSaved:"Token saved. Save your price again now.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publish:"⬆ Publish", publishOk:"All published ✓", cbTelAsk:"Phone number that receives the WhatsApp alert (international, digits only, e.g. 31628498822 or 66825834264):", cbKeyAsk:"CallMeBot API key for that number:", cbOk:"Alert settings saved ✓", cbFout:"Could not save settings", cbBtn:"📲 Alert"}
+      cDel:"Remove this dish from the menu? You can restore it from the trash.", trash:"Trash", trashTitle:"Deleted dishes", trashEmpty:"The trash is empty.", restore:"↩️ Restore", purge:"✕ Delete", cPurge:"Permanently delete this dish? It cannot be restored afterwards.", emptyTrash:"🗑️ Empty trash", cEmptyTrash:"Permanently empty the entire trash? None of the deleted dishes can be restored afterwards.",
+
+      savePrice:"Save price", priceErr:"Invalid price.", pushOk:"✓ Saved", pushErr:"Save failed — check token/internet.",
+ tokenAsk:"Paste your GitHub token (stored only on this device, not online):", adminNaamAsk:"What is your name? (recorded with your logins)", gateTitle:"Admin login", gateSub:"Enter your name and GitHub token to access the admin site.", gateNaamL:"Name", gateTokenL:"GitHub token", gateNaamPh:"Your name", gateTokenPh:"Paste your GitHub token", gateBtn:"Access", gateVul:"Please enter both your name and token.", gateCheck:"Checking token…", gateBad:"Invalid token or no access to the repo. Please check and try again.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publishOk:"All published ✓", cbOk:"Alert settings saved ✓", cbFout:"Could not save settings"}
   },
   th: {
     locale:"th-TH", zaterdag:"วันเสาร์", vrijdag:"วันศุกร์",
@@ -883,18 +883,18 @@ const I18N = {
     payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
     payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
     payMsgCash:t=>`💵 ชำระ <b>${t}</b> <b>เงินสด</b> ตอนรับอาหาร`,
-    labelName:"ชื่อ", labelPhone:"โทรศัพท์", optNote:"(ถ้ามี)", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ", slotVol:"เต็ม", slotVolMsg:"ช่วงเวลานี้เต็มแล้ว กรุณาเลือกเวลารับอื่น",
+    labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelNote:"หมายเหตุ (ถ้ามี)", labelSlot:"เวลารับ", slotVol:"เต็ม", slotVolMsg:"ช่วงเวลานี้เต็มแล้ว กรุณาเลือกเวลารับอื่น",
     phName:"ชื่อ-นามสกุล", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", orderWaBtn:"📲 ส่งออเดอร์ทาง WhatsApp", orderWaSent:"✓ ส่งทาง WhatsApp แล้ว", previewLead:"นี่คือออเดอร์ของคุณ แตะครั้งเดียวเพื่อส่งให้ร้านและบันทึกออเดอร์:", previewSend:"✅ ส่งทาง WhatsApp", previewBack:"← กลับไปแก้ไข", orderSaveFail:"ส่งข้อความให้ร้านทาง WhatsApp แล้ว แต่บันทึกอัตโนมัติไม่สำเร็จ — ร้านได้รับออเดอร์ทาง WhatsApp เรียบร้อยแล้ว", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", volBanner:"🌸 เต็มแล้วสำหรับเสาร์นี้ — ดูเมนูได้", volgeboektMsg:"ออเดอร์เต็มแล้วสำหรับเสาร์นี้ กลับมาใหม่สัปดาห์หน้านะคะ! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
+    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderIngelogd:"✅ คุณเข้าสู่ระบบแล้ว — ดูออเดอร์และสั่งซ้ำได้เร็วขึ้นที่ 'บัญชีของฉัน'", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", volBanner:"🌸 เต็มแล้วสำหรับเสาร์นี้ — ดูเมนูได้", volgeboektMsg:"ออเดอร์เต็มแล้วสำหรับเสาร์นี้ กลับมาใหม่สัปดาห์หน้านะคะ! 🌸", orderClosedHours:(v,t)=>`ขณะนี้ปิดรับออเดอร์ สั่งได้ระหว่างเวลา ${v} ถึง ${t} น.`,
     orderErr:"กรุณากรอกชื่อและเบอร์โทร",
     note:"คำสั่งซื้อจะถูกส่งให้ร้านทันที",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
     diet:{ vega:"มังสวิรัติ", glutenvrij:"ไม่มีกลูเตน", noten:"มีถั่ว" },
     footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`,
-    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸", shareCopied:"คัดลอกลิงก์แล้ว!",
+    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
-    adm:{title:"โหมดผู้ดูแล", add:"เมนู", expF:"⬇ รูปภาพ", expH:"⬇ ที่ซ่อน", expE:"⬇ เพิ่มเติม", wis:"ล้างที่เลือก", sluit:"ปิด",
+    adm:{title:"โหมดผู้ดูแล", add:"เมนู", wis:"ล้างที่เลือก",
       count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่",
       phTerm:"คำค้นหา", search:"🔍 ค้นหา", phUrl:"หรือวางลิงก์รูปภาพเอง", setUrl:"ตั้ง", ownPhoto:"📷 รูปจากเครื่องของคุณ",
       makeHidden:"🚫 ปิดการสั่งซื้อ", makeShown:"✅ เปิดการสั่งซื้ออีกครั้ง", del:"🗑️ ลบเมนูนี้",
@@ -904,10 +904,10 @@ const I18N = {
       spiceOpts:["ไม่เผ็ด","เผ็ดน้อย","เผ็ด","เผ็ดมาก"], cancel:"ยกเลิก", addBtn:"เพิ่ม",
       rhLabels:{curry:"แกง / ซอส",soup:"ซุป",fried:"ทอด / กรอบ",wok:"ผัด",rice:"ข้าว",grill:"เนื้อย่าง",salad:"ยำ (เย็น)",rotiwarm:"โรตี / อุ่นกระทะ",cold:"เย็น (ไอศกรีม/ของหวาน)",sticky:"ข้าวเหนียวมะม่วง",stickyplain:"ข้าวเหนียว",drink:"เครื่องดื่ม"},
       aNaam:"กรุณากรอกชื่อ", aPrijs:"กรุณากรอกราคาที่ถูกต้อง", aImg:"ไฟล์นี้ไม่ใช่รูปภาพที่ถูกต้อง", aImgProc:"ไม่สามารถประมวลผลรูปได้",
-      cDel:"นำเมนูนี้ออกจากเมนูหรือไม่? กู้คืนได้จากถังขยะ", trash:"ถังขยะ", trashTitle:"เมนูที่ลบ", trashEmpty:"ถังขยะว่างเปล่า", restore:"↩️ กู้คืน", purge:"✕ ลบถาวร", cPurge:"ลบเมนูนี้ถาวรหรือไม่? จะกู้คืนไม่ได้อีก", emptyTrash:"🗑️ ล้างถังขยะ", cEmptyTrash:"ล้างถังขยะทั้งหมดถาวรหรือไม่? เมนูที่ลบจะกู้คืนไม่ได้อีก", cWis:"ล้างการเลือกรูปในเครื่องหรือไม่?",
-      cExport:(n,t)=>`มีรูป ${n} จาก ${t} เมนู บางรูปอาจกำลังโหลด ส่งออกเลยหรือไม่?`,
-      savePrice:"บันทึกราคา", nrLabel:"หมายเลข", nrSave:"บันทึกหมายเลข", nrInvalid:"กรุณาใส่หมายเลขตั้งแต่ 1 ขึ้นไป", nrDup:"หมายเหตุ: หมายเลขนี้ถูกใช้กับ", priceErr:"ราคาไม่ถูกต้อง", pushOk:"✓ บันทึกแล้ว", pushErr:"บันทึกไม่สำเร็จ — ตรวจสอบโทเคน/อินเทอร์เน็ต",
-      tokenBtn:"🔑 โทเคน", tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", adminNaamAsk:"คุณชื่ออะไร? (บันทึกพร้อมการเข้าสู่ระบบ)", gateTitle:"เข้าสู่ระบบผู้ดูแล", gateSub:"กรอกชื่อและโทเคน GitHub เพื่อเข้าถึงระบบผู้ดูแล", gateNaamL:"ชื่อ", gateTokenL:"โทเคน GitHub", gateNaamPh:"ชื่อของคุณ", gateTokenPh:"วางโทเคน GitHub", gateBtn:"เข้าถึง", gateVul:"กรุณากรอกทั้งชื่อและโทเคน", gateCheck:"กำลังตรวจสอบโทเคน…", gateBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง repo กรุณาลองใหม่", tokenSaved:"บันทึกโทเคนแล้ว บันทึกราคาอีกครั้ง", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publish:"⬆ เผยแพร่", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓", cbTelAsk:"เบอร์โทรที่รับแจ้งเตือน WhatsApp (สากล เฉพาะตัวเลข เช่น 66825834264):", cbKeyAsk:"CallMeBot API key ของเบอร์นั้น:", cbOk:"บันทึกการตั้งค่าแล้ว ✓", cbFout:"บันทึกไม่สำเร็จ", cbBtn:"📲 แจ้งเตือน"}
+      cDel:"นำเมนูนี้ออกจากเมนูหรือไม่? กู้คืนได้จากถังขยะ", trash:"ถังขยะ", trashTitle:"เมนูที่ลบ", trashEmpty:"ถังขยะว่างเปล่า", restore:"↩️ กู้คืน", purge:"✕ ลบถาวร", cPurge:"ลบเมนูนี้ถาวรหรือไม่? จะกู้คืนไม่ได้อีก", emptyTrash:"🗑️ ล้างถังขยะ", cEmptyTrash:"ล้างถังขยะทั้งหมดถาวรหรือไม่? เมนูที่ลบจะกู้คืนไม่ได้อีก",
+
+      savePrice:"บันทึกราคา", priceErr:"ราคาไม่ถูกต้อง", pushOk:"✓ บันทึกแล้ว", pushErr:"บันทึกไม่สำเร็จ — ตรวจสอบโทเคน/อินเทอร์เน็ต",
+ tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", adminNaamAsk:"คุณชื่ออะไร? (บันทึกพร้อมการเข้าสู่ระบบ)", gateTitle:"เข้าสู่ระบบผู้ดูแล", gateSub:"กรอกชื่อและโทเคน GitHub เพื่อเข้าถึงระบบผู้ดูแล", gateNaamL:"ชื่อ", gateTokenL:"โทเคน GitHub", gateNaamPh:"ชื่อของคุณ", gateTokenPh:"วางโทเคน GitHub", gateBtn:"เข้าถึง", gateVul:"กรุณากรอกทั้งชื่อและโทเคน", gateCheck:"กำลังตรวจสอบโทเคน…", gateBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง repo กรุณาลองใหม่", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓", cbOk:"บันทึกการตั้งค่าแล้ว ✓", cbFout:"บันทึกไม่สำเร็จ"}
   }
 };
 
@@ -2588,7 +2588,7 @@ const BEHEER_T = {
       tokNiet:"Publicatie-token: niet ingesteld op dit apparaat", tokVerlopen:(d)=>"Publicatie-token: verlopen ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publicatie-token: verloopt binnenkort — over "+dagen+" dag(en), op "+d, tokGeldig:(d)=>"Publicatie-token: geldig (verloopt "+d+")",
       tokGeldigKort:"Publicatie-token: geldig", tokOngeldig:"Publicatie-token: ongeldig of verlopen", tokControle:(s)=>"Publicatie-token: kon niet controleren (status "+s+")", tokNetwerk:"Publicatie-token: kon niet controleren (netwerk)",
-      mailMaand:(e,best)=>"E-mails deze maand: ± "+e+best, mailBest:(n)=>" ("+n+" bestelling"+(n===1?"":"en")+")", mailRuimte:(q)=>"E-mailruimte vandaag (Gmail): nog ± "+q+" berichten", mailNietBesch:"E-mailverbruik: nog niet beschikbaar", mailNietOp:"E-mailverbruik: kon niet ophalen", scriptOk:(v)=>"Apps Script: bijgewerkt (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: verouderd — opnieuw deployen (server v"+sv+", verwacht v"+exp+")", scriptOnbekend:"Apps Script: versie onbekend — mogelijk oude versie, opnieuw deployen"
+ scriptOk:(v)=>"Apps Script: bijgewerkt (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: verouderd — opnieuw deployen (server v"+sv+", verwacht v"+exp+")", scriptOnbekend:"Apps Script: versie onbekend — mogelijk oude versie, opnieuw deployen"
     }
   },
   en: {
@@ -2628,7 +2628,7 @@ const BEHEER_T = {
       tokNiet:"Publishing token: not set on this device", tokVerlopen:(d)=>"Publishing token: expired ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publishing token: expires soon — in "+dagen+" day(s), on "+d, tokGeldig:(d)=>"Publishing token: valid (expires "+d+")",
       tokGeldigKort:"Publishing token: valid", tokOngeldig:"Publishing token: invalid or expired", tokControle:(s)=>"Publishing token: could not check (status "+s+")", tokNetwerk:"Publishing token: could not check (network)",
-      mailMaand:(e,best)=>"E-mails this month: ± "+e+best, mailBest:(n)=>" ("+n+" order"+(n===1?"":"s")+")", mailRuimte:(q)=>"E-mail room today (Gmail): ± "+q+" messages left", mailNietBesch:"E-mail usage: not available yet", mailNietOp:"E-mail usage: could not fetch", scriptOk:(v)=>"Apps Script: up to date (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: outdated — redeploy (server v"+sv+", expected v"+exp+")", scriptOnbekend:"Apps Script: version unknown — possibly old, redeploy"
+ scriptOk:(v)=>"Apps Script: up to date (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: outdated — redeploy (server v"+sv+", expected v"+exp+")", scriptOnbekend:"Apps Script: version unknown — possibly old, redeploy"
     }
   },
   th: {
@@ -2668,7 +2668,7 @@ const BEHEER_T = {
       tokNiet:"โทเคนเผยแพร่: ยังไม่ได้ตั้งค่าบนอุปกรณ์นี้", tokVerlopen:(d)=>"โทเคนเผยแพร่: หมดอายุ ("+d+")",
       tokBinnenkort:(dagen,d)=>"โทเคนเผยแพร่: กำลังจะหมดอายุ — ในอีก "+dagen+" วัน วันที่ "+d, tokGeldig:(d)=>"โทเคนเผยแพร่: ใช้งานได้ (หมดอายุ "+d+")",
       tokGeldigKort:"โทเคนเผยแพร่: ใช้งานได้", tokOngeldig:"โทเคนเผยแพร่: ไม่ถูกต้องหรือหมดอายุ", tokControle:(s)=>"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (สถานะ "+s+")", tokNetwerk:"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (เครือข่าย)",
-      mailMaand:(e,best)=>"อีเมลเดือนนี้: ± "+e+best, mailBest:(n)=>" ("+n+" ออเดอร์)", mailRuimte:(q)=>"โควตาอีเมลวันนี้ (Gmail): เหลือ ± "+q+" ฉบับ", mailNietBesch:"การใช้อีเมล: ยังไม่พร้อม", mailNietOp:"การใช้อีเมล: ดึงข้อมูลไม่ได้", scriptOk:(v)=>"Apps Script: อัปเดตแล้ว (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: เวอร์ชันเก่า — ดีพลอยใหม่ (เซิร์ฟเวอร์ v"+sv+", ต้องการ v"+exp+")", scriptOnbekend:"Apps Script: ไม่ทราบเวอร์ชัน — อาจเป็นเวอร์ชันเก่า ดีพลอยใหม่"
+ scriptOk:(v)=>"Apps Script: อัปเดตแล้ว (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: เวอร์ชันเก่า — ดีพลอยใหม่ (เซิร์ฟเวอร์ v"+sv+", ต้องการ v"+exp+")", scriptOnbekend:"Apps Script: ไม่ทราบเวอร์ชัน — อาจเป็นเวอร์ชันเก่า ดีพลอยใหม่"
     }
   }
 };
@@ -2744,16 +2744,16 @@ function herstelMand(order){
 
 const LOGIN_T = {
   nl: { lblInloggen:"Inloggen", lblAccount:"Mijn account",
-    inTitel:"Inloggen", inUitleg:"Vul je e-mailadres in, dan sturen we je een persoonlijke inloglink.", inPh:"jouw@e-mail.nl", inKnop:"Stuur inloglink",
-    inVerzonden:"", inFoutEmail:"", inGeenLogin:"Je wordt automatisch ingelogd zodra je op dit apparaat een bestelling plaatst. Daarna zie je hier je bestellingen en kun je met één tik opnieuw bestellen. Tip: bewaar deze site als favoriet op je telefoon.",
+    inTitel:"Inloggen",
+ inGeenLogin:"Je wordt automatisch ingelogd zodra je op dit apparaat een bestelling plaatst. Daarna zie je hier je bestellingen en kun je met één tik opnieuw bestellen. Tip: bewaar deze site als favoriet op je telefoon.",
     accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen" },
   en: { lblInloggen:"Log in", lblAccount:"My account",
-    inTitel:"Log in", inUitleg:"Enter your e-mail address and we'll send you a personal login link.", inPh:"you@email.com", inKnop:"Send login link",
-    inVerzonden:"", inFoutEmail:"", inGeenLogin:"You are logged in automatically once you place an order on this device. After that you can see your orders here and reorder in one tap. Tip: bookmark this site on your phone.",
+    inTitel:"Log in",
+ inGeenLogin:"You are logged in automatically once you place an order on this device. After that you can see your orders here and reorder in one tap. Tip: bookmark this site on your phone.",
     accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out" },
   th: { lblInloggen:"เข้าสู่ระบบ", lblAccount:"บัญชีของฉัน",
-    inTitel:"เข้าสู่ระบบ", inUitleg:"กรอกอีเมลของคุณ แล้วเราจะส่งลิงก์เข้าสู่ระบบส่วนตัวให้คุณ", inPh:"you@email.com", inKnop:"ส่งลิงก์เข้าสู่ระบบ",
-    inVerzonden:"", inFoutEmail:"", inGeenLogin:"คุณจะเข้าสู่ระบบอัตโนมัติเมื่อสั่งซื้อบนอุปกรณ์นี้ จากนั้นดูออเดอร์และสั่งซ้ำได้ในแตะเดียว เคล็ดลับ: บันทึกเว็บนี้ไว้ในหน้าจอหลัก",
+    inTitel:"เข้าสู่ระบบ",
+ inGeenLogin:"คุณจะเข้าสู่ระบบอัตโนมัติเมื่อสั่งซื้อบนอุปกรณ์นี้ จากนั้นดูออเดอร์และสั่งซ้ำได้ในแตะเดียว เคล็ดลับ: บันทึกเว็บนี้ไว้ในหน้าจอหลัก",
     accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ" }
 };
 function acctToken(){ return localStorage.getItem("tta_klanttoken") || ""; }

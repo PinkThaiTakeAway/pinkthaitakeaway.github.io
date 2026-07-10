@@ -586,11 +586,13 @@ def restant_checks(html):
         items.append({"naam": "geen mail-restanten in index.html", "status": "ok"})
 
     # 2. Taalpariteit nl/en/th per woordenboek
-    defined = set(); parity_problem = False
+    defined = set(); gdefs = {}; parity_problem = False
     for name in _DICTS:
         lk = _dict_lang_keys(html, name)
         if not lk: continue
-        for v in lk.values(): defined.update(v)
+        for v in lk.values():
+            defined.update(v)
+            for k in v: gdefs[k] = gdefs.get(k, 0) + 1
         if "nl" not in lk: continue
         base = set(lk["nl"]); msgs = []
         for lang in ("en", "th"):
@@ -610,8 +612,7 @@ def restant_checks(html):
     for key in sorted(defined):
         if len(key) < 4 or key in _MAIL_KEY_NAMES: continue
         total = len(re.findall(r"\b" + re.escape(key) + r"\b", html))
-        asdef = len(re.findall(r"\b" + re.escape(key) + r"\s*:", html))
-        if total <= asdef: orphans.append(key)
+        if total - gdefs.get(key, 0) <= 0: orphans.append(key)
     if orphans:
         vb = ", ".join(orphans[:8]) + (f" (+{len(orphans) - 8})" if len(orphans) > 8 else "")
         items.append({"naam": f"{len(orphans)} vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): {vb}", "status": "warn"})
