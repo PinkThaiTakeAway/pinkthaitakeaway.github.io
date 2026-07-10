@@ -2018,6 +2018,33 @@ function restoreDish(id){
   buildMenu(); reapplyPhotos(); updateBeheerCount(); updateTrashCount(); renderTrash();
   livePush("verwijderd.json", ()=>[...DELETED], "Gerecht teruggezet");
 }
+function wipeDishData(id){
+  const ch = new Set();
+  if(id in PHOTO){ delete PHOTO[id]; ch.add("fotos"); }
+  if(id in chosen){ delete chosen[id]; ch.add("fotos"); }
+  if(id in PRICES){ delete PRICES[id]; ch.add("prijzen"); }
+  if(id in RECIPES){ delete RECIPES[id]; ch.add("recepten"); }
+  if(id in NAMES){ delete NAMES[id]; ch.add("namen"); }
+  if(id in DESCS){ delete DESCS[id]; ch.add("omschrijvingen"); }
+  if(id in SPICES){ delete SPICES[id]; ch.add("pittigheid"); }
+  if(id in SERVE_EDITS){ delete SERVE_EDITS[id]; ch.add("serveertips"); }
+  if(id in NUMS){ delete NUMS[id]; ch.add("nummers"); }
+  if(ch.has("fotos")) saveJSON("tta_fotos", chosen);
+  return ch;
+}
+function pushWipedData(ch){
+  const map = {
+    fotos:          ["fotos.json",         () => currentFotos()],
+    prijzen:        ["prijzen.json",        () => PRICES],
+    recepten:       ["recepten.json",       () => RECIPES],
+    namen:          ["namen.json",          () => NAMES],
+    omschrijvingen: ["omschrijvingen.json", () => DESCS],
+    pittigheid:     ["pittigheid.json",     () => SPICES],
+    serveertips:    ["serveertips.json",    () => SERVE_EDITS],
+    nummers:        ["nummers.json",        () => NUMS]
+  };
+  ch.forEach(k => { const e = map[k]; if(e) livePush(e[0], e[1], "Gegevens verwijderd gerecht opgeruimd"); });
+}
 function purgeDish(id){
   DELETED.delete(id); PURGED.add(id);
   const ix = EXTRA.findIndex(m => m && m.id===id); const wasExtra = ix>=0;
@@ -2025,15 +2052,18 @@ function purgeDish(id){
   saveJSON("tta_deleted", {ids:[...DELETED]});
   saveJSON("tta_purged", {ids:[...PURGED]});
   if(wasExtra) saveJSON("tta_extra", {items:EXTRA});
+  const wiped = wipeDishData(id);
   buildMenu(); reapplyPhotos(); updateBeheerCount(); updateTrashCount(); renderTrash();
   livePush("verwijderd.json", ()=>[...DELETED], "Gerecht definitief verwijderd");
   livePush("verwijderdweg.json", ()=>[...PURGED], "Gerecht definitief verwijderd");
   if(wasExtra) livePush("extra.json", ()=>EXTRA, "Extra gerecht definitief verwijderd");
+  pushWipedData(wiped);
 }
 function emptyTrash(){
   if(!DELETED.size) return;
   if(!confirm(T().adm.cEmptyTrash)) return;
-  [...DELETED].forEach(id => { DELETED.delete(id); PURGED.add(id); });
+  const wiped = new Set();
+  [...DELETED].forEach(id => { DELETED.delete(id); PURGED.add(id); wipeDishData(id).forEach(k => wiped.add(k)); });
   EXTRA = EXTRA.filter(m => !(m && PURGED.has(m.id)));
   saveJSON("tta_deleted", {ids:[...DELETED]});
   saveJSON("tta_purged", {ids:[...PURGED]});
@@ -2042,6 +2072,7 @@ function emptyTrash(){
   livePush("verwijderd.json", ()=>[...DELETED], "Prullenbak geleegd");
   livePush("verwijderdweg.json", ()=>[...PURGED], "Prullenbak geleegd");
   livePush("extra.json", ()=>EXTRA, "Prullenbak geleegd");
+  pushWipedData(wiped);
 }
 function updateTrashCount(){
   const b = document.getElementById("bTrash"); if(!b) return;
