@@ -679,9 +679,98 @@ def security_checks(html):
                  " — verwijderen uit git-historie en roteren", "status": "err"}]
     return [{"naam": "geen tokens/sleutels in repobestanden aangetroffen", "status": "ok"}]
 
+def _json_load(fn, default):
+    try: return json.load(open(fn, encoding="utf-8"))
+    except Exception: return default
+
+def _menu_dishes(html):
+    """Parseert de gerechten uit de MENU-array (id, cat, price, spice, foto, name)."""
+    region = _menu_region(html) or ""
+    out = []; i = 0; n = len(region)
+    while i < n:
+        if region[i] == "{":
+            e = _match_brace(region, i); blok = region[i:e + 1]
+            mid = re.search(r'id:"([^"]+)"', blok)
+            if mid:
+                mp = re.search(r'\bprice:\s*([0-9]+(?:\.[0-9]+)?)', blok)
+                ms = re.search(r'\bspice:\s*(\d+)', blok)
+                mc = re.search(r'\bcat:"([^"]*)"', blok)
+                mf = re.search(r'\bfoto:"([^"]*)"', blok)
+                nm = re.search(r'\bname:\{([^}]*)\}', blok); nb = nm.group(1) if nm else ""
+                def _nl(l):
+                    m = re.search(l + r':"([^"]*)"', nb); return m.group(1) if m else ""
+                out.append({"id": mid.group(1), "cat": mc.group(1) if mc else None,
+                            "price": float(mp.group(1)) if mp else None,
+                            "spice": int(ms.group(1)) if ms else None,
+                            "foto": mf.group(1) if mf else "",
+                            "name": {l: _nl(l) for l in ("nl", "en", "th")}})
+            i = e + 1
+        else:
+            i += 1
+    return out
+
+def dish_checks(html):
+    """Controleert per bestelbaar gerecht: prijs, categorie, pittigheid, foto,
+    en of de naam in nl/en/th aanwezig is. Overrides in de .json-bestanden
+    gaan vóór de inline waarde in de MENU-array."""
+    dishes = _menu_dishes(html)
+    if not dishes:
+        return [{"naam": "kon geen gerechten uit de MENU-array lezen", "status": "warn"}]
+    items = []
+    cats = set(re.findall(r'\{id:"([^"]+)",\s*nm:\{', html))
+    prijzen = _json_load("prijzen.json", {}); pit = _json_load("pittigheid.json", {})
+    fotos = _json_load("fotos.json", {}); namen = _json_load("namen.json", {})
+    hidden = set(_json_load("verborgen.json", [])) | set(_json_load("verwijderd.json", []))
+    order = [d for d in dishes if d["id"] not in hidden]
+
+    def eff_price(d):
+        try: return float(prijzen.get(d["id"], d["price"]))
+        except Exception: return None
+    geen = [d["id"] for d in order if not eff_price(d) or eff_price(d) <= 0]
+    raar = [d["id"] for d in order if eff_price(d) and not (2 <= eff_price(d) <= 40)]
+    if geen:
+        items.append({"naam": "gerecht(en) zonder geldige prijs: " + ", ".join(geen[:8]), "status": "err"})
+    elif raar:
+        items.append({"naam": "prijs buiten verwacht bereik (\u20ac2\u2013\u20ac40): " + ", ".join(raar[:8]), "status": "warn"})
+    else:
+        items.append({"naam": f"alle {len(order)} bestelbare gerechten hebben een geldige prijs", "status": "ok"})
+
+    badcat = [d["id"] for d in order if d["cat"] not in cats]
+    items.append({"naam": ("gerecht(en) met onbekende categorie: " + ", ".join(badcat[:8])) if badcat
+                  else "alle gerechten verwijzen naar een bestaande categorie",
+                  "status": "err" if badcat else "ok"})
+
+    def eff_spice(d):
+        try: return int(pit.get(d["id"], d["spice"]))
+        except Exception: return None
+    badspice = [d["id"] for d in order if eff_spice(d) not in (0, 1, 2, 3)]
+    items.append({"naam": ("ongeldige pittigheid (verwacht 0\u20133): " + ", ".join(badspice[:8])) if badspice
+                  else "pittigheid van alle gerechten is geldig (0\u20133)",
+                  "status": "warn" if badspice else "ok"})
+
+    def has_photo(d):
+        return bool((fotos.get(d["id"]) or "").strip() or (d["foto"] or "").strip())
+    geenfoto = [d["id"] for d in order if not has_photo(d)]
+    items.append({"naam": ("bestelbare gerechten zonder foto: " + ", ".join(geenfoto[:8])) if geenfoto
+                  else "alle bestelbare gerechten hebben een foto",
+                  "status": "warn" if geenfoto else "ok"})
+
+    def val(d, l):
+        return (namen.get(d["id"], {}).get(l) or d["name"].get(l) or "").strip()
+    geennl = [d["id"] for d in order if not val(d, "nl")]
+    missent = [d["id"] for d in order if not val(d, "en") or not val(d, "th")]
+    if geennl:
+        items.append({"naam": "gerecht(en) zonder Nederlandse naam: " + ", ".join(geennl[:8]), "status": "err"})
+    elif missent:
+        items.append({"naam": "gerecht(en) zonder EN- of TH-naam: " + ", ".join(missent[:8]), "status": "warn"})
+    else:
+        items.append({"naam": "alle gerechten hebben een naam in nl/en/th", "status": "ok"})
+    return items
+
 # Register van extra groepen (repo-modus). Nieuwe groepen worden hier toegevoegd.
 EXTRA_GROUPS = [
     ("Beveiliging", security_checks),
+    ("Gerechten & data", dish_checks),
 ]
 
 def main():
