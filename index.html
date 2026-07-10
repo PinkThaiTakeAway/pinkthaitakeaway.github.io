@@ -2263,7 +2263,7 @@ async function laadDeelcode(){
   try{ const r = await jsonp({actie:"account", token:tok}); if(r && r.ok && r.deelcode) _deelcode = r.deelcode; }catch(e){}
 }
 async function deelPagina(){
-  const url = location.origin + location.pathname + (_deelcode ? ("?via=" + _deelcode) : "");
+  const url = SITE_HOME + (_deelcode ? ("?via=" + _deelcode) : "");
   window.open("https://wa.me/?text=" + encodeURIComponent(T().shareText + " " + url), "_blank");
 }
 function wireShare(){
