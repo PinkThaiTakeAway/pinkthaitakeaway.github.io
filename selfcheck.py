@@ -60,6 +60,19 @@ def _menu_ids(html):
     if d != 0: return None
     return set(re.findall(r'\{id:"([^"]+)"', html[oi:i]))
 
+def _menu_region(html):
+    s = html.find("const MENU = [")
+    if s < 0: return None
+    oi = html.find("[", s); d = 0; i = oi
+    while i < len(html):
+        c = html[i]
+        if c == "[": d += 1
+        elif c == "]":
+            d -= 1
+            if d == 0: break
+        i += 1
+    return html[oi:i] if d == 0 else None
+
 def check_repo():
     # 1. index.html bestaat + bevat de merknaam
     if not os.path.exists("index.html"):
@@ -132,6 +145,63 @@ def check_repo():
             warn(f"{orphan} verweesde gegeven(s) voor niet-bestaande gerechten in de databestanden")
         else:
             ok("geen verweesde gegevens in de databestanden")
+
+    # 2e. Broncode-integriteit: geen dubbele id's / bestelnummers
+    region = _menu_region(html)
+    if region is not None:
+        idlist = re.findall(r'\{id:"([^"]+)"', region)
+        dups = sorted(set(x for x in idlist if idlist.count(x) > 1))
+        if dups: err("dubbele gerecht-id(s) in de broncode: " + ", ".join(dups))
+        else: ok("geen dubbele gerecht-id's in de broncode")
+    if os.path.exists("nummers.json"):
+        try:
+            nums = json.load(open("nummers.json", encoding="utf-8"))
+            vals = [v for v in nums.values() if isinstance(v, (int, float))]
+            dn = sorted(set(int(v) for v in vals if vals.count(v) > 1))
+            if dn: warn("dubbele bestelnummers: " + ", ".join(str(x) for x in dn))
+            else: ok("bestelnummers zijn uniek")
+        except Exception:
+            pass
+
+    # 2f. Verwijzingen naar niet-bestaande gerechten (prullenbak / verborgen)
+    if mids is not None:
+        dangling = 0
+        for fn in ("verwijderd.json", "verborgen.json"):
+            if os.path.exists(fn):
+                try: arr = json.load(open(fn, encoding="utf-8"))
+                except Exception: arr = []
+                if isinstance(arr, list):
+                    dangling += sum(1 for x in arr if x not in mids)
+        if dangling: warn(str(dangling) + " verwijzing(en) naar niet-bestaande gerechten (prullenbak/verborgen)")
+        else: ok("geen verwijzingen naar niet-bestaande gerechten")
+
+    # 2g. Foto's: kapotte verwijzingen + verweesde uploads
+    referenced = set()
+    if os.path.exists("fotos.json"):
+        try:
+            for v in json.load(open("fotos.json", encoding="utf-8")).values():
+                if isinstance(v, str) and v and not v.startswith("http") and not v.startswith("data:"):
+                    referenced.add(v.lstrip("/"))
+        except Exception:
+            pass
+    try:
+        cf = json.load(open("bedrijf.json", encoding="utf-8")).get("chefFoto")
+        if isinstance(cf, str) and cf and not cf.startswith("http") and not cf.startswith("data:"):
+            referenced.add(cf.lstrip("/"))
+    except Exception:
+        pass
+    missing = sorted(p for p in referenced if not os.path.exists(p))
+    if missing: warn(str(len(missing)) + " fotoverwijzing(en) naar ontbrekend bestand: " + ", ".join(missing[:4]))
+    else: ok("alle lokale fotoverwijzingen bestaan")
+    if os.path.isdir("foto"):
+        upl = []
+        for root, _dirs, files in os.walk("foto"):
+            for f in files:
+                if f.lower().rsplit(".", 1)[-1] in ("jpg", "jpeg", "png", "webp", "gif"):
+                    upl.append(os.path.join(root, f).lstrip("/"))
+        orphan_imgs = sorted(p for p in upl if p not in referenced)
+        if orphan_imgs: warn(str(len(orphan_imgs)) + " verweesd fotobestand(en) in foto/ (nergens gebruikt)")
+        else: ok("geen verweesde fotobestanden")
 
     # 3. Alle aanwezige JSON-bestanden zijn geldig
     data = {}
