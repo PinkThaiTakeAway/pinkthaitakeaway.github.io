@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T12:32:11Z",
+  "opgeslagen": "2026-07-10T12:37:37Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T12:32:10.413454+00:00",
+    "updated": "2026-07-10T12:37:36.111872+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -36,6 +36,22 @@
           },
           {
             "naam": "geen verweesde gegevens in de databestanden",
+            "status": "ok"
+          },
+          {
+            "naam": "geen dubbele gerecht-id's in de broncode",
+            "status": "ok"
+          },
+          {
+            "naam": "bestelnummers zijn uniek",
+            "status": "ok"
+          },
+          {
+            "naam": "geen verwijzingen naar niet-bestaande gerechten",
+            "status": "ok"
+          },
+          {
+            "naam": "alle lokale fotoverwijzingen bestaan",
             "status": "ok"
           },
           {
