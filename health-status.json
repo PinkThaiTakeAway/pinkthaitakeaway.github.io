@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-10T13:54:22Z",
+  "opgeslagen": "2026-07-10T13:57:18Z",
   "scriptVersie": 15,
   "verwachteVersie": 15,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-10T13:54:21.546760+00:00",
+    "updated": "2026-07-10T13:57:17.319722+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -243,12 +243,8 @@
             "status": "ok"
           },
           {
-            "naam": "robots.txt-sitemap staat op ander domein dan pinkthaitakeaway.nl: https://pinkthaitakeaway.github.io/sitemap.xml",
-            "status": "warn"
-          },
-          {
-            "naam": "sitemap.xml gebruikt niet (overal) het eigen domein pinkthaitakeaway.nl",
-            "status": "warn"
+            "naam": "sitemap.xml geldig (1 URL(s), eigen domein)",
+            "status": "ok"
           },
           {
             "naam": "JSON-LD compleet (@type FoodEstablishment)",
