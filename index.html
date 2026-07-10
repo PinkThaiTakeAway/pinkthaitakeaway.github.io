@@ -929,23 +929,11 @@ const MENU = [
   {id:"satay", cat:"voorgerechten", emoji:"🍢", price:5.00, spice:1, foto:"Chicken satay Thai",
    th:"สะเต๊ะไก่", name:{nl:"Kip saté",en:"Chicken Satay",th:"สะเต๊ะไก่"},
    desc:{nl:"Gegrilde kipspiesjes met romige pindasaus. 5 stuks.",en:"Grilled chicken skewers with creamy peanut sauce. 5 pieces.",th:"ไก่สะเต๊ะย่าง เสิร์ฟพร้อมน้ำจิ้มถั่ว 5 ไม้"}},
-  {id:"toast", cat:"voorgerechten", emoji:"🍤", price:5.00, spice:0, foto:"Prawn toast",
-   th:"ขนมปังหน้ากุ้ง", name:{nl:"Garnalentoast",en:"Prawn Toast",th:"ขนมปังหน้ากุ้ง"},
-   desc:{nl:"Krokant gebakken brood met garnalenpasta en sesam. 5 stuks.",en:"Crispy fried bread topped with shrimp paste and sesame. 5 pieces.",th:"ขนมปังหน้ากุ้งทอดกรอบ โรยงา 5 ชิ้น"}},
 
-  {id:"tomyum", cat:"soepen", emoji:"🍲", price:7.00, spice:3, foto:"Tom yum goong",
-   th:"ต้มยำกุ้ง", name:{nl:"Tom Yum Goong",en:"Tom Yum Goong",th:"ต้มยำกุ้ง"},
-   desc:{nl:"Pittig-zure garnalensoep met citroengras, galangal en limoenblad.",en:"Spicy-sour prawn soup with lemongrass, galangal and lime leaf.",th:"ต้มยำกุ้งรสเปรี้ยวเผ็ด ใส่ตะไคร้ ข่า และใบมะกรูด"}},
   {id:"tomkha", cat:"soepen", emoji:"🥥", price:7.00, spice:1, foto:"Tom kha kai",
    th:"ต้มข่าไก่", name:{nl:"Tom Kha Kai",en:"Tom Kha Kai",th:"ต้มข่าไก่"},
    desc:{nl:"Milde kokossoep met kip, galangal en verse kruiden.",en:"Mild coconut soup with chicken, galangal and fresh herbs.",th:"ต้มข่าไก่ น้ำกะทิรสอ่อน ใส่ข่าและสมุนไพรสด"}},
 
-  {id:"green", cat:"currys", emoji:"🍛", price:15.00, spice:3, foto:"Thai green curry",
-   th:"แกงเขียวหวาน", name:{nl:"Groene curry",en:"Green Curry",th:"แกงเขียวหวาน"},
-   desc:{nl:"Kip, Thaise aubergine en basilicum in romige groene currysaus. Met jasmijnrijst.",en:"Chicken, Thai aubergine and basil in creamy green curry. With jasmine rice.",th:"แกงเขียวหวานไก่ มะเขือ และใบโหระพา เสิร์ฟพร้อมข้าวหอมมะลิ"}},
-  {id:"red", cat:"currys", emoji:"🍛", price:15.00, spice:3, foto:"Thai red curry",
-   th:"แกงเผ็ด", name:{nl:"Rode curry",en:"Red Curry",th:"แกงเผ็ด"},
-   desc:{nl:"Rundvlees, bamboescheuten en kokos in pittige rode currysaus. Met jasmijnrijst.",en:"Beef, bamboo shoots and coconut in spicy red curry. With jasmine rice.",th:"แกงเผ็ดเนื้อ หน่อไม้ และกะทิ เสิร์ฟพร้อมข้าวหอมมะลิ"}},
   {id:"massaman", cat:"currys", emoji:"🥘", price:15.00, spice:1, foto:"Massaman curry",
    th:"แกงมัสมั่น", name:{nl:"Massaman curry",en:"Massaman Curry",th:"แกงมัสมั่น"},
    desc:{nl:"Zacht gestoofd rund, aardappel en geroosterde pinda. Mild en kruidig. Met rijst.",en:"Slow-cooked beef, potato and roasted peanuts. Mild and aromatic. With rice.",th:"แกงมัสมั่นเนื้อตุ๋น มันฝรั่ง และถั่วลิสงคั่ว รสอ่อนหอมเครื่องเทศ เสิร์ฟพร้อมข้าว"}},
@@ -956,162 +944,33 @@ const MENU = [
   {id:"padthai", opts:["kip","garnaal"], cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"Pad thai",
    th:"ผัดไทย", name:{nl:"Pad Thai",en:"Pad Thai",th:"ผัดไทย"},
    desc:{nl:"Woknoedels met ei, taugé, geroosterde pinda en tamarinde. Met kip of garnaal.",en:"Wok noodles with egg, bean sprouts, peanuts and tamarind. With chicken or prawn.",th:"ก๋วยเตี๋ยวผัดไทย ใส่ไข่ ถั่วงอก ถั่วลิสง และน้ำมะขาม เลือกไก่หรือกุ้ง"}},
-  {id:"padseeew", cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"Pad see ew",
-   th:"ผัดซีอิ๊ว", name:{nl:"Pad See Ew",en:"Pad See Ew",th:"ผัดซีอิ๊ว"},
-   desc:{nl:"Brede rijstnoedels gewokt in zoete sojasaus met ei en broccoli.",en:"Wide rice noodles wok-fried in sweet soy with egg and broccoli.",th:"เส้นใหญ่ผัดซีอิ๊ว ใส่ไข่และบรอกโคลี"}},
-  {id:"krapow", cat:"wok", emoji:"🌿", price:15.00, spice:3, foto:"Phat kaphrao",
-   th:"ผัดกะเพรา", name:{nl:"Pad Krapow Moo",en:"Pad Krapow (Basil Pork)",th:"ผัดกะเพราหมู"},
-   desc:{nl:"Gewokt varkensgehakt met heilige basilicum en chili, gebakken ei erbovenop.",en:"Wok-fried minced pork with holy basil and chilli, topped with a fried egg.",th:"ผัดกะเพราหมูสับ ใส่พริกและใบกะเพรา ราดไข่ดาว"}},
 
-  {id:"khaopad", opts:["kip","garnaal"], cat:"rijst", emoji:"🍚", price:15.00, spice:0, foto:"Thai fried rice",
-   th:"ข้าวผัด", name:{nl:"Thaise gebakken rijst",en:"Thai Fried Rice",th:"ข้าวผัด"},
-   desc:{nl:"Gebakken jasmijnrijst met ei, ui en tomaat. Met kip of garnaal.",en:"Fried jasmine rice with egg, onion and tomato. With chicken or prawn.",th:"ข้าวผัดใส่ไข่ หอมใหญ่ และมะเขือเทศ เลือกไก่หรือกุ้ง"}},
-  {id:"khaomungai", cat:"rijst", emoji:"🍗", price:15.00, spice:1, foto:"Khao man kai",
-   th:"ข้าวมันไก่", name:{nl:"Khao Man Gai",en:"Khao Man Gai",th:"ข้าวมันไก่"},
-   desc:{nl:"Gepocheerde kip op gearomatiseerde rijst met gemberdip.",en:"Poached chicken on aromatic rice with ginger dip.",th:"ข้าวมันไก่ ไก่นุ่ม เสิร์ฟพร้อมน้ำจิ้มขิง"}},
 
-  {id:"mango", cat:"dessert", emoji:"🥭", price:7.50, spice:0, foto:"Mango sticky rice",
-   th:"ข้าวเหนียวมะม่วง", name:{nl:"Mango kleefrijst",en:"Mango Sticky Rice",th:"ข้าวเหนียวมะม่วง"},
-   desc:{nl:"Zoete kokoskleefrijst met verse rijpe mango.",en:"Sweet coconut sticky rice with fresh ripe mango.",th:"ข้าวเหนียวมูนกะทิ เสิร์ฟพร้อมมะม่วงสุก"}},
-  {id:"banana", cat:"dessert", emoji:"🍌", price:6.00, spice:0, foto:"Fried banana Thai",
-   th:"กล้วยทอด", name:{nl:"Gebakken banaan",en:"Fried Banana",th:"กล้วยทอด"},
-   desc:{nl:"Krokant gefrituurde banaan met honing en sesam.",en:"Crispy deep-fried banana with honey and sesame.",th:"กล้วยทอดกรอบ ราดน้ำผึ้งและงา"}},
 
   /* ===== extra keuze ===== */
   // Voorgerechten (€5 per 5 stuks)
-  {id:"todmun", cat:"voorgerechten", emoji:"🐟", price:5.00, spice:2, foto:"Thai fish cake tod mun",
-   th:"ทอดมันปลา", name:{nl:"Viskoekjes",en:"Thai Fish Cakes",th:"ทอดมันปลา"},
-   desc:{nl:"Pittige Thaise viskoekjes met komkommerdip. 5 stuks.",en:"Spicy Thai fish cakes with cucumber relish. 5 pieces.",th:"ทอดมันปลารสเผ็ด เสิร์ฟพร้อมอาจาด 5 ชิ้น"}},
-  {id:"gaitod", cat:"voorgerechten", emoji:"🍗", price:5.00, spice:0, foto:"Thai fried chicken gai tod",
-   th:"ไก่ทอด", name:{nl:"Thaise gefrituurde kip",en:"Thai Fried Chicken",th:"ไก่ทอด"},
-   desc:{nl:"Krokant gefrituurde kip met zoete chilisaus. 5 stuks.",en:"Crispy Thai fried chicken with sweet chilli sauce. 5 pieces.",th:"ไก่ทอดกรอบ เสิร์ฟพร้อมน้ำจิ้มหวาน 5 ชิ้น"}},
-  {id:"karipap", cat:"voorgerechten", emoji:"🥟", price:5.00, spice:1, foto:"curry puff karipap",
-   th:"กะหรี่ปั๊บ", name:{nl:"Curry puffs",en:"Curry Puffs",th:"กะหรี่ปั๊บ"},
-   desc:{nl:"Krokante deegpasteitjes gevuld met kerrie-kip. 5 stuks.",en:"Crispy pastry puffs filled with curried chicken. 5 pieces.",th:"กะหรี่ปั๊บไส้ไก่ 5 ชิ้น"}},
-  {id:"goongtod", cat:"voorgerechten", emoji:"🍤", price:5.00, spice:0, foto:"fried prawns tempura",
-   th:"กุ้งทอด", name:{nl:"Krokante garnalen",en:"Crispy Prawns",th:"กุ้งทอด"},
-   desc:{nl:"Krokant gefrituurde garnalen met zoetzure dip. 5 stuks.",en:"Crispy fried prawns with sweet & sour dip. 5 pieces.",th:"กุ้งทอดกรอบ เสิร์ฟพร้อมน้ำจิ้ม 5 ตัว"}},
 
   // Soepen (€7)
-  {id:"tomjued", cat:"soepen", emoji:"🍲", price:7.00, spice:0, foto:"tom jued soup",
-   th:"ต้มจืด", name:{nl:"Tom Jued",en:"Tom Jued (clear soup)",th:"ต้มจืด"},
-   desc:{nl:"Milde heldere bouillon met tofu, gehakt en groente.",en:"Mild clear broth with tofu, minced pork and vegetables.",th:"ต้มจืดเต้าหู้หมูสับและผัก"}},
-  {id:"guayteow", cat:"soepen", emoji:"🍜", price:7.00, spice:1, foto:"Thai noodle soup guay teow",
-   th:"ก๋วยเตี๋ยวน้ำ", name:{nl:"Noedelsoep",en:"Noodle Soup",th:"ก๋วยเตี๋ยวน้ำ"},
-   desc:{nl:"Thaise noedelsoep met gehaktballetjes en verse kruiden.",en:"Thai noodle soup with meatballs and fresh herbs.",th:"ก๋วยเตี๋ยวน้ำลูกชิ้น ใส่สมุนไพรสด"}},
 
   // Curry's (€15)
-  {id:"yellow", cat:"currys", emoji:"🍛", price:15.00, spice:1, foto:"Thai yellow curry",
-   th:"แกงกะหรี่", name:{nl:"Gele curry",en:"Yellow Curry",th:"แกงกะหรี่"},
-   desc:{nl:"Milde gele curry met kip, aardappel en kurkuma. Met jasmijnrijst.",en:"Mild yellow curry with chicken, potato and turmeric. With jasmine rice.",th:"แกงกะหรี่ไก่ มันฝรั่ง เสิร์ฟพร้อมข้าวหอมมะลิ"}},
-  {id:"jungle", cat:"currys", emoji:"🌶️", price:15.00, spice:3, foto:"jungle curry kaeng pa",
-   th:"แกงป่า", name:{nl:"Jungle curry",en:"Jungle Curry",th:"แกงป่า"},
-   desc:{nl:"Pittige currysoep zonder kokos, met kip en veel groente. Met rijst.",en:"Spicy coconut-free curry with chicken and plenty of vegetables. With rice.",th:"แกงป่าไก่ รสเผ็ดร้อน ไม่ใส่กะทิ เสิร์ฟพร้อมข้าว"}},
-  {id:"choochee", cat:"currys", emoji:"🐟", price:15.00, spice:2, foto:"Thai red curry fish",
-   th:"ฉู่ฉี่ปลา", name:{nl:"Choo Chee (vis)",en:"Choo Chee (fish)",th:"ฉู่ฉี่ปลา"},
-   desc:{nl:"Gebakken vis in romige, milde rode currysaus. Met jasmijnrijst.",en:"Fried fish in creamy mild red curry sauce. With jasmine rice.",th:"ฉู่ฉี่ปลา ราดน้ำพริกแกงข้น เสิร์ฟพร้อมข้าวหอมมะลิ"}},
 
   // Wok & Noedels (€15)
-  {id:"keemao", cat:"wok", emoji:"🍜", price:15.00, spice:3, foto:"drunken noodles pad kee mao",
-   th:"ผัดขี้เมา", name:{nl:"Drunken Noodles",en:"Drunken Noodles",th:"ผัดขี้เมา"},
-   desc:{nl:"Pittige brede noedels met basilicum, chili en groente.",en:"Spicy wide noodles with basil, chilli and vegetables.",th:"ผัดขี้เมาเส้นใหญ่ รสเผ็ด ใส่ใบกะเพรา"}},
-  {id:"radna", cat:"wok", emoji:"🍜", price:15.00, spice:0, foto:"rad na noodles",
-   th:"ราดหน้า", name:{nl:"Rad Na",en:"Rad Na",th:"ราดหน้า"},
-   desc:{nl:"Brede noedels met een romige jus, vlees en Chinese broccoli.",en:"Wide noodles in a savoury gravy with meat and Chinese broccoli.",th:"ราดหน้าเส้นใหญ่ ราดน้ำข้น"}},
-  {id:"woonsen", cat:"wok", emoji:"🍜", price:15.00, spice:1, foto:"pad woon sen glass noodles",
-   th:"ผัดวุ้นเส้น", name:{nl:"Pad Woon Sen",en:"Pad Woon Sen",th:"ผัดวุ้นเส้น"},
-   desc:{nl:"Gewokte glasnoedels met ei, groente en je keuze van vlees.",en:"Stir-fried glass noodles with egg, vegetables and your choice of meat.",th:"ผัดวุ้นเส้น ใส่ไข่และผัก"}},
   {id:"cashew", cat:"wok", emoji:"🥜", price:15.00, spice:1, foto:"cashew chicken Thai",
    th:"ไก่ผัดเม็ดมะม่วง", name:{nl:"Kip met cashew",en:"Cashew Chicken",th:"ไก่ผัดเม็ดมะม่วง"},
    desc:{nl:"Gewokte kip met cashewnoten, ui en milde chilijam.",en:"Stir-fried chicken with cashew nuts, onion and mild chilli jam.",th:"ไก่ผัดเม็ดมะม่วงหิมพานต์ ใส่หอมใหญ่"}},
-  {id:"khaosoi", cat:"wok", emoji:"🍜", price:15.00, spice:2, foto:"Khao soi gai",
-   th:"ข้าวซอย", name:{nl:"Khao Soi",en:"Khao Soi",th:"ข้าวซอย"},
-   desc:{nl:"Noord-Thaise currynoedelsoep met kip en knapperige noedels.",en:"Northern Thai curry noodle soup with chicken and crispy noodles.",th:"ข้าวซอยไก่ น้ำแกงกะทิ โรยเส้นกรอบ"}},
 
   // Rijst (€15)
   {id:"sapparod", opts:["kip","garnaal"], cat:"rijst", emoji:"🍍", price:15.00, spice:1, foto:"pineapple fried rice",
    th:"ข้าวผัดสับปะรด", name:{nl:"Ananas gebakken rijst",en:"Pineapple Fried Rice",th:"ข้าวผัดสับปะรด"},
    desc:{nl:"Gebakken rijst met ananas, cashew, ei en kerrie. Met kip of garnaal.",en:"Fried rice with pineapple, cashew, egg and curry powder. With chicken or prawn.",th:"ข้าวผัดสับปะรด ใส่เม็ดมะม่วงและผงกะหรี่ เลือกไก่หรือกุ้ง"}},
-  {id:"khamoo", cat:"rijst", emoji:"🍖", price:15.00, spice:0, foto:"khao kha moo pork rice",
-   th:"ข้าวขาหมู", name:{nl:"Khao Kha Moo",en:"Khao Kha Moo",th:"ข้าวขาหมู"},
-   desc:{nl:"Mals gestoofde varkenspoot in soja op rijst, met ei.",en:"Tender soy-braised pork leg on rice, with egg.",th:"ข้าวขาหมู เสิร์ฟพร้อมไข่ต้ม"}},
 
   // Dessert
-  {id:"roti", cat:"dessert", emoji:"🥞", price:6.00, spice:0, foto:"roti banana Thai",
-   th:"โรตีกล้วย", name:{nl:"Roti met banaan",en:"Banana Roti",th:"โรตีกล้วย"},
-   desc:{nl:"Krokante Thaise pannenkoek met banaan en gecondenseerde melk.",en:"Crispy Thai pancake with banana and condensed milk.",th:"โรตีกล้วยราดนมข้น"}},
-  {id:"tabtim", cat:"dessert", emoji:"🍧", price:6.50, spice:0, foto:"tab tim krob dessert",
-   th:"ทับทิมกรอบ", name:{nl:"Tab Tim Krob",en:"Tab Tim Krob",th:"ทับทิมกรอบ"},
-   desc:{nl:"Knapperige waterkastanje-robijntjes in zoete kokosmelk met ijs.",en:"Crunchy water-chestnut rubies in sweet coconut milk with ice.",th:"ทับทิมกรอบ น้ำกะทิเย็น"}},
-  {id:"icecream", cat:"dessert", emoji:"🍨", price:5.00, spice:0, foto:"Thai coconut ice cream",
-   th:"ไอศกรีมกะทิ", name:{nl:"Kokosijs",en:"Coconut Ice Cream",th:"ไอศกรีมกะทิ"},
-   desc:{nl:"Romig kokosijs met pinda en zoete toppings.",en:"Creamy coconut ice cream with peanuts and sweet toppings.",th:"ไอศกรีมกะทิ โรยถั่ว"}},
 
   // Dranken (prijzen vrij aan te passen)
-  {id:"chayen", cat:"dranken", emoji:"🧋", price:3.50, spice:0, foto:"Thai iced tea cha yen",
-   th:"ชาเย็น", name:{nl:"Thaise ijsthee",en:"Thai Iced Tea",th:"ชาเย็น"},
-   desc:{nl:"De iconische zoete oranje-roze Thaise ijsthee.",en:"The iconic sweet orange-pink Thai iced tea.",th:"ชาเย็นรสหวานหอม"}},
-  {id:"oliang", cat:"dranken", emoji:"☕", price:3.50, spice:0, foto:"Thai iced coffee oliang",
-   th:"โอเลี้ยง", name:{nl:"Thaise ijskoffie",en:"Thai Iced Coffee",th:"โอเลี้ยง"},
-   desc:{nl:"Sterke, zoete Thaise ijskoffie.",en:"Strong, sweet Thai iced coffee.",th:"โอเลี้ยงเย็น"}},
-  {id:"manao", cat:"dranken", emoji:"🥤", price:3.50, spice:0, foto:"lime soda drink",
-   th:"น้ำมะนาวโซดา", name:{nl:"Limoensoda",en:"Lime Soda",th:"น้ำมะนาวโซดา"},
-   desc:{nl:"Verfrissende verse limoensodadrank.",en:"Refreshing fresh lime soda.",th:"น้ำมะนาวโซดาสดชื่น"}},
 
   /* ===== Isaan — authentiek Noordoost-Thais ===== */
-  {id:"somtam", cat:"isaan", emoji:"🥗", price:12.00, spice:3, foto:"som tam papaya salad",
-   th:"ส้มตำไทย", name:{nl:"Som Tam Thai",en:"Som Tam (papaya salad)",th:"ส้มตำไทย"},
-   desc:{nl:"Groene papayasalade met tomaat, sperziebonen, pinda en limoen.",en:"Green papaya salad with tomato, green beans, peanuts and lime.",th:"ส้มตำไทย ใส่มะเขือเทศ ถั่วฝักยาว ถั่วลิสง และมะนาว"}},
-  {id:"larb", cat:"isaan", emoji:"🌶️", price:13.00, spice:3, foto:"larb moo Thai",
-   th:"ลาบหมู", name:{nl:"Larb Moo",en:"Larb Moo",th:"ลาบหมู"},
-   desc:{nl:"Pittige salade van varkensgehakt met geroosterde rijst, munt en limoen.",en:"Spicy minced pork salad with toasted rice, mint and lime.",th:"ลาบหมู ใส่ข้าวคั่ว ใบสะระแหน่ และมะนาว"}},
-  {id:"namtok", cat:"isaan", emoji:"🥩", price:13.00, spice:3, foto:"nam tok moo Thai",
-   th:"น้ำตกหมู", name:{nl:"Nam Tok Moo",en:"Nam Tok Moo",th:"น้ำตกหมู"},
-   desc:{nl:"Salade van gegrild varkensvlees met geroosterde rijst, ui en chili.",en:"Grilled pork salad with toasted rice, onion and chilli.",th:"น้ำตกหมูย่าง ใส่ข้าวคั่วและหอมแดง"}},
-  {id:"gaiyang", cat:"isaan", emoji:"🍗", price:15.00, spice:1, foto:"Kai yang grilled chicken",
-   th:"ไก่ย่าง", name:{nl:"Gai Yang",en:"Gai Yang (grilled chicken)",th:"ไก่ย่าง"},
-   desc:{nl:"Gemarineerde gegrilde kip op Isaan-wijze met pittige dipsaus.",en:"Marinated Isaan-style grilled chicken with spicy dipping sauce.",th:"ไก่ย่างหมักสไตล์อีสาน เสิร์ฟพร้อมน้ำจิ้มแจ่ว"}},
-  {id:"kormoo", cat:"isaan", emoji:"🥓", price:13.00, spice:2, foto:"kor moo yang grilled pork neck",
-   th:"คอหมูย่าง", name:{nl:"Kor Moo Yang",en:"Kor Moo Yang",th:"คอหมูย่าง"},
-   desc:{nl:"Gegrilde varkensnek met pittige Isaan-dipsaus (jaew).",en:"Grilled pork neck with spicy Isaan dipping sauce (jaew).",th:"คอหมูย่าง เสิร์ฟพร้อมน้ำจิ้มแจ่ว"}},
-  {id:"mooping", cat:"isaan", emoji:"🍢", price:5.00, spice:1, foto:"Moo ping",
-   th:"หมูปิ้ง", name:{nl:"Moo Ping",en:"Moo Ping (pork skewers)",th:"หมูปิ้ง"},
-   desc:{nl:"Gegrilde gemarineerde varkensspiesjes. 5 stuks.",en:"Grilled marinated pork skewers. 5 pieces.",th:"หมูปิ้งหมักย่าง 5 ไม้"}},
-  {id:"saikrok", cat:"isaan", emoji:"🌭", price:5.00, spice:1, foto:"Sai krok Isan",
-   th:"ไส้กรอกอีสาน", name:{nl:"Sai Krok Isan",en:"Sai Krok Isan",th:"ไส้กรอกอีสาน"},
-   desc:{nl:"Licht gefermenteerde Isaan-worst met een zurig accent. 5 stuks.",en:"Lightly fermented, tangy Isaan sausage. 5 pieces.",th:"ไส้กรอกอีสานรสเปรี้ยว 5 ชิ้น"}},
-  {id:"khaoniao", cat:"isaan", emoji:"🍚", price:3.00, spice:0, foto:"Thai sticky rice basket",
-   th:"ข้าวเหนียว", name:{nl:"Khao Niao (kleefrijst)",en:"Khao Niao (sticky rice)",th:"ข้าวเหนียว"},
-   desc:{nl:"Thaise kleefrijst — het perfecte bijgerecht bij elk Isaan-gerecht.",en:"Thai sticky rice — the perfect side for any Isaan dish.",th:"ข้าวเหนียว เหมาะกับอาหารอีสานทุกจาน"}},
 
   /* ===== Zuid-Thais — authentieke gerechten uit Zuid-Thailand ===== */
-  {id:"kuakling", cat:"zuid", emoji:"🌶️", price:15.00, spice:3, foto:"Kua kling southern Thai dry curry",
-   th:"คั่วกลิ้ง", name:{nl:"Kua Kling",en:"Kua Kling",th:"คั่วกลิ้ง"},
-   desc:{nl:"Vurige droge curry van fijngehakt vlees met citroengras, limoenblad en veel chili.",en:"Fiery dry curry of minced meat with lemongrass, kaffir lime leaf and lots of chilli.",th:"คั่วกลิ้งเนื้อสับ ใส่ตะไคร้ ใบมะกรูด และพริกจัดจ้าน"}},
-  {id:"gaengsom", cat:"zuid", emoji:"🍲", price:15.00, spice:3, foto:"Kaeng som sour curry Thai",
-   th:"แกงส้ม", name:{nl:"Gaeng Som",en:"Gaeng Som (sour curry)",th:"แกงส้ม"},
-   desc:{nl:"Heldergele, waterige Zuid-Thaise curry met vis en groenten — heerlijk zuur en pittig.",en:"Bright-yellow, brothy Southern curry with fish and vegetables — wonderfully sour and spicy.",th:"แกงส้มปักษ์ใต้ใส่ปลาและผัก รสเปรี้ยวเผ็ดจัด"}},
-  {id:"gaengtaipla", cat:"zuid", emoji:"🐟", price:15.00, spice:3, foto:"Kaeng tai pla southern Thai curry",
-   th:"แกงไตปลา", name:{nl:"Gaeng Tai Pla",en:"Gaeng Tai Pla",th:"แกงไตปลา"},
-   desc:{nl:"Rijke, hartige curry op basis van gefermenteerde vis. Intens, zuur en flink heet.",en:"Rich, savoury curry based on fermented fish. Intense, sour and seriously hot.",th:"แกงไตปลารสเข้มข้น กลมกล่อม เปรี้ยวและเผ็ดร้อน"}},
-  {id:"khaomokgai", cat:"zuid", emoji:"🍛", price:15.00, spice:1, foto:"Khao mok kai Thai chicken biryani",
-   th:"ข้าวหมกไก่", name:{nl:"Khao Mok Gai",en:"Khao Mok Gai",th:"ข้าวหมกไก่"},
-   desc:{nl:"Thaise biryani: gele kruidenrijst met malse gekruide kip, gefruite ui en frisse dipsaus.",en:"Thai biryani: yellow spiced rice with tender chicken, fried onions and a fresh dip.",th:"ข้าวหมกไก่ ข้าวเหลืองหอมเครื่องเทศ เสิร์ฟกับไก่และน้ำจิ้ม"}},
-  {id:"moohong", cat:"zuid", emoji:"🥩", price:15.00, spice:0, foto:"Moo hong braised pork belly Phuket",
-   th:"หมูฮ้อง", name:{nl:"Moo Hong",en:"Moo Hong",th:"หมูฮ้อง"},
-   desc:{nl:"Gestoofd varkensbuikspek in zoete donkere sojasaus met knoflook en peper. Smelt op de tong.",en:"Braised pork belly in sweet dark soy with garlic and pepper. Melts in the mouth.",th:"หมูฮ้อง สามชั้นตุ๋นซีอิ๊วหวาน กระเทียมและพริกไทย นุ่มละมุน"}},
-  {id:"bailiang", cat:"zuid", emoji:"🥬", price:12.00, spice:1, foto:"Pad bai liang egg southern Thai stir fry",
-   th:"ใบเหลียงผัดไข่", name:{nl:"Bai Liang Pad Kai",en:"Bai Liang Pad Kai",th:"ใบเหลียงผัดไข่"},
-   desc:{nl:"Eenvoudig roerbakgerecht van knapperige Zuid-Thaise liang-bladeren met ei.",en:"Simple stir-fry of crisp Southern liang leaves with egg.",th:"ใบเหลียงผัดไข่ เมนูผัดง่ายๆ กรอบอร่อย"}},
-  {id:"padsator", cat:"zuid", emoji:"🫛", price:15.00, spice:2, foto:"Pad sator stink beans shrimp Thai",
-   th:"ผัดสะตอ", name:{nl:"Pad Sator",en:"Pad Sator (stink beans)",th:"ผัดสะตอ"},
-   desc:{nl:"Sator-bonen met hun kenmerkende smaak, gewokt met garnalen, varkensvlees en pittige garnalenpasta.",en:"Stink beans with their signature flavour, wok-fried with shrimp, pork and spicy shrimp paste.",th:"ผัดสะตอกุ้งและหมู ใส่กะปิรสเผ็ด กลิ่นเฉพาะตัว"}},
-  {id:"khaoyam", cat:"zuid", emoji:"🥗", price:13.00, spice:1, foto:"Khao yam southern Thai rice salad",
-   th:"ข้าวยำ", name:{nl:"Khao Yam",en:"Khao Yam (rice salad)",th:"ข้าวยำ"},
-   desc:{nl:"Verfrissende Zuid-Thaise rijstsalade met kruiden, verse groenten, citroengras en budu-saus.",en:"Refreshing Southern rice salad with herbs, fresh vegetables, lemongrass and budu sauce.",th:"ข้าวยำปักษ์ใต้ ใส่สมุนไพร ผักสด ตะไคร้ ราดน้ำบูดู"}},
-  {id:"khanomjeen", cat:"zuid", emoji:"🍜", price:15.00, spice:2, foto:"Khanom chin nam ya fish curry noodles",
-   th:"ขนมจีนน้ำยา", name:{nl:"Khanom Jeen Nam Ya",en:"Khanom Jeen Nam Ya",th:"ขนมจีนน้ำยา"},
-   desc:{nl:"Dunne gefermenteerde rijstnoedels met een pittige, kruidige viscurry en verse rauwe groenten.",en:"Thin fermented rice noodles topped with a spicy fish curry and fresh raw vegetables.",th:"ขนมจีนน้ำยา เส้นหมักราดน้ำยาปลารสเผ็ด เสิร์ฟกับผักสด"}},
   {id:"plaradprik", cat:"wok", emoji:"🐟", price:16.00, spice:3, foto:"Pla rad prik deep fried fish chilli sauce",
    th:"ปลาราดพริก", name:{nl:"Pla Rad Prik",en:"Pla Rad Prik (fried fish, chilli sauce)",th:"ปลาราดพริก"},
    desc:{nl:"Krokant gefrituurde hele vis, overgoten met een zoetzure Thaise chilisaus van knoflook, chili en tamarinde. Pittig. Met jasmijnrijst.",en:"Crispy deep-fried whole fish topped with a sweet-and-sour Thai chilli sauce of garlic, chilli and tamarind. Spicy. With jasmine rice.",th:"ปลาทอดกรอบราดด้วยน้ำพริกเปรี้ยวหวานเผ็ด ใส่กระเทียม พริก และมะขาม เสิร์ฟพร้อมข้าวหอมมะลิ"}},
@@ -2032,6 +1891,54 @@ function wipeDishData(id){
   if(ch.has("fotos")) saveJSON("tta_fotos", chosen);
   return ch;
 }
+function _menuBounds(src){
+  const s = src.indexOf("const MENU = [");
+  if(s<0) return null;
+  const open = src.indexOf("[", s);
+  let d=0, i=open;
+  for(; i<src.length; i++){ const c=src[i]; if(c==="[") d++; else if(c==="]"){ d--; if(d===0) break; } }
+  return d===0 ? [open,i] : null;
+}
+function _removeMenuEntriesSrc(src, ids){
+  let removed=0;
+  for(const id of ids){
+    const b=_menuBounds(src); if(!b) break;
+    const [open,close]=b;
+    const marker='{id:"'+id+'"';
+    const mi=src.indexOf(marker, open);
+    if(mi<0 || mi>close) continue;                 // niet (meer) in broncode -> overslaan
+    let d=0, j=mi;
+    for(; j<src.length; j++){ const c=src[j]; if(c==="{") d++; else if(c==="}"){ d--; if(d===0){ j++; break; } } }
+    let start=mi, end=j;
+    while(start>0 && (src[start-1]===" "||src[start-1]==="\t")) start--;
+    if(src[start-1]==="\n") start--;
+    if(src[end]===",") end++;
+    src = src.slice(0,start) + src.slice(end);
+    removed++;
+  }
+  return {src, removed};
+}
+// Verwijdert definitief-verwijderde gerechten uit de MENU-broncode in index.html.
+// Best-effort met validatie: bij twijfel wordt de code NIET aangepast (PURGED filtert dan nog steeds).
+async function pruneMenuSource(ids){
+  const token = ghToken(); if(!token || !ids || !ids.length) return;
+  try{
+    const g = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/index.html?t=`+Date.now(), {headers:{Authorization:"token "+token}});
+    if(!g.ok) return;
+    const meta = await g.json();
+    let src = decodeURIComponent(escape(atob((meta.content||"").replace(/\s/g,""))));
+    const res = _removeMenuEntriesSrc(src, ids);
+    if(!res.removed) return;                        // niets uit broncode te verwijderen
+    src = res.src;
+    const b = _menuBounds(src); if(!b) return;
+    const arrText = src.slice(b[0], b[1]+1);
+    let parsed;
+    try{ parsed = eval("("+arrText+")"); }catch(e){ return; }   // ongeldige code -> afbreken (vangnet: PURGED)
+    if(!Array.isArray(parsed) || !parsed.length) return;
+    const b64 = btoa(unescape(encodeURIComponent(src)));
+    await ghPutBinary("index.html", b64, "Gerecht definitief uit MENU-broncode verwijderd");
+  }catch(e){}
+}
 async function persistRemoval(wiped, msg){
   if(!BEHEER || !needToken()) return;
   // Volgorde is bewust: verwijderdweg.json (permanent) EERST, zodat gerechten nooit
@@ -2068,18 +1975,21 @@ async function purgeDish(id){
   saveJSON("tta_extra", {items:EXTRA});
   buildMenu(); reapplyPhotos(); updateBeheerCount(); updateTrashCount(); renderTrash();
   await persistRemoval(wiped, "Gerecht definitief verwijderd");
+  await pruneMenuSource([id]);
 }
 async function emptyTrash(){
   if(!DELETED.size) return;
   if(!confirm(T().adm.cEmptyTrash)) return;
+  const ids = [...DELETED];
   const wiped = new Set();
-  [...DELETED].forEach(id => { DELETED.delete(id); PURGED.add(id); wipeDishData(id).forEach(k => wiped.add(k)); });
+  ids.forEach(id => { DELETED.delete(id); PURGED.add(id); wipeDishData(id).forEach(k => wiped.add(k)); });
   EXTRA = EXTRA.filter(m => !(m && PURGED.has(m.id)));
   saveJSON("tta_deleted", {ids:[...DELETED]});
   saveJSON("tta_purged", {ids:[...PURGED]});
   saveJSON("tta_extra", {items:EXTRA});
   buildMenu(); reapplyPhotos(); updateBeheerCount(); updateTrashCount(); renderTrash();
   await persistRemoval(wiped, "Prullenbak geleegd");
+  await pruneMenuSource(ids);
 }
 function updateTrashCount(){
   const b = document.getElementById("bTrash"); if(!b) return;
