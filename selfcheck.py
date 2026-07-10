@@ -46,6 +46,20 @@ def redirect_target(url, timeout=20):
         return None, str(e)
 
 # ----------------------------------------------------------------------------
+def _menu_ids(html):
+    s = html.find("const MENU = [")
+    if s < 0: return None
+    oi = html.find("[", s); d = 0; i = oi
+    while i < len(html):
+        c = html[i]
+        if c == "[": d += 1
+        elif c == "]":
+            d -= 1
+            if d == 0: break
+        i += 1
+    if d != 0: return None
+    return set(re.findall(r'\{id:"([^"]+)"', html[oi:i]))
+
 def check_repo():
     # 1. index.html bestaat + bevat de merknaam
     if not os.path.exists("index.html"):
@@ -89,6 +103,35 @@ def check_repo():
         warn(f"onveilige http://-bron(nen) op de pagina: {len(mixed)}\u00d7 \u2014 bijv. {mixed[0][:60]}")
     else:
         ok("geen onveilige http://-bronnen op de pagina")
+
+    # 2d. MENU-broncode consistent met (definitief) verwijderde gerechten
+    mids = _menu_ids(html)
+    if mids is None:
+        err("MENU-array niet gevonden of niet gebalanceerd in index.html")
+    else:
+        ok(f"MENU-broncode telt {len(mids)} gerechten")
+        try:
+            purged = set(json.load(open("verwijderdweg.json", encoding="utf-8")))
+        except Exception:
+            purged = set()
+        stuck = sorted(mids & purged)
+        if stuck:
+            warn(f"{len(stuck)} definitief verwijderd gerecht(en) staan nog in de broncode: {', '.join(stuck[:6])}")
+        else:
+            ok("geen definitief verwijderde gerechten meer in de broncode")
+        orphan = 0
+        for fn in ("fotos.json", "prijzen.json", "recepten.json", "namen.json", "omschrijvingen.json", "pittigheid.json", "serveertips.json", "nummers.json"):
+            if os.path.exists(fn):
+                try:
+                    dd = json.load(open(fn, encoding="utf-8"))
+                except Exception:
+                    continue
+                if isinstance(dd, dict):
+                    orphan += sum(1 for k in dd if k not in mids)
+        if orphan:
+            warn(f"{orphan} verweesde gegeven(s) voor niet-bestaande gerechten in de databestanden")
+        else:
+            ok("geen verweesde gegevens in de databestanden")
 
     # 3. Alle aanwezige JSON-bestanden zijn geldig
     data = {}
