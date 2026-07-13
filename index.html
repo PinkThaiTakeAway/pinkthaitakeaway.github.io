@@ -2378,7 +2378,7 @@ function jsonp(params){
     setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
   });
 }
-const SCRIPT_VERSIE_VERWACHT = 21;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 22;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
@@ -3368,6 +3368,7 @@ async function renderBezoek(){
   if(_kTab === "bezoek") tekenBezoek(r);
 }
 function toggleUniek(){ var d=document.getElementById("uniekDetail"); if(d) d.style.display=(d.style.display==="none"?"block":"none"); }
+function toggleAnon(id){ var d=document.getElementById("anonDet_"+id); if(d) d.style.display=(d.style.display==="none"?"block":"none"); }
 function tekenBezoek(r){
   const K = BT().kl;
   const body = document.getElementById("kBody");
@@ -3433,7 +3434,7 @@ function tekenBezoek(r){
       deelLog.map(e=>'<div class="ktoprow"><span>📤 '+esc(K.bzVia)+' '+esc(e.naam)+'</span><span class="ktn">'+esc(fmtInlog(e.tijd))+'</span></div>').join("")+'</div>';
   }
   body.innerHTML =
-    '<div class="kstat-grid">'+kaart(r.vandaag,K.bzVandaag)+kaart(r.week,K.bzWeek)+kaart(r.maand,K.bzMaand)+kaart(r.totaal,K.bzTotaal)+(r.uniek!=null?'<div class="kstat-card" style="cursor:pointer" title="'+esc(K.bzUniekTip)+'" onclick="toggleUniek()"><div class="kv">'+r.uniek+' <span style="font-size:.6em;opacity:.55">\u25be</span></div><div class="kl">'+esc(K.bzUniek)+'</div></div>':"")+'</div>'+(r.uniek!=null?'<div id="uniekDetail" style="display:none">'+verdeling(K.bzUniekHerkomst, r.uniekHerkomst, {direct:K.bzDirect, whatsapp:K.bzWhatsapp, google:K.bzGoogle, overig:K.bzOverig})+verdelingDyn(K.bzUniekLand, r.uniekLand)+verdelingDyn(K.bzUniekPlaats, r.uniekPlaats)+'<div class="ktop"><h4>'+esc(K.bzAnoniem)+'</h4>'+((r.anoniemLijst&&r.anoniemLijst.length)?r.anoniemLijst.map(function(a){return '<div class="ktoprow"><span>#'+esc(a.id)+(a.plaats?' \u00b7 '+esc(a.plaats):'')+'</span><span class="ktn">'+a.aantal+' '+esc(K.bzBezoeken)+'</span></div>';}).join(""):'<div class="ktoprow"><span>'+esc(K.bzGeen)+'</span></div>')+'</div>'+'</div>':"")+
+    '<div class="kstat-grid">'+kaart(r.vandaag,K.bzVandaag)+kaart(r.week,K.bzWeek)+kaart(r.maand,K.bzMaand)+kaart(r.totaal,K.bzTotaal)+(r.uniek!=null?'<div class="kstat-card" style="cursor:pointer" title="'+esc(K.bzUniekTip)+'" onclick="toggleUniek()"><div class="kv">'+r.uniek+' <span style="font-size:.6em;opacity:.55">\u25be</span></div><div class="kl">'+esc(K.bzUniek)+'</div></div>':"")+'</div>'+(r.uniek!=null?'<div id="uniekDetail" style="display:none">'+verdeling(K.bzUniekHerkomst, r.uniekHerkomst, {direct:K.bzDirect, whatsapp:K.bzWhatsapp, google:K.bzGoogle, overig:K.bzOverig})+verdelingDyn(K.bzUniekLand, r.uniekLand)+verdelingDyn(K.bzUniekPlaats, r.uniekPlaats)+'<div class="ktop"><h4>'+esc(K.bzAnoniem)+'</h4>'+((r.anoniemLijst&&r.anoniemLijst.length)?r.anoniemLijst.map(function(a){var det=(a.sessies||[]).map(function(s){return '<div style="font-size:.82em;opacity:.72;padding:2px 0 2px 14px">'+esc(fmtInlog(s.tijd))+' \u00b7 '+esc(s.herkomst||'')+' \u00b7 '+esc(s.toestel||'')+' \u00b7 '+esc(s.taal||'')+(s.plaats?(' \u00b7 '+esc(s.plaats)):'')+(s.land?(' ('+esc(s.land)+')'):'')+'</div>';}).join("");return '<div class="ktoprow" style="cursor:pointer" onclick="toggleAnon(\''+esc(a.id)+'\')"><span>\u25b8 #'+esc(a.id)+(a.plaats?' \u00b7 '+esc(a.plaats):'')+'</span><span class="ktn">'+a.aantal+' '+esc(K.bzBezoeken)+'</span></div>'+'<div id="anonDet_'+esc(a.id)+'" style="display:none">'+det+'</div>';}).join(""):'<div class="ktoprow"><span>'+esc(K.bzGeen)+'</span></div>')+'</div>'+'</div>':"")+
     '<div class="ktop"><h4>'+esc(K.bzPerDag)+'</h4><div class="bzchart">'+bars+'</div></div>'+
     klantBlok+
     beheerBlok+
