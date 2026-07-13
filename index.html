@@ -1466,7 +1466,7 @@ document.getElementById("waBtn").onclick = async () => {
   try{
     const r = await jsonp({
       actie: "bestelling",
-      start: pickupISO(slot), order_id: orderId, naam, tel,
+      start: pickupISO(slot), order_id: orderId, naam, tel, vid: myVid(),
       bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
       afhaal, taal: LANG, mand: JSON.stringify(cart)
     });
@@ -2351,7 +2351,7 @@ let _toastT;
 let _deelcode = "";
 async function laadDeelcode(){
   const tok = acctToken(); if(!tok) return;
-  try{ const r = await jsonp({actie:"account", token:tok}); if(r && r.ok && r.deelcode) _deelcode = r.deelcode; }catch(e){}
+  try{ const r = await jsonp({actie:"account", token:tok, vid: myVid()}); if(r && r.ok && r.deelcode) _deelcode = r.deelcode; }catch(e){}
 }
 async function deelPagina(){
   const url = SITE_HOME + (_deelcode ? ("?via=" + _deelcode) : "");
@@ -2378,7 +2378,7 @@ function jsonp(params){
     setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
   });
 }
-const SCRIPT_VERSIE_VERWACHT = 19;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 20;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
@@ -2757,6 +2757,7 @@ const LOGIN_T = {
     accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ" }
 };
 function acctToken(){ return localStorage.getItem("tta_klanttoken") || ""; }
+function myVid(){ try{ var v=localStorage.getItem("tta_vid")||""; if(!v){ v=Date.now().toString(36)+Math.random().toString(36).slice(2,10); localStorage.setItem("tta_vid",v); } return v; }catch(e){ return ""; } }
 function updateAcctBtn(){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   const lbl = document.getElementById("acctLabel");
@@ -2775,7 +2776,7 @@ let _accountData = null, _accountFetch = null;
 function fetchAccount(){
   if(_accountFetch) return _accountFetch;
   const tok = acctToken();
-  _accountFetch = jsonp({actie:"account", token:tok});
+  _accountFetch = jsonp({actie:"account", token:tok, vid: myVid()});
   Promise.resolve(_accountFetch).finally(()=>{ _accountFetch = null; });
   return _accountFetch;
 }
@@ -2846,7 +2847,7 @@ function uitloggen(){ localStorage.removeItem("tta_klanttoken"); localStorage.re
 async function toonBeheerder(){
   const el = document.getElementById("mgmtUser"); if(!el) return;
   const tok = acctToken(); if(!tok) return;
-  try{ const r = await jsonp({actie:"account", token:tok}); if(r && r.ok && r.naam) el.textContent = "👤 " + r.naam; }catch(e){}
+  try{ const r = await jsonp({actie:"account", token:tok, vid: myVid()}); if(r && r.ok && r.naam) el.textContent = "👤 " + r.naam; }catch(e){}
 }
 
 async function laadKlanten(){
