@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-13T08:00:48Z",
+  "opgeslagen": "2026-07-13T19:07:13Z",
   "scriptVersie": 18,
-  "verwachteVersie": 18,
-  "versieOk": true,
+  "verwachteVersie": 19,
+  "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-13T08:00:46.430740+00:00",
+    "updated": "2026-07-13T19:07:12.141840+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -260,11 +260,11 @@
         "naam": "Onderhoud",
         "items": [
           {
-            "naam": "laatste Health-run is recent (1 dag(en) geleden)",
+            "naam": "laatste Health-run is recent (0 dag(en) geleden)",
             "status": "ok"
           },
           {
-            "naam": "index.html compact (297 KB, geen zware inline-afbeeldingen)",
+            "naam": "index.html compact (298 KB, geen zware inline-afbeeldingen)",
             "status": "ok"
           },
           {
