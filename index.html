@@ -1693,6 +1693,7 @@ async function initBeheer(){
     else if(a==="knieuw-ok") klantNieuwOpslaan();
     else if(a==="kimport-ok") klantImporteren();
     else if(a==="wa") waUitnodiging(btn.dataset.tel, btn.dataset.naam, btn.dataset.email, btn.dataset.taal);
+    else if(a==="copylink") kopieerInloglink(btn.dataset.token);
     else if(a==="kookkopie") kopieerKooklijst();
     else if(a==="expcsv") exportBestellingenCSV();
     else if(a==="qrshow") toonQR();
@@ -2378,7 +2379,7 @@ function jsonp(params){
     setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
   });
 }
-const SCRIPT_VERSIE_VERWACHT = 28;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 29;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
@@ -2557,7 +2558,7 @@ const BEHEER_T = {
     kl:{
       title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabAdmins:"Admins", adLaden:"Admins laden…", adGeen:"Nog geen logins vastgelegd.", adUit:"Elke keer dat beheer wordt geopend, wordt hier vastgelegd wie, wanneer en op welk apparaat.", adNaam:"Admin", adWanneer:"Wanneer", adApparaat:"Apparaat", adOnbekend:"onbekend", tabInstel:"Instellingen", tikkieTitel:"Tikkie-betaling", tikkieUit2:"Laat klanten kiezen om via Tikkie te betalen in plaats van contant.", tikkieStatusAan:"Nu: aan", tikkieStatusUit:"Nu: uit", tikkieAanBtn:"Aanzetten", tikkieUitBtn:"Uitzetten", tokenTitel:"GitHub-token (technisch)", tokenUit2:"Nodig om wijzigingen zoals prijzen en menu live op te slaan. Wordt alleen op dit apparaat bewaard.", tokenStatusSet:"Ingesteld op dit apparaat ✓", tokenStatusNone:"Nog niet ingesteld", tokenSetBtn:"Token instellen / wijzigen", publiceerTitel:"Publiceren", publiceerUit2:"Zet alle wijzigingen (prijzen, menu, teksten) in één keer live op de website.", publiceerBtn:"⬆ Nu publiceren", adresTitel:"Adresgegevens", adresUit2:"Adres en telefoonnummer zoals ze op de website worden getoond.", adresLabel:"Adres", adresTelLabel:"Telefoon (zichtbaar op de site)", naamLabel:"Bedrijfsnaam", fotoTitel:"Foto van Pink", fotoUit2:"De foto bovenaan de homepage. Plak een link naar een afbeelding (leeg = standaardfoto).", fotoLabel:"Link naar de foto (URL)", fotoUpload:"…of upload een foto (van je telefoon)", fotoBezig:"Foto uploaden…", fotoOk:"Foto opgeslagen ✓", fotoFout:"Kon foto niet opslaan", adresOk:"Adresgegevens opgeslagen ✓", adresFout:"Kon adresgegevens niet opslaan", seoTitel:"Vindbaarheid (Google)", seoUit:"Deze gegevens bepalen hoe je zaak in Google verschijnt (keuken, bediend gebied, prijsklasse en foto).", seoKeuken:"Keuken", seoGebied:"Bediend gebied (plaatsen, komma-gescheiden)", seoPrijs:"Prijsklasse (bijv. €, €€ of €€€)", seoAfb:"Foto voor Google/delen (URL)", seoOk:"Vindbaarheid opgeslagen ✓", seoFout:"Kon vindbaarheid niet opslaan", afhTitel:"Afhaal & bestellen", afhUit2:"Afhaaldag, afhaaltijden en tot wanneer klanten kunnen bestellen.", afhDagL:"Afhaaldag", afhVanL:"Vanaf", afhTotL:"Tot", afhSlotL:"Tijdvak per (minuten)", afhCutDagL:"Bestellen kan t/m (dag)", afhCutUurL:"…tot dat uur (0–23)", afhOk:"Afhaal-instellingen opgeslagen ✓", afhFout:"Kon afhaal-instellingen niet opslaan", capTitel:"Capaciteit", capUit2:"Maximum aantal bestellingen per tijdvak en per afhaaldag (0 = geen limiet).", capSlotL:"Max per tijdvak", capDagL:"Max per afhaaldag", capOk:"Capaciteit opgeslagen ✓", capFout:"Kon capaciteit niet opslaan", mijnTel:"Mijn telefoonnummer", mijnTelUit:"Op dit nummer krijg je automatisch elke nieuwe bestelling binnen via WhatsApp.", telLabel:"Telefoonnummer (internationaal, alleen cijfers, bijv. 31612345678 of 66812345678)", keyLabel:"CallMeBot API-key", telOpslaan:"Opslaan", zatTestBtn:"▶ Stuur zaterdag-overzicht nu (test)", zatTestBezig:"Overzicht versturen…", zatTestOk:"Zaterdag-overzicht verstuurd via WhatsApp ✓", zatTestFout:"Kon het overzicht niet versturen (telefoon + key ingesteld?)", zatTestLeeg:"Geen openstaande bestellingen — geen overzicht verstuurd", mijnTelHint:"Nieuw nummer? Activeer eerst CallMeBot op die telefoon: voeg contact +34 621 331 709 toe en stuur 'I allow callmebot to send me messages'. Je krijgt dan een API-key terug.",
       bzLaden:"Bezoek laden…", bzReset:"🗑 Bezoek resetten", bzResetConf:"Weet je zeker dat je ALLE bezoekgegevens wilt wissen? Dit kan niet ongedaan worden gemaakt.", bzResetOk:"Bezoekgegevens gewist ✓", bzResetFout:"Kon bezoek niet resetten", bzGeen:"Nog geen bezoekgegevens.", bzVandaag:"vandaag", bzWeek:"deze week", bzMaand:"deze maand", bzTotaal:"totaal", bzUniek:"unieke bezoekers", bzUniekHerkomst:"Herkomst unieke bezoekers", bzUniekTip:"klik voor herkomst", bzUniekLand:"Land unieke bezoekers", bzUniekPlaats:"Plaats unieke bezoekers", bzOnbekend:"onbekend", bzAnoniem:"Anonieme bezoekers (hoe vaak terug)", bzBeheerApp:"Beheerders (herkende apparaten)", bzBezoeken:"bezoeken", bzBekend:"bekend", bzAnon:"anoniem", bzPerDag:"Bezoeken per dag (30 dagen)", bzType:"Type bezoek", bzKlant:"klant", bzBeheer:"beheer", bzVolg:"volglink", bzTaal:"Taal", bzHerkomst:"Herkomst", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"overig", bzToestel:"Toestel", bzMobiel:"mobiel", bzDesktop:"desktop", bzVasteKlanten:"Terugkerende klanten", laatstInlog:"laatst ingelogd:", bzBeheerders:"In beheer ingelogd", bzInlogLog:"Inloggeschiedenis", bzDeelLijst:"Binnengekomen via delen", bzDeelLog:"Deelgeschiedenis", bzVia:"via",
-      zoek:"Zoek op naam of telefoon…", reload:"Opnieuw laden",
+      zoek:"Zoek op naam of telefoon…", copyLink:"Kopieer inloglink", copyLinkOk:"Inloglink gekopieerd ✓", reload:"Opnieuw laden",
       addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan", telVerplicht:"Vul een telefoonnummer in",
       impHint:"Eén klant per regel: naam en telefoon", impPlaceholder:"Jan Jansen, 0612345678\nPiet Peters, 0698765432", impBtn:"Importeren",
       waInvite:"📲 WhatsApp-uitnodiging", waNogmaals:"📲 Nogmaals uitnodigen", uitgLabel:"uitgenodigd", waGeenTel:"Deze klant heeft geen telefoonnummer",
@@ -2597,7 +2598,7 @@ const BEHEER_T = {
     kl:{
       title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabAdmins:"Admins", adLaden:"Loading admins…", adGeen:"No logins recorded yet.", adUit:"Every time the admin page is opened, this records who, when and on which device.", adNaam:"Admin", adWanneer:"When", adApparaat:"Device", adOnbekend:"unknown", tabInstel:"Settings", tikkieTitel:"Tikkie payment", tikkieUit2:"Let customers choose to pay via Tikkie instead of cash.", tikkieStatusAan:"Now: on", tikkieStatusUit:"Now: off", tikkieAanBtn:"Turn on", tikkieUitBtn:"Turn off", tokenTitel:"GitHub token (technical)", tokenUit2:"Needed to save changes like prices and menu live. Stored only on this device.", tokenStatusSet:"Set on this device ✓", tokenStatusNone:"Not set yet", tokenSetBtn:"Set / change token", publiceerTitel:"Publish", publiceerUit2:"Push all changes (prices, menu, texts) live to the website at once.", publiceerBtn:"⬆ Publish now", adresTitel:"Address details", adresUit2:"Address and phone number as shown on the website.", adresLabel:"Address", adresTelLabel:"Phone (shown on the site)", naamLabel:"Business name", fotoTitel:"Photo of Pink", fotoUit2:"The photo at the top of the homepage. Paste an image link (empty = default photo).", fotoLabel:"Image link (URL)", fotoUpload:"…or upload a photo (from your phone)", fotoBezig:"Uploading photo…", fotoOk:"Photo saved ✓", fotoFout:"Could not save photo", adresOk:"Address saved ✓", adresFout:"Could not save address", seoTitel:"Visibility (Google)", seoUit:"These details control how your business appears in Google (cuisine, area served, price range and photo).", seoKeuken:"Cuisine", seoGebied:"Area served (places, comma-separated)", seoPrijs:"Price range (e.g. €, €€ or €€€)", seoAfb:"Photo for Google/sharing (URL)", seoOk:"Visibility saved ✓", seoFout:"Could not save visibility", afhTitel:"Pickup & ordering", afhUit2:"Pickup day, pickup times and the deadline for customers to order.", afhDagL:"Pickup day", afhVanL:"From", afhTotL:"Until", afhSlotL:"Time slot length (minutes)", afhCutDagL:"Ordering open until (day)", afhCutUurL:"…until this hour (0–23)", afhOk:"Pickup settings saved ✓", afhFout:"Could not save pickup settings", capTitel:"Capacity", capUit2:"Maximum orders per time slot and per pickup day (0 = no limit).", capSlotL:"Max per time slot", capDagL:"Max per pickup day", capOk:"Capacity saved ✓", capFout:"Could not save capacity", mijnTel:"My phone number", mijnTelUit:"This number automatically receives every new order via WhatsApp.", telLabel:"Phone number (international, digits only, e.g. 31612345678 or 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"Save", zatTestBtn:"▶ Send Saturday summary now (test)", zatTestBezig:"Sending summary…", zatTestOk:"Saturday summary sent via WhatsApp ✓", zatTestFout:"Could not send the summary (phone + key set?)", zatTestLeeg:"No open orders — no summary sent", mijnTelHint:"New number? First activate CallMeBot on that phone: add contact +34 621 331 709 and send 'I allow callmebot to send me messages'. You will receive an API key.",
       bzLaden:"Loading visits…", bzReset:"🗑 Reset visits", bzResetConf:"Are you sure you want to erase ALL visit data? This cannot be undone.", bzResetOk:"Visit data cleared ✓", bzResetFout:"Could not reset visits", bzGeen:"No visit data yet.", bzVandaag:"today", bzWeek:"this week", bzMaand:"this month", bzTotaal:"total", bzUniek:"unique visitors", bzUniekHerkomst:"Unique visitors by source", bzUniekTip:"click for source", bzUniekLand:"Unique visitors by country", bzUniekPlaats:"Unique visitors by city", bzOnbekend:"unknown", bzAnoniem:"Anonymous visitors (return visits)", bzBeheerApp:"Admins (recognized devices)", bzBezoeken:"visits", bzBekend:"known", bzAnon:"anonymous", bzPerDag:"Visits per day (30 days)", bzType:"Visit type", bzKlant:"customer", bzBeheer:"admin", bzVolg:"tracking link", bzTaal:"Language", bzHerkomst:"Source", bzDirect:"direct", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"other", bzToestel:"Device", bzMobiel:"mobile", bzDesktop:"desktop", bzVasteKlanten:"Returning customers", laatstInlog:"last login:", bzBeheerders:"Logged into admin", bzInlogLog:"Login history", bzDeelLijst:"Arrived via sharing", bzDeelLog:"Share history", bzVia:"via",
-      zoek:"Search by name or phone…", reload:"Reload",
+      zoek:"Search by name or phone…", copyLink:"Copy login link", copyLinkOk:"Login link copied ✓", reload:"Reload",
       addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer", telVerplicht:"Enter a phone number",
       impHint:"One customer per line: name and phone", impPlaceholder:"Jan Jansen, 0612345678\nPiet Peters, 0698765432", impBtn:"Import",
       waInvite:"📲 WhatsApp invite", waNogmaals:"📲 Invite again", uitgLabel:"invited", waGeenTel:"This customer has no phone number",
@@ -2637,7 +2638,7 @@ const BEHEER_T = {
     kl:{
       title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabAdmins:"ผู้ดูแล", adLaden:"กำลังโหลด…", adGeen:"ยังไม่มีบันทึกการเข้าสู่ระบบ", adUit:"ทุกครั้งที่เปิดหน้าผู้ดูแล ระบบจะบันทึกว่าใคร เมื่อไร และอุปกรณ์ใด", adNaam:"ผู้ดูแล", adWanneer:"เมื่อไร", adApparaat:"อุปกรณ์", adOnbekend:"ไม่ทราบ", tabInstel:"การตั้งค่า", tikkieTitel:"การชำระด้วย Tikkie", tikkieUit2:"ให้ลูกค้าเลือกจ่ายผ่าน Tikkie แทนเงินสด", tikkieStatusAan:"ตอนนี้: เปิด", tikkieStatusUit:"ตอนนี้: ปิด", tikkieAanBtn:"เปิด", tikkieUitBtn:"ปิด", tokenTitel:"โทเคน GitHub (ทางเทคนิค)", tokenUit2:"จำเป็นสำหรับบันทึกการเปลี่ยนแปลง เช่น ราคาและเมนู แบบสด เก็บในเครื่องนี้เท่านั้น", tokenStatusSet:"ตั้งค่าในเครื่องนี้แล้ว ✓", tokenStatusNone:"ยังไม่ได้ตั้งค่า", tokenSetBtn:"ตั้งค่า / เปลี่ยนโทเคน", publiceerTitel:"เผยแพร่", publiceerUit2:"อัปเดตการเปลี่ยนแปลงทั้งหมด (ราคา เมนู ข้อความ) ขึ้นเว็บไซต์พร้อมกัน", publiceerBtn:"⬆ เผยแพร่ตอนนี้", adresTitel:"ที่อยู่ร้าน", adresUit2:"ที่อยู่และเบอร์โทรที่แสดงบนเว็บไซต์", adresLabel:"ที่อยู่", adresTelLabel:"เบอร์โทร (แสดงบนเว็บไซต์)", naamLabel:"ชื่อร้าน", fotoTitel:"รูปของ Pink", fotoUit2:"รูปด้านบนของหน้าแรก วางลิงก์รูปภาพ (เว้นว่าง = รูปเริ่มต้น)", fotoLabel:"ลิงก์รูปภาพ (URL)", fotoUpload:"…หรืออัปโหลดรูป (จากมือถือ)", fotoBezig:"กำลังอัปโหลดรูป…", fotoOk:"บันทึกรูปแล้ว ✓", fotoFout:"บันทึกรูปไม่สำเร็จ", adresOk:"บันทึกที่อยู่แล้ว ✓", adresFout:"บันทึกที่อยู่ไม่สำเร็จ", seoTitel:"การค้นพบ (Google)", seoUit:"ข้อมูลนี้กำหนดว่าร้านจะแสดงใน Google อย่างไร (ประเภทอาหาร พื้นที่ให้บริการ ระดับราคา และรูปภาพ)", seoKeuken:"ประเภทอาหาร", seoGebied:"พื้นที่ให้บริการ (คั่นด้วยจุลภาค)", seoPrijs:"ระดับราคา (เช่น €, €€ หรือ €€€)", seoAfb:"รูปภาพสำหรับ Google/แชร์ (URL)", seoOk:"บันทึกแล้ว ✓", seoFout:"บันทึกไม่สำเร็จ", afhTitel:"การรับอาหาร & การสั่ง", afhUit2:"วันรับอาหาร เวลารับ และกำหนดเวลาสุดท้ายที่ลูกค้าสั่งได้", afhDagL:"วันรับอาหาร", afhVanL:"ตั้งแต่", afhTotL:"ถึง", afhSlotL:"ช่วงเวลาต่อ (นาที)", afhCutDagL:"สั่งได้ถึง (วัน)", afhCutUurL:"…ถึงเวลานี้ (0–23)", afhOk:"บันทึกการตั้งค่าการรับอาหารแล้ว ✓", afhFout:"บันทึกไม่สำเร็จ", capTitel:"ความจุ", capUit2:"จำนวนออเดอร์สูงสุดต่อช่วงเวลาและต่อวันรับอาหาร (0 = ไม่จำกัด)", capSlotL:"สูงสุดต่อช่วงเวลา", capDagL:"สูงสุดต่อวันรับ", capOk:"บันทึกความจุแล้ว ✓", capFout:"บันทึกไม่สำเร็จ", mijnTel:"เบอร์โทรของฉัน", mijnTelUit:"เบอร์นี้จะรับออเดอร์ใหม่ทุกครั้งทาง WhatsApp โดยอัตโนมัติ", telLabel:"เบอร์โทร (สากล เฉพาะตัวเลข เช่น 66812345678)", keyLabel:"CallMeBot API key", telOpslaan:"บันทึก", zatTestBtn:"▶ ส่งสรุปวันเสาร์ตอนนี้ (ทดสอบ)", zatTestBezig:"กำลังส่งสรุป…", zatTestOk:"ส่งสรุปวันเสาร์ทาง WhatsApp แล้ว ✓", zatTestFout:"ส่งสรุปไม่สำเร็จ (ตั้งค่าเบอร์ + คีย์แล้วหรือยัง?)", zatTestLeeg:"ไม่มีออเดอร์ค้าง — ไม่ได้ส่งสรุป", mijnTelHint:"เบอร์ใหม่? เปิดใช้งาน CallMeBot บนเครื่องนั้นก่อน: เพิ่มผู้ติดต่อ +34 621 331 709 แล้วส่งข้อความ 'I allow callmebot to send me messages' คุณจะได้รับ API key",
       bzLaden:"กำลังโหลดการเข้าชม…", bzReset:"🗑 ล้างข้อมูลการเข้าชม", bzResetConf:"แน่ใจหรือไม่ว่าต้องการลบข้อมูลการเข้าชมทั้งหมด? ไม่สามารถย้อนกลับได้", bzResetOk:"ล้างข้อมูลการเข้าชมแล้ว ✓", bzResetFout:"ล้างข้อมูลไม่สำเร็จ", bzGeen:"ยังไม่มีข้อมูลการเข้าชม", bzVandaag:"วันนี้", bzWeek:"สัปดาห์นี้", bzMaand:"เดือนนี้", bzTotaal:"ทั้งหมด", bzUniek:"ผู้เข้าชมที่ไม่ซ้ำ", bzUniekHerkomst:"ที่มาของผู้เข้าชมที่ไม่ซ้ำ", bzUniekTip:"คลิกเพื่อดูที่มา", bzUniekLand:"ประเทศของผู้เข้าชมที่ไม่ซ้ำ", bzUniekPlaats:"เมืองของผู้เข้าชมที่ไม่ซ้ำ", bzOnbekend:"ไม่ทราบ", bzAnoniem:"ผู้เข้าชมนิรนาม (กลับมากี่ครั้ง)", bzBeheerApp:"ผู้ดูแล (อุปกรณ์ที่รู้จัก)", bzBezoeken:"ครั้ง", bzBekend:"รู้จัก", bzAnon:"นิรนาม", bzPerDag:"การเข้าชมต่อวัน (30 วัน)", bzType:"ประเภทการเข้าชม", bzKlant:"ลูกค้า", bzBeheer:"ผู้ดูแล", bzVolg:"ลิงก์ติดตาม", bzTaal:"ภาษา", bzHerkomst:"ที่มา", bzDirect:"เข้าตรง", bzWhatsapp:"WhatsApp", bzGoogle:"Google", bzOverig:"อื่นๆ", bzToestel:"อุปกรณ์", bzMobiel:"มือถือ", bzDesktop:"เดสก์ท็อป", bzVasteKlanten:"ลูกค้าประจำ", laatstInlog:"เข้าสู่ระบบล่าสุด:", bzBeheerders:"เข้าสู่ระบบผู้ดูแล", bzInlogLog:"ประวัติการเข้าสู่ระบบ", bzDeelLijst:"เข้ามาผ่านการแชร์", bzDeelLog:"ประวัติการแชร์", bzVia:"โดย",
-      zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", reload:"โหลดใหม่",
+      zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", copyLink:"คัดลอกลิงก์เข้าสู่ระบบ", copyLinkOk:"คัดลอกลิงก์แล้ว ✓", reload:"โหลดใหม่",
       addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า", telVerplicht:"กรุณากรอกเบอร์โทร",
       impHint:"หนึ่งคนต่อบรรทัด: ชื่อ และเบอร์โทร", impPlaceholder:"สมชาย, 0812345678\nสมหญิง, 0898765432", impBtn:"นำเข้า",
       waInvite:"📲 เชิญทาง WhatsApp", waNogmaals:"📲 เชิญอีกครั้ง", uitgLabel:"เชิญแล้ว", waGeenTel:"ลูกค้ารายนี้ไม่มีเบอร์โทร",
@@ -2746,15 +2747,15 @@ const LOGIN_T = {
   nl: { lblInloggen:"Inloggen", lblAccount:"Mijn account",
     inTitel:"Inloggen",
  inGeenLogin:"Je wordt automatisch ingelogd zodra je op dit apparaat een bestelling plaatst. Daarna zie je hier je bestellingen en kun je met één tik opnieuw bestellen. Tip: bewaar deze site als favoriet op je telefoon.",
-    inBeheerderTitel:"Beheerder", inBeheerder:"Je bent op dit apparaat herkend als beheerder {naam}. Je hebt geen klant-account — ga naar de beheersite om te beheren.", inNaarBeheer:"Naar beheer", accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen" },
+    inBeheerderTitel:"Beheerder", inBeheerder:"Je bent op dit apparaat herkend als beheerder {naam}. Je hebt geen klant-account — ga naar de beheersite om te beheren.", inNaarBeheer:"Naar beheer", inAlsKlant:"Inloggen als klant", inKlantGeen:"Dit apparaat is nog niet aan een klant-account gekoppeld. Plaats één keer een bestelling of gebruik je persoonlijke inloglink.", accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen" },
   en: { lblInloggen:"Log in", lblAccount:"My account",
     inTitel:"Log in",
  inGeenLogin:"You are logged in automatically once you place an order on this device. After that you can see your orders here and reorder in one tap. Tip: bookmark this site on your phone.",
-    inBeheerderTitel:"Admin", inBeheerder:"This device is recognized as admin {naam}. You don't have a customer account — go to the admin site to manage.", inNaarBeheer:"Go to admin", accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out" },
+    inBeheerderTitel:"Admin", inBeheerder:"This device is recognized as admin {naam}. You don't have a customer account — go to the admin site to manage.", inNaarBeheer:"Go to admin", inAlsKlant:"Log in as customer", inKlantGeen:"This device isn't linked to a customer account yet. Place an order once or use your personal login link.", accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out" },
   th: { lblInloggen:"เข้าสู่ระบบ", lblAccount:"บัญชีของฉัน",
     inTitel:"เข้าสู่ระบบ",
  inGeenLogin:"คุณจะเข้าสู่ระบบอัตโนมัติเมื่อสั่งซื้อบนอุปกรณ์นี้ จากนั้นดูออเดอร์และสั่งซ้ำได้ในแตะเดียว เคล็ดลับ: บันทึกเว็บนี้ไว้ในหน้าจอหลัก",
-    inBeheerderTitel:"ผู้ดูแล", inBeheerder:"อุปกรณ์นี้ถูกจดจำเป็นผู้ดูแล {naam} คุณไม่มีบัญชีลูกค้า — ไปที่หน้าผู้ดูแลเพื่อจัดการ", inNaarBeheer:"ไปที่ผู้ดูแล", accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ" }
+    inBeheerderTitel:"ผู้ดูแล", inBeheerder:"อุปกรณ์นี้ถูกจดจำเป็นผู้ดูแล {naam} คุณไม่มีบัญชีลูกค้า — ไปที่หน้าผู้ดูแลเพื่อจัดการ", inNaarBeheer:"ไปที่ผู้ดูแล", inAlsKlant:"เข้าสู่ระบบในฐานะลูกค้า", inKlantGeen:"อุปกรณ์นี้ยังไม่ได้เชื่อมกับบัญชีลูกค้า สั่งซื้อหนึ่งครั้งหรือใช้ลิงก์เข้าสู่ระบบส่วนตัว", accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ" }
 };
 function acctToken(){ return localStorage.getItem("tta_klanttoken") || ""; }
 function myVid(){ try{ var v=localStorage.getItem("tta_vid")||""; if(!v){ v=Date.now().toString(36)+Math.random().toString(36).slice(2,10); localStorage.setItem("tta_vid",v); } return v; }catch(e){ return ""; } }
@@ -2781,13 +2782,38 @@ function renderLoginForm(msg){
   if(adm){
     document.getElementById("loginTitel").textContent = LT.inBeheerderTitel;
     const b = document.getElementById("loginBody");
-    b.innerHTML = '<p>'+esc(LT.inBeheerder).replace("{naam}", esc(adm))+'</p><button class="agbtn" id="naarBeheerBtn"></button>';
-    const nb = document.getElementById("naarBeheerBtn");
-    if(nb){ nb.textContent = LT.inNaarBeheer; nb.onclick = function(){ location.href = location.pathname + "?beheer"; }; }
+    b.innerHTML = '<p>'+esc(LT.inBeheerder).replace("{naam}", esc(adm))+'</p>'
+      + '<button class="agbtn" id="alsKlantBtn"></button>'
+      + '<button class="agbtn" id="naarBeheerBtn" style="margin-top:8px"></button>';
+    const ak = document.getElementById("alsKlantBtn"); if(ak){ ak.textContent = LT.inAlsKlant; ak.onclick = probeerKlantLogin; }
+    const nb = document.getElementById("naarBeheerBtn"); if(nb){ nb.textContent = LT.inNaarBeheer; nb.onclick = function(){ location.href = location.pathname + "?beheer"; }; }
     return;
   }
   document.getElementById("loginTitel").textContent = LT.inTitel;
   document.getElementById("loginBody").innerHTML = '<p>'+esc(LT.inGeenLogin)+'</p>';
+}
+async function probeerKlantLogin(){
+  const LT = LOGIN_T[LANG] || LOGIN_T.nl;
+  try{ localStorage.removeItem("tta_noauto"); }catch(e){}
+  try{
+    const r = await jsonp({actie:"account", vid:myVid()});
+    if(r && r.ok && r.token){
+      localStorage.setItem("tta_klanttoken", r.token);
+      _accountData = {token:r.token, r:r};
+      try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:r.token, r:r})); }catch(e){}
+      updateAcctBtn(); closeLogin(); openAccount();
+      return;
+    }
+  }catch(e){}
+  const b = document.getElementById("loginBody"); if(b) b.innerHTML = '<p>'+esc(LT.inKlantGeen)+'</p>';
+}
+function kopieerInloglink(token){
+  const K = BT().kl;
+  if(!token){ showToast("geen token", false); return; }
+  const url = SITE_HOME + "?login=" + encodeURIComponent(token);
+  const ok = function(){ showToast(K.copyLinkOk, true); };
+  try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok).catch(function(){ showToast(url, true); }); return; } }catch(e){}
+  try{ const ta=document.createElement("textarea"); ta.value=url; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); ok(); }catch(e){ showToast(url, true); }
 }
 function openAccount(){ document.getElementById("accountOverlay").classList.add("open"); laadAccount(); }
 function closeAccount(){ document.getElementById("accountOverlay").classList.remove("open"); }
@@ -2873,12 +2899,16 @@ function renderAccount(a){
       '</div>';
     }).join("");
   }
+  let _admN = ""; try{ _admN = localStorage.getItem("tta_adminname")||""; }catch(e){}
+  if(_admN){ html += '<button class="agbtn" id="accNaarBeheer" style="margin-top:12px"></button>'; }
   body.innerHTML = html;
   body.querySelectorAll(".accagain").forEach(btn=>{
     btn.onclick = ()=>{ const b = best[+btn.dataset.i]; herstelMand(Object.assign({}, b, {naam:a.naam, tel:a.tel, email:a.email})); };
   });
   const favBtn = document.getElementById("accFavBtn");
   if(favBtn){ favBtn.onclick = ()=>{ const b = best[+favBtn.dataset.i]; herstelMand(Object.assign({}, b, {naam:a.naam, tel:a.tel, email:a.email})); }; }
+  const _accNB = document.getElementById("accNaarBeheer");
+  if(_accNB){ _accNB.textContent = (LOGIN_T[LANG]||LOGIN_T.nl).inNaarBeheer; _accNB.onclick = function(){ location.href = location.pathname + "?beheer"; }; }
 }
 function uitloggen(){ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); _accountData=null; try{ localStorage.setItem("tta_noauto","1"); }catch(e){} updateAcctBtn(); closeAccount(); }
 function toonBeheerder(){
@@ -3003,7 +3033,7 @@ function klantAggregatie(){
   (_klantRecords||[]).forEach(k=>{
     const key = k.email ? ("e:"+String(k.email).toLowerCase()) : (k.tel ? ("t:"+String(k.tel).replace(/\D/g,"")) : (k.naam?("n:"+String(k.naam).toLowerCase()):""));
     if(!key) return;
-    if(!map[key]) map[key] = {naam:k.naam, email:k.email, tel:k.tel, notitie:k.notitie||"", laatstIngelogd:k.laatstIngelogd||"", uitgenodigd:k.uitgenodigd||0, laatstUitgenodigd:k.laatstUitgenodigd||"", taal:k.taal||"", bestellingen:[]};
+    if(!map[key]) map[key] = {naam:k.naam, email:k.email, tel:k.tel, notitie:k.notitie||"", laatstIngelogd:k.laatstIngelogd||"", uitgenodigd:k.uitgenodigd||0, laatstUitgenodigd:k.laatstUitgenodigd||"", taal:k.taal||"", token:k.token||"", bestellingen:[]};
   });
   _klantData.forEach(b=>{
     const key = b.email ? ("e:"+String(b.email).toLowerCase()) : (b.tel ? ("t:"+String(b.tel).replace(/\D/g,"")) : (b.naam?("n:"+String(b.naam).toLowerCase()):"?"));
@@ -3119,6 +3149,7 @@ function renderKlantenLijst(){
       (_kKlantView==="vol" ? k.bestellingen.map(bestelHtml).join("") : "")+
       '<div class="kacts" style="margin-top:8px">'+
         (k.tel?('<button class="kwabtn" data-a="wa" data-tel="'+esc(k.tel)+'" data-naam="'+esc(k.naam||"")+'" data-email="'+esc(k.email||"")+'" data-taal="'+esc(k.taal||"")+'">'+(k.uitgenodigd>0?K.waNogmaals:K.waInvite)+'</button>'):'')+
+        (k.token?('<button class="kwabtn" data-a="copylink" data-token="'+esc(k.token)+'">'+esc(K.copyLink)+'</button>'):'')+
         (k.tel && n>0 ?('<button class="kdelbtn" data-a="delbest-all" data-tel="'+esc(k.tel)+'">'+K.alleBestVerw+'</button>'):'')+
         (k.tel?('<button class="kdelbtn" data-a="delklant" data-tel="'+esc(k.tel)+'">'+K.klantVerw+'</button>'):'')+
       '</div>'+
