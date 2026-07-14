@@ -1474,7 +1474,7 @@ document.getElementById("waBtn").onclick = async () => {
     if(r && r.ok===false && r.fout==="vol"){ msg.className="order-msg err"; msg.textContent=T().slotVolMsg; btn.disabled=false; laadSlots(); return; }
     if(!r || !r.ok) throw new Error("bestelling niet doorgekomen");
     let ingelogdNu = false;
-    if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); if(typeof prefetchAccount==="function"){ _accountData=null; prefetchAccount(); } }
+    if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); localStorage.removeItem("tta_noauto"); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); if(typeof prefetchAccount==="function"){ _accountData=null; prefetchAccount(); } }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]); store.save();
     form.naam=""; form.tel=""; form.note=""; form.slot=""; form.pay="contant";
@@ -2378,7 +2378,7 @@ function jsonp(params){
     setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
   });
 }
-const SCRIPT_VERSIE_VERWACHT = 23;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 24;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
@@ -2794,6 +2794,21 @@ async function prefetchAccount(){
   const tok = acctToken(); if(!tok) return;
   try{ const r = await fetchAccount(); if(r && r.ok){ _accountData = {token:tok, r:r}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:tok, r:r})); }catch(e){} try{ updateAcctBtn(); }catch(e){} } }catch(e){}
 }
+async function autoLoginByVid(){
+  try{
+    if(acctToken()) return;
+    if(localStorage.getItem("tta_noauto")) return;   // niet automatisch terug inloggen na uitloggen
+    const vid = myVid(); if(!vid) return;
+    const r = await jsonp({actie:"account", vid:vid});
+    if(r && r.ok && r.token){
+      localStorage.setItem("tta_klanttoken", r.token);
+      _accountData = {token:r.token, r:r};
+      try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:r.token, r:r})); }catch(e){}
+      try{ updateAcctBtn(); }catch(e){}
+      if(typeof laadDeelcode==="function") laadDeelcode();
+    }
+  }catch(e){}
+}
 async function laadAccount(){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   const body = document.getElementById("accountBody");
@@ -2853,7 +2868,7 @@ function renderAccount(a){
   const favBtn = document.getElementById("accFavBtn");
   if(favBtn){ favBtn.onclick = ()=>{ const b = best[+favBtn.dataset.i]; herstelMand(Object.assign({}, b, {naam:a.naam, tel:a.tel, email:a.email})); }; }
 }
-function uitloggen(){ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); _accountData=null; updateAcctBtn(); closeAccount(); }
+function uitloggen(){ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); _accountData=null; try{ localStorage.setItem("tta_noauto","1"); }catch(e){} updateAcctBtn(); closeAccount(); }
 function toonBeheerder(){
   const el = document.getElementById("mgmtUser"); if(!el) return;
   let n = ""; try{ n = localStorage.getItem("tta_adminname") || ""; }catch(e){}
@@ -3881,12 +3896,13 @@ function orderClosedMsg(st){
   const _loginParam = new URLSearchParams(location.search).get("login");
   if(_loginParam){
     localStorage.setItem("tta_klanttoken", _loginParam);
+    try{ localStorage.removeItem("tta_noauto"); }catch(e){}
     try{ history.replaceState(null,"",location.pathname); }catch(e){}
     updateAcctBtn();
     openAccount();
   }
   if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); ensureAdminEnLog(); startKlantAutoRefresh(); } else resolvePhotos();
-  if(acctToken()) prefetchAccount();
+  if(acctToken()) prefetchAccount(); else autoLoginByVid();
 })();
 </script>
 </body>
