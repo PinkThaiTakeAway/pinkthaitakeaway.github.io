@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-14T05:19:05Z",
+  "opgeslagen": "2026-07-14T05:20:34Z",
   "scriptVersie": 24,
   "verwachteVersie": 24,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-14T05:19:04.818140+00:00",
+    "updated": "2026-07-14T05:20:33.026468+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -167,7 +167,7 @@
             "status": "ok"
           },
           {
-            "naam": "bestelpauze.json: geldig (manualPause=False)",
+            "naam": "bestelpauze.json: geldig (manualPause=True)",
             "status": "ok"
           },
           {
