@@ -2762,7 +2762,11 @@ function updateAcctBtn(){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   const lbl = document.getElementById("acctLabel");
   if(!lbl) return;
-  if(!acctToken()){ lbl.textContent = LT.lblInloggen; return; }
+  if(!acctToken()){
+    let adm = ""; try{ adm = localStorage.getItem("tta_adminname") || ""; }catch(e){}
+    lbl.textContent = adm || LT.lblInloggen;
+    return;
+  }
   let naam = "";
   try{ let c = (_accountData && _accountData.r) ? _accountData.r : null; if(!c){ const cc = JSON.parse(localStorage.getItem("tta_acctcache")||"null"); if(cc && cc.r) c = cc.r; } if(c && c.naam) naam = String(c.naam); }catch(e){}
   lbl.textContent = naam || LT.lblAccount;
