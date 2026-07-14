@@ -2830,7 +2830,7 @@ function berCopyMsgFn(){ const K=BT().kl; _copyText(K.berTemplate, K.berOk); }
 function berSentSet(){ try{ return new Set(JSON.parse(localStorage.getItem("tta_ber_sent")||"[]")); }catch(e){ return new Set(); } }
 function berSaveSent(s){ try{ localStorage.setItem("tta_ber_sent", JSON.stringify(Array.from(s))); }catch(e){} }
 function berMarkSent(num){ if(!num) return; const s=berSentSet(); s.add(num); berSaveSent(s); }
-function berSentInfoHtml(){ const K=BT().kl; const n=berSentSet().size; if(!n) return ""; return n+" "+esc(K.berAlSent)+' — <a data-a="berreset" style="color:#e0559a;cursor:pointer;text-decoration:underline">'+esc(K.berWis)+'</a>'; }
+function berSentInfoHtml(){ const K=BT().kl; const n=berSentSet().size; if(!n) return ""; return n+" "+esc(K.berAlSent)+' — <button data-a="berreset" style="background:none;border:none;padding:0;color:#e0559a;cursor:pointer;text-decoration:underline;font:inherit">'+esc(K.berWis)+'</button>'; }
 function berReset(){
   berSaveSent(new Set());
   document.querySelectorAll('[data-a="berwa"]').forEach(function(b){ b.classList.remove("done"); b.textContent=b.textContent.replace(/^✓ /,""); });
