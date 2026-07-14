@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-14T20:07:53Z",
-  "scriptVersie": null,
+  "opgeslagen": "2026-07-14T20:09:59Z",
+  "scriptVersie": 29,
   "verwachteVersie": 29,
-  "versieOk": false,
+  "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-14T20:07:23.784915+00:00",
+    "updated": "2026-07-14T20:09:58.144384+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -366,7 +366,7 @@
             "status": "ok"
           },
           {
-            "naam": "bestelkoppeling reageert (status 404)",
+            "naam": "bestelkoppeling reageert (status 200)",
             "status": "ok"
           },
           {
