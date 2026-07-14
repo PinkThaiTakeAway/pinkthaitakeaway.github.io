@@ -2746,15 +2746,15 @@ const LOGIN_T = {
   nl: { lblInloggen:"Inloggen", lblAccount:"Mijn account",
     inTitel:"Inloggen",
  inGeenLogin:"Je wordt automatisch ingelogd zodra je op dit apparaat een bestelling plaatst. Daarna zie je hier je bestellingen en kun je met één tik opnieuw bestellen. Tip: bewaar deze site als favoriet op je telefoon.",
-    accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen" },
+    inBeheerderTitel:"Beheerder", inBeheerder:"Je bent op dit apparaat herkend als beheerder {naam}. Je hebt geen klant-account — ga naar de beheersite om te beheren.", inNaarBeheer:"Naar beheer", accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen" },
   en: { lblInloggen:"Log in", lblAccount:"My account",
     inTitel:"Log in",
  inGeenLogin:"You are logged in automatically once you place an order on this device. After that you can see your orders here and reorder in one tap. Tip: bookmark this site on your phone.",
-    accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out" },
+    inBeheerderTitel:"Admin", inBeheerder:"This device is recognized as admin {naam}. You don't have a customer account — go to the admin site to manage.", inNaarBeheer:"Go to admin", accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out" },
   th: { lblInloggen:"เข้าสู่ระบบ", lblAccount:"บัญชีของฉัน",
     inTitel:"เข้าสู่ระบบ",
  inGeenLogin:"คุณจะเข้าสู่ระบบอัตโนมัติเมื่อสั่งซื้อบนอุปกรณ์นี้ จากนั้นดูออเดอร์และสั่งซ้ำได้ในแตะเดียว เคล็ดลับ: บันทึกเว็บนี้ไว้ในหน้าจอหลัก",
-    accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ" }
+    inBeheerderTitel:"ผู้ดูแล", inBeheerder:"อุปกรณ์นี้ถูกจดจำเป็นผู้ดูแล {naam} คุณไม่มีบัญชีลูกค้า — ไปที่หน้าผู้ดูแลเพื่อจัดการ", inNaarBeheer:"ไปที่ผู้ดูแล", accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ" }
 };
 function acctToken(){ return localStorage.getItem("tta_klanttoken") || ""; }
 function myVid(){ try{ var v=localStorage.getItem("tta_vid")||""; if(!v){ v=Date.now().toString(36)+Math.random().toString(36).slice(2,10); localStorage.setItem("tta_vid",v); } return v; }catch(e){ return ""; } }
@@ -2777,6 +2777,15 @@ function openLogin(){ document.getElementById("loginOverlay").classList.add("ope
 function closeLogin(){ document.getElementById("loginOverlay").classList.remove("open"); }
 function renderLoginForm(msg){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
+  let adm = ""; try{ adm = acctToken() ? "" : (localStorage.getItem("tta_adminname")||""); }catch(e){}
+  if(adm){
+    document.getElementById("loginTitel").textContent = LT.inBeheerderTitel;
+    const b = document.getElementById("loginBody");
+    b.innerHTML = '<p>'+esc(LT.inBeheerder).replace("{naam}", esc(adm))+'</p><button class="agbtn" id="naarBeheerBtn"></button>';
+    const nb = document.getElementById("naarBeheerBtn");
+    if(nb){ nb.textContent = LT.inNaarBeheer; nb.onclick = function(){ location.href = location.pathname + "?beheer"; }; }
+    return;
+  }
   document.getElementById("loginTitel").textContent = LT.inTitel;
   document.getElementById("loginBody").innerHTML = '<p>'+esc(LT.inGeenLogin)+'</p>';
 }
