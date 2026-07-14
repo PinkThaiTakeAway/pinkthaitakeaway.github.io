@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-14T19:02:38Z",
+  "opgeslagen": "2026-07-14T19:13:49Z",
   "scriptVersie": 29,
   "verwachteVersie": 29,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-14T19:02:36.719635+00:00",
+    "updated": "2026-07-14T19:13:48.360639+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -196,8 +196,8 @@
             "status": "ok"
           },
           {
-            "naam": "1 ongebruikt bestand(en) in de repo: pink-open-og.png",
-            "status": "warn"
+            "naam": "geen ongebruikte data-/beeldbestanden",
+            "status": "ok"
           }
         ]
       },
