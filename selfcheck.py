@@ -621,7 +621,8 @@ def restant_checks(html):
 
     # 4. Ongebruikte data-/beeldbestanden in de repo
     corpus = html
-    for extra in ("selfcheck.py", "health-status.py", ".github/workflows/static.yml",
+    _html_files = [f for f in os.listdir(".") if f.lower().endswith(".html")]
+    for extra in tuple(_html_files) + ("selfcheck.py", "health-status.py", ".github/workflows/static.yml",
                   "sitemap.xml", "robots.txt", "mutatietest.js"):
         try: corpus += "\n" + open(extra, encoding="utf-8", errors="replace").read()
         except Exception: pass
