@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-14T19:58:57Z",
-  "scriptVersie": 29,
+  "opgeslagen": "2026-07-14T20:07:53Z",
+  "scriptVersie": null,
   "verwachteVersie": 29,
-  "versieOk": true,
+  "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-14T19:58:55.634406+00:00",
+    "updated": "2026-07-14T20:07:23.784915+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -264,7 +264,7 @@
             "status": "ok"
           },
           {
-            "naam": "index.html compact (309 KB, geen zware inline-afbeeldingen)",
+            "naam": "index.html compact (310 KB, geen zware inline-afbeeldingen)",
             "status": "ok"
           },
           {
@@ -366,7 +366,7 @@
             "status": "ok"
           },
           {
-            "naam": "bestelkoppeling reageert (status 200)",
+            "naam": "bestelkoppeling reageert (status 404)",
             "status": "ok"
           },
           {
