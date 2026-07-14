@@ -2389,7 +2389,7 @@ function jsonp(params){
     setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
   });
 }
-const SCRIPT_VERSIE_VERWACHT = 29;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 30;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
@@ -2849,7 +2849,7 @@ function berTaalWijzig(sel){
   const taal=sel.value, token=sel.dataset.token||"", tel=sel.dataset.tel||"";
   (_klantRecords||[]).forEach(function(k){ if((token && k.token===token) || (tel && k.tel===tel)) k.taal=taal; });
   try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
-  if(token){ try{ jsonp({actie:"taal", token:token, taal:taal}); }catch(e){} }
+  try{ jsonp({actie:"taal", token:token, taal:taal, tel:tel, key:klantKey()}); }catch(e){}
   showToast(BT().kl.berTaalOpslaan, true);
 }
 function openAccount(){ document.getElementById("accountOverlay").classList.add("open"); laadAccount(); }
