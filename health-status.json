@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-14T20:33:39Z",
+  "opgeslagen": "2026-07-14T20:36:49Z",
   "scriptVersie": 30,
   "verwachteVersie": 30,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-14T20:33:38.267075+00:00",
+    "updated": "2026-07-14T20:36:48.182731+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -197,6 +197,15 @@
           },
           {
             "naam": "geen ongebruikte data-/beeldbestanden",
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "naam": "Openingsbericht",
+        "items": [
+          {
+            "naam": "Openingsbericht: 3 taal-pagina('s) in orde (plaatje, og:title en doorverwijzing aanwezig)",
             "status": "ok"
           }
         ]
