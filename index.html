@@ -2761,7 +2761,11 @@ function myVid(){ try{ var v=localStorage.getItem("tta_vid")||""; if(!v){ v=Date
 function updateAcctBtn(){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   const lbl = document.getElementById("acctLabel");
-  if(lbl) lbl.textContent = acctToken() ? LT.lblAccount : LT.lblInloggen;
+  if(!lbl) return;
+  if(!acctToken()){ lbl.textContent = LT.lblInloggen; return; }
+  let naam = "";
+  try{ let c = (_accountData && _accountData.r) ? _accountData.r : null; if(!c){ const cc = JSON.parse(localStorage.getItem("tta_acctcache")||"null"); if(cc && cc.r) c = cc.r; } if(c && c.naam) naam = String(c.naam); }catch(e){}
+  lbl.textContent = naam || LT.lblAccount;
 }
 function openLogin(){ document.getElementById("loginOverlay").classList.add("open"); renderLoginForm(); }
 function closeLogin(){ document.getElementById("loginOverlay").classList.remove("open"); }
@@ -2782,7 +2786,7 @@ function fetchAccount(){
 }
 async function prefetchAccount(){
   const tok = acctToken(); if(!tok) return;
-  try{ const r = await fetchAccount(); if(r && r.ok){ _accountData = {token:tok, r:r}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:tok, r:r})); }catch(e){} } }catch(e){}
+  try{ const r = await fetchAccount(); if(r && r.ok){ _accountData = {token:tok, r:r}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:tok, r:r})); }catch(e){} try{ updateAcctBtn(); }catch(e){} } }catch(e){}
 }
 async function laadAccount(){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
@@ -2844,10 +2848,10 @@ function renderAccount(a){
   if(favBtn){ favBtn.onclick = ()=>{ const b = best[+favBtn.dataset.i]; herstelMand(Object.assign({}, b, {naam:a.naam, tel:a.tel, email:a.email})); }; }
 }
 function uitloggen(){ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); _accountData=null; updateAcctBtn(); closeAccount(); }
-async function toonBeheerder(){
+function toonBeheerder(){
   const el = document.getElementById("mgmtUser"); if(!el) return;
-  const tok = acctToken(); if(!tok) return;
-  try{ const r = await jsonp({actie:"account", token:tok, vid: myVid()}); if(r && r.ok && r.naam) el.textContent = "👤 " + r.naam; }catch(e){}
+  let n = ""; try{ n = localStorage.getItem("tta_adminname") || ""; }catch(e){}
+  el.textContent = n ? ("👤 " + n) : "";
 }
 
 async function laadKlanten(){
