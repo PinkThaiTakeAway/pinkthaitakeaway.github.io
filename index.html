@@ -2819,8 +2819,9 @@ function kopieerInloglink(token){
   try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok).catch(function(){ showToast(url, true); }); return; } }catch(e){}
   try{ const ta=document.createElement("textarea"); ta.value=url; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); ok(); }catch(e){ showToast(url, true); }
 }
-function berSentSet(){ try{ return new Set(JSON.parse(localStorage.getItem("tta_ber_sent")||"[]")); }catch(e){ return new Set(); } }
-function berSaveSent(s){ try{ localStorage.setItem("tta_ber_sent", JSON.stringify(Array.from(s))); }catch(e){} }
+function berPeriodKey(){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-d.getDay()); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+function berSentSet(){ try{ const r=JSON.parse(localStorage.getItem("tta_ber_sent")||"null"); if(r && r.period===berPeriodKey() && Array.isArray(r.nums)) return new Set(r.nums); }catch(e){} return new Set(); }
+function berSaveSent(s){ try{ localStorage.setItem("tta_ber_sent", JSON.stringify({period:berPeriodKey(), nums:Array.from(s)})); }catch(e){} }
 function berMarkSent(num){ if(!num) return; const s=berSentSet(); s.add(num); berSaveSent(s); }
 function berSentInfoHtml(){ const K=BT().kl; const n=berSentSet().size; if(!n) return ""; return n+" "+esc(K.berAlSent)+' — <button data-a="berreset" style="background:none;border:none;padding:0;color:#e0559a;cursor:pointer;text-decoration:underline;font:inherit">'+esc(K.berWis)+'</button>'; }
 function berReset(){
