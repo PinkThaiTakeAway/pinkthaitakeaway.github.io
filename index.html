@@ -435,7 +435,15 @@
   .hreload{width:100%;margin-top:6px;background:var(--forest);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:700;font-family:inherit;cursor:pointer}
   .hloading{text-align:center;color:#888;padding:24px 0}
   .kzoek{width:100%;box-sizing:border-box;padding:11px 14px;margin-bottom:12px;border:1px solid #ddd;border-radius:10px;font-family:inherit;font-size:.95rem}
-  .kklant{border:1px solid #eee;border-radius:12px;padding:12px 14px;margin-bottom:12px}
+  .kklant{border:1px solid #eee;border-radius:12px;margin-bottom:12px;padding:0;overflow:hidden}
+.kklant>summary.ksum{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px;user-select:none}
+.kklant>summary.ksum::-webkit-details-marker{display:none}
+.kklant>summary.ksum::after{content:"\25be";margin-left:auto;color:#bbb;font-size:1rem;transition:transform .15s}
+.kklant[open]>summary.ksum::after{transform:rotate(180deg)}
+.kklant[open]>summary.ksum{border-bottom:1px solid #f2f2f2}
+.ksum .knaam{font-size:1rem}
+.ksum .kmeta{margin:0}
+.kdet{padding:12px 14px}
   .kklant .knaam{font-weight:700;color:var(--forest);font-size:1.02rem}
   .kklant .kmeta{font-size:.82rem;color:#777;margin:2px 0 4px}
   .kklant .kstat{font-size:.82rem;color:#555;margin-bottom:6px}
@@ -3184,9 +3192,9 @@ function renderKlantenLijst(){
     const n = k.bestellingen.length;
     const vast = n>=5 ? '<span class="klabel">'+K.vasteKlant+'</span>' : '';
     const notitie = k.notitie||"";
-    return '<div class="kklant">'+
-      '<div class="knaam">'+esc(k.naam||K.naamOnbekend)+vast+'</div>'+
-      '<div class="kmeta">'+(k.tel?esc(k.tel):'')+'</div>'+
+    return '<details class="kklant">'+
+      '<summary class="ksum"><span class="knaam">'+esc(k.naam||K.naamOnbekend)+vast+'</span>'+(k.tel?('<span class="kmeta">'+esc(k.tel)+'</span>'):'')+'</summary>'+
+      '<div class="kdet">'+
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
       (k.uitgenodigd>0?('<div class="kuitg">📲 '+esc(K.uitgLabel)+' '+k.uitgenodigd+'×'+(k.laatstUitgenodigd?(' · '+esc(fmtInlog(k.laatstUitgenodigd))):'')+'</div>'):'')+
       '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+
@@ -3199,7 +3207,7 @@ function renderKlantenLijst(){
         (k.tel && n>0 ?('<button class="kdelbtn" data-a="delbest-all" data-tel="'+esc(k.tel)+'">'+K.alleBestVerw+'</button>'):'')+
         (k.tel?('<button class="kdelbtn" data-a="delklant" data-tel="'+esc(k.tel)+'">'+K.klantVerw+'</button>'):'')+
       '</div>'+
-    '</div>';
+    '</div></details>';
   }).join("");
 }
 function bestelHtml(b){
