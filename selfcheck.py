@@ -938,8 +938,45 @@ def maintenance_checks(html):
                   "status": "warn" if onbekend else "ok"})
     return items
 
+def openingsbericht_checks(html):
+    """Openingsbericht: taal-aankondigingspagina's linken naar bestaande pagina's,
+    elk met een bestaand og:image, een og:title (nodig om het plaatje te tonen)
+    en een doorverwijzing naar de bestelsite. Alles als waarschuwing (niet blokkerend)."""
+    items = []
+    m = re.search(r"function berLinkFor\(taal\)\{.*?\}", html, re.S)
+    linked = sorted(set(re.findall(r"open[-a-z0-9]*\.html", m.group(0)))) if m else []
+    for pg in linked:
+        if not os.path.exists(pg):
+            items.append({"naam": f"Openingsbericht linkt naar ontbrekende pagina: {pg}", "status": "warn"})
+    try:
+        pages = sorted(f for f in os.listdir(".") if re.match(r"open[-a-z0-9]*\.html$", f))
+    except Exception:
+        pages = []
+    checked = 0
+    for pg in pages:
+        try:
+            c = open(pg, encoding="utf-8").read()
+        except Exception:
+            continue
+        checked += 1
+        img = re.search(r'og:image"\s+content="([^"]+)"', c)
+        if not img:
+            items.append({"naam": f"{pg}: geen og:image \u2014 WhatsApp toont geen plaatje", "status": "warn"})
+        else:
+            fname = img.group(1).rstrip("/").split("/")[-1]
+            if fname and not os.path.exists(fname):
+                items.append({"naam": f"{pg}: og:image verwijst naar ontbrekend bestand {fname}", "status": "warn"})
+        if "og:title" not in c:
+            items.append({"naam": f"{pg}: geen og:title \u2014 WhatsApp toont het plaatje dan niet", "status": "warn"})
+        if "location.replace" not in c and 'http-equiv="refresh"' not in c:
+            items.append({"naam": f"{pg}: geen doorverwijzing naar de bestelsite", "status": "warn"})
+    if not items:
+        items.append({"naam": f"Openingsbericht: {checked} taal-pagina('s) in orde (plaatje, og:title en doorverwijzing aanwezig)", "status": "ok"})
+    return items
+
 # Register van extra groepen (repo-modus). Nieuwe groepen worden hier toegevoegd.
 EXTRA_GROUPS = [
+    ("Openingsbericht", openingsbericht_checks),
     ("Beveiliging", security_checks),
     ("Gerechten & data", dish_checks),
     ("SEO & vindbaarheid", seo_checks),
