@@ -464,7 +464,7 @@
   .acct-btn{background:transparent;border:1px solid var(--forest);color:var(--forest);border-radius:999px;padding:7px 13px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer;display:flex;align-items:center;white-space:nowrap}
   .acct-btn:hover{background:rgba(14,59,51,.06)}
   body.beheer .acct-btn{display:none!important}
-  @media(max-width:520px){ .acct-btn #acctLabel{display:none} .acct-btn{padding:7px 10px} }
+  @media(max-width:520px){ .acct-btn #acctLabel{display:none} .acct-btn.named #acctLabel{display:inline-block;max-width:100px;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom} .acct-btn{padding:7px 10px} }
   .accbest{border:1px solid #eee;border-radius:12px;padding:12px 14px;margin-bottom:10px}
   .accbest .kbreg{display:flex;justify-content:space-between;font-weight:700;color:var(--forest);margin-bottom:4px}
   .accbest .acclijn{font-size:.9rem;color:#444;white-space:pre-line;margin:4px 0}
@@ -2761,15 +2761,17 @@ function myVid(){ try{ var v=localStorage.getItem("tta_vid")||""; if(!v){ v=Date
 function updateAcctBtn(){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   const lbl = document.getElementById("acctLabel");
+  const btn = document.getElementById("acctBtn");
   if(!lbl) return;
-  if(!acctToken()){
-    let adm = ""; try{ adm = localStorage.getItem("tta_adminname") || ""; }catch(e){}
-    lbl.textContent = adm || LT.lblInloggen;
-    return;
-  }
   let naam = "";
-  try{ let c = (_accountData && _accountData.r) ? _accountData.r : null; if(!c){ const cc = JSON.parse(localStorage.getItem("tta_acctcache")||"null"); if(cc && cc.r) c = cc.r; } if(c && c.naam) naam = String(c.naam); }catch(e){}
-  lbl.textContent = naam || LT.lblAccount;
+  if(acctToken()){
+    try{ let c = (_accountData && _accountData.r) ? _accountData.r : null; if(!c){ const cc = JSON.parse(localStorage.getItem("tta_acctcache")||"null"); if(cc && cc.r) c = cc.r; } if(c && c.naam) naam = String(c.naam); }catch(e){}
+    lbl.textContent = naam || LT.lblAccount;
+  } else {
+    try{ naam = localStorage.getItem("tta_adminname") || ""; }catch(e){}
+    lbl.textContent = naam || LT.lblInloggen;
+  }
+  if(btn) btn.classList.toggle("named", !!naam);
 }
 function openLogin(){ document.getElementById("loginOverlay").classList.add("open"); renderLoginForm(); }
 function closeLogin(){ document.getElementById("loginOverlay").classList.remove("open"); }
