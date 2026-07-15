@@ -661,6 +661,7 @@
 
 <div id="beheerbar">
   <button class="sl" id="bAdd">Gerecht</button>
+  <button class="sl" id="bAllToggle">🚫 Alles onbestelbaar</button>
   <button class="sl" id="bTrash">🗑️ Prullenbak</button>
   <button class="sl" id="bPauze">⏸️ Bestellen</button>
   <div class="sysmenu-wrap">
@@ -851,7 +852,7 @@ const I18N = {
     footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", wis:"Wis keuzes",
-      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR",
+      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR", allesUit:"🚫 Alles onbestelbaar", allesAan:"✅ Alles bestelbaar", allesUitConf:"Alle gerechten onbestelbaar maken?", allesAanConf:"Alle gerechten weer bestelbaar maken?",
       phTerm:"Zoekterm", search:"🔍 Zoek", phUrl:"of plak een eigen foto-URL", setUrl:"Zet", ownPhoto:"📷 Eigen foto van je toestel",
       del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
@@ -893,7 +894,7 @@ const I18N = {
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
       descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", trBusy:"Translating…", trEmpty:"Enter the Thai name or description first.", trFail:"Translation failed — try again or fill in manually.", translateBtn:"🌐 Translate Thai → NL/EN", wis:"Clear choices",
-      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN", actief:"AVAILABLE",
+      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN", actief:"AVAILABLE", allesUit:"🚫 All unavailable", allesAan:"✅ All available", allesUitConf:"Make all dishes unavailable?", allesAanConf:"Make all dishes available again?",
       phTerm:"Search term", search:"🔍 Search", phUrl:"or paste your own photo URL", setUrl:"Set", ownPhoto:"📷 Your own photo",
       del:"🗑️ Delete this dish",
       pickHint:"Tap a photo, paste a URL, or upload your own. Then export below.",
@@ -934,7 +935,7 @@ const I18N = {
     footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", wis:"ล้างที่เลือก",
-      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้",
+      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้", allesUit:"🚫 ปิดทั้งหมด", allesAan:"✅ เปิดทั้งหมด", allesUitConf:"ปิดการสั่งซื้อเมนูทั้งหมด?", allesAanConf:"เปิดการสั่งซื้อเมนูทั้งหมดอีกครั้ง?",
       phTerm:"คำค้นหา", search:"🔍 ค้นหา", phUrl:"หรือวางลิงก์รูปภาพเอง", setUrl:"ตั้ง", ownPhoto:"📷 รูปจากเครื่องของคุณ",
       del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
@@ -1203,6 +1204,7 @@ function buildMenu(){
   });
   setupSpy();
   reapplyPhotos();
+  updateAllToggleLabel();
 }
 function spiceLabel(n){ if(n===0) return ""; const lbl=T().spice[n>=3?2:n-1]; return `<span class="badge-spice">${"🌶️".repeat(n)} ${lbl}</span>`; }
 function card(m){
@@ -1658,6 +1660,7 @@ let chosen = {};
 function applyBeheerLang(){
   const A = T().adm, B = BT();
   document.getElementById("bAdd").textContent = A.add;
+  updateAllToggleLabel();
   document.getElementById("bKlanten").textContent = B.bar.klanten;
   { const bi=document.getElementById("bInstellingen"); if(bi) bi.textContent = B.bar.instellingen; }
   updateBeheerCount();
@@ -1704,6 +1707,7 @@ async function initBeheer(){
   }
   updateBeheerCount();
   document.getElementById("bAdd").onclick = openAddModal;
+  document.getElementById("bAllToggle").onclick = toggleAllHidden;
   document.getElementById("bTrash").onclick = openTrash;
   updateTikkieBtn();
   document.getElementById("bPauze").onclick = togglePauze;
@@ -1806,6 +1810,27 @@ function toggleHidden(id){
   saveJSON("tta_hidden", {ids:[...HIDDEN]});
   buildMenu(); reapplyPhotos();
   livePush("verborgen.json", ()=>[...HIDDEN], "Zichtbaarheid bijgewerkt");
+}
+function _bestelbareIds(){ return MENU.filter(m => m && m.id && !DELETED.has(m.id) && !PURGED.has(m.id)).map(m=>m.id); }
+function updateAllToggleLabel(){
+  const btn = document.getElementById("bAllToggle"); if(!btn) return;
+  const A = T().adm;
+  const ids = _bestelbareIds();
+  const allHidden = ids.length>0 && ids.every(id => HIDDEN.has(id));
+  btn.textContent = allHidden ? A.allesAan : A.allesUit;
+}
+function toggleAllHidden(){
+  const A = T().adm;
+  const ids = _bestelbareIds();
+  if(!ids.length) return;
+  const allHidden = ids.every(id => HIDDEN.has(id));
+  const maakOnbestelbaar = !allHidden;
+  if(!confirm(maakOnbestelbaar ? A.allesUitConf : A.allesAanConf)) return;
+  if(maakOnbestelbaar) ids.forEach(id => HIDDEN.add(id));
+  else ids.forEach(id => HIDDEN.delete(id));
+  saveJSON("tta_hidden", {ids:[...HIDDEN]});
+  buildMenu(); reapplyPhotos();
+  livePush("verborgen.json", ()=>[...HIDDEN], maakOnbestelbaar ? "Alle gerechten onbestelbaar" : "Alle gerechten bestelbaar");
 }
 const val = id => document.getElementById(id).value;
 function openAddModal(){
