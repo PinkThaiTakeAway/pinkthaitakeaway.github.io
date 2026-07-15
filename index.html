@@ -3564,8 +3564,24 @@ function tekenBezoek(r){
   const inlogLog = r.inlogLog || [];
   let logBlok = "";
   if(inlogLog.length){
+    const _logParse = t => { const d = new Date(t); return isNaN(d) ? 0 : d.getTime(); };
+    const _logGrp = {};
+    inlogLog.forEach(e=>{ const nm = e.naam || K.adOnbekend; (_logGrp[nm] || (_logGrp[nm] = {naam:nm, ev:[]})).ev.push(e); });
+    const _logGroepen = Object.keys(_logGrp).map(nm=>{
+      const g = _logGrp[nm];
+      g.ev.sort((a,b)=>_logParse(b.tijd)-_logParse(a.tijd));
+      g.laatste = g.ev[0] ? _logParse(g.ev[0].tijd) : 0;
+      g.isBeheer = g.ev.some(e=>e.type==="beheer");
+      return g;
+    }).sort((a,b)=>b.laatste-a.laatste);
     logBlok = '<details class="bzsec"><summary class="bzsum">'+esc(K.bzInlogLog)+' ('+inlogLog.length+')</summary><div class="bzsecin">'+
-      inlogLog.map(e=>'<div class="ktoprow"><span>'+(e.type==="beheer"?"🔑":"👤")+' '+esc(e.naam)+'</span><span class="ktn">'+esc(fmtInlog(e.tijd))+'</span></div>').join("")+'</div></details>';
+      _logGroepen.map(g=>{
+        const laatst = g.ev[0] ? esc(fmtInlog(g.ev[0].tijd)) : "";
+        return '<details class="kklant"><summary class="ksum"><span class="knaam">'+(g.isBeheer?"🔑":"👤")+' '+esc(g.naam)+'</span><span class="kmeta">'+g.ev.length+'×'+(laatst?(' · '+laatst):'')+'</span></summary>'+
+          '<div class="kdet">'+
+          g.ev.map(e=>'<div class="ktoprow"><span>'+(e.type==="beheer"?"🔑":"👤")+' '+esc(fmtInlog(e.tijd))+'</span></div>').join("")+
+          '</div></details>';
+      }).join("")+'</div></details>';
   }
   const deelLijst = r.deelLijst || [];
   let deelBlok = "";
