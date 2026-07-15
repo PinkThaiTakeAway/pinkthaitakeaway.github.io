@@ -173,7 +173,8 @@
   body.beheer .card.hidden-dish:not(.open) .card-title .nm{opacity:.5;text-decoration:line-through}
   .card-title .nmline{display:flex;align-items:center;gap:8px}
   .card-title .nmline .nm{flex:0 1 auto;min-width:0}
-  body.beheer .card .dishstatus{margin-left:auto;flex:0 0 auto;font-size:.62rem;font-weight:800;letter-spacing:.05em;padding:2px 8px;border-radius:999px;text-transform:uppercase;white-space:nowrap}
+  body.beheer .card .dishstatus{margin-left:auto;flex:0 0 auto;font-size:.62rem;font-weight:800;letter-spacing:.05em;padding:2px 8px;border-radius:999px;text-transform:uppercase;white-space:nowrap;cursor:pointer}
+  body.beheer .card .dishstatus:hover{outline:1px solid currentColor;outline-offset:1px}
   body.beheer .card .dishstatus.on{background:#e6f4ea;color:#1e7d3f}
   body.beheer .card .dishstatus.off{background:#fdecea;color:#c0392b}
   .trashrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
@@ -1269,6 +1270,8 @@ function card(m){
   if(BEHEER){
     const _titel = el.querySelector(".card-title");
     if(_titel) _titel.addEventListener("click", () => { el.classList.toggle("open"); if(el.classList.contains("open")) _openDishes.add(m.id); else _openDishes.delete(m.id); });
+    const _status = el.querySelector(".dishstatus");
+    if(_status) _status.addEventListener("click", (e) => { e.stopPropagation(); toggleHidden(m.id); });
     el.querySelector(`[data-saveprice="${m.id}"]`).onclick = (e) => savePrice(m.id, el.querySelector(`[data-price="${m.id}"]`).value, e.currentTarget);
     el.querySelector(`[data-price="${m.id}"]`).onchange = (e) => { if(parseFloat(e.target.value)!==m.price) savePrice(m.id, e.target.value, el.querySelector(`[data-saveprice="${m.id}"]`)); };
     const spiceSel = el.querySelector(`[data-spice="${m.id}"]`);
