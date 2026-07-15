@@ -517,6 +517,14 @@
   .ktop{margin-top:4px}
   .ktop h4{margin:0 0 8px;font-size:.9rem;color:var(--forest);text-transform:uppercase;letter-spacing:.04em}
   .ktoprow{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #f0f0f0;font-size:.92rem}
+  .bzsec{border:1px solid #eee;border-radius:12px;margin:10px 0;overflow:hidden}
+  .bzsec>summary.bzsum{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:11px 14px;user-select:none;font-size:.9rem;color:var(--forest);text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+  .bzsec>summary.bzsum::-webkit-details-marker{display:none}
+  .bzsec>summary.bzsum::after{content:"▾";margin-left:auto;color:#bbb;font-size:1rem;transition:transform .15s}
+  .bzsec[open]>summary.bzsum::after{transform:rotate(180deg)}
+  .bzsec[open]>summary.bzsum{border-bottom:1px solid #f2f2f2}
+  .bzsecin{padding:4px 14px 12px}
+  .bzsecin .ktoprow:first-child{border-top:0}
   .ktoprow .ktn{font-weight:700;color:#555;min-width:26px}
   .kafhaal-dag{font-weight:700;color:var(--forest);margin:14px 0 6px;font-size:.95rem}
   .bzchart{display:flex;align-items:flex-end;gap:2px;height:90px;padding:6px 0;border-bottom:1px solid #eee;margin-bottom:6px}
@@ -3525,7 +3533,7 @@ function tekenBezoek(r){
       const v = obj[k]||0, pct = Math.round(v/tot*100);
       return '<div class="ktoprow"><span>'+esc(labels[k])+'</span><span class="ktn">'+v+' ('+pct+'%)</span></div>';
     }).join("");
-    return '<div class="ktop"><h4>'+esc(titel)+'</h4>'+rijen+'</div>';
+    return '<details class="bzsec"><summary class="bzsum">'+esc(titel)+'</summary><div class="bzsecin">'+rijen+'</div></details>';
   };
   const verdelingDyn = (titel,obj)=>{
     const ent = Object.keys(obj||{}).map(k=>[k,obj[k]]).filter(e=>e[1]).sort((a,b)=>b[1]-a[1]);
@@ -3533,7 +3541,7 @@ function tekenBezoek(r){
     const rijen = ent.length
       ? ent.map(([k,v])=>{ const pct=Math.round(v/tot*100); return '<div class="ktoprow"><span>'+esc(k||K.bzOnbekend)+'</span><span class="ktn">'+v+' ('+pct+'%)</span></div>'; }).join("")
       : '<div class="ktoprow"><span>'+esc(K.bzOnbekend)+'</span></div>';
-    return '<div class="ktop"><h4>'+esc(titel)+'</h4>'+rijen+'</div>';
+    return '<details class="bzsec"><summary class="bzsum">'+esc(titel)+'</summary><div class="bzsecin">'+rijen+'</div></details>';
   };
   // laatste login-tijd per ingelogde klant (inlogLog is nieuwste-eerst -> eerste voorkomen = meest recent)
   const _laatstKlant = {};
@@ -3541,39 +3549,39 @@ function tekenBezoek(r){
   const klantLijst = r.klantLijst || [];
   let klantBlok = "";
   if(klantLijst.length){
-    klantBlok = '<div class="ktop"><h4>'+esc(K.bzVasteKlanten)+' ('+(r.ingelogd||0)+')</h4>'+
+    klantBlok = '<details class="bzsec"><summary class="bzsum">'+esc(K.bzVasteKlanten)+' ('+(r.ingelogd||0)+')</summary><div class="bzsecin">'+
       klantLijst.map(k=>{
         const lt = _laatstKlant[k.naam];
         return '<div class="ktoprow"><span>⭐ '+esc(k.naam)+' ('+k.aantal+'×: '+(k.bekend||0)+' '+esc(K.bzBekend)+', '+(k.anoniem||0)+' '+esc(K.bzAnon)+')</span><span class="ktn">'+(lt?('🔓 '+esc(fmtInlog(lt))):'')+'</span></div>';
-      }).join("")+'</div>';
+      }).join("")+'</div></details>';
   }
   const beheerLijst = r.beheerLijst || [];
   let beheerBlok = "";
   if(beheerLijst.length){
-    beheerBlok = '<div class="ktop"><h4>'+esc(K.bzBeheerders)+'</h4>'+
-      beheerLijst.map(k=>'<div class="ktoprow"><span>🔑 '+esc(k.naam)+'</span><span class="ktn">'+k.aantal+'×</span></div>').join("")+'</div>';
+    beheerBlok = '<details class="bzsec"><summary class="bzsum">'+esc(K.bzBeheerders)+' ('+beheerLijst.length+')</summary><div class="bzsecin">'+
+      beheerLijst.map(k=>'<div class="ktoprow"><span>🔑 '+esc(k.naam)+'</span><span class="ktn">'+k.aantal+'×</span></div>').join("")+'</div></details>';
   }
   const inlogLog = r.inlogLog || [];
   let logBlok = "";
   if(inlogLog.length){
-    logBlok = '<div class="ktop"><h4>'+esc(K.bzInlogLog)+'</h4>'+
-      inlogLog.map(e=>'<div class="ktoprow"><span>'+(e.type==="beheer"?"🔑":"👤")+' '+esc(e.naam)+'</span><span class="ktn">'+esc(fmtInlog(e.tijd))+'</span></div>').join("")+'</div>';
+    logBlok = '<details class="bzsec"><summary class="bzsum">'+esc(K.bzInlogLog)+' ('+inlogLog.length+')</summary><div class="bzsecin">'+
+      inlogLog.map(e=>'<div class="ktoprow"><span>'+(e.type==="beheer"?"🔑":"👤")+' '+esc(e.naam)+'</span><span class="ktn">'+esc(fmtInlog(e.tijd))+'</span></div>').join("")+'</div></details>';
   }
   const deelLijst = r.deelLijst || [];
   let deelBlok = "";
   if(deelLijst.length){
-    deelBlok = '<div class="ktop"><h4>'+esc(K.bzDeelLijst)+'</h4>'+
-      deelLijst.map(k=>'<div class="ktoprow"><span>📤 '+esc(K.bzVia)+' '+esc(k.naam)+'</span><span class="ktn">'+k.aantal+'×</span></div>').join("")+'</div>';
+    deelBlok = '<details class="bzsec"><summary class="bzsum">'+esc(K.bzDeelLijst)+' ('+deelLijst.length+')</summary><div class="bzsecin">'+
+      deelLijst.map(k=>'<div class="ktoprow"><span>📤 '+esc(K.bzVia)+' '+esc(k.naam)+'</span><span class="ktn">'+k.aantal+'×</span></div>').join("")+'</div></details>';
   }
   const deelLog = r.deelLog || [];
   let deelLogBlok = "";
   if(deelLog.length){
-    deelLogBlok = '<div class="ktop"><h4>'+esc(K.bzDeelLog)+'</h4>'+
-      deelLog.map(e=>'<div class="ktoprow"><span>📤 '+esc(K.bzVia)+' '+esc(e.naam)+'</span><span class="ktn">'+esc(fmtInlog(e.tijd))+'</span></div>').join("")+'</div>';
+    deelLogBlok = '<details class="bzsec"><summary class="bzsum">'+esc(K.bzDeelLog)+' ('+deelLog.length+')</summary><div class="bzsecin">'+
+      deelLog.map(e=>'<div class="ktoprow"><span>📤 '+esc(K.bzVia)+' '+esc(e.naam)+'</span><span class="ktn">'+esc(fmtInlog(e.tijd))+'</span></div>').join("")+'</div></details>';
   }
   body.innerHTML =
     '<div class="kstat-grid">'+kaart(r.vandaag,K.bzVandaag)+kaart(r.week,K.bzWeek)+kaart(r.maand,K.bzMaand)+kaart(r.totaal,K.bzTotaal)+(r.uniek!=null?'<div class="kstat-card" style="cursor:pointer" title="'+esc(K.bzUniekTip)+'" onclick="toggleUniek()"><div class="kv">'+r.uniek+' <span style="font-size:.6em;opacity:.55">\u25be</span></div><div class="kl">'+esc(K.bzUniek)+'</div></div>':"")+'</div>'+(r.uniek!=null?'<div id="uniekDetail" style="display:none">'+verdeling(K.bzUniekHerkomst, r.uniekHerkomst, {direct:K.bzDirect, whatsapp:K.bzWhatsapp, google:K.bzGoogle, overig:K.bzOverig})+verdelingDyn(K.bzUniekLand, r.uniekLand)+verdelingDyn(K.bzUniekPlaats, r.uniekPlaats)+((r.beheerApparaten&&r.beheerApparaten.length)?('<div class="ktop"><h4>'+esc(K.bzBeheerApp)+'</h4>'+r.beheerApparaten.map(function(a){var det=(a.sessies||[]).map(function(s){return '<div style="font-size:.82em;opacity:.72;padding:2px 0 2px 14px">'+esc(fmtInlog(s.tijd))+' \u00b7 '+esc(s.herkomst||'')+' \u00b7 '+esc(s.toestel||'')+' \u00b7 '+esc(s.taal||'')+(s.plaats?(' \u00b7 '+esc(s.plaats)):'')+(s.land?(' ('+esc(s.land)+')'):'')+'</div>';}).join("");return '<div class="ktoprow" style="cursor:pointer" onclick="toggleAnon(\'a'+esc(a.id)+'\')"><span>\u25b8 '+esc(a.naam||a.id)+'</span><span class="ktn">'+a.aantal+' '+esc(K.bzBezoeken)+'</span></div>'+'<div id="anonDet_a'+esc(a.id)+'" style="display:none">'+det+'</div>';}).join("")+'</div>'):'')+'<div class="ktop"><h4>'+esc(K.bzAnoniem)+'</h4>'+((r.anoniemLijst&&r.anoniemLijst.length)?r.anoniemLijst.map(function(a){var det=(a.sessies||[]).map(function(s){return '<div style="font-size:.82em;opacity:.72;padding:2px 0 2px 14px">'+esc(fmtInlog(s.tijd))+' \u00b7 '+esc(s.herkomst||'')+' \u00b7 '+esc(s.toestel||'')+' \u00b7 '+esc(s.taal||'')+(s.plaats?(' \u00b7 '+esc(s.plaats)):'')+(s.land?(' ('+esc(s.land)+')'):'')+'</div>';}).join("");return '<div class="ktoprow" style="cursor:pointer" onclick="toggleAnon(\''+esc(a.id)+'\')"><span>\u25b8 #'+esc(a.id)+(a.plaats?' \u00b7 '+esc(a.plaats):'')+'</span><span class="ktn">'+a.aantal+' '+esc(K.bzBezoeken)+'</span></div>'+'<div id="anonDet_'+esc(a.id)+'" style="display:none">'+det+'</div>';}).join(""):'<div class="ktoprow"><span>'+esc(K.bzGeen)+'</span></div>')+'</div>'+'</div>':"")+
-    '<div class="ktop"><h4>'+esc(K.bzPerDag)+'</h4><div class="bzchart">'+bars+'</div></div>'+
+    '<details class="bzsec"><summary class="bzsum">'+esc(K.bzPerDag)+'</summary><div class="bzsecin"><div class="bzchart">'+bars+'</div></div></details>'+
     klantBlok+
     beheerBlok+
     logBlok+
