@@ -171,6 +171,9 @@
   body.beheer .card:not(.open) .card-foot,
   body.beheer .card:not(.open) .fotopick{display:none}
   body.beheer .card.hidden-dish:not(.open) .card-title .nm{opacity:.5;text-decoration:line-through}
+  body.beheer .card .dishstatus{display:inline-block;align-self:flex-start;margin-top:5px;font-size:.62rem;font-weight:800;letter-spacing:.05em;padding:2px 8px;border-radius:999px;text-transform:uppercase}
+  body.beheer .card .dishstatus.on{background:#e6f4ea;color:#1e7d3f}
+  body.beheer .card .dishstatus.off{background:#fdecea;color:#c0392b}
   .trashrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
   .trashbtns{display:flex;gap:6px;flex-shrink:0}
   .purge-btn{background:#b3261e;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:700;font-size:.8rem;font-family:inherit;cursor:pointer}
@@ -846,7 +849,7 @@ const I18N = {
     footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", wis:"Wis keuzes",
-      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN",
+      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR",
       phTerm:"Zoekterm", search:"🔍 Zoek", phUrl:"of plak een eigen foto-URL", setUrl:"Zet", ownPhoto:"📷 Eigen foto van je toestel",
       makeHidden:"🚫 Niet bestelbaar maken", makeShown:"✅ Weer bestelbaar maken", del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
@@ -888,7 +891,7 @@ const I18N = {
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
       descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", trBusy:"Translating…", trEmpty:"Enter the Thai name or description first.", trFail:"Translation failed — try again or fill in manually.", translateBtn:"🌐 Translate Thai → NL/EN", wis:"Clear choices",
-      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN",
+      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN", actief:"AVAILABLE",
       phTerm:"Search term", search:"🔍 Search", phUrl:"or paste your own photo URL", setUrl:"Set", ownPhoto:"📷 Your own photo",
       makeHidden:"🚫 Make unavailable", makeShown:"✅ Make available again", del:"🗑️ Delete this dish",
       pickHint:"Tap a photo, paste a URL, or upload your own. Then export below.",
@@ -929,7 +932,7 @@ const I18N = {
     footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", wis:"ล้างที่เลือก",
-      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่",
+      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้",
       phTerm:"คำค้นหา", search:"🔍 ค้นหา", phUrl:"หรือวางลิงก์รูปภาพเอง", setUrl:"ตั้ง", ownPhoto:"📷 รูปจากเครื่องของคุณ",
       makeHidden:"🚫 ปิดการสั่งซื้อ", makeShown:"✅ เปิดการสั่งซื้ออีกครั้ง", del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
@@ -1209,7 +1212,7 @@ function card(m){
   el.innerHTML = `
     <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
     <div class="card-body">
-      <div class="card-title"><span class="nm">${m.name[LANG]}</span><span class="sub">${sub}</span></div>
+      <div class="card-title"><span class="nm">${m.name[LANG]}</span><span class="sub">${sub}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div>
       <p class="card-desc">${m.desc[LANG]}</p>
       ${dietLabel(m)}
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
