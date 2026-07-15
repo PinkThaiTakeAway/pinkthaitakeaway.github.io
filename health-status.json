@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-15T05:59:32Z",
+  "opgeslagen": "2026-07-15T06:00:32Z",
   "scriptVersie": 30,
   "verwachteVersie": 30,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-15T05:59:30.931608+00:00",
+    "updated": "2026-07-15T06:00:31.155175+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -159,7 +159,7 @@
             "status": "ok"
           },
           {
-            "naam": "verborgen.json: 20 id('s) gecontroleerd",
+            "naam": "verborgen.json: 0 id('s) gecontroleerd",
             "status": "ok"
           },
           {
@@ -223,7 +223,7 @@
         "naam": "Gerechten & data",
         "items": [
           {
-            "naam": "alle 0 bestelbare gerechten hebben een geldige prijs",
+            "naam": "alle 20 bestelbare gerechten hebben een geldige prijs",
             "status": "ok"
           },
           {
@@ -322,12 +322,12 @@
             "status": "ok"
           },
           {
-            "naam": "Gerecht verbergen: gerecht niet in verborgen.json",
-            "status": "err"
+            "naam": "Gerecht verbergen",
+            "status": "ok"
           },
           {
-            "naam": "Gerecht weer tonen: gerecht nog in verborgen.json",
-            "status": "err"
+            "naam": "Gerecht weer tonen",
+            "status": "ok"
           },
           {
             "naam": "Gerecht verwijderen",
