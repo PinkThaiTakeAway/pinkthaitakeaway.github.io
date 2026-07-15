@@ -161,6 +161,16 @@
 
   .fotopick{display:none;border-top:1px dashed var(--line);padding:12px 16px;background:#fff;flex-direction:column;gap:8px}
   body.beheer .fotopick{display:flex}
+  body.beheer .card .card-title{position:relative;cursor:pointer;padding-right:22px}
+  body.beheer .card .card-title::after{content:"▾";position:absolute;right:0;top:50%;transform:translateY(-50%);color:#bbb;transition:transform .15s}
+  body.beheer .card.open .card-title::after{transform:translateY(-50%) rotate(180deg)}
+  body.beheer .card:not(.open) .thumb,
+  body.beheer .card:not(.open) .card-desc,
+  body.beheer .card:not(.open) .diet-badges,
+  body.beheer .card:not(.open) .reheat,
+  body.beheer .card:not(.open) .card-foot,
+  body.beheer .card:not(.open) .fotopick{display:none}
+  body.beheer .card.hidden-dish:not(.open) .card-title .nm{opacity:.5;text-decoration:line-through}
   .trashrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
   .trashbtns{display:flex;gap:6px;flex-shrink:0}
   .purge-btn{background:#b3261e;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:700;font-size:.8rem;font-family:inherit;cursor:pointer}
@@ -1089,6 +1099,7 @@ function dietLabel(m){
   const D = T().diet || {};
   return '<div class="diet-badges">'+m.diet.map(k=>'<span class="diet-badge diet-'+k+'">'+(DIET_ICON[k]||"")+' '+(D[k]||k)+'</span>').join("")+'</div>';
 }
+const _openDishes = new Set();
 const SERVE_EDITS = {};
 const NUMS = {};
 let _numsDirty = false;
@@ -1191,7 +1202,7 @@ function card(m){
   const hidden = BEHEER && HIDDEN.has(m.id);
   const A = T().adm;
   const el = document.createElement("article");
-  el.className = "card" + (hidden ? " hidden-dish" : "");
+  el.className = "card" + (hidden ? " hidden-dish" : "") + ((BEHEER && _openDishes.has(m.id)) ? " open" : "");
   el.innerHTML = `
     <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
     <div class="card-body">
@@ -1248,6 +1259,8 @@ function card(m){
     </div>`;
   renderCtl(el.querySelector(`[data-ctl="${m.id}"]`), m.id);
   if(BEHEER){
+    const _titel = el.querySelector(".card-title");
+    if(_titel) _titel.addEventListener("click", () => { el.classList.toggle("open"); if(el.classList.contains("open")) _openDishes.add(m.id); else _openDishes.delete(m.id); });
     el.querySelector(`[data-saveprice="${m.id}"]`).onclick = (e) => savePrice(m.id, el.querySelector(`[data-price="${m.id}"]`).value, e.currentTarget);
     el.querySelector(`[data-price="${m.id}"]`).onchange = (e) => { if(parseFloat(e.target.value)!==m.price) savePrice(m.id, e.target.value, el.querySelector(`[data-saveprice="${m.id}"]`)); };
     const spiceSel = el.querySelector(`[data-spice="${m.id}"]`);
