@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-15T04:33:34Z",
+  "opgeslagen": "2026-07-15T04:59:43Z",
   "scriptVersie": 30,
   "verwachteVersie": 30,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-15T04:33:31.074060+00:00",
+    "updated": "2026-07-15T04:59:42.373902+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -159,7 +159,7 @@
             "status": "ok"
           },
           {
-            "naam": "verborgen.json: 0 id('s) gecontroleerd",
+            "naam": "verborgen.json: 1 id('s) gecontroleerd",
             "status": "ok"
           },
           {
@@ -223,7 +223,7 @@
         "naam": "Gerechten & data",
         "items": [
           {
-            "naam": "alle 20 bestelbare gerechten hebben een geldige prijs",
+            "naam": "alle 19 bestelbare gerechten hebben een geldige prijs",
             "status": "ok"
           },
           {
