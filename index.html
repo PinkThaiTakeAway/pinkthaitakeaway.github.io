@@ -1901,13 +1901,14 @@ function saveNewDish(){
   };
   EXTRA.push(dish); saveJSON("tta_extra", {items:EXTRA});
   if(!byId(dish.id)) MENU.push(dish);
+  _openDishes.add(dish.id);
   document.getElementById("addModal").classList.remove("open");
   buildMenu();
   pickPhoto(dish).then(url => { if(url){ setPhoto(dish.id, url); } updateBeheerCount(); });
   updateBeheerCount();
   livePush("extra.json", ()=>EXTRA, `Gerecht toegevoegd: ${dish.name.nl}`);
   pushNumbersIfNeeded();
-  setTimeout(()=>{ const c=document.querySelector(`[data-photo="${dish.id}"]`); if(c) c.scrollIntoView({behavior:"smooth",block:"center"}); }, 120);
+  setTimeout(()=>{ const _ph=document.querySelector(`[data-photo="${dish.id}"]`); const _card=_ph?_ph.closest(".card"):null; if(_card) _card.scrollIntoView({behavior:"smooth",block:"center"}); }, 120);
 }
 function deleteDish(id){
   if(!confirm(T().adm.cDel)) return;
