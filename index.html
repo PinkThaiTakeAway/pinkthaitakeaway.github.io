@@ -171,7 +171,9 @@
   body.beheer .card:not(.open) .card-foot,
   body.beheer .card:not(.open) .fotopick{display:none}
   body.beheer .card.hidden-dish:not(.open) .card-title .nm{opacity:.5;text-decoration:line-through}
-  body.beheer .card .dishstatus{display:inline-block;align-self:flex-start;margin-top:5px;font-size:.62rem;font-weight:800;letter-spacing:.05em;padding:2px 8px;border-radius:999px;text-transform:uppercase}
+  .card-title .nmline{display:flex;align-items:center;gap:8px}
+  .card-title .nmline .nm{flex:0 1 auto;min-width:0}
+  body.beheer .card .dishstatus{margin-left:auto;flex:0 0 auto;font-size:.62rem;font-weight:800;letter-spacing:.05em;padding:2px 8px;border-radius:999px;text-transform:uppercase;white-space:nowrap}
   body.beheer .card .dishstatus.on{background:#e6f4ea;color:#1e7d3f}
   body.beheer .card .dishstatus.off{background:#fdecea;color:#c0392b}
   .trashrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
@@ -1212,7 +1214,7 @@ function card(m){
   el.innerHTML = `
     <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
     <div class="card-body">
-      <div class="card-title"><span class="nm">${m.name[LANG]}</span><span class="sub">${sub}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div>
+      <div class="card-title"><div class="nmline"><span class="nm">${m.name[LANG]}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${sub}</span></div>
       <p class="card-desc">${m.desc[LANG]}</p>
       ${dietLabel(m)}
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
