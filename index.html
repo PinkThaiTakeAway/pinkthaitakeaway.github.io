@@ -3292,10 +3292,8 @@ function tekenAudit(r){
       + '<span class="auditlast">'+esc(K.auLaatste)+' '+esc(laatste)+'</span></summary>';
     html += '<div class="audititems">';
     g.items.forEach(a=>{
-      const doel = a.doel ? ' <span class="auditdoel">'+esc(a.doel)+'</span>' : '';
-      const full = (a.wat||"") + (a.doel ? " ("+a.doel+")" : "");
       html += '<div class="audititem"><span class="auditwhen">'+esc(fmtAuditTime(a.tijd))+'</span>'
-        + '<span class="auditwhat" title="'+esc(full)+'">'+esc(a.wat||"")+doel+'</span></div>';
+        + '<span class="auditwhat" title="'+esc(a.wat||"")+'">'+esc(a.wat||"")+'</span></div>';
     });
     html += '</div></details>';
   });
