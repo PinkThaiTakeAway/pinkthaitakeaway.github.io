@@ -727,6 +727,13 @@ def dish_checks(html):
         return [{"naam": "kon geen gerechten uit de MENU-array lezen", "status": "warn"}]
     items = []
     cats = set(re.findall(r'\{id:"([^"]+)",\s*nm:\{', html))
+    try:
+        _cj = json.load(open("categorieen.json", encoding="utf-8"))
+        for c in (_cj if isinstance(_cj, list) else []):
+            if isinstance(c, dict) and c.get("id"):
+                cats.add(c["id"])
+    except Exception:
+        pass
     prijzen = _json_load("prijzen.json", {}); pit = _json_load("pittigheid.json", {})
     fotos = _json_load("fotos.json", {}); namen = _json_load("namen.json", {})
     hidden = set(_json_load("verborgen.json", [])) | set(_json_load("verwijderd.json", []))
