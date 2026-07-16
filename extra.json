@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "xmrnaf5vp",
+    "cat": "hoofd",
+    "emoji": "🍽️",
+    "price": 12,
+    "spice": 1,
+    "foto": "Khao man kai thai food",
+    "th": "",
+    "name": {
+      "nl": "Khao man kai",
+      "en": "Khao man kai",
+      "th": "Khao man kai"
+    },
+    "desc": {
+      "nl": "Gestoomde kip met kokos en chilisaus",
+      "en": "Gestoomde kip met kokos en chilisaus",
+      "th": "Gestoomde kip met kokos en chilisaus"
+    },
+    "rh": "wok",
+    "custom": true,
+    "nr": 21
+  }
+]
