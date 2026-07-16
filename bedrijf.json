@@ -12,22 +12,19 @@
     "tijden": {
       "5": {
         "van": "17:00",
-        "tot": "19:00",
-        "slotMin": 15
+        "tot": "19:00"
       },
       "6": {
         "van": "14:00",
-        "tot": "15:00",
-        "slotMin": 15
+        "tot": "15:00"
       }
     },
     "van": "17:00",
     "tot": "19:00",
-    "slotMin": 15
+    "vanaf": "2026-07-24"
   },
   "bestel": {
-    "cutoffDag": 6,
-    "cutoffUur": 10
+    "leadUren": 3
   },
   "seo": {
     "keuken": "Thai",
