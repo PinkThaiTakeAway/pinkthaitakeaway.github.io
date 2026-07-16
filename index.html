@@ -82,6 +82,7 @@
   .chip.chip-info{flex-direction:column;align-items:flex-start;gap:6px}
   .chip-line{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
   .chip .stat{width:9px;height:9px;border-radius:999px;background:#5BD27E;box-shadow:0 0 0 3px rgba(91,210,126,.25);flex:0 0 auto}
+  .chip .chip-tag{font-weight:700}
   .hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:var(--amber);color:var(--ink);font-weight:800;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s,background .2s}
   .hero-cta:hover{background:var(--amber-deep)}
   .hero-cta:active{transform:scale(.97)}
@@ -673,8 +674,8 @@
       <div class="chips">
         <span class="chip">📍 <span id="cfgAdres">Hakvoortseweg 30, 5084 HA Biest-Houtakker (voordeur aan de oprit)</span></span>
         <span class="chip chip-info">
-          <span class="chip-line">🛍 <span id="chipPickup">Afhalen zaterdag · 17:00–19:00 uur</span></span>
-          <span class="chip-line"><span class="stat"></span> <span id="chipOrder">Bestel t/m vrijdag 23:00 uur</span></span>
+          <span class="chip-line">🛍 <b class="chip-tag" id="chipPickTag">Afhalen</b> <span id="chipPickup">zaterdag · 17:00–19:00 uur</span></span>
+          <span class="chip-line">🛒 <b class="chip-tag" id="chipOrderTag">Bestellen</b> <span id="chipOrder">t/m vrijdag 23:00 uur</span></span>
         </span>
       </div>
       <div class="hero-actions">
@@ -868,7 +869,7 @@ const I18N = {
     heroTitle:"Echt Thais, <em>vers voor je weekend.</em>",
     heroP:"Bestel deze week online en haal je verse Thaise gerechten op zaterdag af. Met liefde gewokt en gestampt.",
     heroChef:"Met liefde gekookt door Pink",
-    chipPickup:(d,v,t)=>`Afhalen ${d} · ${v}–${t} uur`, chipOrder:(d,t)=>`Bestel t/m ${d} ${t} uur`, dagen:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],
+    chipPickup:(d,v,t)=>`${d} · ${v}–${t} uur`, chipOrder:(d,t)=>`t/m ${d} ${t} uur`, pickLabel:"Afhalen", orderLabel:"Bestellen", dagen:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
     yourOrder:"Jouw bestelling", empty:"Je mandje is nog leeg.\nKies iets lekkers uit het menu.",
@@ -909,7 +910,7 @@ const I18N = {
     heroTitle:"Real Thai, <em>fresh for your weekend.</em>",
     heroP:"Order online during the week and pick up your fresh Thai dishes on Saturday. Wok-fried and pounded with care.",
     heroChef:"Lovingly cooked by Pink",
-    chipPickup:(d,v,t)=>`Pickup ${d} · ${v}–${t}`, chipOrder:(d,t)=>`Order until ${d} ${t}`, dagen:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    chipPickup:(d,v,t)=>`${d} · ${v}–${t}`, chipOrder:(d,t)=>`until ${d} ${t}`, pickLabel:"Pickup", orderLabel:"Ordering", dagen:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
     yourOrder:"Your order", empty:"Your basket is empty.\nPick something tasty from the menu.",
@@ -951,7 +952,7 @@ const I18N = {
     heroTitle:"อาหารไทยแท้ <em>สดใหม่สำหรับสุดสัปดาห์</em>",
     heroP:"สั่งออนไลน์ภายในสัปดาห์ แล้วมารับอาหารไทยสดใหม่ในวันเสาร์ ปรุงสดทุกจาน",
     heroChef:"ปรุงด้วยความรักโดยคุณพิงค์",
-    chipPickup:(d,v,t)=>`รับ${d} · ${v}–${t} น.`, chipOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`, dagen:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"],
+    chipPickup:(d,v,t)=>`${d} · ${v}–${t} น.`, chipOrder:(d,t)=>`ถึง${d} ${t} น.`, pickLabel:"รับอาหาร", orderLabel:"สั่งอาหาร", dagen:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"],
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
     yourOrder:"คำสั่งซื้อของคุณ", empty:"ตะกร้าของคุณว่างเปล่า\nเลือกเมนูอร่อยๆ ได้เลย",
@@ -1615,6 +1616,8 @@ function applyLang(){
   const _cutDag = T().dagen[CONFIG.bestel.cutoffDag];
   const _cutTijd = String(CONFIG.bestel.cutoffUur).padStart(2,"0") + ":00";
   document.getElementById("chipOrder").textContent = T().chipOrder(_cutDag, _cutTijd);
+  { const _pt=document.getElementById("chipPickTag"); if(_pt) _pt.textContent = T().pickLabel; }
+  { const _ot=document.getElementById("chipOrderTag"); if(_ot) _ot.textContent = T().orderLabel; }
   document.getElementById("heroCta").textContent = T().heroCta;
   document.getElementById("cartLabel").textContent = T().cart;
   document.getElementById("fbGo").textContent = T().viewOrder;
