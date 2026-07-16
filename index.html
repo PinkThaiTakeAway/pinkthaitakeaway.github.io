@@ -2482,6 +2482,7 @@ async function ghPutBinary(path, b64, message){
   const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
     method:"PUT", headers:{Authorization:"token "+token, "Content-Type":"application/json"}, body: JSON.stringify(body) });
   if(!r.ok) throw new Error("push-"+r.status);
+  try{ logAudit(path, message||("Afbeelding geupload: "+path)); }catch(e){}
   return true;
 }
 function _resizeImage(file, maxPx){
@@ -2551,6 +2552,7 @@ function wireShare(){
   btn.onclick = deelPagina;
 }
 function jsonp(params){
+  try{ if(params && params.key && typeof _AUDIT_LABELS!=="undefined" && _AUDIT_LABELS[params.actie]) logAudit("", _AUDIT_LABELS[params.actie](params)); }catch(e){}
   return new Promise((resolve)=>{
     if(!CONFIG.agendaUrl){ resolve(null); return; }
     const cb = "ttaCb" + Date.now() + Math.floor(Math.random()*10000);
@@ -3678,6 +3680,20 @@ function auditWat(path, oldO, newO, message){
   try{ const parts=_auditChanges(path, oldO, newO); if(parts.length){ let s=parts.join("; "); return s.length>190 ? s.slice(0,187)+"\u2026" : s; } }catch(e){}
   return String(message||"");
 }
+const _AUDIT_LABELS = {
+  betaald:        p => "Bestelling "+(p.id||"")+": betaald "+(String(p.waarde)==="ja"?"aan":"uit"),
+  afgehaald:      p => "Bestelling "+(p.id||"")+": afgehaald "+(String(p.waarde)==="ja"?"aan":"uit"),
+  verwijder:      p => "Bestelling verwijderd: "+(p.id||""),
+  verwijderklant: p => "Klant verwijderd: "+(p.tel||""),
+  klantnieuw:     p => "Klant toegevoegd: "+[p.naam,p.tel].filter(Boolean).join(" "),
+  klantimport:    p => { let n=""; try{ n=" ("+JSON.parse(p.data).length+")"; }catch(e){} return "Klanten geimporteerd"+n; },
+  notitie:        p => "Notitie klant "+(p.tel||"")+" gewijzigd",
+  cbset:          p => "CallMeBot ingesteld"+(p.cbtel?": "+p.cbtel:""),
+  taal:           p => "Taal klant "+(p.tel||"")+" \u2192 "+(p.taal||""),
+  uitgenodigd:    p => "Uitnodiging gemarkeerd: "+(p.tel||p.email||""),
+  bezoekreset:    () => "Bezoekstatistiek gereset",
+  zatnu:          () => "Zaterdag-overzicht handmatig verstuurd"
+};
 function logAudit(path, msg){
   try{
     if(!BEHEER || !klantKey()) return;
