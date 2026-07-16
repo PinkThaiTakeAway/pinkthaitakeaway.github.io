@@ -3995,17 +3995,23 @@ async function saveName(id, nl, en, th, btn){
   const name = { nl: nl||m.name.nl, en: en||m.name.en, th: th||m.name.th };
   m.name = name; NAMES[id] = name;
   if(!ghToken()){ alert(A.tokenNeed); askToken(); }
-  // kaart-titel direct bijwerken
   const card = btn ? btn.closest(".card") : null;
-  if(card){
+  const paintTitle = () => { if(card){
     const nm = card.querySelector(".nm"); if(nm) nm.textContent = m.name[LANG];
     const sb = card.querySelector(".sub"); if(sb) sb.textContent = LANG==="th" ? (m.name.en||"") : m.th;
     const ph = card.querySelector("[data-photo]"); if(ph) ph.alt = m.name[LANG];
-  }
+  } };
+  paintTitle();
   const label = btn ? btn.textContent : "";
   if(btn){ btn.disabled = true; btn.textContent = "…"; }
+  // Namen altijd compleet/vertaald: EN leeg -> vertalen, TH leeg of niet-Thais -> vertalen
+  if(!name.en){ const t = await mmTo(name.nl, "nl", "en"); if(t) name.en = t; }
+  if(!_thaiScript(name.th)){ const t = await mmTo(name.nl, "nl", "th"); if(t && _thaiScript(t)) name.th = t; }
+  if(!(m.th||"").trim() && _thaiScript(name.th)) m.th = name.th;
+  m.name = name; NAMES[id] = name; paintTitle(); if(BEHEER) fitDishNames();
   try{
     await ghPut("namen.json", NAMES, `Naam ${m.name.nl} bijgewerkt`);
+    if(m.custom){ const it = EXTRA.find(x=>x.id===id); if(it){ it.name = { nl:name.nl, en:name.en, th:name.th }; if(m.th) it.th = m.th; saveJSON("tta_extra", {items:EXTRA}); livePush("extra.json", ()=>EXTRA, `Naam ${m.name.nl} bijgewerkt`); } }
     if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
     if(sheet.classList.contains("open")) renderSheet();
   }catch(e){
