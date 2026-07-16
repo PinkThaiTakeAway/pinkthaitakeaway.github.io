@@ -1159,6 +1159,7 @@ function saveJSON(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(
 const store = { save(){ saveJSON("tta_cart", cart); }, load(){ return loadJSON("tta_cart"); } };
 function goTo(id){ const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
 function esc(s){ return String(s==null?"":s).replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function titleCase(s){ s=String(s==null?"":s); if(s.trim().split(/\s+/).filter(Boolean).length<2) return s; return s.replace(/\S+/g, w => w.replace(/[a-z\u00E0-\u00FF]/i, c => c.toUpperCase())); }
 function pad(t){ const [h,m]=t.split(":").map(Number); return h*60+m; }
 
 /* ---------- Afhaaldatum + tijden ---------- */
@@ -1299,9 +1300,9 @@ function card(m){
   const el = document.createElement("article");
   el.className = "card" + (hidden ? " hidden-dish" : "") + ((BEHEER && _openDishes.has(m.id)) ? " open" : "");
   el.innerHTML = `
-    <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
+    <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(titleCase(m.name[LANG]))}" loading="lazy"></div>
     <div class="card-body">
-      <div class="card-title">${BEHEER ? `<img class="minithumb" data-photo="${m.id}" alt="" loading="lazy">` : ''}<div class="titletext"><div class="nmline"><span class="nm">${m.name[LANG]}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${sub}</span></div></div>
+      <div class="card-title">${BEHEER ? `<img class="minithumb" data-photo="${m.id}" alt="" loading="lazy">` : ''}<div class="titletext"><div class="nmline"><span class="nm">${titleCase(m.name[LANG])}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${titleCase(sub)}</span></div></div>
       <p class="card-desc">${m.desc[LANG]}</p>
       ${dietLabel(m)}
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
@@ -1493,7 +1494,7 @@ function renderSheet(){
     const m = byId(baseId(id));
     const ph = PHOTO[baseId(id)] ? `<img data-cphoto="${baseId(id)}" src="${PHOTO[baseId(id)]}" alt="" onerror="this.remove()">` : "";
     html += `<div class="line"><div class="lthumb">${m.emoji}${ph}</div>
-      <div class="ldetail"><div class="ln">${m.nr?`#${m.nr} `:""}${m.name[LANG]}${variantLabel(id)}</div><div class="lp">${fmt(m.price)} ${cart[id]>1?"· "+fmt(m.price*cart[id]):""}</div></div>
+      <div class="ldetail"><div class="ln">${m.nr?`#${m.nr} `:""}${titleCase(m.name[LANG])}${variantLabel(id)}</div><div class="lp">${fmt(m.price)} ${cart[id]>1?"· "+fmt(m.price*cart[id]):""}</div></div>
       <div class="lstep"><button data-m="${id}">−</button><span class="q">${cart[id]}</span><button data-p="${id}">+</button></div></div>`;
   });
   const _days = upcomingPickupDates();
@@ -1546,7 +1547,7 @@ function renderSheet(){
 }
 function buildOrder(){
   const ids = Object.keys(cart); let lines=[], sum=0;
-  ids.forEach(id => { const m=byId(baseId(id)), q=cart[id]; sum+=m.price*q; lines.push(`${q}× ${m.nr?"#"+m.nr+" ":""}${m.name.nl}${variantNL(id)} — ${fmt(m.price*q)}`); });
+  ids.forEach(id => { const m=byId(baseId(id)), q=cart[id]; sum+=m.price*q; lines.push(`${q}× ${m.nr?"#"+m.nr+" ":""}${titleCase(m.name.nl)}${variantNL(id)} — ${fmt(m.price*q)}`); });
   return {lines, sum};
 }
 document.getElementById("waBtn").onclick = async () => {
@@ -2193,7 +2194,7 @@ function renderTrash(){
   box.innerHTML =
     `<div class="trashtop"><button class="purge-all" id="trashEmpty">${A.emptyTrash}</button></div>` +
     items.map(m =>
-    `<div class="trashrow"><span>${m.emoji} ${esc(m.name[LANG])}</span><span class="trashbtns"><button class="restore-btn" data-restore="${m.id}">${A.restore}</button><button class="purge-btn" data-purge="${m.id}">${A.purge}</button></span></div>`
+    `<div class="trashrow"><span>${m.emoji} ${esc(titleCase(m.name[LANG]))}</span><span class="trashbtns"><button class="restore-btn" data-restore="${m.id}">${A.restore}</button><button class="purge-btn" data-purge="${m.id}">${A.purge}</button></span></div>`
   ).join("");
   box.querySelectorAll("[data-restore]").forEach(b => b.onclick = () => restoreDish(b.dataset.restore));
   box.querySelectorAll("[data-purge]").forEach(b => b.onclick = () => { if(confirm(A.cPurge)) purgeDish(b.dataset.purge); });
@@ -3903,9 +3904,9 @@ async function saveName(id, nl, en, th, btn){
   if(!ghToken()){ alert(A.tokenNeed); askToken(); }
   const card = btn ? btn.closest(".card") : null;
   const paintTitle = () => { if(card){
-    const nm = card.querySelector(".nm"); if(nm) nm.textContent = m.name[LANG];
+    const nm = card.querySelector(".nm"); if(nm) nm.textContent = titleCase(m.name[LANG]);
     const sb = card.querySelector(".sub"); if(sb) sb.textContent = LANG==="th" ? (m.name.en||"") : m.th;
-    const ph = card.querySelector("[data-photo]"); if(ph) ph.alt = m.name[LANG];
+    const ph = card.querySelector("[data-photo]"); if(ph) ph.alt = titleCase(m.name[LANG]);
   } };
   paintTitle();
   const label = btn ? btn.textContent : "";
