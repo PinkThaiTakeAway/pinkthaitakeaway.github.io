@@ -2,8 +2,25 @@
   "naam": "Pink Thai TakeAway",
   "adres": "Hakvoortseweg 30, 5084 HA Biest-Houtakker (voordeur aan de oprit)",
   "telefoon": "06 48 55 58 42",
+  "chefFoto": "chef.jpg",
   "afhaal": {
-    "dag": 6,
+    "dag": 5,
+    "dagen": [
+      5,
+      6
+    ],
+    "tijden": {
+      "5": {
+        "van": "17:00",
+        "tot": "19:00",
+        "slotMin": 15
+      },
+      "6": {
+        "van": "14:00",
+        "tot": "15:00",
+        "slotMin": 15
+      }
+    },
     "van": "17:00",
     "tot": "19:00",
     "slotMin": 15
@@ -12,7 +29,6 @@
     "cutoffDag": 5,
     "cutoffUur": 23
   },
-  "chefFoto": "chef.jpg",
   "seo": {
     "keuken": "Thai",
     "gebied": [
