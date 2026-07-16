@@ -892,7 +892,7 @@ _EXPECTED_ACTIES = {
     "account", "adminget", "adminlog", "afgehaald", "bestelling", "betaald", "bezoek",
     "bezoekreset", "bezoekstats", "cbget", "cbset", "klanten", "klantimport", "klantnieuw",
     "maxget", "maxset", "notitie", "slots", "taal", "uitgenodigd", "versie", "verwijder",
-    "verwijderklant", "volg", "zatnu",
+    "verwijderklant", "volg", "zatnu", "audit", "auditget",
 }
 
 def _dict_body(html, name):
