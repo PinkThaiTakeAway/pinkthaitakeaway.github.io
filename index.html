@@ -2008,6 +2008,17 @@ async function mmTranslate(text, to){
   if(!t) throw new Error("empty");
   return t;
 }
+async function mmTo(text, from, to){
+  try{
+    const ctrl = new AbortController(); const _to = setTimeout(()=>ctrl.abort(), 4000);
+    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`, {signal: ctrl.signal});
+    clearTimeout(_to);
+    if(!r.ok) return "";
+    const d = await r.json();
+    const t = d && d.responseData && d.responseData.translatedText;
+    return (t && typeof t === "string") ? t.trim() : "";
+  }catch(e){ return ""; }
+}
 async function translateFromThai(){
   const A = T().adm;
   const nameTh = val("fNaamTh").trim();
@@ -2051,16 +2062,18 @@ function suggestDesc(){
   const sp = noSpice ? "" : (spice>=3?" Heel pittig — voor de liefhebber.":spice===2?" Lekker pittig.":spice===1?" Mild pittig.":"");
   document.getElementById("fDesc").value = base + sp;
 }
+const _thaiScript = s => /[\u0E00-\u0E7F]/.test(s||"");
 function saveNewDish(){
   const naam = val("fNaam").trim(); const prijs = parseFloat(val("fPrijs"));
   if(!naam){ alert(T().adm.aNaam); return; }
   if(isNaN(prijs) || prijs < 0){ alert(T().adm.aPrijs); return; }
-  const en = val("fNaamEn").trim() || naam, th = val("fNaamTh").trim() || naam, desc = val("fDesc").trim();
+  const en0 = val("fNaamEn").trim(), th0 = val("fNaamTh").trim(), thSub0 = val("fTh").trim();
+  const en = en0 || naam, th = th0 || naam, desc = val("fDesc").trim();
   const descEn = val("fDescEn").trim() || desc, descTh = val("fDescTh").trim() || desc;
   const dish = {
     id: "x" + Date.now().toString(36), cat: val("fCat"),
     emoji: val("fEmoji").trim() || "🍽️", price: prijs, spice: parseInt(val("fSpice"))||0,
-    foto: en + " thai food", th: val("fTh").trim(),
+    foto: en + " thai food", th: thSub0,
     name: {nl:naam, en, th}, desc: {nl:desc, en:descEn, th:descTh}, rh: val("fRh"), custom: true
   };
   EXTRA.push(dish); saveJSON("tta_extra", {items:EXTRA});
@@ -2068,11 +2081,21 @@ function saveNewDish(){
   _openDishes.add(dish.id);
   document.getElementById("addModal").classList.remove("open");
   buildMenu();
-  pickPhoto(dish).then(url => { if(url){ setPhoto(dish.id, url); } updateBeheerCount(); });
+  pickPhoto(dish).then(url => { if(url){ chosen[dish.id]=url; saveJSON("tta_fotos", chosen); setPhoto(dish.id, url); livePush("fotos.json", currentFotos, "Foto naar server"); } updateBeheerCount(); });
   updateBeheerCount();
   livePush("extra.json", ()=>EXTRA, `Gerecht toegevoegd: ${dish.name.nl}`);
   pushNumbersIfNeeded();
   setTimeout(()=>{ const _ph=document.querySelector(`[data-photo="${dish.id}"]`); const _card=_ph?_ph.closest(".card"):null; if(_card) _card.scrollIntoView({behavior:"smooth",block:"center"}); }, 120);
+  autoTranslateNames(dish, {en: !en0, th: (!th0 || !_thaiScript(th0)), thSub: !thSub0});
+}
+async function autoTranslateNames(dish, need){
+  try{
+    let changed = false;
+    if(need && need.en){ const t = await mmTo(dish.name.nl, "nl", "en"); if(t){ dish.name.en = t; dish.foto = t + " thai food"; changed = true; } }
+    if(need && need.th){ const t = await mmTo(dish.name.nl, "nl", "th"); if(t && _thaiScript(t)){ dish.name.th = t; changed = true; } }
+    if(_thaiScript(dish.name.th) && (need && need.thSub || !dish.th)){ dish.th = dish.name.th; changed = true; }
+    if(changed){ saveJSON("tta_extra", {items:EXTRA}); buildMenu(); reapplyPhotos(); livePush("extra.json", ()=>EXTRA, `Namen vertaald: ${dish.name.nl}`); }
+  }catch(e){}
 }
 function copyDish(id){
   const src = byId(id); if(!src) return;
