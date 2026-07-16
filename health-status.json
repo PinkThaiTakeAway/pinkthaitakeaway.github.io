@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-16T13:48:08Z",
+  "opgeslagen": "2026-07-16T13:53:01Z",
   "scriptVersie": 30,
   "verwachteVersie": 30,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-16T13:48:05.378814+00:00",
+    "updated": "2026-07-16T13:53:00.161016+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -281,7 +281,7 @@
             "status": "ok"
           },
           {
-            "naam": "index.html compact (329 KB, geen zware inline-afbeeldingen)",
+            "naam": "index.html compact (324 KB, geen zware inline-afbeeldingen)",
             "status": "ok"
           },
           {
@@ -293,7 +293,7 @@
             "status": "ok"
           },
           {
-            "naam": "alle 25 client-acties staan in het verwachte GAS-contract",
+            "naam": "alle 22 client-acties staan in het verwachte GAS-contract",
             "status": "ok"
           }
         ]
