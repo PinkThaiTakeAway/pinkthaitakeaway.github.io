@@ -869,7 +869,7 @@ const I18N = {
     heroTitle:"Echt Thais, <em>vers voor je weekend.</em>",
     heroP:"Bestel deze week online en haal je verse Thaise gerechten op zaterdag af. Met liefde gewokt en gestampt.",
     heroChef:"Met liefde gekookt door Pink",
-    chipPickup:(d,v,t)=>`${d} · ${v}–${t} uur`, chipOrder:(d,t)=>`t/m ${d} ${t} uur`, pickLabel:"Afhalen", orderLabel:"Bestellen", dagen:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],
+    chipPickup:(d,v,t)=>`${d} · ${v}–${t} uur`, chipOrder:(d,t)=>`t/m ${d} ${t} uur`, pickLabel:"Afhalen", orderLabel:"Bestellen", dagen:["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"], maandenKort:["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"],
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
     yourOrder:"Jouw bestelling", empty:"Je mandje is nog leeg.\nKies iets lekkers uit het menu.",
@@ -910,7 +910,7 @@ const I18N = {
     heroTitle:"Real Thai, <em>fresh for your weekend.</em>",
     heroP:"Order online during the week and pick up your fresh Thai dishes on Saturday. Wok-fried and pounded with care.",
     heroChef:"Lovingly cooked by Pink",
-    chipPickup:(d,v,t)=>`${d} · ${v}–${t}`, chipOrder:(d,t)=>`until ${d} ${t}`, pickLabel:"Pickup", orderLabel:"Ordering", dagen:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    chipPickup:(d,v,t)=>`${d} · ${v}–${t}`, chipOrder:(d,t)=>`until ${d} ${t}`, pickLabel:"Pickup", orderLabel:"Ordering", dagen:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], maandenKort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
     yourOrder:"Your order", empty:"Your basket is empty.\nPick something tasty from the menu.",
@@ -952,7 +952,7 @@ const I18N = {
     heroTitle:"อาหารไทยแท้ <em>สดใหม่สำหรับสุดสัปดาห์</em>",
     heroP:"สั่งออนไลน์ภายในสัปดาห์ แล้วมารับอาหารไทยสดใหม่ในวันเสาร์ ปรุงสดทุกจาน",
     heroChef:"ปรุงด้วยความรักโดยคุณพิงค์",
-    chipPickup:(d,v,t)=>`${d} · ${v}–${t} น.`, chipOrder:(d,t)=>`ถึง${d} ${t} น.`, pickLabel:"รับอาหาร", orderLabel:"สั่งอาหาร", dagen:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"],
+    chipPickup:(d,v,t)=>`${d} · ${v}–${t} น.`, chipOrder:(d,t)=>`ถึง${d} ${t} น.`, pickLabel:"รับอาหาร", orderLabel:"สั่งอาหาร", dagen:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"], maandenKort:["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."],
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
     yourOrder:"คำสั่งซื้อของคุณ", empty:"ตะกร้าของคุณว่างเปล่า\nเลือกเมนูอร่อยๆ ได้เลย",
@@ -1191,6 +1191,13 @@ function pickupSlots(date){
   return out;
 }
 function dateLabelFor(d){ return `${T().dagen[d.getDay()]} ${d.getDate()}-${d.getMonth()+1}`; }
+function chipDate(d){ return `${T().dagen[d.getDay()]} ${d.getDate()} ${(T().maandenKort||[])[d.getMonth()]||(d.getMonth()+1)}`; }
+function nextCutoffDate(){
+  const now=new Date(), wd=now.getDay(), nowm=now.getHours()*60+now.getMinutes();
+  let add=(CONFIG.bestel.cutoffDag - wd + 7)%7;
+  if(add===0 && nowm >= CONFIG.bestel.cutoffUur*60) add=7;
+  const s=new Date(now); s.setDate(now.getDate()+add); s.setHours(0,0,0,0); return s;
+}
 function pickupDateLabel(){ return dateLabelFor(selectedPickupDate()); }
 function pickupISO(slot){
   const d = new Date(selectedPickupDate());
@@ -1607,25 +1614,19 @@ function applyLang(){
   document.getElementById("heroTitle").innerHTML = T().heroTitle;
   { const _hc=document.getElementById("heroChef"); if(_hc) _hc.textContent = T().heroChef || ""; }
   document.getElementById("heroP").textContent = T().heroP;
-  const _pd = pickupDays();
-  const _w0 = dayWindow(_pd[0]);
-  const _uniform = _pd.every(d => { const w=dayWindow(d); return w.van===_w0.van && w.tot===_w0.tot; });
-  document.getElementById("chipPickup").textContent = _uniform
-    ? T().chipPickup(_pd.map(d=>T().dagen[d]).join(" / "), _w0.van, _w0.tot)
-    : _pd.map(d=>`${T().dagen[d]} ${dayWindow(d).van}–${dayWindow(d).tot}`).join(" · ");
-  const _cutDag = T().dagen[CONFIG.bestel.cutoffDag];
+  const _pickStr = upcomingPickupDates().map(d=>T().chipPickup(chipDate(d), dayWindow(d.getDay()).van, dayWindow(d.getDay()).tot)).join("  •  ");
+  const _cutDatum = chipDate(nextCutoffDate());
   const _cutTijd = String(CONFIG.bestel.cutoffUur).padStart(2,"0") + ":00";
-  document.getElementById("chipOrder").textContent = T().chipOrder(_cutDag, _cutTijd);
+  document.getElementById("chipPickup").textContent = _pickStr;
+  document.getElementById("chipOrder").textContent = T().chipOrder(_cutDatum, _cutTijd);
   { const _pt=document.getElementById("chipPickTag"); if(_pt) _pt.textContent = T().pickLabel; }
   { const _ot=document.getElementById("chipOrderTag"); if(_ot) _ot.textContent = T().orderLabel; }
   document.getElementById("heroCta").textContent = T().heroCta;
   document.getElementById("cartLabel").textContent = T().cart;
   document.getElementById("fbGo").textContent = T().viewOrder;
   document.getElementById("footPickupHead").textContent = T().footPickupHead;
-  document.getElementById("footPickup").textContent = _uniform
-    ? `${_pd.map(d=>T().dagen[d]).join(" · ")} · ${_w0.van}–${_w0.tot}`
-    : _pd.map(d=>`${T().dagen[d]} ${dayWindow(d).van}–${dayWindow(d).tot}`).join(" · ");
-  document.getElementById("footOrder").textContent = T().footOrder(_cutDag, _cutTijd);
+  document.getElementById("footPickup").textContent = _pickStr;
+  document.getElementById("footOrder").textContent = T().footOrder(_cutDatum, _cutTijd);
   document.getElementById("footFindHead").textContent = T().footFindHead;
   document.getElementById("footTagline").textContent = T().footTagline;
   document.getElementById("shareLabel").textContent = T().shareLabel;
