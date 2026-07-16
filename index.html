@@ -4109,10 +4109,11 @@ async function loadHidden(){
   return false;
 }
 async function loadExtra(){
-  let items = [];
-  try{ const r = await fetch("extra.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) items = a; } }catch(e){}
-  if(BEHEER){ const local = loadJSON("tta_extra"); if(local && Array.isArray(local.items)) items = local.items; }
+  let items = [], ok = false;
+  try{ const r = await fetch("extra.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)){ items = a; ok = true; } } }catch(e){}
+  if(BEHEER && !ok){ const local = loadJSON("tta_extra"); if(local && Array.isArray(local.items)) items = local.items; }   // alleen terugval als server onbereikbaar is
   EXTRA = items;
+  if(BEHEER) saveJSON("tta_extra", {items:EXTRA});   // lokale cache gelijktrekken met server
   EXTRA.forEach(m => { if(m && m.id && !byId(m.id)) MENU.push(m); });
 }
 function normCat(c){
@@ -4120,10 +4121,11 @@ function normCat(c){
   return { id:c.id, nm:{ nl, en:((c.nm&&c.nm.en)||nl), th:((c.nm&&c.nm.th)||nl) }, th:(c.th || (c.nm&&c.nm.th) || nl), emoji:(c.emoji||"🍽️"), custom:true };
 }
 async function loadCats(){
-  let raw = null;
-  try{ const r = await fetch("categorieen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok) raw = await r.json(); }catch(e){}
-  if(BEHEER){ const local = loadJSON("tta_cats"); if(local && (Array.isArray(local) || local.items || local.custom || local.namen || local.volgorde)) raw = local; }
+  let raw = null, ok = false;
+  try{ const r = await fetch("categorieen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ raw = await r.json(); ok = true; } }catch(e){}
+  if(BEHEER && !ok){ const local = loadJSON("tta_cats"); if(local && (Array.isArray(local) || local.items || local.custom || local.namen || local.volgorde)) raw = local; }   // alleen terugval als server onbereikbaar is
   applyCatsConfig(raw);
+  if(BEHEER) saveJSON("tta_cats", buildCatsPayload());   // lokale cache gelijktrekken met server
 }
 function applyCatsConfig(raw){
   let custom=[], namen={}, volgorde=[];
