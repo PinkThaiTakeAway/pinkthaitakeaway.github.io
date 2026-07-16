@@ -2362,10 +2362,13 @@ async function cbOpslaan(){
   const A = T().adm;
   const tel=(document.getElementById("cbTelIn").value||"").trim();
   const key=(document.getElementById("cbKeyIn").value||"").trim();
+  const oudTel=(_cbCache&&_cbCache.tel)||"", oudKey=(_cbCache&&_cbCache.key)||"";
   showToast(A.saving, null);
   try{
     const r = await jsonp({actie:"cbset", cbtel:tel, cbkey:key, key:klantKey()});
-    if(r && r.ok){ _cbCache={tel:r.tel||"", key:r.key||""}; try{ localStorage.setItem("tta_cbcache", JSON.stringify(_cbCache)); }catch(e){} showToast(A.cbOk, true); }
+    if(r && r.ok){ _cbCache={tel:r.tel||"", key:r.key||""}; try{ localStorage.setItem("tta_cbcache", JSON.stringify(_cbCache)); }catch(e){}
+      try{ const ps=[]; if(String(oudTel)!==String(tel)) ps.push("tel "+_fmtAuditVal(oudTel)+" \u2192 "+_fmtAuditVal(tel)); if(String(oudKey)!==String(key)) ps.push("sleutel gewijzigd"); if(ps.length) logAudit("", "CallMeBot: "+ps.join(", ")); }catch(e){}
+      showToast(A.cbOk, true); }
     else showToast(A.cbFout, false);
   }catch(e){ showToast(A.cbFout, false); }
 }
@@ -3026,6 +3029,8 @@ function berWaKlant(btn){
 }
 function berTaalWijzig(sel){
   const taal=sel.value, token=sel.dataset.token||"", tel=sel.dataset.tel||"";
+  let oudT=""; (_klantRecords||[]).forEach(function(k){ if((token && k.token===token) || (tel && k.tel===tel)){ if(!oudT) oudT=k.taal||""; } });
+  if(String(oudT)!==String(taal)) try{ logAudit("", "Taal klant "+(_klantNaam(tel)||tel||token)+": "+(oudT||"\u2014")+" \u2192 "+taal); }catch(e){}
   (_klantRecords||[]).forEach(function(k){ if((token && k.token===token) || (tel && k.tel===tel)) k.taal=taal; });
   try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
   try{ jsonp({actie:"taal", token:token, taal:taal, tel:tel, key:klantKey()}); }catch(e){}
@@ -3360,6 +3365,8 @@ function waUitnodiging(tel, naam, email, taal){
 async function registreerUitnodiging(email, tel){
   const teln = String(tel||"").replace(/\D/g,"");
   const rec = (_klantRecords||[]).find(k => (email && String(k.email||"").toLowerCase()===email.toLowerCase()) || (!email && teln && String(k.tel||"").replace(/\D/g,"")===teln));
+  const oudU=(rec&&rec.uitgenodigd)||0;
+  try{ logAudit("", "Uitnodiging "+(_klantNaam(tel)||tel||email)+": "+oudU+"\u00d7 \u2192 "+(oudU+1)+"\u00d7"); }catch(e){}
   if(rec){ rec.uitgenodigd=(rec.uitgenodigd||0)+1; rec.laatstUitgenodigd=new Date().toISOString(); }
   try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
   if(_kTab==="klanten" && !_kForm) renderKlanten();
@@ -3680,17 +3687,15 @@ function auditWat(path, oldO, newO, message){
   try{ const parts=_auditChanges(path, oldO, newO); if(parts.length){ let s=parts.join("; "); return s.length>190 ? s.slice(0,187)+"\u2026" : s; } }catch(e){}
   return String(message||"");
 }
+function _ordNaam(id){ try{ const b=((typeof _klantData!=="undefined"&&_klantData)||[]).find(x=>String(x.id)===String(id)); if(b) return b.naam||b.klant||""; }catch(e){} return ""; }
+function _klantNaam(tel){ try{ const t=String(tel||"").replace(/\D/g,""); const b=((typeof _klantData!=="undefined"&&_klantData)||[]).find(x=>String(x.tel||"").replace(/\D/g,"")===t); if(b&&b.naam) return b.naam; const k=((typeof _klantRecords!=="undefined"&&_klantRecords)||[]).find(x=>String(x.tel||"").replace(/\D/g,"")===t); if(k&&k.naam) return k.naam; }catch(e){} return String(tel||""); }
 const _AUDIT_LABELS = {
-  betaald:        p => "Bestelling "+(p.id||"")+": betaald "+(String(p.waarde)==="ja"?"aan":"uit"),
-  afgehaald:      p => "Bestelling "+(p.id||"")+": afgehaald "+(String(p.waarde)==="ja"?"aan":"uit"),
-  verwijder:      p => "Bestelling verwijderd: "+(p.id||""),
-  verwijderklant: p => "Klant verwijderd: "+(p.tel||""),
+  betaald:        p => { const n=_ordNaam(p.id); return "Bestelling "+(p.id||"")+(n?" ("+n+")":"")+": betaald "+(String(p.waarde)==="ja"?"uit \u2192 aan":"aan \u2192 uit"); },
+  afgehaald:      p => { const n=_ordNaam(p.id); return "Bestelling "+(p.id||"")+(n?" ("+n+")":"")+": afgehaald "+(String(p.waarde)==="ja"?"uit \u2192 aan":"aan \u2192 uit"); },
+  verwijder:      p => { const n=_ordNaam(p.id); return "Bestelling verwijderd: "+(p.id||"")+(n?" ("+n+")":""); },
+  verwijderklant: p => "Klant verwijderd: "+(_klantNaam(p.tel)||p.tel||""),
   klantnieuw:     p => "Klant toegevoegd: "+[p.naam,p.tel].filter(Boolean).join(" "),
   klantimport:    p => { let n=""; try{ n=" ("+JSON.parse(p.data).length+")"; }catch(e){} return "Klanten geimporteerd"+n; },
-  notitie:        p => "Notitie klant "+(p.tel||"")+" gewijzigd",
-  cbset:          p => "CallMeBot ingesteld"+(p.cbtel?": "+p.cbtel:""),
-  taal:           p => "Taal klant "+(p.tel||"")+" \u2192 "+(p.taal||""),
-  uitgenodigd:    p => "Uitnodiging gemarkeerd: "+(p.tel||p.email||""),
   bezoekreset:    () => "Bezoekstatistiek gereset",
   zatnu:          () => "Zaterdag-overzicht handmatig verstuurd"
 };
@@ -3926,8 +3931,10 @@ async function klantBetaald(id, waarde){
   else showToast(BT().kl.tNietBij, false);
 }
 async function klantNotitie(tel, tekst){
+  const t=String(tel||"").replace(/\D/g,"");
+  const oudN=((_klantData||[]).find(x=>String(x.tel||"").replace(/\D/g,"")===t)||{}).notitie||"";
   const r = await jsonp({actie:"notitie", tel, notitie:tekst, key:klantKey()});
-  if(r && r.ok){ const t=String(tel||"").replace(/\D/g,""); _klantData.forEach(x=>{ if(String(x.tel||"").replace(/\D/g,"")===t) x.notitie=tekst; }); showToast(BT().kl.tNotitieOk, true); }
+  if(r && r.ok){ _klantData.forEach(x=>{ if(String(x.tel||"").replace(/\D/g,"")===t) x.notitie=tekst; }); if(String(oudN)!==String(tekst||"")) try{ logAudit("", "Notitie "+_klantNaam(tel)+": "+_fmtAuditVal(oudN)+" \u2192 "+_fmtAuditVal(tekst||"")); }catch(e){} showToast(BT().kl.tNotitieOk, true); }
   else showToast(BT().kl.tNotitieFout, false);
 }
 async function klantVerwijder(id){
