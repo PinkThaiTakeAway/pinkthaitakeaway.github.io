@@ -211,6 +211,8 @@
   .card.hidden-dish{opacity:.5}
   .hidden-badge{position:absolute;top:8px;right:8px;z-index:3;background:var(--chili);color:#fff;font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:.04em}
   .del-dish{width:100%;font-weight:700;font-size:.82rem;padding:9px 12px;border-radius:8px;border:1px solid var(--chili);background:#fff;color:var(--chili);cursor:pointer}
+  .copy-dish{font-weight:700;font-size:.82rem;padding:9px 12px;border-radius:8px;border:1px solid var(--forest);background:#fff;color:var(--forest);cursor:pointer}
+  .pickrow.twobtn .copy-dish,.pickrow.twobtn .del-dish{flex:1;width:auto}
   .addmodal{display:none;position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.55);align-items:flex-start;justify-content:center;padding:18px;overflow-y:auto}
   .addmodal.open{display:flex}
   .addmodal .box{background:#fff;border-radius:14px;max-width:480px;width:100%;padding:18px;margin:auto}
@@ -852,7 +854,7 @@ const I18N = {
     footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", wis:"Wis keuzes",
-      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR", allesUit:"🚫 Alles onbestelbaar", allesAan:"✅ Alles bestelbaar", allesUitConf:"Alle gerechten onbestelbaar maken?", allesAanConf:"Alle gerechten weer bestelbaar maken?",
+      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR", copy:"📋 Kopieer gerecht", copySuffix:" (kopie)", allesUit:"🚫 Alles onbestelbaar", allesAan:"✅ Alles bestelbaar", allesUitConf:"Alle gerechten onbestelbaar maken?", allesAanConf:"Alle gerechten weer bestelbaar maken?",
       phTerm:"Zoekterm", search:"🔍 Zoek", phUrl:"of plak een eigen foto-URL", setUrl:"Zet", ownPhoto:"📷 Eigen foto van je toestel",
       del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
@@ -894,7 +896,7 @@ const I18N = {
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
       descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", trBusy:"Translating…", trEmpty:"Enter the Thai name or description first.", trFail:"Translation failed — try again or fill in manually.", translateBtn:"🌐 Translate Thai → NL/EN", wis:"Clear choices",
-      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN", actief:"AVAILABLE", allesUit:"🚫 All unavailable", allesAan:"✅ All available", allesUitConf:"Make all dishes unavailable?", allesAanConf:"Make all dishes available again?",
+      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN", actief:"AVAILABLE", copy:"📋 Copy dish", copySuffix:" (copy)", allesUit:"🚫 All unavailable", allesAan:"✅ All available", allesUitConf:"Make all dishes unavailable?", allesAanConf:"Make all dishes available again?",
       phTerm:"Search term", search:"🔍 Search", phUrl:"or paste your own photo URL", setUrl:"Set", ownPhoto:"📷 Your own photo",
       del:"🗑️ Delete this dish",
       pickHint:"Tap a photo, paste a URL, or upload your own. Then export below.",
@@ -935,7 +937,7 @@ const I18N = {
     footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", wis:"ล้างที่เลือก",
-      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้", allesUit:"🚫 ปิดทั้งหมด", allesAan:"✅ เปิดทั้งหมด", allesUitConf:"ปิดการสั่งซื้อเมนูทั้งหมด?", allesAanConf:"เปิดการสั่งซื้อเมนูทั้งหมดอีกครั้ง?",
+      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้", copy:"📋 คัดลอกเมนู", copySuffix:" (สำเนา)", allesUit:"🚫 ปิดทั้งหมด", allesAan:"✅ เปิดทั้งหมด", allesUitConf:"ปิดการสั่งซื้อเมนูทั้งหมด?", allesAanConf:"เปิดการสั่งซื้อเมนูทั้งหมดอีกครั้ง?",
       phTerm:"คำค้นหา", search:"🔍 ค้นหา", phUrl:"หรือวางลิงก์รูปภาพเอง", setUrl:"ตั้ง", ownPhoto:"📷 รูปจากเครื่องของคุณ",
       del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
@@ -1229,7 +1231,7 @@ function card(m){
       <div class="pickresults" data-results="${m.id}"></div>
       <div class="pickrow"><input type="text" data-url="${m.id}" placeholder="${A.phUrl}"><button data-seturl="${m.id}">${A.setUrl}</button></div>
       <div class="pickrow"><label class="filebtn">${A.ownPhoto}<input type="file" accept="image/*" data-file="${m.id}" hidden></label></div>
-      <div class="pickrow"><button class="del-dish" data-del="${m.id}">${A.del}</button></div>
+      <div class="pickrow twobtn"><button class="copy-dish" data-copy="${m.id}">${A.copy}</button><button class="del-dish" data-del="${m.id}">${A.del}</button></div>
       <span class="pickhint">${A.pickHint}</span>
       <details class="name-edit">
         <summary>✏️ ${A.nameEdit}</summary>
@@ -1281,6 +1283,8 @@ function card(m){
     el.querySelector(`[data-file="${m.id}"]`).onchange = (e) => { if(e.target.files[0]) handleFile(m.id, e.target.files[0]); e.target.value=""; };
     const delBtn = el.querySelector(`[data-del="${m.id}"]`);
     if(delBtn) delBtn.onclick = () => deleteDish(m.id);
+    const copyBtn = el.querySelector(`[data-copy="${m.id}"]`);
+    if(copyBtn) copyBtn.onclick = () => copyDish(m.id);
     const rsave = el.querySelector(`[data-rsave="${m.id}"]`);
     if(rsave) rsave.onclick = (e) => saveRecipe(m.id, el.querySelector(`[data-ring="${m.id}"]`).value, el.querySelector(`[data-rprep="${m.id}"]`).value, e.currentTarget);
     const nmsave = el.querySelector(`[data-nmsave="${m.id}"]`);
@@ -1934,6 +1938,35 @@ function saveNewDish(){
   livePush("extra.json", ()=>EXTRA, `Gerecht toegevoegd: ${dish.name.nl}`);
   pushNumbersIfNeeded();
   setTimeout(()=>{ const _ph=document.querySelector(`[data-photo="${dish.id}"]`); const _card=_ph?_ph.closest(".card"):null; if(_card) _card.scrollIntoView({behavior:"smooth",block:"center"}); }, 120);
+}
+function copyDish(id){
+  const src = byId(id); if(!src) return;
+  const A = T().adm;
+  const suf = A.copySuffix || " (kopie)";
+  const nid = "x" + Date.now().toString(36);
+  const dish = {
+    id: nid, cat: src.cat, emoji: src.emoji || "🍽️",
+    price: (typeof src.price === "number" ? src.price : 0),
+    spice: (typeof src.spice === "number" ? src.spice : 0),
+    foto: src.foto || "", th: src.th || "",
+    name: { nl:((src.name&&src.name.nl)||"")+suf, en:((src.name&&src.name.en)||"")+suf, th:((src.name&&src.name.th)||"")+suf },
+    desc: { nl:(src.desc&&src.desc.nl)||"", en:(src.desc&&src.desc.en)||"", th:(src.desc&&src.desc.th)||"" },
+    rh: src.rh || "", custom: true
+  };
+  EXTRA.push(dish); saveJSON("tta_extra", {items:EXTRA});
+  if(!byId(dish.id)) MENU.push(dish);
+  const foto = chosen[id] || PHOTO[id];
+  if(foto){ chosen[nid] = foto; saveJSON("tta_fotos", chosen); }
+  if(RECIPES[id]){ RECIPES[nid] = JSON.parse(JSON.stringify(RECIPES[id])); }
+  if(SERVE_EDITS[id]){ SERVE_EDITS[nid] = JSON.parse(JSON.stringify(SERVE_EDITS[id])); }
+  _openDishes.add(nid);
+  buildMenu(); reapplyPhotos(); updateBeheerCount();
+  livePush("extra.json", ()=>EXTRA, `Gerecht gekopieerd: ${dish.name.nl}`);
+  if(foto) livePush("fotos.json", currentFotos, "Foto bijgewerkt");
+  if(RECIPES[nid]) livePush("recepten.json", ()=>RECIPES, "Recept bijgewerkt");
+  if(SERVE_EDITS[nid]) livePush("serveertips.json", ()=>SERVE_EDITS, "Serveertip bijgewerkt");
+  pushNumbersIfNeeded();
+  setTimeout(()=>{ const _ph=document.querySelector(`[data-photo="${nid}"]`); const _card=_ph?_ph.closest(".card"):null; if(_card) _card.scrollIntoView({behavior:"smooth",block:"center"}); }, 120);
 }
 function deleteDish(id){
   if(!confirm(T().adm.cDel)) return;
