@@ -132,6 +132,14 @@ def check_repo():
             warn(f"{len(stuck)} definitief verwijderd gerecht(en) staan nog in de broncode: {', '.join(stuck[:6])}")
         else:
             ok("geen definitief verwijderde gerechten meer in de broncode")
+        # Eigen gerechten uit extra.json tellen ook als geldig (die staan niet in de MENU-broncode)
+        try:
+            _ej = json.load(open("extra.json", encoding="utf-8"))
+            _items = _ej.get("items", _ej) if isinstance(_ej, dict) else _ej
+            extra_ids = {it["id"] for it in _items if isinstance(it, dict) and it.get("id")}
+        except Exception:
+            extra_ids = set()
+        valid_ids = set(mids) | extra_ids
         orphan = 0
         for fn in ("fotos.json", "prijzen.json", "recepten.json", "namen.json", "omschrijvingen.json", "pittigheid.json", "serveertips.json", "nummers.json"):
             if os.path.exists(fn):
@@ -140,7 +148,7 @@ def check_repo():
                 except Exception:
                     continue
                 if isinstance(dd, dict):
-                    orphan += sum(1 for k in dd if k not in mids)
+                    orphan += sum(1 for k in dd if k not in valid_ids)
         if orphan:
             warn(f"{orphan} verweesde gegeven(s) voor niet-bestaande gerechten in de databestanden")
         else:
