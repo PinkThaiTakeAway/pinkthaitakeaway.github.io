@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-16T08:54:05Z",
+  "opgeslagen": "2026-07-16T08:56:13Z",
   "scriptVersie": 30,
   "verwachteVersie": 30,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-16T08:54:04.989459+00:00",
+    "updated": "2026-07-16T08:56:12.373074+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -123,7 +123,7 @@
             "status": "ok"
           },
           {
-            "naam": "prijzen.json: 8 vermelding(en) gecontroleerd",
+            "naam": "prijzen.json: 9 vermelding(en) gecontroleerd",
             "status": "ok"
           },
           {
