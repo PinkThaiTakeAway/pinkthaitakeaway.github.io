@@ -1317,21 +1317,21 @@ function card(m){
       <details class="name-edit">
         <summary>✏️ ${A.nameEdit}</summary>
         <label class="reclabel">${A.langLabels.nl}</label>
-        <input type="text" class="nameinput" data-nm-nl="${m.id}" value="${esc(m.name.nl)}">
+        <input type="text" class="nameinput" data-nm-nl="${m.id}" value="${esc(titleCase(m.name.nl))}">
         <label class="reclabel">${A.langLabels.en}</label>
-        <input type="text" class="nameinput" data-nm-en="${m.id}" value="${esc(m.name.en)}">
+        <input type="text" class="nameinput" data-nm-en="${m.id}" value="${esc(titleCase(m.name.en))}">
         <label class="reclabel">${A.langLabels.th}</label>
-        <input type="text" class="nameinput" data-nm-th="${m.id}" value="${esc(m.name.th)}">
+        <input type="text" class="nameinput" data-nm-th="${m.id}" value="${esc(titleCase(m.name.th))}">
         <button class="recsave" data-nmsave="${m.id}">${A.nameSave}</button>
       </details>
       <details class="desc-edit">
         <summary>📝 ${A.descEdit}</summary>
         <label class="reclabel">${A.langLabels.nl}</label>
-        <textarea class="recta" data-ds-nl="${m.id}">${esc(m.desc.nl)}</textarea>
+        <textarea class="recta" data-ds-nl="${m.id}">${esc(titleCase(m.desc.nl))}</textarea>
         <label class="reclabel">${A.langLabels.en}</label>
-        <textarea class="recta" data-ds-en="${m.id}">${esc(m.desc.en)}</textarea>
+        <textarea class="recta" data-ds-en="${m.id}">${esc(titleCase(m.desc.en))}</textarea>
         <label class="reclabel">${A.langLabels.th}</label>
-        <textarea class="recta" data-ds-th="${m.id}">${esc(m.desc.th)}</textarea>
+        <textarea class="recta" data-ds-th="${m.id}">${esc(titleCase(m.desc.th))}</textarea>
         <button class="recsave" data-dssave="${m.id}">${A.descSave}</button>
       </details>
       <details class="recipe-edit">
