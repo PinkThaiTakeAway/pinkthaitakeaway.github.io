@@ -556,9 +556,9 @@
   .audititems{display:flex;flex-direction:column;gap:4px;padding:2px 13px 11px 30px;border-top:1px solid #f2f2f2}
   .audititem{display:grid;grid-template-columns:152px 1fr;gap:8px;font-size:.82rem;align-items:baseline}
   .auditwhen{color:#888;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .auditwhat{color:#333;word-break:break-word}
+  .auditwhat{color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .auditdoel{color:#999;font-size:.75rem}
-  @media(max-width:520px){.audititem{grid-template-columns:1fr;gap:1px}.auditwhen{font-size:.75rem}.audititems{padding-left:16px}}
+  @media(max-width:520px){.audititem{grid-template-columns:128px 1fr;gap:6px}.auditwhen{font-size:.72rem}.audititems{padding-left:16px}}
   .kinstel{max-width:420px}
   .kinstel-h{margin:4px 0 6px;font-size:1.05rem}
   .kinstel-uit{font-size:.9rem;color:#555;margin:0 0 14px;line-height:1.45}
@@ -3293,8 +3293,9 @@ function tekenAudit(r){
     html += '<div class="audititems">';
     g.items.forEach(a=>{
       const doel = a.doel ? ' <span class="auditdoel">'+esc(a.doel)+'</span>' : '';
+      const full = (a.wat||"") + (a.doel ? " ("+a.doel+")" : "");
       html += '<div class="audititem"><span class="auditwhen">'+esc(fmtAuditTime(a.tijd))+'</span>'
-        + '<span class="auditwhat">'+esc(a.wat||"")+doel+'</span></div>';
+        + '<span class="auditwhat" title="'+esc(full)+'">'+esc(a.wat||"")+doel+'</span></div>';
     });
     html += '</div></details>';
   });
