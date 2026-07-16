@@ -268,6 +268,18 @@
   .sysdot-ok{background:#3fbf6a}
   .sysdot-warn{background:#f0a500}
   .sysdot-err{background:#e5484d}
+  .catrow{border:1px solid #eee;border-radius:12px;padding:10px 12px;margin-bottom:10px}
+  .catrow-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .catrow-top .catname{font-weight:700;color:var(--forest)}
+  .catrow-top .catcount{font-size:.8rem;color:#888;white-space:nowrap}
+  .catrow-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .catrow-acts button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font:inherit;font-size:.8rem;font-weight:700;color:var(--forest);cursor:pointer}
+  .catrow-acts button:disabled{opacity:.4;cursor:default}
+  .catrow-acts .catdel{border-color:var(--chili);color:var(--chili)}
+  .cateditbox{margin-top:8px;display:flex;flex-direction:column;gap:2px}
+  .cateditbox .reclabel{font-size:.72rem;font-weight:700;color:#888;margin-top:4px}
+  .cateditbox .nameinput{border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;font-size:.85rem;box-sizing:border-box}
+  .cateditbox .recsave{margin-top:8px;background:var(--forest);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-weight:700;font-size:.85rem;cursor:pointer}
 
   .floatbar{position:fixed;left:0;right:0;bottom:0;z-index:70;transform:translateY(120%);transition:transform .3s cubic-bezier(.4,0,.2,1);padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,var(--paper) 28%)}
   .floatbar.show{transform:translateY(0)}
@@ -671,6 +683,7 @@
     <div class="sysmenu" id="sysMenu">
       <button class="sl" id="bHealth">🩺 Health</button>
       <button class="sl" id="bKlanten">👥 Klanten</button>
+      <button class="sl" id="bCats">🏷️ Categorieën</button>
       <button class="sl" id="bInstellingen">⚙️ Instellingen</button>
     </div>
   </div>
@@ -687,6 +700,16 @@
     <button id="hReload" class="hreload">Opnieuw laden</button>
     <button id="hSaveBtn" class="hreload">💾 Health opslaan</button>
     <button id="hRunBtn" class="hreload">▶ Volledige check uitvoeren</button>
+  </div>
+</div>
+
+<div id="catOverlay" class="hoverlay">
+  <div class="hpanel">
+    <div class="hhead">
+      <h3 id="catTitel">🏷️ Categorieën</h3>
+      <button id="catClose" class="hclose" aria-label="Sluiten">✕</button>
+    </div>
+    <div id="catBody" class="hbody"></div>
   </div>
 </div>
 
@@ -854,7 +877,7 @@ const I18N = {
     footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
     searching:"Zoeken…", reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", wis:"Wis keuzes",
-      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR", copy:"📋 Kopieer gerecht", copySuffix:" (kopie)", catNew:"➕ Nieuwe categorie…", catAskNl:"Naam van de nieuwe categorie:", catAskEmoji:"Emoji voor de categorie (optioneel):", catAdded:"Categorie toegevoegd ✓", allesUit:"🚫 Alles onbestelbaar", allesAan:"✅ Alles bestelbaar", allesUitConf:"Alle gerechten onbestelbaar maken?", allesAanConf:"Alle gerechten weer bestelbaar maken?",
+      count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR", copy:"📋 Kopieer gerecht", copySuffix:" (kopie)", catNew:"➕ Nieuwe categorie…", catAskNl:"Naam van de nieuwe categorie:", catAskEmoji:"Emoji voor de categorie (optioneel):", catAdded:"Categorie toegevoegd ✓", catMenuBtn:"🏷️ Categorieën", catManageTitle:"🏷️ Categorieën", catManageHint:"Hernoem, verplaats (↑/↓) of verwijder categorieën. Verwijderen kan alleen bij een lege eigen categorie.", catDishes:"gerecht(en)", catRename:"Naam", catDelete:"Verwijderen", catSaveName:"Naam opslaan", catNotEmpty:"Verplaats eerst de gerechten uit deze categorie.", catDelConf:"Deze categorie verwijderen?", allesUit:"🚫 Alles onbestelbaar", allesAan:"✅ Alles bestelbaar", allesUitConf:"Alle gerechten onbestelbaar maken?", allesAanConf:"Alle gerechten weer bestelbaar maken?",
       phTerm:"Zoekterm", search:"🔍 Zoek", phUrl:"of plak een eigen foto-URL", setUrl:"Zet", ownPhoto:"📷 Eigen foto van je toestel",
       del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
@@ -896,7 +919,7 @@ const I18N = {
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
       descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", trBusy:"Translating…", trEmpty:"Enter the Thai name or description first.", trFail:"Translation failed — try again or fill in manually.", translateBtn:"🌐 Translate Thai → NL/EN", wis:"Clear choices",
-      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN", actief:"AVAILABLE", copy:"📋 Copy dish", copySuffix:" (copy)", catNew:"➕ New category…", catAskNl:"Name of the new category:", catAskEmoji:"Emoji for the category (optional):", catAdded:"Category added ✓", allesUit:"🚫 All unavailable", allesAan:"✅ All available", allesUitConf:"Make all dishes unavailable?", allesAanConf:"Make all dishes available again?",
+      count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN", actief:"AVAILABLE", copy:"📋 Copy dish", copySuffix:" (copy)", catNew:"➕ New category…", catAskNl:"Name of the new category:", catAskEmoji:"Emoji for the category (optional):", catAdded:"Category added ✓", catMenuBtn:"🏷️ Categories", catManageTitle:"🏷️ Categories", catManageHint:"Rename, move (↑/↓) or delete categories. Deleting is only possible for an empty custom category.", catDishes:"dish(es)", catRename:"Name", catDelete:"Delete", catSaveName:"Save name", catNotEmpty:"Move the dishes out of this category first.", catDelConf:"Delete this category?", allesUit:"🚫 All unavailable", allesAan:"✅ All available", allesUitConf:"Make all dishes unavailable?", allesAanConf:"Make all dishes available again?",
       phTerm:"Search term", search:"🔍 Search", phUrl:"or paste your own photo URL", setUrl:"Set", ownPhoto:"📷 Your own photo",
       del:"🗑️ Delete this dish",
       pickHint:"Tap a photo, paste a URL, or upload your own. Then export below.",
@@ -937,7 +960,7 @@ const I18N = {
     footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
     searching:"กำลังค้นหา…", reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", wis:"ล้างที่เลือก",
-      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้", copy:"📋 คัดลอกเมนู", copySuffix:" (สำเนา)", catNew:"➕ หมวดหมู่ใหม่…", catAskNl:"ชื่อหมวดหมู่ใหม่:", catAskEmoji:"อีโมจิสำหรับหมวดหมู่ (ถ้ามี):", catAdded:"เพิ่มหมวดหมู่แล้ว ✓", allesUit:"🚫 ปิดทั้งหมด", allesAan:"✅ เปิดทั้งหมด", allesUitConf:"ปิดการสั่งซื้อเมนูทั้งหมด?", allesAanConf:"เปิดการสั่งซื้อเมนูทั้งหมดอีกครั้ง?",
+      count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้", copy:"📋 คัดลอกเมนู", copySuffix:" (สำเนา)", catNew:"➕ หมวดหมู่ใหม่…", catAskNl:"ชื่อหมวดหมู่ใหม่:", catAskEmoji:"อีโมจิสำหรับหมวดหมู่ (ถ้ามี):", catAdded:"เพิ่มหมวดหมู่แล้ว ✓", catMenuBtn:"🏷️ หมวดหมู่", catManageTitle:"🏷️ หมวดหมู่", catManageHint:"เปลี่ยนชื่อ ย้าย (↑/↓) หรือลบหมวดหมู่ ลบได้เฉพาะหมวดหมู่ที่สร้างเองและว่างเปล่า", catDishes:"เมนู", catRename:"ชื่อ", catDelete:"ลบ", catSaveName:"บันทึกชื่อ", catNotEmpty:"ย้ายเมนูออกจากหมวดนี้ก่อน", catDelConf:"ลบหมวดหมู่นี้?", allesUit:"🚫 ปิดทั้งหมด", allesAan:"✅ เปิดทั้งหมด", allesUitConf:"ปิดการสั่งซื้อเมนูทั้งหมด?", allesAanConf:"เปิดการสั่งซื้อเมนูทั้งหมดอีกครั้ง?",
       phTerm:"คำค้นหา", search:"🔍 ค้นหา", phUrl:"หรือวางลิงก์รูปภาพเอง", setUrl:"ตั้ง", ownPhoto:"📷 รูปจากเครื่องของคุณ",
       del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
@@ -958,6 +981,7 @@ const CATS = [
   {id:"soepen",        nm:{nl:"Soepen",en:"Soups",th:"ต้ม"},                  th:"ต้ม",        emoji:"🍲"},
   {id:"hoofd",         nm:{nl:"Hoofdgerechten",en:"Main dishes",th:"อาหารจานหลัก"}, th:"อาหารจานหลัก", emoji:"🍛"},
 ];
+const _CAT_DEFAULTS = JSON.parse(JSON.stringify(CATS));
 
 const MENU = [
   {id:"popia", cat:"voorgerechten", emoji:"🥟", price:5.00, spice:0, foto:"Thai fried spring rolls",
@@ -1662,6 +1686,9 @@ function applyBeheerLang(){
   updateAllToggleLabel();
   document.getElementById("bKlanten").textContent = B.bar.klanten;
   { const bi=document.getElementById("bInstellingen"); if(bi) bi.textContent = B.bar.instellingen; }
+  { const bcz=document.getElementById("bCats"); if(bcz) bcz.textContent = A.catMenuBtn; }
+  { const ct=document.getElementById("catTitel"); if(ct) ct.textContent = A.catManageTitle; }
+  { const co=document.getElementById("catOverlay"); if(co && co.classList.contains("open")) renderCats(); }
   updateBeheerCount();
   updateTrashCount();
   updateTikkieBtn();
@@ -1720,6 +1747,17 @@ async function initBeheer(){
   document.getElementById("healthOverlay").addEventListener("click", (e) => { if(e.target.id === "healthOverlay") closeHealth(); });
   document.getElementById("bKlanten").onclick = ()=>{ _kTab="klanten"; _markTab(); openKlanten(); };
   { const bi=document.getElementById("bInstellingen"); if(bi) bi.onclick = openInstellingen; }
+  { const bcz=document.getElementById("bCats"); if(bcz) bcz.onclick = openCats; }
+  { const cc=document.getElementById("catClose"); if(cc) cc.onclick = closeCats; }
+  { const co=document.getElementById("catOverlay"); if(co) co.addEventListener("click",(e)=>{ if(e.target.id==="catOverlay") closeCats(); }); }
+  { const cb=document.getElementById("catBody"); if(cb) cb.addEventListener("click",(e)=>{
+      const b = e.target.closest("button[data-catup],button[data-catdown],button[data-catedit],button[data-catdel],button[data-catsave]"); if(!b) return;
+      if(b.dataset.catup!==undefined) catMove(b.dataset.catup,-1);
+      else if(b.dataset.catdown!==undefined) catMove(b.dataset.catdown,1);
+      else if(b.dataset.catedit!==undefined){ _catEdit = (_catEdit===b.dataset.catedit)?null:b.dataset.catedit; renderCats(); }
+      else if(b.dataset.catdel!==undefined) catDelete(b.dataset.catdel);
+      else if(b.dataset.catsave!==undefined) catSaveName(b.dataset.catsave);
+    }); }
   document.getElementById("kClose").onclick = closeKlanten;
   document.getElementById("kReload").onclick = laadKlanten;
   document.getElementById("kZoek").addEventListener("input", renderKlanten);
@@ -1843,8 +1881,7 @@ function nieuweCategorie(){
   const emoji = (prompt(A.catAskEmoji, "🍽️") || "").trim() || "🍽️";
   const cat = { id:"c" + Date.now().toString(36), nm:{ nl, en:nl, th:nl }, th:nl, emoji, custom:true };
   CATS.push(cat); EXTRA_CATS.push(cat);
-  saveJSON("tta_cats", {items:EXTRA_CATS});
-  livePush("categorieen.json", ()=>EXTRA_CATS, `Categorie toegevoegd: ${nl}`);
+  persistCats(`Categorie toegevoegd: ${nl}`);
   showToast(A.catAdded, true);
   return cat.id;
 }
@@ -1853,6 +1890,55 @@ function onCatChange(e){
   const nid = nieuweCategorie();
   e.target.innerHTML = _catOptionsHTML();
   e.target.value = nid || (CATS[0] && CATS[0].id) || "";
+}
+let _catEdit = null;
+function openCats(){ document.getElementById("catOverlay").classList.add("open"); renderCats(); }
+function closeCats(){ document.getElementById("catOverlay").classList.remove("open"); }
+function _catDishCount(id){ return MENU.filter(m=>m.cat===id && !DELETED.has(m.id) && !PURGED.has(m.id)).length; }
+function renderCats(){
+  const A = T().adm;
+  const body = document.getElementById("catBody"); if(!body) return;
+  body.innerHTML = '<p class="kinstel-uit">'+esc(A.catManageHint)+'</p>' + CATS.map((c,i)=>{
+    const n = _catDishCount(c.id), isCustom = !!c.custom, editing = _catEdit===c.id;
+    return '<div class="catrow">'
+      + '<div class="catrow-top"><span class="catname">'+esc(c.emoji||"")+' '+esc(c.nm[LANG])+'</span><span class="catcount">'+n+' '+esc(A.catDishes)+'</span></div>'
+      + '<div class="catrow-acts">'
+      +   '<button data-catup="'+esc(c.id)+'"'+(i===0?" disabled":"")+'>↑</button>'
+      +   '<button data-catdown="'+esc(c.id)+'"'+(i===CATS.length-1?" disabled":"")+'>↓</button>'
+      +   '<button data-catedit="'+esc(c.id)+'">✏️ '+esc(A.catRename)+'</button>'
+      +   (isCustom ? '<button class="catdel" data-catdel="'+esc(c.id)+'"'+(n>0?' disabled title="'+esc(A.catNotEmpty)+'"':'')+'>🗑 '+esc(A.catDelete)+'</button>' : '')
+      + '</div>'
+      + (editing ? '<div class="cateditbox">'
+          + '<label class="reclabel">NL</label><input class="nameinput" data-cnm-nl="'+esc(c.id)+'" value="'+esc(c.nm.nl)+'">'
+          + '<label class="reclabel">EN</label><input class="nameinput" data-cnm-en="'+esc(c.id)+'" value="'+esc(c.nm.en)+'">'
+          + '<label class="reclabel">TH</label><input class="nameinput" data-cnm-th="'+esc(c.id)+'" value="'+esc(c.nm.th)+'">'
+          + '<label class="reclabel">Emoji</label><input class="nameinput" data-cnm-emoji="'+esc(c.id)+'" value="'+esc(c.emoji||"")+'">'
+          + '<button class="recsave" data-catsave="'+esc(c.id)+'">'+esc(A.catSaveName)+'</button>'
+        + '</div>' : '')
+      + '</div>';
+  }).join("");
+}
+function catMove(id, dir){
+  const i = CATS.findIndex(c=>c.id===id); if(i<0) return;
+  const j = i+dir; if(j<0 || j>=CATS.length) return;
+  const t = CATS[i]; CATS[i]=CATS[j]; CATS[j]=t;
+  persistCats("Volgorde categorieën aangepast"); buildMenu(); renderCats();
+}
+function catSaveName(id){
+  const c = CATS.find(x=>x.id===id); if(!c) return;
+  const v = k => { const el=document.querySelector('[data-cnm-'+k+'="'+id+'"]'); return el?el.value.trim():""; };
+  const nl=v("nl")||c.nm.nl, en=v("en")||v("nl")||c.nm.en, th=v("th")||v("nl")||c.nm.th, emoji=v("emoji")||c.emoji||"🍽️";
+  c.nm = { nl, en, th }; c.emoji = emoji; if(c.custom) c.th = th;
+  _catEdit = null; persistCats("Categorie hernoemd: "+nl); buildMenu(); renderCats();
+}
+function catDelete(id){
+  const A = T().adm;
+  const c = CATS.find(x=>x.id===id); if(!c || !c.custom) return;
+  if(_catDishCount(id)>0){ alert(A.catNotEmpty); return; }
+  if(!confirm(A.catDelConf)) return;
+  const i = CATS.findIndex(x=>x.id===id); if(i>=0) CATS.splice(i,1);
+  EXTRA_CATS = EXTRA_CATS.filter(x=>x.id!==id);
+  _catEdit = null; persistCats("Categorie verwijderd: "+(c.nm.nl||id)); buildMenu(); renderCats();
 }
 function openAddModal(){
   const A = T().adm;
@@ -3806,7 +3892,7 @@ async function publishAll(){
     await ghPut("nummers.json", NUMS, "Bestelnummers publiceren");
     await ghPut("verborgen.json", [...HIDDEN], "Verborgen publiceren");
     await ghPut("extra.json", EXTRA, "Extra gerechten publiceren");
-    await ghPut("categorieen.json", EXTRA_CATS, "Categorieën publiceren");
+    await ghPut("categorieen.json", buildCatsPayload(), "Categorieën publiceren");
     await ghPut("tikkie.json", {enabled:TIKKIE_ON}, "Tikkie-instelling publiceren");
     await ghPut("bestelpauze.json", ORDER_STATE, "Bestelpauze publiceren");
     showToast(T().adm.publishOk, true);
@@ -4002,11 +4088,49 @@ function normCat(c){
   return { id:c.id, nm:{ nl, en:((c.nm&&c.nm.en)||nl), th:((c.nm&&c.nm.th)||nl) }, th:(c.th || (c.nm&&c.nm.th) || nl), emoji:(c.emoji||"🍽️"), custom:true };
 }
 async function loadCats(){
-  let items = [];
-  try{ const r = await fetch("categorieen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const a = await r.json(); if(Array.isArray(a)) items = a; } }catch(e){}
-  if(BEHEER){ const local = loadJSON("tta_cats"); if(local && Array.isArray(local.items)) items = local.items; }
-  EXTRA_CATS = items.filter(c => c && c.id && c.nm);
+  let raw = null;
+  try{ const r = await fetch("categorieen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok) raw = await r.json(); }catch(e){}
+  if(BEHEER){ const local = loadJSON("tta_cats"); if(local && (Array.isArray(local) || local.items || local.custom || local.namen || local.volgorde)) raw = local; }
+  applyCatsConfig(raw);
+}
+function applyCatsConfig(raw){
+  let custom=[], namen={}, volgorde=[];
+  if(Array.isArray(raw)) custom = raw;
+  else if(raw && typeof raw==="object"){
+    if(Array.isArray(raw.items)) custom = raw.items;
+    if(Array.isArray(raw.custom)) custom = raw.custom;
+    if(raw.namen && typeof raw.namen==="object") namen = raw.namen;
+    if(Array.isArray(raw.volgorde)) volgorde = raw.volgorde;
+  }
+  EXTRA_CATS = (custom||[]).filter(c => c && c.id && c.nm);
   EXTRA_CATS.forEach(c => { if(!CATS.some(x => x.id===c.id)) CATS.push(normCat(c)); });
+  Object.keys(namen).forEach(id => {
+    const c = CATS.find(x=>x.id===id), o = namen[id]; if(!c || !o) return;
+    if(o.nm && typeof o.nm==="object") c.nm = { nl:(o.nm.nl||c.nm.nl), en:(o.nm.en||c.nm.en), th:(o.nm.th||c.nm.th) };
+    if(typeof o.emoji==="string" && o.emoji) c.emoji = o.emoji;
+    if(typeof o.th==="string" && o.th) c.th = o.th;
+  });
+  if(volgorde.length){
+    const map={}; CATS.forEach(c=>map[c.id]=c);
+    const ordered=[];
+    volgorde.forEach(id=>{ if(map[id]){ ordered.push(map[id]); delete map[id]; } });
+    CATS.forEach(c=>{ if(map[c.id]) ordered.push(c); });
+    CATS.length=0; ordered.forEach(c=>CATS.push(c));
+  }
+}
+function buildCatsPayload(){
+  const custom = CATS.filter(c=>c.custom).map(c=>({ id:c.id, nm:{nl:c.nm.nl,en:c.nm.en,th:c.nm.th}, th:c.th||"", emoji:c.emoji||"🍽️" }));
+  const namen = {};
+  (_CAT_DEFAULTS||[]).forEach(d=>{
+    const c = CATS.find(x=>x.id===d.id); if(!c) return;
+    const changed = c.nm.nl!==d.nm.nl || c.nm.en!==d.nm.en || c.nm.th!==d.nm.th || (c.emoji||"")!==(d.emoji||"") || (c.th||"")!==(d.th||"");
+    if(changed) namen[d.id] = { nm:{nl:c.nm.nl,en:c.nm.en,th:c.nm.th}, emoji:c.emoji||"", th:c.th||"" };
+  });
+  return { custom, namen, volgorde: CATS.map(c=>c.id) };
+}
+function persistCats(msg){
+  saveJSON("tta_cats", buildCatsPayload());
+  livePush("categorieen.json", buildCatsPayload, msg || "Categorieën bijgewerkt");
 }
 async function loadPrijzen(){
   try{ const r = await fetch("prijzen.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object") Object.assign(PRICES, p); } }catch(e){}

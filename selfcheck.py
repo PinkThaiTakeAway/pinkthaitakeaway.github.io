@@ -729,7 +729,8 @@ def dish_checks(html):
     cats = set(re.findall(r'\{id:"([^"]+)",\s*nm:\{', html))
     try:
         _cj = json.load(open("categorieen.json", encoding="utf-8"))
-        for c in (_cj if isinstance(_cj, list) else []):
+        _clist = _cj if isinstance(_cj, list) else (_cj.get("custom", []) if isinstance(_cj, dict) else [])
+        for c in _clist:
             if isinstance(c, dict) and c.get("id"):
                 cats.add(c["id"])
     except Exception:
