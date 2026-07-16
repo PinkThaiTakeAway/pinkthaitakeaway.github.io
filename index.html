@@ -508,6 +508,9 @@
   #adminGate .agerr{display:none;margin-top:12px;color:#ff8080;font-size:.9rem;line-height:1.4}
   #adminGate .agbezig{display:none;margin-top:12px;color:#FF6C00;font-size:.9rem}
   .acct-btn{background:transparent;border:1px solid var(--forest);color:var(--forest);border-radius:999px;padding:7px 13px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer;display:flex;align-items:center;white-space:nowrap}
+  .refresh-btn{display:none;background:transparent;border:1px solid var(--forest);color:var(--forest);border-radius:999px;width:36px;height:36px;font-size:1rem;line-height:1;cursor:pointer;align-items:center;justify-content:center;flex:0 0 auto;padding:0}
+  body.beheer .refresh-btn{display:flex}
+  .refresh-btn:hover{background:var(--forest);color:#fff}
   .acct-btn:hover{background:rgba(14,59,51,.06)}
   body.beheer .acct-btn{display:none!important}
   @media(max-width:520px){ .acct-btn #acctLabel{display:none} .acct-btn.named #acctLabel{display:inline-block;max-width:100px;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom} .acct-btn{padding:7px 10px} }
@@ -623,6 +626,7 @@
   <div class="bar">
     <div class="brand"><span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span><span class="mgmt-badge">Management</span><span class="mgmt-user" id="mgmtUser"></span></div>
     <div class="bar-right">
+      <button class="refresh-btn" id="refreshBtn" aria-label="Vernieuwen" title="Vernieuwen">🔄</button>
       <div class="langsw" id="langsw">
         <button data-lang="nl">NL</button><button data-lang="en">EN</button><button data-lang="th">ไทย</button>
       </div>
@@ -1754,6 +1758,7 @@ async function initBeheer(){
   document.getElementById("bKlanten").onclick = ()=>{ _kTab="klanten"; _markTab(); openKlanten(); };
   { const bi=document.getElementById("bInstellingen"); if(bi) bi.onclick = openInstellingen; }
   { const bcz=document.getElementById("bCats"); if(bcz) bcz.onclick = openCats; }
+  { const rb=document.getElementById("refreshBtn"); if(rb) rb.onclick = () => location.reload(); }
   { const cc=document.getElementById("catClose"); if(cc) cc.onclick = closeCats; }
   { const co=document.getElementById("catOverlay"); if(co) co.addEventListener("click",(e)=>{ if(e.target.id==="catOverlay") closeCats(); }); }
   { const cb=document.getElementById("catBody"); if(cb) cb.addEventListener("click",(e)=>{
