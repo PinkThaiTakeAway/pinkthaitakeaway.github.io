@@ -2525,14 +2525,14 @@ async function uploadChefFoto(file){
 }
 async function ghPut(path, obj, message){
   const token = ghToken(); if(!token) throw new Error("no-token");
-  let sha;
-  try{ const g = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?t=`+Date.now(), {headers:{Authorization:"token "+token}}); if(g.ok){ sha = (await g.json()).sha; } }catch(e){}
+  let sha, _oldObj = null;
+  try{ const g = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?t=`+Date.now(), {headers:{Authorization:"token "+token}}); if(g.ok){ const gj = await g.json(); sha = gj.sha; try{ _oldObj = JSON.parse(decodeURIComponent(escape(atob((gj.content||"").replace(/\s/g,""))))); }catch(e){ _oldObj = null; } } }catch(e){}
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));
   const body = {message, content, branch:"main"}; if(sha) body.sha = sha;
   const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
     method:"PUT", headers:{Authorization:"token "+token, "Content-Type":"application/json"}, body: JSON.stringify(body) });
   if(!r.ok) throw new Error("push-"+r.status);
-  try{ if(path!=="health-status.json") logAudit(path, message); }catch(e){}
+  try{ if(path!=="health-status.json") logAudit(path, auditWat(path, _oldObj, obj, message)); }catch(e){}
   return true;
 }
 let _toastT;
@@ -3634,6 +3634,50 @@ async function logAdminLogin(){
   if(typeof _kTab!=="undefined" && _kTab==="admins") renderAdmins();
 }
 let _adminGelogd = false, _adminPrompted = false;
+function _dishName(id){
+  try{ const m = (typeof MENU!=="undefined") && MENU.find(x=>String(x.id)===String(id)); if(m && m.name) return titleCase(m.name.nl||m.name.en||String(id)); }catch(e){}
+  return String(id);
+}
+function _fmtAuditVal(v, price){
+  if(v===null||v===undefined||v==="") return "\u2014";
+  if(typeof v==="boolean") return v?"aan":"uit";
+  if(typeof v==="object"){ const s=JSON.stringify(v); return s.length>40?s.slice(0,39)+"\u2026":s; }
+  if(price){ const num=parseFloat(String(v).replace(",",".")); if(!isNaN(num)) return "\u20AC"+num.toFixed(2).replace(".",","); }
+  let s=String(v); return s.length>50 ? s.slice(0,49)+"\u2026" : s;
+}
+function _toMap(v){
+  if(Array.isArray(v)){ const m={}; v.forEach((x,i)=>{ m[(x&&x.id!=null)?String(x.id):("#"+i)]=x; }); return m; }
+  return (v&&typeof v==="object") ? v : {};
+}
+function _auditChanges(path, oldO, newO){
+  oldO=_toMap(oldO); newO=_toMap(newO);
+  const price=/prijz/i.test(path||"");
+  const out=[]; const keys=Array.from(new Set(Object.keys(oldO).concat(Object.keys(newO))));
+  keys.forEach(k=>{
+    const a=oldO[k], b=newO[k];
+    if(JSON.stringify(a)===JSON.stringify(b)) return;
+    const label=_dishName(k);
+    if((typeof a==="boolean"||a===undefined) && (typeof b==="boolean"||b===undefined)){
+      const on=!!b, was=!!a;
+      if(on!==was){
+        if(/verborg/i.test(path)) out.push(label+": "+(on?"verborgen":"weer zichtbaar"));
+        else if(/verwijderd/i.test(path)) out.push(label+": "+(on?"verwijderd":"hersteld"));
+        else out.push(label+": "+(on?"aangezet":"uitgezet"));
+        return;
+      }
+    }
+    if(a && b && typeof a==="object" && typeof b==="object"){
+      const subs=_auditChanges("", a, b).map(s=>label+" "+s);
+      out.push(subs.length ? subs.join("; ") : (label+": gewijzigd")); return;
+    }
+    out.push(label+": "+_fmtAuditVal(a,price)+" \u2192 "+_fmtAuditVal(b,price));
+  });
+  return out;
+}
+function auditWat(path, oldO, newO, message){
+  try{ const parts=_auditChanges(path, oldO, newO); if(parts.length){ let s=parts.join("; "); return s.length>190 ? s.slice(0,187)+"\u2026" : s; } }catch(e){}
+  return String(message||"");
+}
 function logAudit(path, msg){
   try{
     if(!BEHEER || !klantKey()) return;
