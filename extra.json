@@ -6,16 +6,16 @@
     "price": 12,
     "spice": 1,
     "foto": "Khao man kai thai food",
-    "th": "",
+    "th": "ข้าวมันไก่",
     "name": {
       "nl": "Khao man kai",
       "en": "Khao man kai",
-      "th": "Khao man kai"
+      "th": "ข้าวมันไก่"
     },
     "desc": {
       "nl": "Gestoomde kip met kokos en chilisaus",
-      "en": "Gestoomde kip met kokos en chilisaus",
-      "th": "Gestoomde kip met kokos en chilisaus"
+      "en": "Steamed chicken with coconut and chilli sauce",
+      "th": "ไก่นึ่งกับกะทิ เสิร์ฟพร้อมน้ำจิ้มพริก"
     },
     "rh": "wok",
     "custom": true,
