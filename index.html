@@ -323,6 +323,15 @@
   .pickupbox b{color:var(--forest)}
   .afhdagen{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px}
   .afhdag{display:flex;align-items:center;gap:5px;font-size:.9rem;cursor:pointer}
+  .afhlegenda{font-size:.78rem;color:#888;margin:2px 0 4px}
+  .afhdagtijden{display:flex;flex-direction:column;gap:6px;margin:2px 0 8px}
+  .afhdagrij{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #f2efe9}
+  .afhdagrij .afhdag{min-width:104px}
+  .afhdagrij .afhtijd{display:flex;align-items:center;gap:4px}
+  .afhdagrij .afhtijd input,.afhdagrij .afhslot input{padding:4px 6px;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:.85rem}
+  .afhdagrij .afhslot{display:flex;align-items:center;gap:4px;font-size:.8rem;color:#888}
+  .afhdagrij .afhslot input{width:54px}
+  .afhdagrij.uit .afhtijd,.afhdagrij.uit .afhslot{opacity:.4}
   .fields{margin-top:14px;display:flex;flex-direction:column;gap:12px}
   .field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:5px}
   .field label .opt{color:var(--muted,#9aa0a6);font-weight:600;font-size:.85em}
@@ -853,7 +862,7 @@ const CONFIG = {
   telefoon: "06 48 55 58 42",
   chefFoto: "chef.jpg",                          // foto van Pink bovenaan (leeg/standaard = chef.jpg)
   seo: { keuken:"Thai", gebied:["Biest-Houtakker","Hilvarenbeek","Diessen","Tilburg"], prijsklasse:"\u20AC\u20AC", afbeelding:"https://pinkthaitakeaway.nl/pink-thai-og.png" },
-  afhaal: { dag:6, dagen:[6], van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
+  afhaal: { dag:6, dagen:[6], tijden:{}, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
   agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec",
   bestel: { dagen:[0,1,2,3,4,5,6], van:"00:00", tot:"23:59", cutoffDag:5, cutoffUur:23 }   // hele dag open; auto-pauze op cutoffDag (5=vr) om cutoffUur
 };
@@ -1165,10 +1174,14 @@ function pickupDays(){
   const a = (CONFIG.afhaal.dagen && CONFIG.afhaal.dagen.length) ? CONFIG.afhaal.dagen.slice() : [CONFIG.afhaal.dag];
   return [...new Set(a)].sort((x,y)=>x-y);
 }
+function dayWindow(dayNum){
+  const t = (CONFIG.afhaal.tijden||{})[dayNum];
+  return { van:(t&&t.van)||CONFIG.afhaal.van, tot:(t&&t.tot)||CONFIG.afhaal.tot, slotMin:(t&&t.slotMin)||CONFIG.afhaal.slotMin };
+}
 function nextDateForDay(dayNum){
   const d = new Date(), day = d.getDay();
   let add = (dayNum - day + 7) % 7;
-  if(day === dayNum){ const nowm=d.getHours()*60+d.getMinutes(); add = nowm < pad(CONFIG.afhaal.tot) ? 0 : 7; }
+  if(day === dayNum){ const nowm=d.getHours()*60+d.getMinutes(); add = nowm < pad(dayWindow(dayNum).tot) ? 0 : 7; }
   const s = new Date(d); s.setDate(d.getDate()+add); s.setHours(0,0,0,0); return s;
 }
 function upcomingPickupDates(){ return pickupDays().map(nextDateForDay).sort((a,b)=>a-b); }
@@ -1178,8 +1191,10 @@ function selectedPickupDate(){
   return list[0] || nextDateForDay(CONFIG.afhaal.dag);
 }
 function nextPickupDate(){ return selectedPickupDate(); }
-function pickupSlots(){
-  const out=[]; for(let m=pad(CONFIG.afhaal.van); m<=pad(CONFIG.afhaal.tot); m+=CONFIG.afhaal.slotMin)
+function pickupSlots(date){
+  const d = date || selectedPickupDate();
+  const w = dayWindow(d.getDay());
+  const out=[]; for(let m=pad(w.van); m<=pad(w.tot); m+=w.slotMin)
     out.push(`${String(Math.floor(m/60)).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`);
   return out;
 }
@@ -1484,9 +1499,10 @@ function renderSheet(){
   if(!form.pickTs || !_days.some(d=>d.getTime()===form.pickTs)) form.pickTs = (_days[0]||selectedPickupDate()).getTime();
   const _dayOpts = _days.map(d=>`<option value="${d.getTime()}" ${form.pickTs===d.getTime()?"selected":""}>${dateLabelFor(d)}</option>`).join("");
   const _anySlot = pickupSlots().some(slotAvail);
+  const _w = dayWindow(selectedPickupDate().getDay());
   if(!form.slot || !slotAvail(form.slot)){ const first = pickupSlots().find(slotAvail); if(first) form.slot = first; }
   const slots = pickupSlots().map(s => { const vol=!slotAvail(s); return `<option value="${s}" ${form.slot===s?"selected":""} ${vol?"disabled":""}>${s}${vol?" — "+T().slotVol:""}</option>`; }).join("");
-  html += `<div class="pickupbox">${T().pickupNotice(pickupDateLabel()+" · "+CONFIG.afhaal.van+"–"+CONFIG.afhaal.tot)}</div>
+  html += `<div class="pickupbox">${T().pickupNotice(pickupDateLabel()+" · "+_w.van+"–"+_w.tot)}</div>
     <div class="fields">
       <input type="text" id="fHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
       <div class="field"><label for="fName">${T().labelName} <span class="req">*</span></label><input id="fName" type="text" placeholder="${T().phName}" autocomplete="name" value="${esc(form.naam)}"></div>
@@ -1602,7 +1618,12 @@ function applyLang(){
   document.getElementById("heroTitle").innerHTML = T().heroTitle;
   { const _hc=document.getElementById("heroChef"); if(_hc) _hc.textContent = T().heroChef || ""; }
   document.getElementById("heroP").textContent = T().heroP;
-  document.getElementById("chipPickup").textContent = T().chipPickup(pickupDays().map(d=>T().dagen[d]).join(" / "), CONFIG.afhaal.van, CONFIG.afhaal.tot);
+  const _pd = pickupDays();
+  const _w0 = dayWindow(_pd[0]);
+  const _uniform = _pd.every(d => { const w=dayWindow(d); return w.van===_w0.van && w.tot===_w0.tot; });
+  document.getElementById("chipPickup").textContent = _uniform
+    ? T().chipPickup(_pd.map(d=>T().dagen[d]).join(" / "), _w0.van, _w0.tot)
+    : _pd.map(d=>`${T().dagen[d]} ${dayWindow(d).van}–${dayWindow(d).tot}`).join(" · ");
   const _cutDag = T().dagen[CONFIG.bestel.cutoffDag];
   const _cutTijd = String(CONFIG.bestel.cutoffUur).padStart(2,"0") + ":00";
   document.getElementById("chipOrder").textContent = T().chipOrder(_cutDag, _cutTijd);
@@ -1610,7 +1631,9 @@ function applyLang(){
   document.getElementById("cartLabel").textContent = T().cart;
   document.getElementById("fbGo").textContent = T().viewOrder;
   document.getElementById("footPickupHead").textContent = T().footPickupHead;
-  document.getElementById("footPickup").textContent = `${pickupDays().map(d=>T().dagen[d]).join(" · ")} · ${CONFIG.afhaal.van}–${CONFIG.afhaal.tot}`;
+  document.getElementById("footPickup").textContent = _uniform
+    ? `${_pd.map(d=>T().dagen[d]).join(" · ")} · ${_w0.van}–${_w0.tot}`
+    : _pd.map(d=>`${T().dagen[d]} ${dayWindow(d).van}–${dayWindow(d).tot}`).join(" · ");
   document.getElementById("footOrder").textContent = T().footOrder(_cutDag, _cutTijd);
   document.getElementById("footFindHead").textContent = T().footFindHead;
   document.getElementById("footTagline").textContent = T().footTagline;
@@ -2339,13 +2362,8 @@ function renderInstellingen(){
     +   '<h4 class="kinstel-h">\uD83D\uDD52 '+esc(K.afhTitel)+'</h4>'
     +   '<p class="kinstel-uit">'+esc(K.afhUit2)+'</p>'
     +   '<label class="kinstel-l">'+esc(K.afhDagL)+'</label>'
-    +   '<div id="afhDagen" class="afhdagen">'+_dagChecks()+'</div>'
-    +   '<label class="kinstel-l">'+esc(K.afhVanL)+'</label>'
-    +   '<input id="afhVan" type="time" value="'+esc(CONFIG.afhaal.van)+'">'
-    +   '<label class="kinstel-l">'+esc(K.afhTotL)+'</label>'
-    +   '<input id="afhTot" type="time" value="'+esc(CONFIG.afhaal.tot)+'">'
-    +   '<label class="kinstel-l">'+esc(K.afhSlotL)+'</label>'
-    +   '<input id="afhSlot" type="number" min="5" step="5" value="'+esc(CONFIG.afhaal.slotMin)+'">'
+    +   '<p class="afhlegenda">'+esc(K.afhVanL)+' – '+esc(K.afhTotL)+' · '+esc(K.afhSlotL)+'</p>'
+    +   '<div id="afhDagen" class="afhdagtijden">'+_afhDagRows()+'</div>'
     +   '<label class="kinstel-l">'+esc(K.afhCutDagL)+'</label>'
     +   '<select id="afhCutDag">'+_dagOpties(CONFIG.bestel.cutoffDag)+'</select>'
     +   '<label class="kinstel-l">'+esc(K.afhCutUurL)+'</label>'
@@ -2400,6 +2418,7 @@ function renderInstellingen(){
   const ab=document.getElementById("adrSaveBtn"); if(ab) ab.onclick = adresOpslaan;
   const seb=document.getElementById("seoSaveBtn"); if(seb) seb.onclick = seoOpslaan;
   const afb=document.getElementById("afhSaveBtn"); if(afb) afb.onclick = afhaalOpslaan;
+  document.querySelectorAll('#afhDagen input[data-afh-on]').forEach(cb => cb.onchange = () => { const r=cb.closest('.afhdagrij'); if(r) r.classList.toggle('uit', !cb.checked); });
   const fsb=document.getElementById("fotoSaveBtn"); if(fsb) fsb.onclick = fotoOpslaan;
   { const ff=document.getElementById("fotoFile"); if(ff) ff.onchange = (e)=>{ if(e.target.files && e.target.files[0]) uploadChefFoto(e.target.files[0]); }; }
   { const fi=document.getElementById("fotoIn"), fp=document.getElementById("fotoPreview"); if(fi && fp) fi.addEventListener("input", ()=>{ fp.src = fi.value.trim() || "chef.jpg"; }); }
@@ -2462,11 +2481,21 @@ async function capOpslaan(){
   }catch(e){ showToast(K.capFout, false); }
 }
 function _dagOpties(sel){ return (T().dagen||[]).map((d,i)=>'<option value="'+i+'"'+(i===sel?' selected':'')+'>'+esc(d)+'</option>').join(''); }
-function _dagChecks(){ const sel=pickupDays(); return (T().dagen||[]).map((d,i)=>'<label class="afhdag"><input type="checkbox" value="'+i+'"'+(sel.includes(i)?' checked':'')+'> '+esc(d)+'</label>').join(''); }
+function _afhDagRows(){
+  const sel=pickupDays();
+  return (T().dagen||[]).map((d,i)=>{
+    const w=dayWindow(i), on=sel.includes(i);
+    return '<div class="afhdagrij'+(on?'':' uit')+'">'
+      + '<label class="afhdag"><input type="checkbox" data-afh-on="'+i+'"'+(on?' checked':'')+'> '+esc(d)+'</label>'
+      + '<span class="afhtijd"><input type="time" data-afh-van="'+i+'" value="'+esc(w.van)+'"> – <input type="time" data-afh-tot="'+i+'" value="'+esc(w.tot)+'"></span>'
+      + '<span class="afhslot"><input type="number" min="5" step="5" data-afh-slot="'+i+'" value="'+esc(w.slotMin)+'"> min</span>'
+      + '</div>';
+  }).join('');
+}
 function bedrijfData(){
   return {
     naam: CONFIG.naam, adres: CONFIG.adres, telefoon: CONFIG.telefoon, chefFoto: CONFIG.chefFoto,
-    afhaal: { dag:CONFIG.afhaal.dag, dagen:CONFIG.afhaal.dagen, van:CONFIG.afhaal.van, tot:CONFIG.afhaal.tot, slotMin:CONFIG.afhaal.slotMin },
+    afhaal: { dag:CONFIG.afhaal.dag, dagen:CONFIG.afhaal.dagen, tijden:CONFIG.afhaal.tijden, van:CONFIG.afhaal.van, tot:CONFIG.afhaal.tot, slotMin:CONFIG.afhaal.slotMin },
     bestel: { cutoffDag:CONFIG.bestel.cutoffDag, cutoffUur:CONFIG.bestel.cutoffUur },
     seo: { keuken:CONFIG.seo.keuken, gebied:CONFIG.seo.gebied, prijsklasse:CONFIG.seo.prijsklasse, afbeelding:CONFIG.seo.afbeelding }
   };
@@ -2510,17 +2539,23 @@ async function seoOpslaan(){
 async function afhaalOpslaan(){
   const A = T().adm, K = BT().kl;
   if(!ghToken()){ showToast(A.tokenNeed, false); return; }
-  const dagen=[...document.querySelectorAll("#afhDagen input:checked")].map(c=>parseInt(c.value,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
-  if(!dagen.length){ showToast(BT().kl.afhFout, false); return; }
-  const dag=dagen[0];
-  const van=(document.getElementById("afhVan").value||"").trim();
-  const tot=(document.getElementById("afhTot").value||"").trim();
-  const slot=parseInt(document.getElementById("afhSlot").value,10)||15;
+  const root=document.getElementById("afhDagen");
+  const dagen=[...root.querySelectorAll('input[data-afh-on]:checked')].map(c=>parseInt(c.getAttribute("data-afh-on"),10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+  if(!dagen.length){ showToast(K.afhFout, false); return; }
+  const tijden={};
+  for(const day of dagen){
+    const van=(root.querySelector('[data-afh-van="'+day+'"]').value||"").trim();
+    const tot=(root.querySelector('[data-afh-tot="'+day+'"]').value||"").trim();
+    const slot=parseInt(root.querySelector('[data-afh-slot="'+day+'"]').value,10)||15;
+    if(!van||!tot){ showToast(K.afhFout, false); return; }
+    tijden[day]={van,tot,slotMin:slot};
+  }
   const cutDag=parseInt(document.getElementById("afhCutDag").value,10);
   const cutUur=Math.max(0,Math.min(23,parseInt(document.getElementById("afhCutUur").value,10)||0));
   showToast(A.saving, null);
   try{
-    CONFIG.afhaal.dag=dag; CONFIG.afhaal.dagen=dagen; CONFIG.afhaal.van=van; CONFIG.afhaal.tot=tot; CONFIG.afhaal.slotMin=slot;
+    CONFIG.afhaal.dagen=dagen; CONFIG.afhaal.tijden=tijden; CONFIG.afhaal.dag=dagen[0];
+    const f=tijden[dagen[0]]; CONFIG.afhaal.van=f.van; CONFIG.afhaal.tot=f.tot; CONFIG.afhaal.slotMin=f.slotMin;
     CONFIG.bestel.cutoffDag=cutDag; CONFIG.bestel.cutoffUur=cutUur;
     await ghPut("bedrijf.json", bedrijfData(), "Afhaal-instellingen bijwerken");
     applyLang(); applyConfig(); refreshOrderingUI();
@@ -4237,7 +4272,7 @@ async function loadPauze(){
 async function loadBedrijf(){
   try{ const r = await fetch("bedrijf.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object"){
     if(p.naam) CONFIG.naam = p.naam; if(p.adres) CONFIG.adres = p.adres; if(p.telefoon) CONFIG.telefoon = p.telefoon; if(p.chefFoto) CONFIG.chefFoto = p.chefFoto;
-    if(p.afhaal && typeof p.afhaal==="object"){ const a=p.afhaal; if(typeof a.dag==="number")CONFIG.afhaal.dag=a.dag; if(a.van)CONFIG.afhaal.van=a.van; if(a.tot)CONFIG.afhaal.tot=a.tot; if(typeof a.slotMin==="number"&&a.slotMin>0)CONFIG.afhaal.slotMin=a.slotMin; CONFIG.afhaal.dagen = (Array.isArray(a.dagen)&&a.dagen.length) ? a.dagen.filter(n=>typeof n==="number") : [CONFIG.afhaal.dag]; }
+    if(p.afhaal && typeof p.afhaal==="object"){ const a=p.afhaal; if(typeof a.dag==="number")CONFIG.afhaal.dag=a.dag; if(a.van)CONFIG.afhaal.van=a.van; if(a.tot)CONFIG.afhaal.tot=a.tot; if(typeof a.slotMin==="number"&&a.slotMin>0)CONFIG.afhaal.slotMin=a.slotMin; CONFIG.afhaal.dagen = (Array.isArray(a.dagen)&&a.dagen.length) ? a.dagen.filter(n=>typeof n==="number") : [CONFIG.afhaal.dag]; if(a.tijden && typeof a.tijden==="object") CONFIG.afhaal.tijden = a.tijden; }
     if(p.bestel && typeof p.bestel==="object"){ const b=p.bestel; if(typeof b.cutoffDag==="number")CONFIG.bestel.cutoffDag=b.cutoffDag; if(typeof b.cutoffUur==="number")CONFIG.bestel.cutoffUur=b.cutoffUur; }
     if(p.seo && typeof p.seo==="object"){ const so=p.seo; if(so.keuken)CONFIG.seo.keuken=String(so.keuken); if(Array.isArray(so.gebied))CONFIG.seo.gebied=so.gebied.filter(x=>typeof x==="string"&&x.trim()).map(x=>x.trim()); if(so.prijsklasse)CONFIG.seo.prijsklasse=String(so.prijsklasse); if(typeof so.afbeelding==="string")CONFIG.seo.afbeelding=so.afbeelding.trim(); }
   } } }catch(e){}
