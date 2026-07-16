@@ -527,8 +527,7 @@
   #adminGate .agerr{display:none;margin-top:12px;color:#ff8080;font-size:.9rem;line-height:1.4}
   #adminGate .agbezig{display:none;margin-top:12px;color:#FF6C00;font-size:.9rem}
   .acct-btn{background:transparent;border:1px solid var(--forest);color:var(--forest);border-radius:999px;padding:7px 13px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer;display:flex;align-items:center;white-space:nowrap}
-  .refresh-btn{display:none;background:transparent;border:none;color:var(--forest);width:34px;height:34px;font-size:1.2rem;line-height:1;cursor:pointer;align-items:center;justify-content:center;flex:0 0 auto;padding:0}
-  body.beheer .refresh-btn{display:flex}
+  .refresh-btn{display:flex;background:transparent;border:none;color:var(--forest);width:34px;height:34px;font-size:1.2rem;line-height:1;cursor:pointer;align-items:center;justify-content:center;flex:0 0 auto;padding:0}
   .refresh-btn:hover{opacity:.6}
   .acct-btn:hover{background:rgba(14,59,51,.06)}
   body.beheer .acct-btn{display:none!important}
@@ -645,7 +644,7 @@
   <div class="bar">
     <div class="brand"><span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span><span class="mgmt-badge">Management</span><span class="mgmt-user" id="mgmtUser"></span></div>
     <div class="bar-right">
-      <button class="refresh-btn" id="refreshBtn" aria-label="Vernieuwen" title="Vernieuwen">🔄</button>
+      <button class="refresh-btn" id="refreshBtn" aria-label="Vernieuwen" title="Vernieuwen" onclick="location.reload()">🔄</button>
       <div class="langsw" id="langsw">
         <button data-lang="nl">NL</button><button data-lang="en">EN</button><button data-lang="th">ไทย</button>
       </div>
@@ -1791,7 +1790,6 @@ async function initBeheer(){
   document.getElementById("healthOverlay").addEventListener("click", (e) => { if(e.target.id === "healthOverlay") closeHealth(); });
   document.getElementById("bKlanten").onclick = ()=>{ _kTab="klanten"; _markTab(); openKlanten(); };
   { const bi=document.getElementById("bInstellingen"); if(bi) bi.onclick = openInstellingen; }
-  { const rb=document.getElementById("refreshBtn"); if(rb) rb.onclick = () => location.reload(); }
   window.addEventListener("resize", () => { clearTimeout(_fitT); _fitT = setTimeout(fitDishNames, 150); });
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitDishNames);
   document.getElementById("kClose").onclick = closeKlanten;
