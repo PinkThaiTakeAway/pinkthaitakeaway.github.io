@@ -545,7 +545,7 @@
   .ktab{flex:1;padding:9px 6px;border:1px solid #ddd;background:#fff;border-radius:9px;font-family:inherit;font-weight:700;font-size:.85rem;color:#555;cursor:pointer}
   .ktab.active{background:var(--forest);color:#fff;border-color:var(--forest)}
   .audittbl{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-  .auditrow{display:grid;grid-template-columns:138px 96px 1fr;gap:8px;padding:8px 10px;background:#fff;border:1px solid #eee;border-radius:9px;font-size:.82rem;align-items:baseline}
+  .auditrow{display:grid;grid-template-columns:152px 104px 1fr;gap:8px;padding:8px 10px;background:#fff;border:1px solid #eee;border-radius:9px;font-size:.82rem;align-items:baseline}
   .auditwhen{color:#888;font-variant-numeric:tabular-nums;white-space:nowrap}
   .auditwho{font-weight:700;color:var(--forest);overflow:hidden;text-overflow:ellipsis}
   .auditwhat{color:#333;word-break:break-word}
@@ -3242,6 +3242,16 @@ async function renderAudit(){
   _auditData = r;
   if(_kTab === "audit") tekenAudit(r);
 }
+function fmtAuditTime(t){
+  t = String(t==null?"":t).trim();
+  if(/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(t)) return t.replace("T"," ");   // al netjes
+  const d = new Date(t);
+  if(!isNaN(d.getTime())){
+    const p = n => String(n).padStart(2,"0");
+    return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds());
+  }
+  return t;
+}
 function tekenAudit(r){
   const K = BT().kl, body = document.getElementById("kBody");
   const rows = (r && r.audit) ? r.audit : [];
@@ -3250,7 +3260,7 @@ function tekenAudit(r){
   html += '<div class="audittbl">';
   rows.forEach(a=>{
     const doel = a.doel ? ' <span class="auditdoel">'+esc(a.doel)+'</span>' : '';
-    html += '<div class="auditrow"><div class="auditwhen">'+esc(a.tijd||"")+'</div>'
+    html += '<div class="auditrow"><div class="auditwhen">'+esc(fmtAuditTime(a.tijd))+'</div>'
       + '<div class="auditwho">'+esc(a.naam||K.adOnbekend)+'</div>'
       + '<div class="auditwhat">'+esc(a.wat||"")+doel+'</div></div>';
   });
