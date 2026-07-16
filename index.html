@@ -4210,7 +4210,7 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer().then(hideLoader, hideLoader); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { resolvePhotos(); hideLoader(); }
+  if(BEHEER){ initBeheer().then(hideLoader, hideLoader); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { await resolvePhotos(); hideLoader(); }
   if(acctToken()) prefetchAccount(); else autoLoginByVid();
 })();
 </script>
