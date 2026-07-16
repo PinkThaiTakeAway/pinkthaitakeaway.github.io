@@ -1721,8 +1721,10 @@ function applyBeheerLang(){
 async function initBeheer(){
   document.body.classList.add("beheer");
   const _cb = document.getElementById("cartBtn"); if(_cb) _cb.style.display = "none";
-  try{ const r = await fetch("fotos.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok) chosen = {...await r.json()}; }catch(e){}
-  Object.assign(chosen, loadJSON("tta_fotos"));
+  let _fotosOk = false;
+  try{ const r = await fetch("fotos.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ chosen = {...await r.json()}; _fotosOk = true; } }catch(e){}
+  if(!_fotosOk) Object.assign(chosen, loadJSON("tta_fotos"));   // alleen terugval als de server onbereikbaar is
+  saveJSON("tta_fotos", chosen);                                // lokale cache gelijktrekken met server
   const okHid = await loadHidden();                 // verborgen.json (server) is leidend
   if(!okHid){ const lh = loadJSON("tta_hidden"); if(lh && Array.isArray(lh.ids)){ HIDDEN.clear(); lh.ids.forEach(id => HIDDEN.add(id)); } }  // alleen terugval als ophalen faalt
   saveJSON("tta_hidden", {ids:[...HIDDEN]});         // lokale cache gelijktrekken met server
