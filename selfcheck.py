@@ -706,13 +706,17 @@ def _menu_dishes(html):
                 mc = re.search(r'\bcat:"([^"]*)"', blok)
                 mf = re.search(r'\bfoto:"([^"]*)"', blok)
                 nm = re.search(r'\bname:\{([^}]*)\}', blok); nb = nm.group(1) if nm else ""
-                def _nl(l):
-                    m = re.search(l + r':"([^"]*)"', nb); return m.group(1) if m else ""
+                dm = re.search(r'\bdesc:\{([^}]*)\}', blok); db = dm.group(1) if dm else ""
+                def _nl(l, _b=nb):
+                    m = re.search(l + r':"([^"]*)"', _b); return m.group(1) if m else ""
+                def _dl(l, _b=db):
+                    m = re.search(l + r':"([^"]*)"', _b); return m.group(1) if m else ""
                 out.append({"id": mid.group(1), "cat": mc.group(1) if mc else None,
                             "price": float(mp.group(1)) if mp else None,
                             "spice": int(ms.group(1)) if ms else None,
                             "foto": mf.group(1) if mf else "",
-                            "name": {l: _nl(l) for l in ("nl", "en", "th")}})
+                            "name": {l: _nl(l) for l in ("nl", "en", "th")},
+                            "desc": {l: _dl(l) for l in ("nl", "en", "th")}})
             i = e + 1
         else:
             i += 1
@@ -782,6 +786,35 @@ def dish_checks(html):
         items.append({"naam": "gerecht(en) zonder EN- of TH-naam: " + ", ".join(missent[:8]), "status": "warn"})
     else:
         items.append({"naam": "alle gerechten hebben een naam in nl/en/th", "status": "ok"})
+
+    # Omschrijvingen compleet én vertaald in nl/en/th (incl. eigen gerechten uit extra.json, met overrides)
+    oms = _json_load("omschrijvingen.json", {})
+    extra = _json_load("extra.json", [])
+    if isinstance(extra, dict): extra = extra.get("items", [])
+    weg = set(_json_load("verwijderd.json", [])) | set(_json_load("verwijderdweg.json", []))
+    desc_src = {}
+    for d in dishes:
+        desc_src[d["id"]] = d.get("desc", {}) or {}
+    for it in (extra or []):
+        if isinstance(it, dict) and it.get("id"):
+            desc_src[it["id"]] = it.get("desc", {}) or {}
+    def eff_desc(did, l):
+        o = oms.get(did, {}); o = o if isinstance(o, dict) else {}
+        return (o.get(l) or desc_src.get(did, {}).get(l) or "").strip()
+    def _has_thai(s):
+        return bool(re.search(r'[\u0E00-\u0E7F]', s or ""))
+    dids = [x for x in desc_src if x not in weg]
+    geen_nl_d = [x for x in dids if not eff_desc(x, "nl")]
+    mis_d = [x for x in dids if eff_desc(x, "nl") and (
+                not eff_desc(x, "en") or eff_desc(x, "en") == eff_desc(x, "nl")
+                or not eff_desc(x, "th") or eff_desc(x, "th") == eff_desc(x, "nl")
+                or not _has_thai(eff_desc(x, "th")))]
+    if geen_nl_d:
+        items.append({"naam": "gerecht(en) zonder Nederlandse omschrijving: " + ", ".join(geen_nl_d[:8]), "status": "warn"})
+    elif mis_d:
+        items.append({"naam": "gerecht(en) zonder (vertaalde) EN/TH-omschrijving: " + ", ".join(mis_d[:8]), "status": "warn"})
+    else:
+        items.append({"naam": "alle gerechten hebben een omschrijving in nl/en/th", "status": "ok"})
     return items
 
 def seo_checks(html):
