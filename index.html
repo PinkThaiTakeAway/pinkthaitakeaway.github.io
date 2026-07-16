@@ -3279,7 +3279,7 @@ function tekenAudit(r){
     const g = groups[key], naam = g.naam || g.adminid || K.adOnbekend, cnt = g.items.length;
     const woord = (cnt===1 ? (K.auMut1||K.auMut) : K.auMut);
     const laatste = fmtAuditTime(g.items[0].tijd);
-    html += '<details class="auditgrp"'+(idx===0?' open':'')+'><summary>'
+    html += '<details class="auditgrp"><summary>'
       + '<span class="auditwho">'+esc(naam)+'</span>'
       + '<span class="auditcount">'+cnt+' '+esc(woord)+'</span>'
       + '<span class="auditlast">'+esc(K.auLaatste)+' '+esc(laatste)+'</span></summary>';
