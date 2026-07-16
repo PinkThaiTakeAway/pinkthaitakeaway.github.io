@@ -529,6 +529,11 @@
   .acct-btn{background:transparent;border:1px solid var(--forest);color:var(--forest);border-radius:999px;padding:7px 13px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer;display:flex;align-items:center;white-space:nowrap}
   .refresh-btn{display:flex;background:transparent;border:none;color:var(--forest);width:34px;height:34px;font-size:1.2rem;line-height:1;cursor:pointer;align-items:center;justify-content:center;flex:0 0 auto;padding:0}
   .refresh-btn:hover{opacity:.6}
+  #appLoader{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#F0E7D2;transition:opacity .35s ease}
+  #appLoader.done{opacity:0;pointer-events:none}
+  #appLoader .ldspin{width:40px;height:40px;border-radius:50%;border:4px solid rgba(14,59,51,.15);border-top-color:var(--forest,#15564a);animation:ldspin .8s linear infinite}
+  #appLoader .ldname{font-weight:800;color:var(--forest,#15564a);letter-spacing:.3px;opacity:.85}
+  @keyframes ldspin{to{transform:rotate(360deg)}}
   .acct-btn:hover{background:rgba(14,59,51,.06)}
   body.beheer .acct-btn{display:none!important}
   @media(max-width:520px){ .acct-btn #acctLabel{display:none} .acct-btn.named #acctLabel{display:inline-block;max-width:100px;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom} .acct-btn{padding:7px 10px} }
@@ -625,6 +630,7 @@
 </script>
 </head>
 <body>
+<div id="appLoader"><div class="ldspin"></div><div class="ldname">Pink Thai TakeAway</div></div>
 <script>try{if(new URLSearchParams(location.search).has("beheer"))document.body.classList.add("beheer");}catch(e){}</script>
 <div id="adminGate">
   <div class="agcard">
@@ -4153,25 +4159,20 @@ function orderStatus(){
 function orderClosedMsg(st){
   return T().orderPausedMsg;
 }
+function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.classList.contains("done")){ l.classList.add("done"); setTimeout(()=>{ if(l&&l.parentNode) l.parentNode.removeChild(l); },400); } }
 (async function init(){
   const savedLang = loadJSON("tta_lang_v").l;
   if(savedLang && I18N[savedLang]) LANG = savedLang;
+  setTimeout(hideLoader, 8000);   // veiligheidsval: overlay nooit blijven hangen
   document.getElementById("heroCta").onclick = () => goTo("voorgerechten");
-  await loadExtra();
-  await loadCats();
-  await loadPrijzen();
-  await loadNamen();
-  await loadOmschrijvingen();
-  await loadPittigheid();
-  await loadVerwijderd();
-  await loadPurged();
-  await loadServetips();
-  await loadNummers();
-  await loadTikkie();
-  await loadPauze();
-  await loadBedrijf();
-  if(BEHEER) await loadRecepten();
-  if(!BEHEER) await loadHidden();
+  // Totale prefetch: alle serverdata parallel ophalen vóór de eerste render
+  await Promise.all([
+    loadExtra(), loadCats(), loadPrijzen(), loadNamen(), loadOmschrijvingen(),
+    loadPittigheid(), loadVerwijderd(), loadPurged(), loadServetips(),
+    loadNummers(), loadTikkie(), loadPauze(), loadBedrijf(),
+    (BEHEER ? loadRecepten() : Promise.resolve()),
+    (BEHEER ? Promise.resolve() : loadHidden())
+  ].map(p => Promise.resolve(p).catch(()=>{})));
   Object.entries(store.load()).forEach(([id,q]) => { if(byId(baseId(id)) && q>0 && !HIDDEN.has(baseId(id))) cart[id]=q; });
   applyLang();
   buildMenu();
@@ -4215,7 +4216,7 @@ function orderClosedMsg(st){
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer(); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); ensureAdminEnLog(); startKlantAutoRefresh(); } else resolvePhotos();
+  if(BEHEER){ initBeheer().then(hideLoader, hideLoader); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { resolvePhotos(); hideLoader(); }
   if(acctToken()) prefetchAccount(); else autoLoginByVid();
 })();
 </script>
