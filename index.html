@@ -3230,6 +3230,10 @@ function fetchAudit(){
   _auditFetch.finally(()=>{ _auditFetch = null; });
   return _auditFetch;
 }
+async function prefetchAudit(){
+  if(!klantKey()) return;
+  try{ const r = await fetchAudit(); if(r && r.ok){ _auditData = r; if(_kTab === "audit") tekenAudit(r); } }catch(e){}
+}
 async function renderAudit(){
   const K = BT().kl, body = document.getElementById("kBody");
   if(_auditData) tekenAudit(_auditData); else body.innerHTML = '<p class="hloading">'+esc(K.auLaden)+'</p>';
@@ -4268,7 +4272,7 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer().then(hideLoader, hideLoader); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { await resolvePhotos(); hideLoader(); }
+  if(BEHEER){ initBeheer().then(hideLoader, hideLoader); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); prefetchAudit(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { await resolvePhotos(); hideLoader(); }
   if(acctToken()) prefetchAccount(); else autoLoginByVid();
 })();
 </script>
