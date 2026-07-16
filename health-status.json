@@ -1,19 +1,15 @@
 {
-  "opgeslagen": "2026-07-16T09:15:05Z",
+  "opgeslagen": "2026-07-16T09:17:43Z",
   "scriptVersie": 30,
   "verwachteVersie": 30,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-16T09:15:03.347264+00:00",
+    "updated": "2026-07-16T09:17:40.746280+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
         "items": [
-          {
-            "naam": "1 verweesde gegeven(s) voor niet-bestaande gerechten in de databestanden",
-            "status": "warn"
-          },
           {
             "naam": "index.html aanwezig met verwachte inhoud",
             "status": "ok"
@@ -36,6 +32,10 @@
           },
           {
             "naam": "geen definitief verwijderde gerechten meer in de broncode",
+            "status": "ok"
+          },
+          {
+            "naam": "geen verweesde gegevens in de databestanden",
             "status": "ok"
           },
           {
