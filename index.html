@@ -856,7 +856,7 @@ const CONFIG = {
   seo: { keuken:"Thai", gebied:["Biest-Houtakker","Hilvarenbeek","Diessen","Tilburg"], prijsklasse:"\u20AC\u20AC", afbeelding:"https://pinkthaitakeaway.nl/pink-thai-og.png" },
   afhaal: { dag:6, dagen:[6], tijden:{}, van:"17:00", tot:"19:00", slotMin:15 },  // dag: 0=zo..6=za
   agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec",
-  bestel: { leadUren:3 }   // bestellen altijd open; sluit leadUren uur vóór de eindtijd (tot) van elke afhaaldatum
+  bestel: { leadUren:3 }   // bestellen altijd open; sluit leadUren uur vóór de begintijd (van) van elke afhaaldatum
 };
 
 /* ===================================================================
@@ -1169,7 +1169,7 @@ function dayWindow(dayNum){
 }
 function orderDeadlineFor(date){
   const w = dayWindow(date.getDay());
-  const d = new Date(date); d.setHours(0,0,0,0); d.setMinutes(pad(w.tot));
+  const d = new Date(date); d.setHours(0,0,0,0); d.setMinutes(pad(w.van));
   const lead = (typeof CONFIG.bestel.leadUren==="number") ? CONFIG.bestel.leadUren : 3;
   return d.getTime() - lead*3600000;
 }
