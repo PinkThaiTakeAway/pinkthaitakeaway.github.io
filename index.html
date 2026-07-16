@@ -800,7 +800,6 @@
       <div><label id="amLNameTh">Naam (TH)</label><input id="fNaamTh" type="text"></div>
     </div>
     <label id="amLEmoji">Emoji</label><input id="fEmoji" type="text" maxlength="4" placeholder="🍽️">
-    <button type="button" class="translate-btn" id="fTranslate">🌐 Vertaal Thais → NL/EN</button>
     <div class="actions"><button class="cancel" id="fCancel">Annuleren</button><button class="save" id="fSave">Toevoegen</button></div>
   </div>
 </div>
@@ -893,7 +892,7 @@ const I18N = {
       del:"🗑️ Dit gerecht verwijderen",
       pickHint:"Klik een foto, plak een URL, of upload je eigen foto. Exporteer daarna onderaan.",
       addTitle:"Gerecht toevoegen", addHint:"Velden met * zijn verplicht. Engels/Thais is optioneel — laat je het leeg, dan wordt de Nederlandse tekst gebruikt.",
-      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", rhHint:"De volledige serveertip (meerdere apparaten, tijden) stel je in bij het gerecht zelf, na toevoegen — via 🍽️ Serveertip wijzigen.", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"}, translateBtn:"🌐 Vertaal Thais → NL/EN", trBusy:"Bezig met vertalen…", trFail:"Vertalen mislukt — probeer opnieuw of vul handmatig in.", trEmpty:"Vul eerst de Thaise naam of beschrijving in.", recipeTitle:"Recept / bereiding (intern)", recipeNeed:"Nodig (ingrediënten)", recipePrep:"Bereiding (stappen)", recipeSave:"Recept opslaan", nameEdit:"Naam wijzigen", nameSave:"Naam opslaan", descEdit:"Omschrijving wijzigen", descSave:"Omschrijving opslaan", serveEdit:"Serveertip wijzigen", serveAddRow:"＋ Methode toevoegen", serveSave:"Serveertip opslaan", serveNotePh:"opmerking (optioneel)", recipeNeedPh:"bijv. 200g kip, 2 tenen knoflook, vissaus…", recipePrepPh:"bijv. 1) Wok verhitten 2) Kip bakken…",
+      lName:"Naam", lCat:"Categorie", lPrice:"Prijs (€)", lSpice:"Pittigheid", lRh:"Serveertip-type", rhHint:"De volledige serveertip (meerdere apparaten, tijden) stel je in bij het gerecht zelf, na toevoegen — via 🍽️ Serveertip wijzigen.", lDesc:"Beschrijving", lTh:"Thais schrift", lEmoji:"Emoji", opt:"optioneel", langLabels:{nl:"NL",en:"EN",th:"TH"}, recipeTitle:"Recept / bereiding (intern)", recipeNeed:"Nodig (ingrediënten)", recipePrep:"Bereiding (stappen)", recipeSave:"Recept opslaan", nameEdit:"Naam wijzigen", nameSave:"Naam opslaan", descEdit:"Omschrijving wijzigen", descSave:"Omschrijving opslaan", serveEdit:"Serveertip wijzigen", serveAddRow:"＋ Methode toevoegen", serveSave:"Serveertip opslaan", serveNotePh:"opmerking (optioneel)", recipeNeedPh:"bijv. 200g kip, 2 tenen knoflook, vissaus…", recipePrepPh:"bijv. 1) Wok verhitten 2) Kip bakken…",
       spiceOpts:["Niet pittig","Mild","Pittig","Heel pittig"], cancel:"Annuleren", addBtn:"Toevoegen",
       rhLabels:{curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"},
       aNaam:"Vul een naam in.", aPrijs:"Vul een geldige prijs in.", aImg:"Dit bestand is geen geldige afbeelding.", aImgProc:"Foto kon niet verwerkt worden.",
@@ -929,7 +928,7 @@ const I18N = {
     footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸",
     searching:"Searching…", reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
-      descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", trBusy:"Translating…", trEmpty:"Enter the Thai name or description first.", trFail:"Translation failed — try again or fill in manually.", translateBtn:"🌐 Translate Thai → NL/EN", wis:"Clear choices",
+      descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", wis:"Clear choices",
       count:(n,t)=>`${n} / ${t} photos ready`, hidden:"HIDDEN", actief:"AVAILABLE", copy:"📋 Copy dish", copySuffix:" (copy)", catNew:"➕ New category…", catAskNl:"Name of the new category:", catAskEmoji:"Emoji for the category (optional):", catAdded:"Category added ✓", catMenuBtn:"🏷️ Categories", catManageTitle:"🏷️ Categories", catManageHint:"Rename, move (↑/↓) or delete categories. Deleting is only possible for an empty custom category.", catDishes:"dish(es)", catRename:"Name", catDelete:"Delete", catSaveName:"Save name", catNotEmpty:"Move the dishes out of this category first.", catDelConf:"Delete this category?", allesUit:"🚫 All unavailable", allesAan:"✅ All available", allesUitConf:"Make all dishes unavailable?", allesAanConf:"Make all dishes available again?",
       phTerm:"Search term", search:"🔍 Search", phUrl:"or paste your own photo URL", setUrl:"Set", ownPhoto:"📷 Your own photo",
       del:"🗑️ Delete this dish",
@@ -976,7 +975,7 @@ const I18N = {
       del:"🗑️ ลบเมนูนี้",
       pickHint:"แตะรูป วางลิงก์ หรืออัปโหลดรูปของคุณ แล้วส่งออกด้านล่าง",
       addTitle:"เพิ่มเมนู", addHint:"ช่องที่มี * ต้องกรอก ภาษาอังกฤษ/ไทยไม่บังคับ ถ้าเว้นว่างจะใช้ข้อความภาษาดัตช์",
-      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", rhHint:"วิธีเสิร์ฟแบบเต็ม (หลายเครื่อง เวลา) ตั้งค่าที่ตัวเมนูหลังเพิ่ม — ผ่าน 🍽️ แก้ไขวิธีอุ่น", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"}, translateBtn:"🌐 แปลไทย → NL/EN", trBusy:"กำลังแปล…", trFail:"แปลไม่สำเร็จ ลองใหม่หรือกรอกเอง", trEmpty:"กรุณากรอกชื่อหรือคำอธิบายภาษาไทยก่อน", recipeTitle:"สูตร / วิธีทำ (ภายใน)", recipeNeed:"วัตถุดิบที่ต้องใช้", recipePrep:"วิธีทำ (ขั้นตอน)", recipeSave:"บันทึกสูตร", nameEdit:"แก้ไขชื่อ", nameSave:"บันทึกชื่อ", descEdit:"แก้ไขคำอธิบาย", descSave:"บันทึกคำอธิบาย", serveEdit:"แก้ไขวิธีอุ่น", serveAddRow:"＋ เพิ่มวิธี", serveSave:"บันทึกวิธีอุ่น", serveNotePh:"หมายเหตุ (ถ้ามี)", recipeNeedPh:"เช่น ไก่ 200 กรัม กระเทียม 2 กลีบ น้ำปลา…", recipePrepPh:"เช่น 1) ตั้งกระทะ 2) ผัดไก่…",
+      lName:"ชื่อ", lCat:"หมวดหมู่", lPrice:"ราคา (€)", lSpice:"ความเผ็ด", lRh:"ประเภทวิธีเสิร์ฟ", rhHint:"วิธีเสิร์ฟแบบเต็ม (หลายเครื่อง เวลา) ตั้งค่าที่ตัวเมนูหลังเพิ่ม — ผ่าน 🍽️ แก้ไขวิธีอุ่น", lDesc:"คำอธิบาย", lTh:"อักษรไทย", lEmoji:"อีโมจิ", opt:"ถ้ามี", langLabels:{nl:"ดัตช์",en:"อังกฤษ",th:"ไทย"}, recipeTitle:"สูตร / วิธีทำ (ภายใน)", recipeNeed:"วัตถุดิบที่ต้องใช้", recipePrep:"วิธีทำ (ขั้นตอน)", recipeSave:"บันทึกสูตร", nameEdit:"แก้ไขชื่อ", nameSave:"บันทึกชื่อ", descEdit:"แก้ไขคำอธิบาย", descSave:"บันทึกคำอธิบาย", serveEdit:"แก้ไขวิธีอุ่น", serveAddRow:"＋ เพิ่มวิธี", serveSave:"บันทึกวิธีอุ่น", serveNotePh:"หมายเหตุ (ถ้ามี)", recipeNeedPh:"เช่น ไก่ 200 กรัม กระเทียม 2 กลีบ น้ำปลา…", recipePrepPh:"เช่น 1) ตั้งกระทะ 2) ผัดไก่…",
       spiceOpts:["ไม่เผ็ด","เผ็ดน้อย","เผ็ด","เผ็ดมาก"], cancel:"ยกเลิก", addBtn:"เพิ่ม",
       rhLabels:{curry:"แกง / ซอส",soup:"ซุป",fried:"ทอด / กรอบ",wok:"ผัด",rice:"ข้าว",grill:"เนื้อย่าง",salad:"ยำ (เย็น)",rotiwarm:"โรตี / อุ่นกระทะ",cold:"เย็น (ไอศกรีม/ของหวาน)",sticky:"ข้าวเหนียวมะม่วง",stickyplain:"ข้าวเหนียว",drink:"เครื่องดื่ม"},
       aNaam:"กรุณากรอกชื่อ", aPrijs:"กรุณากรอกราคาที่ถูกต้อง", aImg:"ไฟล์นี้ไม่ใช่รูปภาพที่ถูกต้อง", aImgProc:"ไม่สามารถประมวลผลรูปได้",
@@ -1835,7 +1834,6 @@ async function initBeheer(){
   document.getElementById("fCancel").onclick = () => document.getElementById("addModal").classList.remove("open");
   document.getElementById("fSave").onclick = saveNewDish;
   document.getElementById("fSuggest").onclick = suggestDesc;
-  document.getElementById("fTranslate").onclick = translateFromThai;
   applyBeheerLang();
 }
 async function doSearch(id){
@@ -1992,7 +1990,6 @@ function openAddModal(){
   document.getElementById("amLEmoji").textContent = `${A.lEmoji} — ${A.opt}`;
   document.getElementById("fCancel").textContent = A.cancel;
   document.getElementById("fSave").textContent = A.addBtn;
-  document.getElementById("fTranslate").textContent = A.translateBtn;
   { const fc = document.getElementById("fCat"); fc.innerHTML = _catOptionsHTML(); fc.onchange = onCatChange; }
   document.getElementById("fSpice").innerHTML = A.spiceOpts.map((s,i)=>`<option value="${i}">${s}</option>`).join("");
   document.getElementById("fRh").innerHTML = Object.keys(REHEAT).map(k=>`<option value="${k}">${A.rhLabels[k]||k}</option>`).join("");
@@ -2018,28 +2015,6 @@ async function mmTo(text, from, to){
     const t = d && d.responseData && d.responseData.translatedText;
     return (t && typeof t === "string") ? t.trim() : "";
   }catch(e){ return ""; }
-}
-async function translateFromThai(){
-  const A = T().adm;
-  const nameTh = val("fNaamTh").trim();
-  const descTh = val("fDescTh").trim();
-  if(!nameTh && !descTh){ alert(A.trEmpty); return; }
-  const btn = document.getElementById("fTranslate");
-  const orig = btn.textContent; btn.textContent = A.trBusy; btn.disabled = true;
-  try {
-    if(nameTh){
-      const nl = await mmTranslate(nameTh,"nl"); const en = await mmTranslate(nameTh,"en");
-      document.getElementById("fNaam").value = nl;
-      document.getElementById("fNaamEn").value = en;
-      if(!val("fTh").trim()) document.getElementById("fTh").value = nameTh;
-    }
-    if(descTh){
-      const nl = await mmTranslate(descTh,"nl"); const en = await mmTranslate(descTh,"en");
-      document.getElementById("fDesc").value = nl;
-      document.getElementById("fDescEn").value = en;
-    }
-  } catch(e){ alert(A.trFail); }
-  btn.textContent = orig; btn.disabled = false;
 }
 function suggestDesc(){
   const type = val("fRh");
