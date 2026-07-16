@@ -1,15 +1,19 @@
 {
-  "opgeslagen": "2026-07-16T09:07:37Z",
+  "opgeslagen": "2026-07-16T09:10:52Z",
   "scriptVersie": 30,
   "verwachteVersie": 30,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-16T09:07:29.273635+00:00",
+    "updated": "2026-07-16T09:10:51.652531+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
         "items": [
+          {
+            "naam": "1 verweesde gegeven(s) voor niet-bestaande gerechten in de databestanden",
+            "status": "warn"
+          },
           {
             "naam": "index.html aanwezig met verwachte inhoud",
             "status": "ok"
@@ -32,10 +36,6 @@
           },
           {
             "naam": "geen definitief verwijderde gerechten meer in de broncode",
-            "status": "ok"
-          },
-          {
-            "naam": "geen verweesde gegevens in de databestanden",
             "status": "ok"
           },
           {
@@ -119,7 +119,7 @@
             "status": "ok"
           },
           {
-            "naam": "20 gerechten in het menu herkend",
+            "naam": "21 gerechten in het menu herkend",
             "status": "ok"
           },
           {
@@ -135,7 +135,7 @@
             "status": "ok"
           },
           {
-            "naam": "fotos.json: 20 vermelding(en) gecontroleerd",
+            "naam": "fotos.json: 21 vermelding(en) gecontroleerd",
             "status": "ok"
           },
           {
