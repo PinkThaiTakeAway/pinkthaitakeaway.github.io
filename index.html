@@ -1672,7 +1672,11 @@ async function resolvePhotos(){
   try{ const r = await fetch("fotos.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok) fixed = await r.json(); }catch(e){}
   const cache = loadJSON("tta_photo_cache");
   for(const m of MENU){
-    if(fixed[m.id]){ setPhoto(m.id, fixed[m.id], () => pickPhoto(m).then(u => { if(u){ setPhoto(m.id, u); cache[m.id]=u; saveJSON("tta_photo_cache", cache); } })); continue; }
+    if(fixed[m.id]){
+      const _up = String(fixed[m.id]).startsWith("data:");   // eigen upload = leidend, nooit automatisch vervangen
+      setPhoto(m.id, fixed[m.id], _up ? null : () => pickPhoto(m).then(u => { if(u){ setPhoto(m.id, u); cache[m.id]=u; saveJSON("tta_photo_cache", cache); } }));
+      continue;
+    }
     if(cache[m.id]){ setPhoto(m.id, cache[m.id]); continue; }
     pickPhoto(m).then(url => { if(url){ setPhoto(m.id, url); cache[m.id]=url; saveJSON("tta_photo_cache", cache); } });
   }
