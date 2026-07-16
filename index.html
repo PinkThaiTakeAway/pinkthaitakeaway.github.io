@@ -177,6 +177,8 @@
   body.beheer .card .dishstatus:hover{outline:1px solid currentColor;outline-offset:1px}
   body.beheer .card .dishstatus.on{background:#e6f4ea;color:#1e7d3f}
   body.beheer .card .dishstatus.off{background:#fdecea;color:#c0392b}
+  body.beheer .card-title .minithumb{width:30px;height:30px;border-radius:6px;object-fit:cover;flex:0 0 auto;background:#f0ece6}
+  body.beheer .card.open .card-title .minithumb{display:none}
   .trashrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
   .trashbtns{display:flex;gap:6px;flex-shrink:0}
   .purge-btn{background:#b3261e;color:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:700;font-size:.8rem;font-family:inherit;cursor:pointer}
@@ -1237,7 +1239,7 @@ function card(m){
   el.innerHTML = `
     <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
     <div class="card-body">
-      <div class="card-title"><div class="nmline"><span class="nm">${m.name[LANG]}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${sub}</span></div>
+      <div class="card-title"><div class="nmline">${BEHEER ? `<img class="minithumb" data-photo="${m.id}" alt="" loading="lazy">` : ''}<span class="nm">${m.name[LANG]}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${sub}</span></div>
       <p class="card-desc">${m.desc[LANG]}</p>
       ${dietLabel(m)}
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
