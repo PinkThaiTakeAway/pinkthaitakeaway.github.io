@@ -173,6 +173,10 @@
   body.beheer .card.hidden-dish:not(.open) .card-title .nm{opacity:.5;text-decoration:line-through}
   .card-title .nmline{display:flex;align-items:center;gap:8px}
   .card-title .nmline .nm{flex:0 1 auto;min-width:0}
+  .titletext{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1 1 auto}
+  body.beheer .card .card-title{flex-direction:row;align-items:center;gap:8px}
+  body.beheer .card .card-title .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  body.beheer .card .card-title .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
   body.beheer .card .dishstatus{margin-left:auto;flex:0 0 auto;font-size:.62rem;font-weight:800;letter-spacing:.05em;padding:2px 8px;border-radius:999px;text-transform:uppercase;white-space:nowrap;cursor:pointer}
   body.beheer .card .dishstatus:hover{outline:1px solid currentColor;outline-offset:1px}
   body.beheer .card .dishstatus.on{background:#e6f4ea;color:#1e7d3f}
@@ -1233,6 +1237,18 @@ function buildMenu(){
   setupSpy();
   reapplyPhotos();
   updateAllToggleLabel();
+  if(BEHEER) requestAnimationFrame(fitDishNames);
+}
+let _fitT;
+function fitDishNames(){
+  if(!BEHEER) return;
+  document.querySelectorAll(".card .card-title .nm").forEach(el => {
+    el.style.fontSize = "";                     // terug naar basis (1.18rem)
+    let size = 1.18, guard = 0;
+    while(el.scrollWidth > el.clientWidth + 1 && size > 0.8 && guard < 20){
+      size -= 0.05; el.style.fontSize = size.toFixed(2) + "rem"; guard++;   // verklein tot naam op 1 regel past
+    }
+  });
 }
 function spiceLabel(n){ if(n===0) return ""; const lbl=T().spice[n>=3?2:n-1]; return `<span class="badge-spice">${"🌶️".repeat(n)} ${lbl}</span>`; }
 function card(m){
@@ -1244,7 +1260,7 @@ function card(m){
   el.innerHTML = `
     <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(m.name[LANG])}" loading="lazy"></div>
     <div class="card-body">
-      <div class="card-title"><div class="nmline">${BEHEER ? `<img class="minithumb" data-photo="${m.id}" alt="" loading="lazy">` : ''}<span class="nm">${m.name[LANG]}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${sub}</span></div>
+      <div class="card-title">${BEHEER ? `<img class="minithumb" data-photo="${m.id}" alt="" loading="lazy">` : ''}<div class="titletext"><div class="nmline"><span class="nm">${m.name[LANG]}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${sub}</span></div></div>
       <p class="card-desc">${m.desc[LANG]}</p>
       ${dietLabel(m)}
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
@@ -1762,6 +1778,8 @@ async function initBeheer(){
   { const bi=document.getElementById("bInstellingen"); if(bi) bi.onclick = openInstellingen; }
   { const bcz=document.getElementById("bCats"); if(bcz) bcz.onclick = openCats; }
   { const rb=document.getElementById("refreshBtn"); if(rb) rb.onclick = () => location.reload(); }
+  window.addEventListener("resize", () => { clearTimeout(_fitT); _fitT = setTimeout(fitDishNames, 150); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitDishNames);
   { const cc=document.getElementById("catClose"); if(cc) cc.onclick = closeCats; }
   { const co=document.getElementById("catOverlay"); if(co) co.addEventListener("click",(e)=>{ if(e.target.id==="catOverlay") closeCats(); }); }
   { const cb=document.getElementById("catBody"); if(cb) cb.addEventListener("click",(e)=>{
