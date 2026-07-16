@@ -1670,15 +1670,13 @@ async function pickPhoto(m){
 async function resolvePhotos(){
   let fixed = {};
   try{ const r = await fetch("fotos.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok) fixed = await r.json(); }catch(e){}
-  const cache = loadJSON("tta_photo_cache");
   for(const m of MENU){
     if(fixed[m.id]){
-      const _up = String(fixed[m.id]).startsWith("data:");   // eigen upload = leidend, nooit automatisch vervangen
-      setPhoto(m.id, fixed[m.id], _up ? null : () => pickPhoto(m).then(u => { if(u){ setPhoto(m.id, u); cache[m.id]=u; saveJSON("tta_photo_cache", cache); } }));
+      const _up = String(fixed[m.id]).startsWith("data:");   // eigen upload = leidend, nooit vervangen
+      setPhoto(m.id, fixed[m.id], _up ? null : () => pickPhoto(m).then(u => { if(u) setPhoto(m.id, u); }));  // serverfoto leidend; terugval alleen voor weergave, niets in clientcache
       continue;
     }
-    if(cache[m.id]){ setPhoto(m.id, cache[m.id]); continue; }
-    pickPhoto(m).then(url => { if(url){ setPhoto(m.id, url); cache[m.id]=url; saveJSON("tta_photo_cache", cache); } });
+    pickPhoto(m).then(url => { if(url) setPhoto(m.id, url); });   // geen serverfoto: alleen tonen, niets client-side bewaren
   }
 }
 
@@ -1735,7 +1733,7 @@ async function initBeheer(){
   buildMenu();
   for(const m of MENU){
     if(chosen[m.id]) setPhoto(m.id, chosen[m.id]);
-    else pickPhoto(m).then(url => { if(url){ setPhoto(m.id, url); updateBeheerCount(); } });
+    else pickPhoto(m).then(url => { if(url){ chosen[m.id]=url; saveJSON("tta_fotos", chosen); setPhoto(m.id, url); updateBeheerCount(); livePush("fotos.json", currentFotos, "Foto naar server"); } });
   }
   updateBeheerCount();
   document.getElementById("bAdd").onclick = openAddModal;
