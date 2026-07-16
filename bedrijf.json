@@ -26,8 +26,8 @@
     "slotMin": 15
   },
   "bestel": {
-    "cutoffDag": 5,
-    "cutoffUur": 23
+    "cutoffDag": 6,
+    "cutoffUur": 10
   },
   "seo": {
     "keuken": "Thai",
