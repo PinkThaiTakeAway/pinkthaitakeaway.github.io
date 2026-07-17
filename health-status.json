@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-17T06:36:31Z",
+  "opgeslagen": "2026-07-17T06:40:29Z",
   "scriptVersie": 39,
-  "verwachteVersie": 39,
-  "versieOk": true,
+  "verwachteVersie": 40,
+  "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-17T06:36:30.092635+00:00",
+    "updated": "2026-07-17T06:40:28.169321+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
