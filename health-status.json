@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-17T01:53:33Z",
-  "scriptVersie": 32,
+  "opgeslagen": "2026-07-17T01:59:56Z",
+  "scriptVersie": 37,
   "verwachteVersie": 37,
-  "versieOk": false,
+  "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-17T01:53:32.299778+00:00",
+    "updated": "2026-07-17T01:59:55.183100+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -52,6 +52,10 @@
           },
           {
             "naam": "alle lokale fotoverwijzingen bestaan",
+            "status": "ok"
+          },
+          {
+            "naam": "aanbod-historie.json: geldige JSON",
             "status": "ok"
           },
           {
