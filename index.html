@@ -3694,8 +3694,8 @@ function _auditChanges(path, oldO, newO){
         return;
       }
     }
-    if(a && b && typeof a==="object" && typeof b==="object"){
-      const subs=_auditChanges("", a, b).map(s=>label+" "+s);
+    if((a && typeof a==="object") || (b && typeof b==="object")){
+      const subs=_auditChanges("", (a && typeof a==="object")?a:{}, (b && typeof b==="object")?b:{}).map(s=>label+" "+s);
       out.push(subs.length ? subs.join("; ") : (label+": gewijzigd")); return;
     }
     out.push(label+": "+_fmtAuditVal(a,price)+" \u2192 "+_fmtAuditVal(b,price));
