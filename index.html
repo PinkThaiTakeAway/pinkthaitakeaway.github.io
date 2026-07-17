@@ -2775,7 +2775,16 @@ let _klantRecords = [];
 let _kTab = "klanten";
 let _kKlantView = "compact";
 let _kForm = null;
-function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); laadKlanten(); }
+function prefetchAlles(){
+  // Laad alle beheer-data van de site voor, elke keer dat beheer geopend wordt.
+  try{ prefetchKlanten(); }catch(e){}
+  try{ prefetchBezoek(); }catch(e){}
+  try{ prefetchInstellingen(); }catch(e){}
+  try{ prefetchAdmins(); }catch(e){}
+  try{ prefetchAudit(); }catch(e){}
+  try{ loadAanbod(); }catch(e){}
+}
+function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); prefetchAlles(); laadKlanten(); }
 function _markTab(){ document.querySelectorAll(".ktab").forEach(x => x.classList.toggle("active", x.dataset.tab===_kTab)); }
 function openInstellingen(){ _kTab="instel"; _markTab(); openKlanten(); }
 function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
@@ -4514,7 +4523,7 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
     updateAcctBtn();
     openAccount();
   }
-  if(BEHEER){ initBeheer().then(()=>{ hideLoader(); loadAanbod().then(()=>{ try{ snapshotAanbod(); }catch(e){} }); }, hideLoader); toonBeheerder(); prefetchKlanten(); prefetchBezoek(); prefetchInstellingen(); prefetchAdmins(); prefetchAudit(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { await resolvePhotos(); hideLoader(); }
+  if(BEHEER){ initBeheer().then(()=>{ hideLoader(); loadAanbod().then(()=>{ try{ snapshotAanbod(); }catch(e){} }); }, hideLoader); toonBeheerder(); prefetchAlles(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { await resolvePhotos(); hideLoader(); }
   if(acctToken()) prefetchAccount(); else autoLoginByVid();
 })();
 </script>
