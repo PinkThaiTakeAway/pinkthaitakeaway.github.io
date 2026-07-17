@@ -2527,7 +2527,7 @@ async function uploadChefFoto(file){
     showToast(String(e && e.message).indexOf("no-token")>=0 ? A.tokenNeed : K.fotoFout, false);
   }
 }
-async function ghPut(path, obj, message){
+async function ghPut(path, obj, message, opts){
   const token = ghToken(); if(!token) throw new Error("no-token");
   let sha, _oldObj = null;
   try{ const g = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?t=`+Date.now(), {headers:{Authorization:"token "+token}}); if(g.ok){ const gj = await g.json(); sha = gj.sha; try{ _oldObj = JSON.parse(decodeURIComponent(escape(atob((gj.content||"").replace(/\s/g,""))))); }catch(e){ _oldObj = null; } } }catch(e){}
@@ -2536,7 +2536,7 @@ async function ghPut(path, obj, message){
   const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
     method:"PUT", headers:{Authorization:"token "+token, "Content-Type":"application/json"}, body: JSON.stringify(body) });
   if(!r.ok) throw new Error("push-"+r.status);
-  try{ if(path!=="health-status.json") logAudit(path, auditWat(path, _oldObj, obj, message)); }catch(e){}
+  try{ if(path!=="health-status.json" && !(opts&&opts.noAudit)) logAudit(path, auditWat(path, _oldObj, obj, message)); }catch(e){}
   return true;
 }
 let _toastT;
@@ -3706,6 +3706,9 @@ function auditWat(path, oldO, newO, message){
   try{ const parts=_auditChanges(path, oldO, newO); if(parts.length){ let s=parts.join("; "); return s.length>190 ? s.slice(0,187)+"\u2026" : s; } }catch(e){}
   return String(message||"");
 }
+function _fieldDiff(prefix, dish, oud, nieuw){
+  const out=[]; ["nl","en","th"].forEach(l=>{ const a=(oud&&oud[l])||"", b=(nieuw&&nieuw[l])||""; if(String(a)!==String(b)) out.push(prefix+" "+dish+" "+l+": "+_fmtAuditVal(a)+" \u2192 "+_fmtAuditVal(b)); }); return out.join("; ");
+}
 function _ordNaam(id){ try{ const b=((typeof _klantData!=="undefined"&&_klantData)||[]).find(x=>String(x.id)===String(id)); if(b) return b.naam||b.klant||""; }catch(e){} return ""; }
 function _klantNaam(tel){ try{ const t=String(tel||"").replace(/\D/g,""); const b=((typeof _klantData!=="undefined"&&_klantData)||[]).find(x=>String(x.tel||"").replace(/\D/g,"")===t); if(b&&b.naam) return b.naam; const k=((typeof _klantRecords!=="undefined"&&_klantRecords)||[]).find(x=>String(x.tel||"").replace(/\D/g,"")===t); if(k&&k.naam) return k.naam; }catch(e){} return String(tel||""); }
 const _AUDIT_LABELS = {
@@ -4055,6 +4058,7 @@ async function saveDesc(id, nl, en, th, btn){
   const A = T().adm;
   const m = byId(id); if(!m) return;
   nl=(nl||"").trim(); en=(en||"").trim(); th=(th||"").trim();
+  const _oudDesc = { nl:m.desc.nl, en:m.desc.en, th:m.desc.th };
   const desc = { nl: nl||m.desc.nl, en: en||m.desc.en, th: th||m.desc.th };
   m.desc = desc; DESCS[id] = desc;
   if(!ghToken()){ alert(A.tokenNeed); askToken(); }
@@ -4063,7 +4067,8 @@ async function saveDesc(id, nl, en, th, btn){
   const label = btn ? btn.textContent : "";
   if(btn){ btn.disabled = true; btn.textContent = "…"; }
   try{
-    await ghPut("omschrijvingen.json", DESCS, `Omschrijving ${m.name.nl} bijgewerkt`);
+    await ghPut("omschrijvingen.json", DESCS, `Omschrijving ${m.name.nl} bijgewerkt`, {noAudit:true});
+    try{ const w=_fieldDiff("Omschrijving", titleCase(m.name.nl), _oudDesc, desc); if(w) logAudit("", w); }catch(e){}
     if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
   }catch(e){
     if(btn){ btn.textContent = label; btn.disabled=false; }
@@ -4074,6 +4079,7 @@ async function saveName(id, nl, en, th, btn){
   const A = T().adm;
   const m = byId(id); if(!m) return;
   nl=(nl||"").trim(); en=(en||"").trim(); th=(th||"").trim();
+  const _oudNaam = { nl:m.name.nl, en:m.name.en, th:m.name.th };
   const name = { nl: nl||m.name.nl, en: en||m.name.en, th: th||m.name.th };
   m.name = name; NAMES[id] = name;
   if(!ghToken()){ alert(A.tokenNeed); askToken(); }
@@ -4092,7 +4098,8 @@ async function saveName(id, nl, en, th, btn){
   if(!(m.th||"").trim() && _thaiScript(name.th)) m.th = name.th;
   m.name = name; NAMES[id] = name; paintTitle(); if(BEHEER) fitDishNames();
   try{
-    await ghPut("namen.json", NAMES, `Naam ${m.name.nl} bijgewerkt`);
+    await ghPut("namen.json", NAMES, `Naam ${m.name.nl} bijgewerkt`, {noAudit:true});
+    if(!m.custom){ try{ const w=_fieldDiff("Naam", titleCase(m.name.nl), _oudNaam, name); if(w) logAudit("", w); }catch(e){} }
     if(m.custom){ const it = EXTRA.find(x=>x.id===id); if(it){ it.name = { nl:name.nl, en:name.en, th:name.th }; if(m.th) it.th = m.th; saveJSON("tta_extra", {items:EXTRA}); livePush("extra.json", ()=>EXTRA, `Naam ${m.name.nl} bijgewerkt`); } }
     if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
     if(sheet.classList.contains("open")) renderSheet();
