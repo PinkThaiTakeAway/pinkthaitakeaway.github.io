@@ -340,15 +340,23 @@ def check_live(html):
             problemen = []
             if af.get("van") and af.get("tot") and str(af["van"]) >= str(af["tot"]):
                 problemen.append("afhaal 'vanaf' ligt niet vóór 'tot'")
-            if af.get("slotMin") is not None and not (isinstance(af["slotMin"], int) and af["slotMin"] > 0):
-                problemen.append("tijdvak-lengte ongeldig")
             if af.get("dag") is not None and not (isinstance(af["dag"], int) and 0 <= af["dag"] <= 6):
                 problemen.append("afhaaldag buiten 0-6")
-            if be.get("cutoffUur") is not None and not (isinstance(be["cutoffUur"], int) and 0 <= be["cutoffUur"] <= 23):
-                problemen.append("deadline-uur buiten 0-23")
-            if be.get("cutoffDag") is not None and not (isinstance(be["cutoffDag"], int) and 0 <= be["cutoffDag"] <= 6):
-                problemen.append("deadline-dag buiten 0-6")
-            warn("bedrijf.json: " + "; ".join(problemen)) if problemen else ok("bedrijf.json: afhaaltijden en deadline logisch")
+            dgn = af.get("dagen")
+            if dgn is not None and not (isinstance(dgn, list) and all(isinstance(d, int) and 0 <= d <= 6 for d in dgn)):
+                problemen.append("afhaaldagen ongeldig (verwacht lijst 0-6)")
+            tijden = af.get("tijden")
+            if isinstance(tijden, dict):
+                for dk, tv in tijden.items():
+                    if isinstance(tv, dict) and tv.get("van") and tv.get("tot") and str(tv["van"]) >= str(tv["tot"]):
+                        problemen.append("tijden dag " + str(dk) + ": 'van' niet vóór 'tot'")
+            vanaf = af.get("vanaf")
+            if vanaf and not (len(str(vanaf)) == 10 and str(vanaf)[4] == "-" and str(vanaf)[7] == "-"):
+                problemen.append("afhaal 'vanaf'-datum ongeldig (verwacht jjjj-mm-dd)")
+            lu = be.get("leadUren")
+            if lu is not None and not (isinstance(lu, (int, float)) and 0 <= lu <= 168):
+                problemen.append("leadUren buiten 0-168")
+            warn("bedrijf.json: " + "; ".join(problemen)) if problemen else ok("bedrijf.json: afhaal en bestel-deadline logisch")
             # foto van Pink bereikbaar
             cf = b.get("chefFoto")
             if cf:
@@ -891,7 +899,7 @@ def seo_checks(html):
 _EXPECTED_ACTIES = {
     "account", "adminget", "adminlog", "afgehaald", "bestelling", "betaald", "bezoek",
     "bezoekreset", "bezoekstats", "cbget", "cbset", "klanten", "klantimport", "klantnieuw",
-    "maxget", "maxset", "notitie", "slots", "taal", "uitgenodigd", "versie", "verwijder",
+    "maxget", "maxset", "notitie", "slots", "statuscheck", "taal", "uitgenodigd", "versie", "verwijder",
     "verwijderklant", "volg", "zatnu", "audit", "auditget", "auditwis", "adminwis",
 }
 

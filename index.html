@@ -2579,7 +2579,7 @@ function jsonp(params){
     setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
   });
 }
-const SCRIPT_VERSIE_VERWACHT = 36;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 37;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
@@ -2612,11 +2612,14 @@ async function checkAccess(){
     }
   }
   try{
-    const v = await jsonp({actie:"versie"});
-    const sv = (v && v.ok && typeof v.versie === "number") ? v.versie : 0;
+    const st = await jsonp({actie:"statuscheck"});
+    const sv = (st && st.ok && typeof st.versie === "number") ? st.versie : 0;
     if(sv >= SCRIPT_VERSIE_VERWACHT) items.push({naam:H.scriptOk(sv), status:"ok"});
     else if(sv > 0)                  items.push({naam:H.scriptOud(sv, SCRIPT_VERSIE_VERWACHT), status:"warn"});
     else                             items.push({naam:H.scriptOnbekend, status:"warn"});
+    if(st && st.ok && st.opschoonActief !== undefined && st.opschoonActief !== null){
+      items.push(st.opschoonActief ? {naam:H.opschoonOk, status:"ok"} : {naam:H.opschoonUit, status:"warn"});
+    }
   }catch(e){ items.push({naam:H.scriptOnbekend, status:"warn"}); }
   return {naam:H.accGroup, items};
 }
@@ -2789,7 +2792,7 @@ const BEHEER_T = {
       tokNiet:"Publicatie-token: niet ingesteld op dit apparaat", tokVerlopen:(d)=>"Publicatie-token: verlopen ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publicatie-token: verloopt binnenkort — over "+dagen+" dag(en), op "+d, tokGeldig:(d)=>"Publicatie-token: geldig (verloopt "+d+")",
       tokGeldigKort:"Publicatie-token: geldig", tokOngeldig:"Publicatie-token: ongeldig of verlopen", tokControle:(s)=>"Publicatie-token: kon niet controleren (status "+s+")", tokNetwerk:"Publicatie-token: kon niet controleren (netwerk)",
- scriptOk:(v)=>"Apps Script: bijgewerkt (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: verouderd — opnieuw deployen (server v"+sv+", verwacht v"+exp+")", scriptOnbekend:"Apps Script: versie onbekend — mogelijk oude versie, opnieuw deployen"
+ scriptOk:(v)=>"Apps Script: bijgewerkt (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: verouderd — opnieuw deployen (server v"+sv+", verwacht v"+exp+")", scriptOnbekend:"Apps Script: versie onbekend — mogelijk oude versie, opnieuw deployen", opschoonOk:"Automatische opschoning: actief", opschoonUit:"Automatische opschoning: niet ingesteld — draai zetAuditTrigger in Apps Script"
     }
   },
   en: {
@@ -2829,7 +2832,7 @@ const BEHEER_T = {
       tokNiet:"Publishing token: not set on this device", tokVerlopen:(d)=>"Publishing token: expired ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publishing token: expires soon — in "+dagen+" day(s), on "+d, tokGeldig:(d)=>"Publishing token: valid (expires "+d+")",
       tokGeldigKort:"Publishing token: valid", tokOngeldig:"Publishing token: invalid or expired", tokControle:(s)=>"Publishing token: could not check (status "+s+")", tokNetwerk:"Publishing token: could not check (network)",
- scriptOk:(v)=>"Apps Script: up to date (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: outdated — redeploy (server v"+sv+", expected v"+exp+")", scriptOnbekend:"Apps Script: version unknown — possibly old, redeploy"
+ scriptOk:(v)=>"Apps Script: up to date (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: outdated — redeploy (server v"+sv+", expected v"+exp+")", scriptOnbekend:"Apps Script: version unknown — possibly old, redeploy", opschoonOk:"Automatic cleanup: active", opschoonUit:"Automatic cleanup: not set up — run zetAuditTrigger in Apps Script"
     }
   },
   th: {
@@ -2869,7 +2872,7 @@ const BEHEER_T = {
       tokNiet:"โทเคนเผยแพร่: ยังไม่ได้ตั้งค่าบนอุปกรณ์นี้", tokVerlopen:(d)=>"โทเคนเผยแพร่: หมดอายุ ("+d+")",
       tokBinnenkort:(dagen,d)=>"โทเคนเผยแพร่: กำลังจะหมดอายุ — ในอีก "+dagen+" วัน วันที่ "+d, tokGeldig:(d)=>"โทเคนเผยแพร่: ใช้งานได้ (หมดอายุ "+d+")",
       tokGeldigKort:"โทเคนเผยแพร่: ใช้งานได้", tokOngeldig:"โทเคนเผยแพร่: ไม่ถูกต้องหรือหมดอายุ", tokControle:(s)=>"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (สถานะ "+s+")", tokNetwerk:"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (เครือข่าย)",
- scriptOk:(v)=>"Apps Script: อัปเดตแล้ว (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: เวอร์ชันเก่า — ดีพลอยใหม่ (เซิร์ฟเวอร์ v"+sv+", ต้องการ v"+exp+")", scriptOnbekend:"Apps Script: ไม่ทราบเวอร์ชัน — อาจเป็นเวอร์ชันเก่า ดีพลอยใหม่"
+ scriptOk:(v)=>"Apps Script: อัปเดตแล้ว (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: เวอร์ชันเก่า — ดีพลอยใหม่ (เซิร์ฟเวอร์ v"+sv+", ต้องการ v"+exp+")", scriptOnbekend:"Apps Script: ไม่ทราบเวอร์ชัน — อาจเป็นเวอร์ชันเก่า ดีพลอยใหม่", opschoonOk:"การล้างอัตโนมัติ: ทำงานอยู่", opschoonUit:"การล้างอัตโนมัติ: ยังไม่ตั้งค่า — รัน zetAuditTrigger ใน Apps Script"
     }
   }
 };
