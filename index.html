@@ -3657,7 +3657,27 @@ function _toMap(v){
   if(Array.isArray(v)){ const m={}; v.forEach((x,i)=>{ m[(x&&x.id!=null)?String(x.id):("#"+i)]=x; }); return m; }
   return (v&&typeof v==="object") ? v : {};
 }
+function _arrayChanges(path, oldA, newA){
+  const out=[];
+  const isObj = oldA.concat(newA).some(x=>x && typeof x==="object");
+  if(isObj){
+    const key = x => (x && x.id!=null) ? String(x.id) : JSON.stringify(x);
+    const nm = x => { if(!x) return ""; if(x.nm && (x.nm.nl||x.nm.en)) return x.nm.nl||x.nm.en; if(x.name && (x.name.nl||x.name.en)) return titleCase(x.name.nl||x.name.en); if(x.naam) return x.naam; return _dishName(x.id!=null?x.id:""); };
+    const cat = /categorie/i.test(path||"");
+    const oldM={}, newM={}; oldA.forEach(x=>oldM[key(x)]=x); newA.forEach(x=>newM[key(x)]=x);
+    Object.keys(newM).forEach(k=>{ if(!(k in oldM)) out.push((nm(newM[k])||k)+(cat?": categorie toegevoegd":": toegevoegd")); });
+    Object.keys(oldM).forEach(k=>{ if(!(k in newM)) out.push((nm(oldM[k])||k)+(cat?": categorie verwijderd":": verwijderd")); });
+    Object.keys(newM).forEach(k=>{ if(k in oldM){ const subs=_auditChanges("", oldM[k], newM[k]).map(s=>(nm(newM[k])||k)+" "+s); if(subs.length) out.push(subs.join("; ")); } });
+    return out;
+  }
+  const oldS=new Set(oldA.map(String)), newS=new Set(newA.map(String));
+  const hidden=/verborg/i.test(path||""), del=/verwijderd/i.test(path||"");
+  newA.filter(x=>!oldS.has(String(x))).forEach(x=>{ const n=_dishName(x); out.push(hidden? n+": verborgen" : del? n+": verwijderd" : "toegevoegd: "+n); });
+  oldA.filter(x=>!newS.has(String(x))).forEach(x=>{ const n=_dishName(x); out.push(hidden? n+": weer zichtbaar" : del? n+": hersteld" : "verwijderd: "+n); });
+  return out;
+}
 function _auditChanges(path, oldO, newO){
+  if(Array.isArray(oldO) || Array.isArray(newO)) return _arrayChanges(path, Array.isArray(oldO)?oldO:[], Array.isArray(newO)?newO:[]);
   oldO=_toMap(oldO); newO=_toMap(newO);
   const price=/prijz/i.test(path||"");
   const out=[]; const keys=Array.from(new Set(Object.keys(oldO).concat(Object.keys(newO))));
