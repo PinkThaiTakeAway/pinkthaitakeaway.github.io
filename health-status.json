@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-17T01:39:29Z",
+  "opgeslagen": "2026-07-17T01:46:55Z",
   "scriptVersie": 32,
-  "verwachteVersie": 36,
+  "verwachteVersie": 37,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-17T01:39:27.226807+00:00",
+    "updated": "2026-07-17T01:46:54.698803+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -293,7 +293,7 @@
             "status": "ok"
           },
           {
-            "naam": "alle 26 client-acties staan in het verwachte GAS-contract",
+            "naam": "alle 27 client-acties staan in het verwachte GAS-contract",
             "status": "ok"
           }
         ]
@@ -391,7 +391,7 @@
             "status": "ok"
           },
           {
-            "naam": "bedrijf.json: afhaaltijden en deadline logisch",
+            "naam": "bedrijf.json: afhaal en bestel-deadline logisch",
             "status": "ok"
           },
           {
