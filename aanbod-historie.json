@@ -2,9 +2,17 @@
   "2026-07-25": {
     "deadline": "2026-07-25T09:00:00.000Z",
     "afhaal": "vrijdag 24 jul, zaterdag 25 jul",
-    "vastgelegd": "2026-07-17T06:35:46.406Z",
-    "aantal": 11,
+    "vastgelegd": "2026-07-17T06:41:22.683Z",
+    "aantal": 12,
     "gerechten": [
+      {
+        "nr": 1,
+        "id": "popia",
+        "naam": "Paw Bpia Pak",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
+      },
       {
         "nr": 2,
         "id": "satay",
