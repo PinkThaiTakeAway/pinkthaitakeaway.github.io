@@ -3289,14 +3289,16 @@ function fetchAudit(){
 }
 async function prefetchAudit(){
   if(!klantKey()) return;
-  try{ const r = await fetchAudit(); if(r && r.ok){ _auditData = r; if(_kTab === "audit") tekenAudit(r); } }catch(e){}
+  try{ const r = await fetchAudit(); if(r && r.ok){ _auditData = r; try{ localStorage.setItem("tta_auditcache", JSON.stringify({r:r, t:Date.now()})); }catch(e){} if(_kTab === "audit") tekenAudit(r); } }catch(e){}
 }
 async function renderAudit(){
   const K = BT().kl, body = document.getElementById("kBody");
+  if(!_auditData){ try{ const c = JSON.parse(localStorage.getItem("tta_auditcache")||"null"); if(c && c.r) _auditData = c.r; }catch(e){} }
   if(_auditData) tekenAudit(_auditData); else body.innerHTML = '<p class="hloading">'+esc(K.auLaden)+'</p>';
   let r; try{ r = await fetchAudit(); }catch(e){ r = null; }
   if(!r || !r.ok){ if(!_auditData) body.innerHTML = '<p class="kinstel-uit">'+esc(K.auUit)+'</p><p class="hloading">'+esc(K.auGeen)+'</p>'; return; }
   _auditData = r;
+  try{ localStorage.setItem("tta_auditcache", JSON.stringify({r:r, t:Date.now()})); }catch(e){}
   if(_kTab === "audit") tekenAudit(r);
 }
 function fmtAuditTime(t){
@@ -3366,7 +3368,7 @@ async function auditWisAlles(){
   if(!confirm(K.auWisConf)) return;
   try{
     const r = await jsonp({actie:"auditwis", key:klantKey()});
-    if(r && r.ok){ _auditData = {ok:true, audit:[]}; if(_kTab==="audit") tekenAudit(_auditData); showToast(K.auWisOk, true); }
+    if(r && r.ok){ _auditData = {ok:true, audit:[]}; try{ localStorage.removeItem("tta_auditcache"); }catch(e){} if(_kTab==="audit") tekenAudit(_auditData); showToast(K.auWisOk, true); }
     else showToast((r&&r.fout)||"Fout", false);
   }catch(e){ showToast("Fout", false); }
 }
