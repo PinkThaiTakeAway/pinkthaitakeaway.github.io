@@ -2611,6 +2611,32 @@ function jsonp(params){
   });
 }
 const SCRIPT_VERSIE_VERWACHT = 40;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+function _canon(v){
+  if(Array.isArray(v)){ const m=v.map(_canon); if(m.every(x=> x===null || typeof x!=="object")) m.sort(); return m; }
+  if(v && typeof v==="object"){ const o={}; Object.keys(v).sort().forEach(k=>{ o[k]=_canon(v[k]); }); return o; }
+  return v;
+}
+async function _ghGetJson(path){
+  const tok = ghToken(); if(!tok) return {skip:true};
+  try{
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?t=`+Date.now(), {headers:{Authorization:"token "+tok}});
+    if(!r.ok) return {skip:true};
+    const gj = await r.json();
+    return {obj: JSON.parse(decodeURIComponent(escape(atob((gj.content||"").replace(/\s/g,"")))))};
+  }catch(e){ return {skip:true}; }
+}
+const _SYNC_FILES = [
+  ["bedrijf.json",     ()=>bedrijfData()],
+  ["verborgen.json",   ()=>[...HIDDEN]],
+  ["verwijderd.json",  ()=>[...DELETED]],
+  ["categorieen.json", ()=>buildCatsPayload()],
+  ["extra.json",       ()=>EXTRA],
+  ["nummers.json",     ()=>NUMS],
+  ["tikkie.json",      ()=>({enabled:TIKKIE_ON})],
+  ["bestelpauze.json", ()=>ORDER_STATE],
+  ["recepten.json",    ()=>RECIPES],
+  ["serveertips.json", ()=>SERVE_EDITS]
+];
 async function checkAccess(){
   const H = BT().hl;
   const items = [];
@@ -2652,6 +2678,20 @@ async function checkAccess(){
       items.push(st.opschoonActief ? {naam:H.opschoonOk, status:"ok"} : {naam:H.opschoonUit, status:"warn"});
     }
   }catch(e){ items.push({naam:H.scriptOnbekend, status:"warn"}); }
+  try{
+    if(BEHEER && ghToken()){
+      await flushPushes();   // openstaande wijzigingen eerst wegschrijven
+      const res = await Promise.all(_SYNC_FILES.map(async (rij)=>{
+        const g = await _ghGetJson(rij[0]);
+        if(g.skip) return null;
+        let mine; try{ mine = rij[1](); }catch(e){ return null; }
+        return JSON.stringify(_canon(mine)) === JSON.stringify(_canon(g.obj)) ? "ok" : rij[0];
+      }));
+      const checked = res.filter(x=>x!==null).length;
+      const mis = res.filter(x=>x && x!=="ok").length;
+      if(checked>0) items.push(mis===0 ? {naam:H.syncOk, status:"ok"} : {naam:H.syncUit(mis), status:"warn"});
+    }
+  }catch(e){}
   return {naam:H.accGroup, items};
 }
 function healthStatusVan(h){
@@ -2832,7 +2872,7 @@ const BEHEER_T = {
       tokNiet:"Publicatie-token: niet ingesteld op dit apparaat", tokVerlopen:(d)=>"Publicatie-token: verlopen ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publicatie-token: verloopt binnenkort — over "+dagen+" dag(en), op "+d, tokGeldig:(d)=>"Publicatie-token: geldig (verloopt "+d+")",
       tokGeldigKort:"Publicatie-token: geldig", tokOngeldig:"Publicatie-token: ongeldig of verlopen", tokControle:(s)=>"Publicatie-token: kon niet controleren (status "+s+")", tokNetwerk:"Publicatie-token: kon niet controleren (netwerk)",
- scriptOk:(v)=>"Apps Script: bijgewerkt (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: verouderd — opnieuw deployen (server v"+sv+", verwacht v"+exp+")", scriptOnbekend:"Apps Script: versie onbekend — mogelijk oude versie, opnieuw deployen", opschoonOk:"Automatische opschoning: actief", opschoonUit:"Automatische opschoning: niet ingesteld — draai zetAuditTrigger in Apps Script"
+ scriptOk:(v)=>"Apps Script: bijgewerkt (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: verouderd — opnieuw deployen (server v"+sv+", verwacht v"+exp+")", scriptOnbekend:"Apps Script: versie onbekend — mogelijk oude versie, opnieuw deployen", opschoonOk:"Automatische opschoning: actief", opschoonUit:"Automatische opschoning: niet ingesteld — draai zetAuditTrigger in Apps Script", syncOk:"Synchronisatie: lokale data komt overeen met de site", syncUit:(n)=>"Synchronisatie: "+n+" onderdeel"+(n===1?"":"en")+" wijkt af van de site — herlaad de pagina"
     }
   },
   en: {
@@ -2872,7 +2912,7 @@ const BEHEER_T = {
       tokNiet:"Publishing token: not set on this device", tokVerlopen:(d)=>"Publishing token: expired ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publishing token: expires soon — in "+dagen+" day(s), on "+d, tokGeldig:(d)=>"Publishing token: valid (expires "+d+")",
       tokGeldigKort:"Publishing token: valid", tokOngeldig:"Publishing token: invalid or expired", tokControle:(s)=>"Publishing token: could not check (status "+s+")", tokNetwerk:"Publishing token: could not check (network)",
- scriptOk:(v)=>"Apps Script: up to date (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: outdated — redeploy (server v"+sv+", expected v"+exp+")", scriptOnbekend:"Apps Script: version unknown — possibly old, redeploy", opschoonOk:"Automatic cleanup: active", opschoonUit:"Automatic cleanup: not set up — run zetAuditTrigger in Apps Script"
+ scriptOk:(v)=>"Apps Script: up to date (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: outdated — redeploy (server v"+sv+", expected v"+exp+")", scriptOnbekend:"Apps Script: version unknown — possibly old, redeploy", opschoonOk:"Automatic cleanup: active", opschoonUit:"Automatic cleanup: not set up — run zetAuditTrigger in Apps Script", syncOk:"Sync: local data matches the site", syncUit:(n)=>"Sync: "+n+" item"+(n===1?"":"s")+" differ from the site — reload the page"
     }
   },
   th: {
@@ -2912,7 +2952,7 @@ const BEHEER_T = {
       tokNiet:"โทเคนเผยแพร่: ยังไม่ได้ตั้งค่าบนอุปกรณ์นี้", tokVerlopen:(d)=>"โทเคนเผยแพร่: หมดอายุ ("+d+")",
       tokBinnenkort:(dagen,d)=>"โทเคนเผยแพร่: กำลังจะหมดอายุ — ในอีก "+dagen+" วัน วันที่ "+d, tokGeldig:(d)=>"โทเคนเผยแพร่: ใช้งานได้ (หมดอายุ "+d+")",
       tokGeldigKort:"โทเคนเผยแพร่: ใช้งานได้", tokOngeldig:"โทเคนเผยแพร่: ไม่ถูกต้องหรือหมดอายุ", tokControle:(s)=>"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (สถานะ "+s+")", tokNetwerk:"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (เครือข่าย)",
- scriptOk:(v)=>"Apps Script: อัปเดตแล้ว (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: เวอร์ชันเก่า — ดีพลอยใหม่ (เซิร์ฟเวอร์ v"+sv+", ต้องการ v"+exp+")", scriptOnbekend:"Apps Script: ไม่ทราบเวอร์ชัน — อาจเป็นเวอร์ชันเก่า ดีพลอยใหม่", opschoonOk:"การล้างอัตโนมัติ: ทำงานอยู่", opschoonUit:"การล้างอัตโนมัติ: ยังไม่ตั้งค่า — รัน zetAuditTrigger ใน Apps Script"
+ scriptOk:(v)=>"Apps Script: อัปเดตแล้ว (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: เวอร์ชันเก่า — ดีพลอยใหม่ (เซิร์ฟเวอร์ v"+sv+", ต้องการ v"+exp+")", scriptOnbekend:"Apps Script: ไม่ทราบเวอร์ชัน — อาจเป็นเวอร์ชันเก่า ดีพลอยใหม่", opschoonOk:"การล้างอัตโนมัติ: ทำงานอยู่", opschoonUit:"การล้างอัตโนมัติ: ยังไม่ตั้งค่า — รัน zetAuditTrigger ใน Apps Script", syncOk:"การซิงค์: ข้อมูลตรงกับเว็บไซต์", syncUit:(n)=>"การซิงค์: "+n+" รายการไม่ตรงกับเว็บไซต์ — โหลดหน้าใหม่"
     }
   }
 };
@@ -4132,7 +4172,7 @@ function flushPath(path){
   _pending[path] = null;
   return _doPush(path, pnd.getObj, pnd.msg);
 }
-function flushPushes(){ for(const p in _pending){ if(_pending[p]) flushPath(p); } }
+function flushPushes(){ const ps=[]; for(const p in _pending){ if(_pending[p]){ const r=flushPath(p); if(r) ps.push(r); } } return Promise.all(ps); }
 function livePush(path, getObj, msg){
   if(!BEHEER || !needToken()) return;
   showToast(T().adm.saving, null);
