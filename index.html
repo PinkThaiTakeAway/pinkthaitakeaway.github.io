@@ -3383,7 +3383,7 @@ function tekenAanbod(){
   html += '<div class="auditgrps">';
   keys.forEach((k,idx)=>{
     const pd = AANBOD[k] || {}, ger = pd.gerechten || [];
-    html += '<details class="auditgrp"'+(idx===0?' open':'')+'><summary>'
+    html += '<details class="auditgrp"><summary>'
       + '<span class="auditwho">'+esc(pd.afhaal||k)+'</span>'
       + '<span class="auditcount">'+ger.length+' '+esc(K.aanGerechten)+'</span>'
       + '<span class="auditlast">'+esc(K.aanVastgelegd)+' '+esc(fmtAuditTime(pd.vastgelegd||""))+'</span></summary>';
