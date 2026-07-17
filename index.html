@@ -1865,7 +1865,12 @@ async function initBeheer(){
   document.getElementById("fSuggest").onclick = suggestDesc;
   applyBeheerLang();
 }
-function choose(id, url){ chosen[id]=url; saveJSON("tta_fotos", chosen); setPhoto(id, url); updateBeheerCount(); livePush("fotos.json", currentFotos, "Foto bijgewerkt"); }
+function choose(id, url){
+  const m = byId(id);
+  const _oudF = (chosen[id]!=null ? chosen[id] : ((document.querySelector('img[data-photo="'+id+'"]')||{}).src||"")) || "";
+  chosen[id]=url; saveJSON("tta_fotos", chosen); setPhoto(id, url); updateBeheerCount(); livePush("fotos.json", currentFotos, "Foto bijgewerkt");
+  try{ if(m && String(_oudF)!==String(url)) logAudit("", "Foto "+titleCase(m.name.nl)+": "+_photoLabel(_oudF)+" \u2192 "+_photoLabel(url)); }catch(e){}
+}
 function updateTikkieBtn(){
   const b = document.getElementById("bTikkie");
   if(b) b.textContent = TIKKIE_ON ? BT().bar.tikkieOn : BT().bar.tikkieOff;
@@ -2536,7 +2541,7 @@ async function ghPut(path, obj, message, opts){
   const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
     method:"PUT", headers:{Authorization:"token "+token, "Content-Type":"application/json"}, body: JSON.stringify(body) });
   if(!r.ok) throw new Error("push-"+r.status);
-  try{ if(path!=="health-status.json" && !(opts&&opts.noAudit)) logAudit(path, auditWat(path, _oldObj, obj, message)); }catch(e){}
+  try{ if(path!=="health-status.json" && path!=="fotos.json" && !(opts&&opts.noAudit)) logAudit(path, auditWat(path, _oldObj, obj, message)); }catch(e){}
   return true;
 }
 let _toastT;
@@ -3706,6 +3711,12 @@ function auditWat(path, oldO, newO, message){
   try{ const parts=_auditChanges(path, oldO, newO); if(parts.length){ let s=parts.join("; "); return s.length>190 ? s.slice(0,187)+"\u2026" : s; } }catch(e){}
   return String(message||"");
 }
+function _photoLabel(u){
+  u=String(u||""); if(!u) return "\u2014";
+  if(/^data:|^blob:/.test(u)) return "eigen foto";
+  try{ let s=decodeURIComponent(u.split("?")[0].split("/").pop()||""); return s.length>40?s.slice(0,39)+"\u2026":(s||u.slice(0,40)); }catch(e){ return u.slice(0,40); }
+}
+function _stripHtml(s){ return String(s||"").replace(/<br\s*\/?>/gi," / ").replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim(); }
 function _fieldDiff(prefix, dish, oud, nieuw){
   const out=[]; ["nl","en","th"].forEach(l=>{ const a=(oud&&oud[l])||"", b=(nieuw&&nieuw[l])||""; if(String(a)!==String(b)) out.push(prefix+" "+dish+" "+l+": "+_fmtAuditVal(a)+" \u2192 "+_fmtAuditVal(b)); }); return out.join("; ");
 }
@@ -4130,6 +4141,7 @@ function makeServeRow(r){
 async function saveServe(id, container, btn){
   const A = T().adm;
   const m = byId(id); if(!m) return;
+  const _oudServe = _stripHtml(serveTip(m));
   const rows = [...container.querySelectorAll(".serverow")].map(div => {
     const o = { m: div.querySelector(".sv-m").value };
     const t = div.querySelector(".sv-t").value.trim();
@@ -4147,7 +4159,8 @@ async function saveServe(id, container, btn){
   const label = btn ? btn.textContent : "";
   if(btn){ btn.disabled = true; btn.textContent = "…"; }
   try{
-    await ghPut("serveertips.json", SERVE_EDITS, `Serveertip ${m.name.nl} bijgewerkt`);
+    await ghPut("serveertips.json", SERVE_EDITS, `Serveertip ${m.name.nl} bijgewerkt`, {noAudit:true});
+    try{ const _nwServe=_stripHtml(serveTip(m)); if(_oudServe!==_nwServe) logAudit("", "Serveertip "+titleCase(m.name.nl)+": "+_fmtAuditVal(_oudServe)+" \u2192 "+_fmtAuditVal(_nwServe)); }catch(e){}
     if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
   }catch(e){
     if(btn){ btn.textContent = label; btn.disabled=false; }
