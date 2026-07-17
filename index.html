@@ -2628,8 +2628,6 @@ async function _ghGetJson(path){
 const _SYNC_FILES = [
   ["bedrijf.json",     ()=>bedrijfData()],
   ["verborgen.json",   ()=>[...HIDDEN]],
-  ["verwijderd.json",  ()=>[...DELETED]],
-  ["categorieen.json", ()=>buildCatsPayload()],
   ["extra.json",       ()=>EXTRA],
   ["nummers.json",     ()=>NUMS],
   ["tikkie.json",      ()=>({enabled:TIKKIE_ON})],
