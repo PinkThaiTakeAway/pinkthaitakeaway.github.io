@@ -2787,7 +2787,7 @@ function prefetchAlles(){
 function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); prefetchAlles(); laadKlanten(); }
 function _markTab(){ document.querySelectorAll(".ktab").forEach(x => x.classList.toggle("active", x.dataset.tab===_kTab)); }
 function openInstellingen(){ _kTab="instel"; _markTab(); openKlanten(); }
-function closeKlanten(){ document.getElementById("klantOverlay").classList.remove("open"); }
+function closeKlanten(){ flushPushes(); document.getElementById("klantOverlay").classList.remove("open"); }
 
 const VOLG_T = {
   nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link nog eens.", laden:"Laden…", ver:"Status vernieuwen", opnieuw:"🔁 Opnieuw bestellen", hersteld:"Je bestelling staat weer in je mandje", nietsHersteld:"Kon de bestelling niet herstellen", geslotenMand:"Je mandje is gevuld — bestellen kan zodra we weer open zijn" },
@@ -4115,22 +4115,34 @@ function needToken(){
   if(!_pushGuard){ _pushGuard = true; alert(T().adm.tokenNeed); askToken(); setTimeout(()=>_pushGuard=false, 500); }
   return false;
 }
-const _q = {}, _dbt = {};
+const _q = {}, _dbt = {}, _pending = {};
 function queuePush(path, obj, msg){
   const prev = _q[path] || Promise.resolve();
   const cur = prev.catch(()=>{}).then(()=> ghPut(path, obj, msg));
   _q[path] = cur; return cur;
 }
+function _doPush(path, getObj, msg){
+  return queuePush(path, getObj(), msg)
+    .then(()=> showToast(T().adm.pushOk, true))
+    .catch(e=>{ if(e.message!=="no-token") showToast(T().adm.pushErr + " (" + e.message + ")", false); });
+}
+function flushPath(path){
+  if(_dbt[path]){ clearTimeout(_dbt[path]); _dbt[path] = null; }
+  const pnd = _pending[path]; if(!pnd) return null;
+  _pending[path] = null;
+  return _doPush(path, pnd.getObj, pnd.msg);
+}
+function flushPushes(){ for(const p in _pending){ if(_pending[p]) flushPath(p); } }
 function livePush(path, getObj, msg){
   if(!BEHEER || !needToken()) return;
   showToast(T().adm.saving, null);
+  _pending[path] = {getObj: getObj, msg: msg};   // pending wijziging onthouden
   clearTimeout(_dbt[path]);
-  _dbt[path] = setTimeout(()=>{
-    queuePush(path, getObj(), msg)
-      .then(()=> showToast(T().adm.pushOk, true))
-      .catch(e=>{ if(e.message!=="no-token") showToast(T().adm.pushErr + " (" + e.message + ")", false); });
-  }, 900);
+  _dbt[path] = setTimeout(()=>{ flushPath(path); }, 900);
 }
+// Geen wijziging verliezen: schrijf openstaande wijzigingen meteen weg bij weggaan/verbergen.
+window.addEventListener("pagehide", flushPushes);
+document.addEventListener("visibilitychange", ()=>{ if(document.hidden) flushPushes(); });
 function currentFotos(){ const d={}; MENU.forEach(m=>{ const u = chosen[m.id]||PHOTO[m.id]; if(u) d[m.id]=u; }); return d; }
 async function publishAll(){
   if(!needToken()) return;
