@@ -4158,13 +4158,15 @@ async function savePittigheid(id, value, sel){
   const A = T().adm;
   const m = byId(id); if(!m) return;
   let n = parseInt(value,10); if(isNaN(n)||n<0) n=0; if(n>3) n=3;
+  const _oudS = m.spice;
   m.spice = n; SPICES[id] = n;
   if(!ghToken()){ alert(A.tokenNeed); askToken(); }
   const card = sel ? sel.closest(".card") : null;
   if(card){ const thumb=card.querySelector(".thumb"); if(thumb){ const old=thumb.querySelector(".badge-spice"); if(old) old.remove(); if(n>0) thumb.insertAdjacentHTML("afterbegin", spiceLabel(n)); } }
   showToast(A.saving, null);
   try{
-    await ghPut("pittigheid.json", SPICES, `Pittigheid ${m.name.nl} → ${n}`);
+    await ghPut("pittigheid.json", SPICES, `Pittigheid ${m.name.nl} → ${n}`, {noAudit:true});
+    try{ if(Number(_oudS)!==Number(n)) logAudit("", "Pittigheid "+titleCase(m.name.nl)+": "+(_oudS==null?"\u2014":_oudS)+" \u2192 "+n); }catch(e){}
     showToast(A.pushOk, true);
   }catch(e){ if(e.message!=="no-token") showToast(A.pushErr, false); }
 }
@@ -4173,12 +4175,14 @@ async function savePrice(id, value, btn){
   const p = Math.round(parseFloat(value)*100)/100;
   if(isNaN(p) || p < 0){ alert(A.priceErr); return; }
   const m = byId(id); if(!m) return;
+  const _oudP = m.price;
   m.price = p; PRICES[id] = p;
   if(!ghToken()){ alert(A.tokenNeed); askToken(); }
   const label = btn ? btn.textContent : "";
   if(btn){ btn.disabled = true; btn.textContent = "…"; }
   try{
-    await ghPut("prijzen.json", PRICES, `Prijs ${m.name.nl} → €${p.toFixed(2)}`);
+    await ghPut("prijzen.json", PRICES, `Prijs ${m.name.nl} → €${p.toFixed(2)}`, {noAudit:true});
+    try{ if(Number(_oudP)!==Number(p)) logAudit("", "Prijs "+titleCase(m.name.nl)+": "+_fmtAuditVal(_oudP,true)+" \u2192 "+_fmtAuditVal(p,true)); }catch(e){}
     if(btn){ btn.textContent = A.pushOk; setTimeout(()=>{ btn.textContent = label; btn.disabled=false; }, 1500); }
     if(sheet.classList.contains("open")) renderSheet();
   }catch(e){
