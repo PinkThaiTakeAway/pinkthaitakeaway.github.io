@@ -1304,7 +1304,7 @@ function snapshotAanbod(){
   AANBOD[key] = { deadline, afhaal:_periodeLabel(), vastgelegd:new Date().toISOString(), aantal:ger.length, gerechten:ger };
   const keys = Object.keys(AANBOD).sort();
   if(keys.length > 60) keys.slice(0, keys.length-60).forEach(k=>delete AANBOD[k]);   // hooguit 60 periodes
-  livePush("aanbod-historie.json", ()=>AANBOD, "Aanbod-historie bijgewerkt");
+  queuePush("aanbod-historie.json", AANBOD, "Aanbod-historie bijgewerkt").catch(()=>{});   // stil op de achtergrond, geen "opgeslagen"-toast
 }
 function buildMenu(){
   catnav.innerHTML = ""; menuEl.innerHTML = "";
