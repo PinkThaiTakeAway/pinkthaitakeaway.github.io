@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-18T05:15:08Z",
+  "opgeslagen": "2026-07-18T05:19:32Z",
   "scriptVersie": 40,
   "verwachteVersie": 40,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-18T05:15:07.114379+00:00",
+    "updated": "2026-07-18T05:19:31.258249+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -408,10 +408,6 @@
           },
           {
             "naam": "CallMeBot-melding: telefoon en key ingesteld",
-            "status": "ok"
-          },
-          {
-            "naam": "capaciteitslimieten: standaardwaarden actief",
             "status": "ok"
           },
           {
