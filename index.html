@@ -1231,7 +1231,6 @@ function selectedPickupDate(){
   if(typeof form !== "undefined" && form.pickTs){ const f = list.find(d=>d.getTime()===form.pickTs); if(f) return f; }
   return list[0] || nextDateForDay(CONFIG.afhaal.dag);
 }
-function nextPickupDate(){ return selectedPickupDate(); }
 function dateLabelFor(d){ return `${T().dagen[d.getDay()]} ${d.getDate()}-${d.getMonth()+1}`; }
 function chipDate(d){ return `${T().dagen[d.getDay()]} ${d.getDate()} ${(T().maandenKort||[])[d.getMonth()]||(d.getMonth()+1)}`; }
 function nextOrderDeadline(){
@@ -2004,14 +2003,6 @@ function openAddModal(){
   ["fNaam","fPrijs","fDesc","fDescEn","fDescTh","fTh","fNaamEn","fNaamTh","fEmoji"].forEach(i=>document.getElementById(i).value="");
   document.getElementById("fSpice").value="0"; document.getElementById("fRh").value="wok";
   document.getElementById("addModal").classList.add("open");
-}
-async function mmTranslate(text, to){
-  const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=th|${to}`);
-  if(!r.ok) throw new Error("net");
-  const d = await r.json();
-  const t = d && d.responseData && d.responseData.translatedText;
-  if(!t) throw new Error("empty");
-  return t;
 }
 async function mmTo(text, from, to){
   try{
