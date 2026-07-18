@@ -992,6 +992,21 @@ def maintenance_checks(html):
     items.append({"naam": ("onbekende client-actie(s) t.o.v. verwacht GAS-contract: " + ", ".join(onbekend))
                   if onbekend else f"alle {len(acties)} client-acties staan in het verwachte GAS-contract",
                   "status": "warn" if onbekend else "ok"})
+
+    # 6. Ongebruikte functies in index.html (gedefinieerd maar nergens aangeroepen) — dagelijkse dode-code-check
+    _entry = {"init"}   # self-invoked IIFE / entrypoint, geen echte dode code
+    _funcs = set(re.findall(r'function\s+([a-zA-Z_][A-Za-z0-9_]*)\s*\(', html))
+    _dood = [f for f in sorted(_funcs)
+             if f not in _entry and len(re.findall(r'\b' + re.escape(f) + r'\b', html)) <= 1]
+    items.append({"naam": ("ongebruikte functie(s) in index.html: " + ", ".join(_dood[:10]))
+                  if _dood else "geen ongebruikte functies in index.html",
+                  "status": "warn" if _dood else "ok"})
+
+    # 7. Acties in de contract-whitelist die de client niet (meer) aanroept — proxy voor dode backend-acties
+    _ongebruikt = sorted(_EXPECTED_ACTIES - acties)
+    items.append({"naam": ("ongebruikte acties in het contract (mogelijk dode backend-actie): " + ", ".join(_ongebruikt))
+                  if _ongebruikt else "geen ongebruikte acties in het contract",
+                  "status": "warn" if _ongebruikt else "ok"})
     return items
 
 def openingsbericht_checks(html):
