@@ -372,7 +372,7 @@ def check_live(html):
     st, _ = http(f"{SITE}/chef.jpg")
     ok("standaard chef-foto (chef.jpg) aanwezig") if st == 200 else warn(f"chef.jpg status {st}")
 
-    # 13. CallMeBot-melding + capaciteit (via veilige publieke statuscheck; vereist script v12+)
+    # 13. CallMeBot-melding (via veilige publieke statuscheck)
     if m:
         sep = "&" if "?" in m.group(1) else "?"
         st2, body2 = http(m.group(1) + sep + "actie=statuscheck&t=selfcheck")
@@ -389,9 +389,8 @@ def check_live(html):
                 ok("CallMeBot-melding: telefoon en key ingesteld")
             else:
                 warn("CallMeBot-melding: geen telefoon/key ingesteld — bestellingen sturen geen WhatsApp")
-            ok("capaciteitslimieten: eigen waarden ingesteld" if conf.get("maxConfigured") else "capaciteitslimieten: standaardwaarden actief")
         else:
-            warn("CallMeBot/capaciteit-status kon niet worden opgevraagd (script mogelijk nog niet op v12)")
+            warn("CallMeBot-status kon niet worden opgevraagd")
 
     # 14. TLS-certificaat: vervaldatum bewaken
     try:
@@ -899,7 +898,7 @@ def seo_checks(html):
 _EXPECTED_ACTIES = {
     "account", "adminget", "adminlog", "afgehaald", "bestelling", "betaald", "bezoek",
     "bezoekreset", "bezoekstats", "cbget", "cbset", "klanten", "klantimport", "klantnieuw",
-    "maxget", "maxset", "notitie", "slots", "statuscheck", "taal", "uitgenodigd", "versie", "verwijder",
+    "notitie", "statuscheck", "taal", "uitgenodigd", "versie", "verwijder",
     "verwijderklant", "volg", "zatnu", "audit", "auditget", "auditwis", "adminwis",
 }
 
