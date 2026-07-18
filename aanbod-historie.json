@@ -102,5 +102,109 @@
         "spice": 1
       }
     ]
+  },
+  "2026-07-24": {
+    "deadline": "2026-07-24T15:00:00.000Z",
+    "afhaal": "วันศุกร์ 24 ก.ค., วันเสาร์ 25 ก.ค.",
+    "vastgelegd": "2026-07-18T05:51:04.615Z",
+    "aantal": 12,
+    "gerechten": [
+      {
+        "nr": 1,
+        "id": "popia",
+        "naam": "Paw Bpia Pak",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
+      },
+      {
+        "nr": 2,
+        "id": "satay",
+        "naam": "Satay Kai",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 1
+      },
+      {
+        "nr": 4,
+        "id": "pawbpiakai",
+        "naam": "Paw Bpia Kai",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
+      },
+      {
+        "nr": 6,
+        "id": "tomkha",
+        "naam": "Tom Kha Kai",
+        "prijs": 10,
+        "cat": "soepen",
+        "spice": 1
+      },
+      {
+        "nr": 7,
+        "id": "kuaitiaokai",
+        "naam": "Kuai-Tiao Kai",
+        "prijs": 10,
+        "cat": "soepen",
+        "spice": 1
+      },
+      {
+        "nr": 8,
+        "id": "massaman",
+        "naam": "Masaman Kai",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 11,
+        "id": "gaengkiauwannua",
+        "naam": "Gaeng Kiau Wan Nua",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 2
+      },
+      {
+        "nr": 13,
+        "id": "padthai",
+        "naam": "Pad Thai Kai",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 14,
+        "id": "cashew",
+        "naam": "Kai Med Ma Mueang",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 15,
+        "id": "plaradprik",
+        "naam": "Pla Rad Prik",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 3
+      },
+      {
+        "nr": 17,
+        "id": "padhokkienkai",
+        "naam": "Pad Hokkien Kai",
+        "prijs": 12,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 21,
+        "id": "xmrnaf5vp",
+        "naam": "Khao Man Kai",
+        "prijs": 12,
+        "cat": "hoofd",
+        "spice": 1
+      }
+    ]
   }
 }
