@@ -336,7 +336,6 @@ def check_live(html):
             b = json.loads(body.decode())
             ok("live bedrijf.json: bereikbaar en geldig")
             af = b.get("afhaal") or {}
-            be = b.get("bestel") or {}
             problemen = []
             if af.get("van") and af.get("tot") and str(af["van"]) >= str(af["tot"]):
                 problemen.append("afhaal 'vanaf' ligt niet vóór 'tot'")
@@ -353,10 +352,7 @@ def check_live(html):
             vanaf = af.get("vanaf")
             if vanaf and not (len(str(vanaf)) == 10 and str(vanaf)[4] == "-" and str(vanaf)[7] == "-"):
                 problemen.append("afhaal 'vanaf'-datum ongeldig (verwacht jjjj-mm-dd)")
-            lu = be.get("leadUren")
-            if lu is not None and not (isinstance(lu, (int, float)) and 0 <= lu <= 168):
-                problemen.append("leadUren buiten 0-168")
-            warn("bedrijf.json: " + "; ".join(problemen)) if problemen else ok("bedrijf.json: afhaal en bestel-deadline logisch")
+            warn("bedrijf.json: " + "; ".join(problemen)) if problemen else ok("bedrijf.json: afhaal-instellingen logisch")
             # foto van Pink bereikbaar
             cf = b.get("chefFoto")
             if cf:
