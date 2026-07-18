@@ -10,7 +10,7 @@
 
 <title>Pink Thai TakeAway — Thais afhalen in Biest-Houtakker</title>
 <link rel="canonical" href="https://pinkthaitakeaway.nl/">
-<meta name="description" content="Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker (gemeente Hilvarenbeek, bij Tilburg). Bestel door de week online en haal je bestelling op zaterdag af.">
+<meta name="description" content="Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker (gemeente Hilvarenbeek, bij Tilburg). Bestel door de week online en haal je bestelling op vrijdag en zaterdag af.">
 <meta name="theme-color" content="#0E3B33">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,7 +18,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="nl_NL">
 <meta property="og:title" content="Pink Thai TakeAway — Thais afhalen in Biest-Houtakker">
-<meta property="og:description" content="Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker. Bestel door de week, afhalen op zaterdag.">
+<meta property="og:description" content="Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker. Bestel door de week, afhalen op vrijdag en zaterdag.">
 <meta property="og:image" content="https://pinkthaitakeaway.nl/pink-thai-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="Pink Thai TakeAway">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Pink Thai TakeAway — Thais afhalen in Biest-Houtakker">
-<meta name="twitter:description" content="Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker. Bestel door de week, afhalen op zaterdag.">
+<meta name="twitter:description" content="Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker. Bestel door de week, afhalen op vrijdag en zaterdag.">
 <meta name="twitter:image" content="https://pinkthaitakeaway.nl/pink-thai-og.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E3B33'/%3E%3Cpath d='M14 34h36a18 18 0 0 1-36 0z' fill='%23FBF6EC'/%3E%3Crect x='12' y='32' width='40' height='4' rx='2' fill='%23E8962E'/%3E%3Cpath d='M26 14c-3 3-3 6 0 9M32 12c-3 3-3 6 0 9M38 14c-3 3-3 6 0 9' fill='none' stroke='%23E8962E' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
 
@@ -914,7 +914,7 @@ const I18N = {
     spice:["Mild pittig","Kruidig","Pittig"],
     diet:{ vega:"Vega", glutenvrij:"Glutenvrij", noten:"Bevat noten" },
     footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t} uur`,
-    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op zaterdag.", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
+    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op {dagen}.", dagEn:" en ", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
     reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", wis:"Wis keuzes",
       count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR", copy:"📋 Kopieer gerecht", copySuffix:" (kopie)", catNew:"➕ Nieuwe categorie…", catAskNl:"Naam van de nieuwe categorie:", catAskEmoji:"Emoji voor de categorie (optioneel):", catAdded:"Categorie toegevoegd ✓", allesUit:"🚫 Alles onbestelbaar", allesAan:"✅ Alles bestelbaar", allesUitConf:"Alle gerechten onbestelbaar maken?", allesAanConf:"Alle gerechten weer bestelbaar maken?",
@@ -954,7 +954,7 @@ const I18N = {
     spice:["Mild","Spicy","Hot"],
     diet:{ vega:"Veggie", glutenvrij:"Gluten-free", noten:"Contains nuts" },
     footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
-    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on Saturday.", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸",
+    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on {dagen}.", dagEn:" and ", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸",
     reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
       descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", wis:"Clear choices",
@@ -995,7 +995,7 @@ const I18N = {
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
     diet:{ vega:"มังสวิรัติ", glutenvrij:"ไม่มีกลูเตน", noten:"มีถั่ว" },
     footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`,
-    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับวันเสาร์", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
+    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับ{dagen}", dagEn:"และ", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
     reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", wis:"ล้างที่เลือก",
       count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้", copy:"📋 คัดลอกเมนู", copySuffix:" (สำเนา)", catNew:"➕ หมวดหมู่ใหม่…", catAskNl:"ชื่อหมวดหมู่ใหม่:", catAskEmoji:"อีโมจิสำหรับหมวดหมู่ (ถ้ามี):", catAdded:"เพิ่มหมวดหมู่แล้ว ✓", allesUit:"🚫 ปิดทั้งหมด", allesAan:"✅ เปิดทั้งหมด", allesUitConf:"ปิดการสั่งซื้อเมนูทั้งหมด?", allesAanConf:"เปิดการสั่งซื้อเมนูทั้งหมดอีกครั้ง?",
@@ -1657,6 +1657,20 @@ document.getElementById("waBtn").onclick = async () => {
 };
 
 /* ---------- Teksten + config toepassen ---------- */
+function _dagenTekst(namen, voeg){
+  const dgn = pickupDays().map(i => (namen||[])[i]).filter(Boolean);
+  if(!dgn.length) return "";
+  if(dgn.length === 1) return dgn[0];
+  return dgn.slice(0,-1).join(", ") + voeg + dgn[dgn.length-1];
+}
+function afhaalDagenTekst(){ return _dagenTekst(T().dagen, T().dagEn || " en "); }
+function _updateMetaDagen(){
+  const d = _dagenTekst(I18N.nl.dagen, I18N.nl.dagEn); if(!d) return;
+  const set = (sel, val) => { const m=document.querySelector(sel); if(m) m.setAttribute("content", val); };
+  set('meta[name="description"]', 'Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker (gemeente Hilvarenbeek, bij Tilburg). Bestel door de week online en haal je bestelling op '+d+' af.');
+  set('meta[property="og:description"]', 'Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker. Bestel door de week, afhalen op '+d+'.');
+  set('meta[name="twitter:description"]', 'Verse, huisgemaakte Thaise gerechten om af te halen in Biest-Houtakker. Bestel door de week, afhalen op '+d+'.');
+}
 function applyLang(){
   document.documentElement.lang = LANG;
   document.getElementById("eyebrow").textContent = T().eyebrow;
@@ -1678,7 +1692,7 @@ function applyLang(){
   document.getElementById("footPickup").textContent = _pickStr;
   document.getElementById("footOrder").textContent = T().footOrder(_cutDatum, _cutTijd);
   document.getElementById("footFindHead").textContent = T().footFindHead;
-  document.getElementById("footTagline").textContent = T().footTagline;
+  document.getElementById("footTagline").textContent = T().footTagline.replace("{dagen}", afhaalDagenTekst());
   document.getElementById("shareLabel").textContent = T().shareLabel;
   [...document.querySelectorAll("#langsw button")].forEach(b => b.classList.toggle("on", b.dataset.lang===LANG));
   if(typeof updateAcctBtn==="function") updateAcctBtn();
@@ -1754,6 +1768,7 @@ function applyConfig(){
   document.getElementById("year").textContent = new Date().getFullYear();
   { const _cf=document.getElementById("heroChefImg"); if(_cf) _cf.src = CONFIG.chefFoto || "chef.jpg"; }
   updateStructuredData();
+  _updateMetaDagen();
 }
 
 /* ---------- Foto's laden (online, met brede fallback) ---------- */
