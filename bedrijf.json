@@ -21,7 +21,9 @@
     },
     "van": "17:00",
     "tot": "19:00",
-    "vanaf": "2026-07-24"
+    "vanaf": "2026-07-24",
+    "sluitDag": 5,
+    "sluitTijd": "17:00"
   },
   "seo": {
     "keuken": "Thai Takeaway Pink",

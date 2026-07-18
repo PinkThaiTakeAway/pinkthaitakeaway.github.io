@@ -352,6 +352,12 @@ def check_live(html):
             vanaf = af.get("vanaf")
             if vanaf and not (len(str(vanaf)) == 10 and str(vanaf)[4] == "-" and str(vanaf)[7] == "-"):
                 problemen.append("afhaal 'vanaf'-datum ongeldig (verwacht jjjj-mm-dd)")
+            sd = af.get("sluitDag")
+            if sd is not None and not (isinstance(sd, int) and 0 <= sd <= 6):
+                problemen.append("sluitDag buiten 0-6")
+            stj = af.get("sluitTijd")
+            if stj is not None and not (isinstance(stj, str) and len(stj) == 5 and stj[2] == ":"):
+                problemen.append("sluitTijd ongeldig (verwacht uu:mm)")
             warn("bedrijf.json: " + "; ".join(problemen)) if problemen else ok("bedrijf.json: afhaal-instellingen logisch")
             # foto van Pink bereikbaar
             cf = b.get("chefFoto")
