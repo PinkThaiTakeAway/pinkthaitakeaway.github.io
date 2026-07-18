@@ -8,7 +8,7 @@ on:
       - 'health-status.json'   # voorkomt herhaling door de auto-commit
   workflow_dispatch:
   schedule:
-    - cron: '0 5 * * *'   # dagelijkse zelfcontrole (± 07:00 NL)
+    - cron: '0 2 * * *'   # dagelijkse zelfcontrole — 04:00 NL (zomertijd) / 03:00 NL (wintertijd); cron is UTC
 
 permissions:
   contents: write
