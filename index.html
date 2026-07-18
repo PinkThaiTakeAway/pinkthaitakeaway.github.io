@@ -2609,7 +2609,7 @@ function jsonp(params){
     setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
   });
 }
-const SCRIPT_VERSIE_VERWACHT = 43;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
+const SCRIPT_VERSIE_VERWACHT = 44;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 function _canon(v){
   if(Array.isArray(v)){ const m=v.map(_canon); if(m.every(x=> x===null || typeof x!=="object")) m.sort(); return m; }
   if(v && typeof v==="object"){ const o={}; Object.keys(v).sort().forEach(k=>{ o[k]=_canon(v[k]); }); return o; }
