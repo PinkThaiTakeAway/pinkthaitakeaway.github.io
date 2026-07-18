@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-18T05:45:39Z",
+  "opgeslagen": "2026-07-18T05:52:43Z",
   "scriptVersie": 40,
   "verwachteVersie": 43,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-18T05:45:37.962975+00:00",
+    "updated": "2026-07-18T05:52:42.115523+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -403,7 +403,7 @@
             "status": "ok"
           },
           {
-            "naam": "bedrijf.json: afhaal en bestel-deadline logisch",
+            "naam": "bedrijf.json: afhaal-instellingen logisch",
             "status": "ok"
           },
           {
