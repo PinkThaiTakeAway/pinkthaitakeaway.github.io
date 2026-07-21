@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-20T05:25:02Z",
+  "opgeslagen": "2026-07-21T04:54:47Z",
   "scriptVersie": 44,
   "verwachteVersie": 44,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-20T05:25:00.976377+00:00",
+    "updated": "2026-07-21T04:54:45.601210+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -281,7 +281,7 @@
         "naam": "Onderhoud",
         "items": [
           {
-            "naam": "laatste Health-run is recent (1 dag(en) geleden)",
+            "naam": "laatste Health-run is recent (0 dag(en) geleden)",
             "status": "ok"
           },
           {
@@ -419,7 +419,7 @@
             "status": "ok"
           },
           {
-            "naam": "TLS-certificaat geldig, nog 79 dagen (tot 08-10-2026)",
+            "naam": "TLS-certificaat geldig, nog 78 dagen (tot 08-10-2026)",
             "status": "ok"
           },
           {
