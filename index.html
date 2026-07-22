@@ -1961,7 +1961,7 @@ function togglePauze(){
 }
 function applyBlackout(){
   const el = document.getElementById("blackout"); if(!el) return;
-  const zwart = BLACKOUT && !_boBypass;   // altijd zwart als de switch aan staat, ook voor beheerder met token; enkel de tijdelijke ontgrendeling (stip) toont de site
+  const zwart = BLACKOUT && !_boBypass && !(BEHEER && ghToken());   // publieke site altijd zwart (ook voor admin die 'm publiek bekijkt); in de beheer-weergave mét token kun je wel beheren
   el.classList.toggle("on", zwart);
   el.setAttribute("aria-hidden", zwart ? "false" : "true");
   document.body.style.overflow = zwart ? "hidden" : "";
