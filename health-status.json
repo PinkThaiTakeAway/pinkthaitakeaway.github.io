@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-22T04:54:14Z",
+  "opgeslagen": "2026-07-22T05:48:30Z",
   "scriptVersie": 44,
   "verwachteVersie": 44,
   "versieOk": true,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-22T04:54:13.169890+00:00",
+    "updated": "2026-07-22T05:48:28.844842+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -64,6 +64,10 @@
           },
           {
             "naam": "bestelpauze.json: geldige JSON",
+            "status": "ok"
+          },
+          {
+            "naam": "blackout.json: geldige JSON",
             "status": "ok"
           },
           {
@@ -285,7 +289,7 @@
             "status": "ok"
           },
           {
-            "naam": "index.html compact (353 KB, geen zware inline-afbeeldingen)",
+            "naam": "index.html compact (356 KB, geen zware inline-afbeeldingen)",
             "status": "ok"
           },
           {
