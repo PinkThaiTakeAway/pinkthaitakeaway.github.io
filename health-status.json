@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-07-31T05:20:16Z",
-  "scriptVersie": 45,
+  "opgeslagen": "2026-07-31T21:03:15Z",
+  "scriptVersie": null,
   "verwachteVersie": 45,
-  "versieOk": true,
+  "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-07-31T05:20:14.881734+00:00",
+    "updated": "2026-07-31T21:03:15.256697+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -285,7 +285,7 @@
         "naam": "Onderhoud",
         "items": [
           {
-            "naam": "laatste Health-run is recent (1 dag(en) geleden)",
+            "naam": "laatste Health-run is recent (0 dag(en) geleden)",
             "status": "ok"
           },
           {
@@ -379,6 +379,10 @@
         "naam": "Live site & diensten",
         "items": [
           {
+            "naam": "CallMeBot-status kon niet worden opgevraagd",
+            "status": "warn"
+          },
+          {
             "naam": "live site bereikbaar (200) met juiste inhoud",
             "status": "ok"
           },
@@ -399,7 +403,7 @@
             "status": "ok"
           },
           {
-            "naam": "bestelkoppeling reageert (status 200)",
+            "naam": "bestelkoppeling reageert (status 403)",
             "status": "ok"
           },
           {
@@ -416,10 +420,6 @@
           },
           {
             "naam": "standaard chef-foto (chef.jpg) aanwezig",
-            "status": "ok"
-          },
-          {
-            "naam": "CallMeBot-melding: telefoon en key ingesteld",
             "status": "ok"
           },
           {
