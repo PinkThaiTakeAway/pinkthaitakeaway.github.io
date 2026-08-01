@@ -898,7 +898,6 @@ const CONFIG = {
   chefFoto: "chef.jpg",                          // foto van Pink bovenaan (leeg/standaard = chef.jpg)
   seo: { keuken:"Thai", gebied:["Biest-Houtakker","Hilvarenbeek","Diessen","Tilburg"], prijsklasse:"\u20AC\u20AC", afbeelding:"https://pinkthaitakeaway.nl/pink-thai-og.png" },
   afhaal: { dag:6, dagen:[6], tijden:{}, van:"17:00", tot:"19:00", vanaf:"", sluitDag:5, sluitTijd:"17:00" },  // dag: 0=zo..6=za; sluitDag/sluitTijd: wanneer bestellen sluit (default vrijdag 17:00)
-  agendaUrl: "https://script.google.com/macros/s/AKfycbxmLQ6oOS170VvAU_kZNA7BahLOnTlMUALSQOjOUp5nban5TsFCHRBzY7Y__RGdZaIL/exec"
 };
 
 /* ===================================================================
@@ -2607,23 +2606,7 @@ function wireShare(){
   laadDeelcode();
   btn.onclick = deelPagina;
 }
-function jsonp(params){
-  try{ if(params && params.key && typeof _AUDIT_LABELS!=="undefined" && _AUDIT_LABELS[params.actie]) logAudit("", _AUDIT_LABELS[params.actie](params)); }catch(e){}
-  return new Promise((resolve)=>{
-    if(!CONFIG.agendaUrl){ resolve(null); return; }
-    const cb = "ttaCb" + Date.now() + Math.floor(Math.random()*10000);
-    const s = document.createElement("script");
-    let done = false;
-    function cleanup(){ try{ delete window[cb]; }catch(e){ window[cb] = undefined; } if(s.parentNode) s.parentNode.removeChild(s); }
-    window[cb] = (data)=>{ if(!done){ done = true; resolve(data); cleanup(); } };
-    s.onerror = ()=>{ if(!done){ done = true; resolve(null); cleanup(); } };
-    let qs = "callback=" + cb + "&t=" + Date.now();
-    for(const k in (params||{})){ qs += "&" + encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); }
-    s.src = CONFIG.agendaUrl + (CONFIG.agendaUrl.indexOf("?")>=0 ? "&" : "?") + qs;
-    document.body.appendChild(s);
-    setTimeout(()=>{ if(!done){ done = true; resolve(null); cleanup(); } }, 25000);
-  });
-}
+function jsonp(params){ return Promise.resolve(null); }   // Google Apps Script-backend verwijderd; alle oude acties zijn no-op
 const SCRIPT_VERSIE_VERWACHT = 45;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 function _canon(v){
   if(Array.isArray(v)){ const m=v.map(_canon); if(m.every(x=> x===null || typeof x!=="object")) m.sort(); return m; }
