@@ -2622,8 +2622,8 @@ async function ghPut(path, obj, message, opts){
 let _toastT;
 let _deelcode = "";
 async function laadDeelcode(){
-  const tok = acctToken(); if(!tok) return;
-  try{ const r = await jsonp({actie:"account", token:tok, vid: myVid()}); if(r && r.ok && r.deelcode) _deelcode = r.deelcode; }catch(e){}
+  if(!acctToken()){ _deelcode=""; return; }
+  try{ if(_accountData && _accountData.r && _accountData.r.deelcode){ _deelcode = _accountData.r.deelcode; return; } const r = await fetchAccount(); if(r && r.ok && r.deelcode) _deelcode = r.deelcode; }catch(e){}
 }
 async function deelPagina(){
   const url = SITE_HOME + (_deelcode ? ("?via=" + _deelcode) : "");
@@ -2634,7 +2634,6 @@ function wireShare(){
   laadDeelcode();
   btn.onclick = deelPagina;
 }
-function jsonp(params){ return Promise.resolve(null); }   // Google Apps Script-backend verwijderd; alle oude acties zijn no-op
 const SCRIPT_VERSIE_VERWACHT = 45;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 function _canon(v){
   if(Array.isArray(v)){ const m=v.map(_canon); if(m.every(x=> x===null || typeof x!=="object")) m.sort(); return m; }
@@ -2967,7 +2966,6 @@ function BT(){ return BEHEER_T[LANG] || BEHEER_T.nl; }
 
 let _volgCode = "";
 let _volgData = null;
-function openVolg(code){ _volgCode = code; document.getElementById("volgOverlay").classList.add("open"); laadVolg(code); }
 function closeVolg(){ document.getElementById("volgOverlay").classList.remove("open"); }
 async function laadVolg(code){
   const VT = VOLG_T[LANG] || VOLG_T.nl;
@@ -2975,7 +2973,7 @@ async function laadVolg(code){
   document.getElementById("volgTitel").textContent = VT.titel;
   const _vr = document.getElementById("volgReload"); if(_vr) _vr.textContent = VT.ver;
   body.innerHTML = '<p class="hloading">'+esc(VT.laden)+'</p>';
-  const r = await jsonp({actie:"volg", code});
+  const r = null;   // volg-overzicht loopt nu via Mijn account (inloglink)
   if(!r || !r.ok || !r.bestelling){ body.innerHTML = '<p class="hloading">'+esc(VT.niet)+'</p>'; return; }
   renderVolg(r.bestelling);
 }
@@ -3084,17 +3082,6 @@ function renderLoginForm(msg){
 }
 async function probeerKlantLogin(){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
-  try{ localStorage.removeItem("tta_noauto"); }catch(e){}
-  try{
-    const r = await jsonp({actie:"account", vid:myVid()});
-    if(r && r.ok && r.token){
-      localStorage.setItem("tta_klanttoken", r.token);
-      _accountData = {token:r.token, r:r};
-      try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:r.token, r:r})); }catch(e){}
-      updateAcctBtn(); closeLogin(); openAccount();
-      return;
-    }
-  }catch(e){}
   const b = document.getElementById("loginBody"); if(b) b.innerHTML = '<p>'+esc(LT.inKlantGeen)+'</p>';
 }
 function kopieerInloglink(token){
@@ -4426,7 +4413,6 @@ function updateBeheerCount(){ /* teller verwijderd */ }
 function setLang(l){
   if(!I18N[l]) return;
   LANG = l; saveJSON("tta_lang_v", {l});
-  try{ if(typeof acctToken==="function" && acctToken()) jsonp({actie:"taal", token:acctToken(), taal:l}); }catch(e){}
   applyLang(); buildMenu(); applyConfig(); updateBars(); pushNumbersIfNeeded();
   if(BEHEER) applyBeheerLang();
   if(document.getElementById("volgOverlay").classList.contains("open") && _volgCode) laadVolg(_volgCode);
@@ -4597,8 +4583,6 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
   document.getElementById("volgClose").onclick = closeVolg;
   document.getElementById("volgReload").onclick = () => laadVolg(_volgCode);
   document.getElementById("volgOverlay").addEventListener("click", (e) => { if(e.target.id === "volgOverlay") closeVolg(); });
-  const _volgParam = new URLSearchParams(location.search).get("volg");
-  if(_volgParam) openVolg(_volgParam);
   document.getElementById("loginClose").onclick = closeLogin;
   document.getElementById("accountClose").onclick = closeAccount;
   document.getElementById("accountLogout").onclick = uitloggen;

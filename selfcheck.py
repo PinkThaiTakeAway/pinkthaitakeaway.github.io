@@ -910,8 +910,7 @@ def seo_checks(html):
                   "status": "warn" if miss else "ok"})
     return items
 
-_EXPECTED_ACTIES = {
-    "account", "taal", "volg", }
+_EXPECTED_ACTIES = set()   # Google-backend volledig verwijderd; geen jsonp-acties meer
 
 def _dict_body(html, name):
     m = re.search(r'const\s+' + name + r'\s*=\s*\{', html)
