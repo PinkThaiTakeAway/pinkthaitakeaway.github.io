@@ -681,6 +681,7 @@
     <div class="brand"><span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span><span class="mgmt-badge">Management</span><span class="mgmt-user" id="mgmtUser"></span></div>
     <div class="bar-right">
       <button class="refresh-btn" id="refreshBtn" aria-label="Vernieuwen" title="Vernieuwen" onclick="location.reload()">🔄</button>
+      <button class="acct-btn" id="acctBtn" aria-label="inloggen"><span>👤 <span id="acctLabel">Inloggen</span></span></button>
       <div class="langsw" id="langsw">
         <button data-lang="nl">NL</button><button data-lang="en">EN</button><button data-lang="th">ไทย</button>
       </div>
@@ -1654,10 +1655,12 @@ document.getElementById("waBtn").onclick = async () => {
       start: pickupISO(_w0.van), order_id: orderId, naam, tel, vid: myVid(),
       bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
       afhaal, taal: LANG, mand: JSON.stringify(cart),
+      klanttoken: acctToken(),
       turnstile: (window.turnstile && turnstile.getResponse) ? (turnstile.getResponse() || "") : ""
     });
     try{ if(window.turnstile) turnstile.reset(); }catch(e){}
     if(!r || !r.ok) throw new Error("bestelling niet doorgekomen");
+    if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); _accountData=null; localStorage.removeItem("tta_acctcache"); }catch(e){} try{ updateAcctBtn(); }catch(e){} }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]); store.save();
     try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam, tel})); }catch(e){}
@@ -3139,7 +3142,10 @@ let _accountData = null, _accountFetch = null;
 function fetchAccount(){
   if(_accountFetch) return _accountFetch;
   const tok = acctToken();
-  _accountFetch = jsonp({actie:"account", token:tok, vid: myVid()});
+  _accountFetch = fetch(WORKER_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ soort:"account", token:tok }) })
+    .then(function(r){ return r.json(); })
+    .then(function(j){ if(j && j.ok && Array.isArray(j.bestellingen)){ j.bestellingen = j.bestellingen.map(function(b){ return Object.assign({}, b, { id: b.order_id || b.id }); }); } return j; })
+    .catch(function(){ return null; });
   Promise.resolve(_accountFetch).finally(()=>{ _accountFetch = null; });
   return _accountFetch;
 }
@@ -4596,6 +4602,9 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
   document.getElementById("loginClose").onclick = closeLogin;
   document.getElementById("accountClose").onclick = closeAccount;
   document.getElementById("accountLogout").onclick = uitloggen;
+  { const _ab=document.getElementById("acctBtn"); if(_ab) _ab.onclick = function(){ acctToken() ? openAccount() : openLogin(); }; }
+  try{ updateAcctBtn(); }catch(e){}
+  { const _lp = new URLSearchParams(location.search).get("login"); if(_lp){ localStorage.setItem("tta_klanttoken", _lp); try{ localStorage.removeItem("tta_noauto"); }catch(e){} try{ history.replaceState(null,"",location.pathname); }catch(e){} try{ updateAcctBtn(); }catch(e){} openAccount(); } }
   if(BEHEER){ initBeheer().then(()=>{ hideLoader(); loadAanbod().then(()=>{ try{ snapshotAanbod(); }catch(e){} }); }, hideLoader); toonBeheerder(); prefetchAlles(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { await resolvePhotos(); hideLoader(); }
 })();
 </script>
