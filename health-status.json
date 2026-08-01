@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-08-01T09:34:40Z",
+  "opgeslagen": "2026-08-01T09:40:42Z",
   "scriptVersie": null,
   "verwachteVersie": 45,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-08-01T09:34:39.868206+00:00",
+    "updated": "2026-08-01T09:40:42.001856+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -310,6 +310,19 @@
           },
           {
             "naam": "geen ongebruikte acties in het contract",
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "naam": "Bestellingen",
+        "items": [
+          {
+            "naam": "Bestellingen: geen vergeten orders (openstaand > 10 dagen)",
+            "status": "ok"
+          },
+          {
+            "naam": "Bestellingen: 2 openstaand van 2 totaal",
             "status": "ok"
           }
         ]
