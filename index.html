@@ -2423,18 +2423,6 @@ function renderInstellingen(){
   const fsb=document.getElementById("fotoSaveBtn"); if(fsb) fsb.onclick = fotoOpslaan;
   { const ff=document.getElementById("fotoFile"); if(ff) ff.onchange = (e)=>{ if(e.target.files && e.target.files[0]) uploadChefFoto(e.target.files[0]); }; }
   { const fi=document.getElementById("fotoIn"), fp=document.getElementById("fotoPreview"); if(fi && fp) fi.addEventListener("input", ()=>{ fp.src = fi.value.trim() || "chef.jpg"; }); }
-  cbLaden();
-}
-async function cbLaden(){
-  try{
-    const r = await jsonp({actie:"cbget", key:klantKey()});
-    if(r && r.ok){
-      _cbCache = {tel:r.tel||"", key:r.key||""}; try{ localStorage.setItem("tta_cbcache", JSON.stringify(_cbCache)); }catch(e){}
-      const t=document.getElementById("cbTelIn"), k=document.getElementById("cbKeyIn");
-      if(t && document.activeElement!==t) t.value=_cbCache.tel;
-      if(k && document.activeElement!==k) k.value=_cbCache.key;
-    }
-  }catch(e){}
 }
 function _dagOpties(sel){
   const s = (typeof sel==="number") ? sel : 5;

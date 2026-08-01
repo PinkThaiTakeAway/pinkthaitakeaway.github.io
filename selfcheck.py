@@ -374,26 +374,6 @@ def check_live(html):
     st, _ = http(f"{SITE}/chef.jpg")
     ok("standaard chef-foto (chef.jpg) aanwezig") if st == 200 else warn(f"chef.jpg status {st}")
 
-    # 13. CallMeBot-melding (via veilige publieke statuscheck)
-    if m:
-        sep = "&" if "?" in m.group(1) else "?"
-        st2, body2 = http(m.group(1) + sep + "actie=statuscheck&t=selfcheck")
-        conf = None
-        if st2 and body2:
-            try:
-                d = json.loads(body2.decode())
-                if d.get("ok"):
-                    conf = d
-            except Exception:
-                pass
-        if conf is not None:
-            if conf.get("cbConfigured"):
-                ok("CallMeBot-melding: telefoon en key ingesteld")
-            else:
-                warn("CallMeBot-melding: geen telefoon/key ingesteld — bestellingen sturen geen WhatsApp")
-        else:
-            warn("CallMeBot-status kon niet worden opgevraagd")
-
     # 14. TLS-certificaat: vervaldatum bewaken
     try:
         host = SITE.split("://", 1)[-1].split("/", 1)[0]
