@@ -3122,14 +3122,16 @@ function berWaKlant(btn){
   if(btn && btn.classList){ btn.classList.add("done"); if(!/^✓ /.test(btn.textContent)) btn.textContent="✓ "+btn.textContent; }
   const info=document.getElementById("berSentInfo"); if(info) info.innerHTML=berSentInfoHtml();
 }
-function berTaalWijzig(sel){
-  const taal=sel.value, token=sel.dataset.token||"", tel=sel.dataset.tel||"";
-  let oudT=""; (_klantRecords||[]).forEach(function(k){ if((token && k.token===token) || (tel && k.tel===tel)){ if(!oudT) oudT=k.taal||""; } });
-  if(String(oudT)!==String(taal)) try{ logAudit("", "Taal klant "+(_klantNaam(tel)||tel||token)+": "+(oudT||"\u2014")+" \u2192 "+taal); }catch(e){}
-  (_klantRecords||[]).forEach(function(k){ if((token && k.token===token) || (tel && k.tel===tel)) k.taal=taal; });
-  try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
-  try{ jsonp({actie:"taal", token:token, taal:taal, tel:tel, key:klantKey()}); }catch(e){}
-  showToast(BT().kl.berTaalOpslaan, true);
+async function berTaalWijzig(sel){
+  const taal=sel.value, token=sel.dataset.token||"", tel=sel.dataset.tel||"", tn=String(tel||"").replace(/\D/g,"");
+  try{
+    const lijst = await _laadKlantenLijst(); let oudT="";
+    lijst.forEach(function(k){ if((token && k.token===token) || (tn && String(k.tel||"").replace(/\D/g,"")===tn)){ if(!oudT) oudT=k.taal||""; k.taal=taal; } });
+    await _schrijfKlantenLijst(lijst);
+    if(String(oudT)!==String(taal)) try{ logAudit("", "Taal klant "+(_klantNaam(tel)||tel||token)+": "+(oudT||"\u2014")+" \u2192 "+taal); }catch(e){}
+    (_klantRecords||[]).forEach(function(k){ if((token && k.token===token) || (tel && k.tel===tel)) k.taal=taal; });
+    showToast(BT().kl.berTaalOpslaan, true);
+  }catch(e){ showToast(BT().kl.tNietBij, false); }
 }
 function openAccount(){ document.getElementById("accountOverlay").classList.add("open"); laadAccount(); }
 function closeAccount(){ document.getElementById("accountOverlay").classList.remove("open"); }
@@ -3283,13 +3285,24 @@ async function _ghDeleteFile(path, sha, message){
   }catch(e){ return false; }
 }
 let _klantFetch = null;
+async function _laadKlantenLijst(){
+  if(!ghToken()) return [];
+  try{
+    const r = await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/klanten.json?t="+Date.now(), { headers:_ghHeaders(), cache:"no-store" });
+    if(!r.ok) return [];
+    const j = await r.json();
+    const arr = JSON.parse(decodeURIComponent(escape(atob(String(j.content||"").replace(/\s/g,"")))));
+    return Array.isArray(arr) ? arr : [];
+  }catch(e){ return []; }
+}
+async function _schrijfKlantenLijst(lijst){ await ghPut("klanten.json", lijst, "Klantenlijst bijwerken"); }
 function fetchKlanten(){
   if(_klantFetch) return _klantFetch;               // al bezig? gebruik dezelfde aanroep
   _klantFetch = (async ()=>{
     if(!ghToken()) return { ok:false, fout:"geen toegang" };
     const best = await laadBestellingen();
     if(best === null) return { ok:false };
-    return { ok:true, bestellingen: best, klanten: [] };
+    return { ok:true, bestellingen: best, klanten: await _laadKlantenLijst() };
   })();
   _klantFetch.finally(()=>{ _klantFetch = null; });  // vrijgeven na afronden
   return _klantFetch;
@@ -3436,31 +3449,55 @@ function waUitnodiging(tel, naam, email, taal){
 }
 async function registreerUitnodiging(email, tel){
   const teln = String(tel||"").replace(/\D/g,"");
-  const rec = (_klantRecords||[]).find(k => (email && String(k.email||"").toLowerCase()===email.toLowerCase()) || (!email && teln && String(k.tel||"").replace(/\D/g,"")===teln));
-  const oudU=(rec&&rec.uitgenodigd)||0;
-  try{ logAudit("", "Uitnodiging "+(_klantNaam(tel)||tel||email)+": "+oudU+"\u00d7 \u2192 "+(oudU+1)+"\u00d7"); }catch(e){}
-  if(rec){ rec.uitgenodigd=(rec.uitgenodigd||0)+1; rec.laatstUitgenodigd=new Date().toISOString(); }
-  try{ localStorage.setItem("tta_klantcache", JSON.stringify({bestellingen:_klantData, klanten:_klantRecords, t:Date.now()})); }catch(e){}
-  if(_kTab==="klanten" && !_kForm) renderKlanten();
-  try{ await jsonp({actie:"uitgenodigd", email:email||"", tel:tel||"", key:klantKey()}); }catch(e){}
+  try{
+    const lijst = await _laadKlantenLijst();
+    let rec = lijst.find(k => (email && String(k.email||"").toLowerCase()===email.toLowerCase()) || (!email && teln && String(k.tel||"").replace(/\D/g,"")===teln));
+    const oudU=(rec&&rec.uitgenodigd)||0;
+    if(!rec){ rec={ naam:"", tel:tel||"", email:email||"", taal:"", uitgenodigd:0 }; lijst.unshift(rec); }
+    rec.uitgenodigd=(rec.uitgenodigd||0)+1; rec.laatstUitgenodigd=new Date().toISOString();
+    await _schrijfKlantenLijst(lijst);
+    try{ logAudit("", "Uitnodiging "+(_klantNaam(tel)||tel||email)+": "+oudU+"\u00d7 \u2192 "+(oudU+1)+"\u00d7"); }catch(e){}
+    (_klantRecords||[]).forEach(function(k){ if(teln && String(k.tel||"").replace(/\D/g,"")===teln){ k.uitgenodigd=(k.uitgenodigd||0)+1; } });
+    if(_kTab==="klanten" && !_kForm) renderKlanten();
+  }catch(e){}
 }
 async function klantNieuwOpslaan(){
+  const K = BT().kl, A = T().adm;
   const naam=(document.getElementById("knNaam").value||"").trim();
   const tel=(document.getElementById("knTel").value||"").trim();
-  if(!tel){ showToast(BT().kl.telVerplicht, false); return; }
-  const r = await jsonp({actie:"klantnieuw", naam, tel, key:klantKey()});
-  if(r && r.ok){ _kForm=null; localStorage.removeItem("tta_klantcache"); showToast(r.bestond?BT().kl.klantBijgewerkt:BT().kl.klantToegevoegd, true); laadKlanten(); }
-  else showToast((r&&r.fout)||BT().kl.tNietBij, false);
+  if(!tel){ showToast(K.telVerplicht, false); return; }
+  if(!ghToken()){ showToast(A.tokenNeed, false); return; }
+  showToast(A.saving, null);
+  try{
+    const lijst = await _laadKlantenLijst();
+    const tn = tel.replace(/\D/g,""); let bestond=false;
+    lijst.forEach(function(k){ if(String(k.tel||"").replace(/\D/g,"")===tn){ bestond=true; if(naam) k.naam=naam; } });
+    if(!bestond) lijst.unshift({ naam:naam, tel:tel, taal:"", uitgenodigd:0 });
+    await _schrijfKlantenLijst(lijst);
+    _kForm=null; localStorage.removeItem("tta_klantcache");
+    showToast(bestond?K.klantBijgewerkt:K.klantToegevoegd, true); laadKlanten();
+  }catch(e){ showToast(K.tNietBij, false); }
 }
 async function klantImporteren(){
+  const K = BT().kl, A = T().adm;
   const txt=(document.getElementById("kimpTxt").value||"").trim();
-  if(!txt){ showToast(BT().kl.impLeeg, false); return; }
-  const lijst = parseKlantImport(txt);
-  if(!lijst.length){ showToast(BT().kl.impGeenRegels, false); return; }
-  if(lijst.length>100){ showToast(BT().kl.impTeveel, false); return; }
-  const r = await jsonp({actie:"klantimport", data: JSON.stringify(lijst), key:klantKey()});
-  if(r && r.ok){ _kForm=null; localStorage.removeItem("tta_klantcache"); showToast(BT().kl.impKlaar(r.nieuw||0, r.bijgewerkt||0), true); laadKlanten(); }
-  else showToast((r&&r.fout)||BT().kl.tNietBij, false);
+  if(!txt){ showToast(K.impLeeg, false); return; }
+  const nieuwe = parseKlantImport(txt);
+  if(!nieuwe.length){ showToast(K.impGeenRegels, false); return; }
+  if(nieuwe.length>100){ showToast(K.impTeveel, false); return; }
+  if(!ghToken()){ showToast(A.tokenNeed, false); return; }
+  showToast(A.saving, null);
+  try{
+    const lijst = await _laadKlantenLijst(); let cN=0, cB=0;
+    nieuwe.forEach(function(n){
+      const tn=String(n.tel||"").replace(/\D/g,""); let bestond=false;
+      lijst.forEach(function(k){ if(tn && String(k.tel||"").replace(/\D/g,"")===tn){ bestond=true; if(n.naam) k.naam=n.naam; if(n.email) k.email=n.email; } });
+      if(!bestond){ lijst.unshift({ naam:n.naam||"", tel:n.tel||"", email:n.email||"", taal:"", uitgenodigd:0 }); cN++; } else cB++;
+    });
+    await _schrijfKlantenLijst(lijst);
+    _kForm=null; localStorage.removeItem("tta_klantcache");
+    showToast(K.impKlaar(cN, cB), true); laadKlanten();
+  }catch(e){ showToast(K.tNietBij, false); }
 }
 function renderKlantenLijst(){
   const K = BT().kl;
