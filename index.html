@@ -1189,6 +1189,13 @@ const SERVE_EDITS = {};
 const NUMS = {};
 let _numsDirty = false;
 const GH_REPO = "PinkThaiTakeAway/pinkthaitakeaway.github.io";
+const WORKER_URL = "https://ptta.hansstobbe.workers.dev";   // Cloudflare Worker: neemt bestellingen aan
+async function postOrder(payload){
+  try{
+    const r = await fetch(WORKER_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(payload) });
+    return await r.json();
+  }catch(e){ return null; }
+}
 const SITE_HOME = "https://pinkthaitakeaway.nl/";
 const RH_LABELS = {curry:"Curry / saus",soup:"Soep",fried:"Gefrituurd / krokant",wok:"Wok / gebakken",rice:"Rijstgerecht",grill:"Gegrild vlees",salad:"Salade (koud)",rotiwarm:"Roti / warm bakken",cold:"Koud (ijs/dessert)",sticky:"Mango kleefrijst",stickyplain:"Kleefrijst",drink:"Drank"};
 const BEHEER = new URLSearchParams(location.search).has("beheer");
@@ -1649,8 +1656,7 @@ document.getElementById("waBtn").onclick = async () => {
   const btn = document.getElementById("waBtn");
   btn.disabled = true; msg.className="order-msg"; msg.textContent = T().orderSending;
   try{
-    const r = await jsonp({
-      actie: "bestelling",
+    const r = await postOrder({
       start: pickupISO(_w0.van), order_id: orderId, naam, tel, vid: myVid(),
       bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
       afhaal, taal: LANG, mand: JSON.stringify(cart)
