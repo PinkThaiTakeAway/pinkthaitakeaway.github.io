@@ -3289,7 +3289,7 @@ function toonBeheerder(){
 
 async function laadKlanten(){
   const body = document.getElementById("kBody");
-  if(!klantKey()){ toonSleutelInvoer(); return; }
+  if(!ghToken()){ toonSleutelInvoer(); return; }
   // 1) toon direct de laatst bekende gegevens (snel), indien aanwezig
   let toonde = false, cacheStr = "";
   try{
@@ -3314,19 +3314,64 @@ async function laadKlanten(){
   let oudStr = ""; try{ const cc = JSON.parse(cacheStr||"null"); if(cc) oudStr = JSON.stringify({bestellingen:cc.bestellingen, klanten:cc.klanten||[]}); }catch(e){}
   if((!toonde || verseStr !== oudStr) && !_kForm) renderKlanten();  // alleen hertekenen als nieuw of gewijzigd (niet tijdens invoer)
 }
+/* ---------- Bestellingen: lezen/schrijven via GitHub (Cloudflare Worker slaat op in bestellingen/) ---------- */
+function _ghHeaders(){ return { Authorization:"token "+ghToken(), Accept:"application/vnd.github+json" }; }
+function _b64u(str){ return btoa(unescape(encodeURIComponent(str))); }
+function _schoonOrder(b){ const o=Object.assign({}, b); delete o.id; delete o._path; delete o._sha; return o; }
+async function laadBestellingen(){
+  if(!ghToken()) return null;
+  let lijst;
+  try{
+    const r = await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/bestellingen?t="+Date.now(), { headers:_ghHeaders(), cache:"no-store" });
+    if(r.status === 404) return [];                 // map bestaat nog niet = geen bestellingen
+    if(!r.ok) return null;
+    lijst = await r.json();
+  }catch(e){ return null; }
+  const grens = new Date(Date.now() - 45*864e5).toISOString().slice(0,10);   // laatste ~45 dagen tonen
+  const files = (Array.isArray(lijst)?lijst:[]).filter(f=>f.name && f.name.endsWith(".json") && f.name.slice(0,10) >= grens);
+  const items = await Promise.all(files.map(async f=>{
+    try{
+      const rr = await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/"+f.path+"?t="+Date.now(), { headers:_ghHeaders(), cache:"no-store" });
+      if(!rr.ok) return null;
+      const j = await rr.json();
+      const o = JSON.parse(decodeURIComponent(escape(atob(String(j.content||"").replace(/\n/g,"")))));
+      return Object.assign({}, o, { id:o.order_id, _path:j.path, _sha:j.sha });
+    }catch(e){ return null; }
+  }));
+  return items.filter(Boolean).sort((a,b)=> new Date(b.tijd||0) - new Date(a.tijd||0));
+}
+async function _ghWriteOrder(path, obj, sha, message){
+  try{
+    const r = await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/"+path, {
+      method:"PUT", headers: Object.assign({"Content-Type":"application/json"}, _ghHeaders()),
+      body: JSON.stringify({ message, content:_b64u(JSON.stringify(obj,null,2)), sha, branch:"main" })
+    });
+    if(!r.ok) return null; const j = await r.json(); return (j.content && j.content.sha) || null;
+  }catch(e){ return null; }
+}
+async function _ghDeleteFile(path, sha, message){
+  try{
+    const r = await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/"+path, {
+      method:"DELETE", headers: Object.assign({"Content-Type":"application/json"}, _ghHeaders()),
+      body: JSON.stringify({ message, sha, branch:"main" })
+    });
+    return r.ok;
+  }catch(e){ return false; }
+}
 let _klantFetch = null;
 function fetchKlanten(){
   if(_klantFetch) return _klantFetch;               // al bezig? gebruik dezelfde aanroep
   _klantFetch = (async ()=>{
-    let r = await jsonp({actie:"klanten", key:klantKey()});
-    if(!r){ await new Promise(res=>setTimeout(res,600)); r = await jsonp({actie:"klanten", key:klantKey()}); }
-    return r;
+    if(!ghToken()) return { ok:false, fout:"geen toegang" };
+    const best = await laadBestellingen();
+    if(best === null) return { ok:false };
+    return { ok:true, bestellingen: best, klanten: [] };
   })();
   _klantFetch.finally(()=>{ _klantFetch = null; });  // vrijgeven na afronden
   return _klantFetch;
 }
 async function prefetchKlanten(){
-  if(!klantKey()) return;
+  if(!ghToken()) return;
   try{
     const r = await fetchKlanten();
     if(r && r.ok){
@@ -3341,7 +3386,7 @@ async function prefetchInstellingen(){
 }
 let _klantAutoStarted = false;
 async function ververKlantCache(forceerRender){
-  if(!klantKey() || document.hidden) return;
+  if(!ghToken() || document.hidden) return;
   try{
     const r = await fetchKlanten();
     if(r && r.ok){
@@ -4177,33 +4222,43 @@ async function bezoekReset(){
   } else showToast(K.bzResetFout, false);
 }
 async function klantAfgehaald(id, waarde){
-  const r = await jsonp({actie:"afgehaald", id, waarde: waarde?"ja":"nee", key:klantKey()});
-  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.afgehaald=waarde; renderKlanten(); showToast(BT().kl.tBijgewerkt, true); }
+  const b=_klantData.find(x=>x.id===id); if(!b || !b._path){ showToast(BT().kl.tNietBij, false); return; }
+  const o=_schoonOrder(b); o.afgehaald=waarde;
+  const sha = await _ghWriteOrder(b._path, o, b._sha, "Bestelling #"+id+": afgehaald="+(waarde?"ja":"nee"));
+  if(sha){ b.afgehaald=waarde; b._sha=sha; renderKlanten(); showToast(BT().kl.tBijgewerkt, true); }
   else showToast(BT().kl.tNietBij, false);
 }
 async function klantBetaald(id, waarde){
-  const r = await jsonp({actie:"betaald", id, waarde: waarde?"ja":"nee", key:klantKey()});
-  if(r && r.ok){ const b=_klantData.find(x=>x.id===id); if(b) b.betaald=waarde; renderKlanten(); showToast(BT().kl.tBijgewerkt, true); }
+  const b=_klantData.find(x=>x.id===id); if(!b || !b._path){ showToast(BT().kl.tNietBij, false); return; }
+  const o=_schoonOrder(b); o.betaald=waarde;
+  const sha = await _ghWriteOrder(b._path, o, b._sha, "Bestelling #"+id+": betaald="+(waarde?"ja":"nee"));
+  if(sha){ b.betaald=waarde; b._sha=sha; renderKlanten(); showToast(BT().kl.tBijgewerkt, true); }
   else showToast(BT().kl.tNietBij, false);
 }
 async function klantNotitie(tel, tekst){
   const t=String(tel||"").replace(/\D/g,"");
-  const oudN=((_klantData||[]).find(x=>String(x.tel||"").replace(/\D/g,"")===t)||{}).notitie||"";
-  const r = await jsonp({actie:"notitie", tel, notitie:tekst, key:klantKey()});
-  if(r && r.ok){ _klantData.forEach(x=>{ if(String(x.tel||"").replace(/\D/g,"")===t) x.notitie=tekst; }); if(String(oudN)!==String(tekst||"")) try{ logAudit("", "Notitie "+_klantNaam(tel)+": "+_fmtAuditVal(oudN)+" \u2192 "+_fmtAuditVal(tekst||"")); }catch(e){} showToast(BT().kl.tNotitieOk, true); }
-  else showToast(BT().kl.tNotitieFout, false);
+  const doelen=_klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")===t && x._path);
+  if(!doelen.length){ showToast(BT().kl.tNotitieFout, false); return; }
+  let ok=true;
+  for(const b of doelen){ const o=_schoonOrder(b); o.notitie=tekst; const sha=await _ghWriteOrder(b._path,o,b._sha,"Notitie "+t); if(sha){ b.notitie=tekst; b._sha=sha; } else ok=false; }
+  renderKlanten();
+  showToast(ok?BT().kl.tNotitieOk:BT().kl.tNotitieFout, ok);
 }
 async function klantVerwijder(id){
   if(!confirm(BT().kl.confDelBest)) return;
-  const r = await jsonp({actie:"verwijder", id, key:klantKey()});
-  if(r && r.ok){ _klantData = _klantData.filter(x=>x.id!==id); renderKlanten(); showToast(BT().kl.tBestVerw, true); }
+  const b=_klantData.find(x=>x.id===id); if(!b || !b._path){ showToast(BT().kl.tVerwFout, false); return; }
+  const ok = await _ghDeleteFile(b._path, b._sha, "Bestelling #"+id+" verwijderd");
+  if(ok){ _klantData = _klantData.filter(x=>x.id!==id); renderKlanten(); showToast(BT().kl.tBestVerw, true); }
   else showToast(BT().kl.tVerwFout, false);
 }
 async function klantVerwijderKlant(tel){
   if(!confirm(BT().kl.confDelKlant)) return;
-  const r = await jsonp({actie:"verwijderklant", tel, key:klantKey()});
-  if(r && r.ok){ const t=String(tel||"").replace(/\D/g,""); _klantData = _klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")!==t); renderKlanten(); showToast(BT().kl.tKlantVerw, true); }
-  else showToast(BT().kl.tVerwFout, false);
+  const t=String(tel||"").replace(/\D/g,"");
+  const doelen=_klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")===t && x._path);
+  let ok=true; for(const b of doelen){ if(!await _ghDeleteFile(b._path, b._sha, "Bestelling #"+b.id+" verwijderd")) ok=false; }
+  _klantData = _klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")!==t);
+  renderKlanten();
+  showToast(ok?BT().kl.tKlantVerw:BT().kl.tVerwFout, ok);
 }
 async function klantVerwijderAlleBestellingen(tel){
   const t = String(tel||"").replace(/\D/g,"");
@@ -4212,8 +4267,8 @@ async function klantVerwijderAlleBestellingen(tel){
   if(!confirm(BT().kl.confDelAlleBest(ids.length))) return;
   let gelukt = 0;
   for(const id of ids){
-    try{ const r = await jsonp({actie:"verwijder", id, key:klantKey()});
-      if(r && r.ok){ gelukt++; _klantData = _klantData.filter(x=>x.id!==id); } }catch(e){}
+    const b=_klantData.find(x=>x.id===id); if(!b||!b._path) continue;
+    if(await _ghDeleteFile(b._path, b._sha, "Bestelling #"+id+" verwijderd")){ gelukt++; _klantData = _klantData.filter(x=>x.id!==id); }
   }
   renderKlanten();
   if(gelukt) showToast(BT().kl.tAlleBestVerw(gelukt), true);
