@@ -911,9 +911,9 @@ def seo_checks(html):
     return items
 
 _EXPECTED_ACTIES = {
-    "account", "adminget", "bezoek",
+    "account", "bezoek",
     "bezoekreset", "bezoekstats", "klantimport", "klantnieuw",
-    "taal", "uitgenodigd", "versie", "volg", "adminwis", "adminblock", }
+    "taal", "uitgenodigd", "versie", "volg", }
 
 def _dict_body(html, name):
     m = re.search(r'const\s+' + name + r'\s*=\s*\{', html)
