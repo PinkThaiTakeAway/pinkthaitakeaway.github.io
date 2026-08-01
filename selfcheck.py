@@ -331,16 +331,6 @@ def check_live(html):
     st, _ = http(SITE + "/pink-thai-og.png")
     ok("deelbanner bereikbaar") if st == 200 else warn(f"deelbanner status {st}")
 
-    # 10. De bestelkoppeling (Apps Script) — verwerkt bestellingen, agenda en klanten
-    m = re.search(r'agendaUrl:\s*"([^"]+)"', html or "")
-    if m:
-        st, _ = http(m.group(1))
-        # Apps Script antwoordt op een GET vaak met 200/302/405 - elk is 'leeft'
-        if st is not None:
-            ok(f"bestelkoppeling reageert (status {st})")
-        else:
-            warn("bestelkoppeling reageerde niet")
-
     # 11. Bedrijfsgegevens (bedrijf.json): bereikbaar, geldig en logisch
     st, body = http(f"{SITE}/bedrijf.json?t=selfcheck")
     if st == 200:

@@ -2623,7 +2623,6 @@ function wireShare(){
   laadDeelcode();
   btn.onclick = deelPagina;
 }
-const SCRIPT_VERSIE_VERWACHT = 45;  // ophogen samen met SCRIPT_VERSIE in het Apps Script
 function _canon(v){
   if(Array.isArray(v)){ const m=v.map(_canon); if(m.every(x=> x===null || typeof x!=="object")) m.sort(); return m; }
   if(v && typeof v==="object"){ const o={}; Object.keys(v).sort().forEach(k=>{ o[k]=_canon(v[k]); }); return o; }
@@ -2787,12 +2786,8 @@ async function healthOpslaan(){
     const hd = await haalHealthData();
     let totErr=0, totWarn=0;
     (hd.groepen||[]).forEach(g => (g.items||[]).forEach(i => { if(i.status==="err") totErr++; else if(i.status==="warn") totWarn++; }));
-    let sv = null;
     const obj = {
       opgeslagen: new Date().toISOString(),
-      scriptVersie: sv,
-      verwachteVersie: SCRIPT_VERSIE_VERWACHT,
-      versieOk: (sv!==null && sv>=SCRIPT_VERSIE_VERWACHT),
       fouten: totErr,
       waarschuwingen: totWarn,
       onderdelen: hd.groepen || []
