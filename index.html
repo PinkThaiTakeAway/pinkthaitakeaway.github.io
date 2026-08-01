@@ -2817,6 +2817,7 @@ async function healthRun(){
 function klantKey(){ return localStorage.getItem("tta_klantkey") || ""; }
 let _klantData = [];
 let _klantRecords = [];
+let _klantTokenIndex = {};
 let _kTab = "klanten";
 let _kKlantView = "compact";
 let _kForm = null;
@@ -3248,12 +3249,23 @@ async function _laadKlantenLijst(){
   }catch(e){ return []; }
 }
 async function _schrijfKlantenLijst(lijst){ await ghPut("klanten.json", lijst, "Klantenlijst bijwerken"); }
+async function _laadTokenIndex(){
+  if(!ghToken()) return {};
+  try{
+    const r = await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/klant-token-index.json?t="+Date.now(), { headers:_ghHeaders(), cache:"no-store" });
+    if(!r.ok) return {};
+    const j = await r.json();
+    const o = JSON.parse(decodeURIComponent(escape(atob(String(j.content||"").replace(/\s/g,"")))));
+    return (o && typeof o==="object") ? o : {};
+  }catch(e){ return {}; }
+}
 function fetchKlanten(){
   if(_klantFetch) return _klantFetch;               // al bezig? gebruik dezelfde aanroep
   _klantFetch = (async ()=>{
     if(!ghToken()) return { ok:false, fout:"geen toegang" };
     const best = await laadBestellingen();
     if(best === null) return { ok:false };
+    try{ _klantTokenIndex = await _laadTokenIndex(); }catch(e){}
     return { ok:true, bestellingen: best, klanten: await _laadKlantenLijst() };
   })();
   _klantFetch.finally(()=>{ _klantFetch = null; });  // vrijgeven na afronden
@@ -3494,6 +3506,7 @@ function renderKlantenLijst(){
   '</div>';
   body.innerHTML = topBar + tog + klanten.map(k=>{
     const n = k.bestellingen.length;
+    k.token = k.token || (_klantTokenIndex[String(k.tel||"").replace(/\D/g,"")]||"");
     const vast = n>=5 ? '<span class="klabel">'+K.vasteKlant+'</span>' : '';
     const notitie = k.notitie||"";
     return '<details class="kklant">'+
