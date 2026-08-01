@@ -1059,6 +1059,46 @@ def openingsbericht_checks(html):
         items.append({"naam": f"Openingsbericht: {checked} taal-pagina('s) in orde (plaatje, og:title en doorverwijzing aanwezig)", "status": "ok"})
     return items
 
+def bestellingen_checks(html):
+    """Controleert de bestellingen/-map: openstaande orders die te lang blijven staan + onleesbare bestanden."""
+    import datetime
+    items = []
+    d = "bestellingen"
+    if not os.path.isdir(d):
+        items.append({"naam": "Bestellingen: nog geen bestellingen ontvangen", "status": "ok"})
+        return items
+    nu = datetime.datetime.now(datetime.timezone.utc)
+    totaal = openstaand = oud_open = corrupt = 0
+    for fn in sorted(os.listdir(d)):
+        if not fn.endswith(".json"):
+            continue
+        totaal += 1
+        try:
+            o = json.load(open(os.path.join(d, fn), encoding="utf-8"))
+        except Exception:
+            corrupt += 1
+            continue
+        if not o.get("afgehaald"):
+            openstaand += 1
+            dt = None
+            try:
+                dt = datetime.datetime.fromisoformat(str(o.get("tijd", "")).replace("Z", "+00:00"))
+            except Exception:
+                try:
+                    dt = datetime.datetime.fromisoformat(fn[:10] + "T00:00:00+00:00")
+                except Exception:
+                    dt = None
+            if dt and (nu - dt).days >= 10:
+                oud_open += 1
+    if corrupt:
+        items.append({"naam": f"Bestellingen: {corrupt} bestand(en) onleesbaar (ongeldige JSON)", "status": "warn"})
+    if oud_open:
+        items.append({"naam": f"Bestellingen: {oud_open} openstaande order(s) ouder dan 10 dagen \u2014 nog niet afgehaald?", "status": "warn"})
+    else:
+        items.append({"naam": "Bestellingen: geen vergeten orders (openstaand > 10 dagen)", "status": "ok"})
+    items.append({"naam": f"Bestellingen: {openstaand} openstaand van {totaal} totaal", "status": "ok"})
+    return items
+
 # Register van extra groepen (repo-modus). Nieuwe groepen worden hier toegevoegd.
 EXTRA_GROUPS = [
     ("Openingsbericht", openingsbericht_checks),
@@ -1066,6 +1106,7 @@ EXTRA_GROUPS = [
     ("Gerechten & data", dish_checks),
     ("SEO & vindbaarheid", seo_checks),
     ("Onderhoud", maintenance_checks),
+    ("Bestellingen", bestellingen_checks),
 ]
 
 def main():
