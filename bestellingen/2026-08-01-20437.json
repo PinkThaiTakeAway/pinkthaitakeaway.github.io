@@ -1,0 +1,20 @@
+{
+  "order_id": "20437",
+  "tijd": "2026-08-01T09:34:04.083Z",
+  "naam": "Hans",
+  "tel": "0628498822",
+  "bestelling": "1× #14 Kai Med Ma Mueang — € 15,00\n1× #7 Kuai-Tiao Kai — € 10,00",
+  "totaal": "€ 25,00",
+  "betaling": "Contant bij ophalen (€ 25,00)",
+  "opmerking": "",
+  "afhaal": "vrijdag 7-8 17:00–19:00",
+  "start": "2026-08-07T15:00:00.000Z",
+  "taal": "nl",
+  "vid": "msa0ro84huo5gnwf",
+  "mand": {
+    "cashew": 1,
+    "kuaitiaokai": 1
+  },
+  "afgehaald": false,
+  "betaald": false
+}
