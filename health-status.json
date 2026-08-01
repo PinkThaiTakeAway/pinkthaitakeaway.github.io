@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-08-01T08:55:35Z",
+  "opgeslagen": "2026-08-01T08:58:04Z",
   "scriptVersie": null,
   "verwachteVersie": 45,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-08-01T08:55:34.786412+00:00",
+    "updated": "2026-08-01T08:58:03.808050+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -416,6 +416,14 @@
           },
           {
             "naam": "standaard chef-foto (chef.jpg) aanwezig",
+            "status": "ok"
+          },
+          {
+            "naam": "bestel-backend (Cloudflare Worker): bereikbaar met juiste code",
+            "status": "ok"
+          },
+          {
+            "naam": "bestel-backend: CORS staat bestellingen vanaf de site toe",
             "status": "ok"
           },
           {
