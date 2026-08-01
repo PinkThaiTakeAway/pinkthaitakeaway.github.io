@@ -30,6 +30,18 @@ def http(url, timeout=25):
     except Exception as e:
         return None, str(e).encode()
 
+def http_full(url, timeout=15):
+    """Als http(), maar behoudt body en headers ook bij een 4xx/5xx (voor de Worker-check)."""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "selfcheck"})
+        try:
+            r = urllib.request.urlopen(req, timeout=timeout)
+            return r.getcode(), r.read(), dict(r.headers)
+        except urllib.error.HTTPError as e:
+            return e.code, e.read(), dict(e.headers)
+    except Exception as e:
+        return None, b"", {}
+
 def redirect_target(url, timeout=20):
     """Geeft (status, Location) van de eerste reactie ZONDER redirects te volgen."""
     class _NoRedir(urllib.request.HTTPRedirectHandler):
@@ -373,6 +385,27 @@ def check_live(html):
     # 12. Standaard chef-foto aanwezig (fallback als er geen eigen foto is ingesteld)
     st, _ = http(f"{SITE}/chef.jpg")
     ok("standaard chef-foto (chef.jpg) aanwezig") if st == 200 else warn(f"chef.jpg status {st}")
+
+    # 13. Cloudflare Worker (bestel-backend): bereikbaar, juiste code, CORS
+    wm = re.search(r'WORKER_URL\s*=\s*"([^"]+)"', html)
+    if wm:
+        wst, wbody, wheaders = http_full(wm.group(1))
+        if wst in (200, 405) and b"POST vereist" in (wbody or b""):
+            ok("bestel-backend (Cloudflare Worker): bereikbaar met juiste code")
+        elif wst is not None:
+            warn("bestel-backend (Cloudflare Worker): reageert, maar onverwachte inhoud — controleer de Worker")
+        else:
+            err(f"bestel-backend (Cloudflare Worker): niet bereikbaar ({(wbody or b'').decode(errors='ignore')[:40]})")
+        aco = ""
+        for k, v in (wheaders or {}).items():
+            if k.lower() == "access-control-allow-origin":
+                aco = v
+        if aco == "*" or "pinkthaitakeaway.nl" in aco:
+            ok("bestel-backend: CORS staat bestellingen vanaf de site toe")
+        elif wst is not None:
+            warn("bestel-backend: CORS laat de site mogelijk niet toe — controleer SITE_ORIGIN in de Worker")
+    else:
+        warn("WORKER_URL niet gevonden in index.html — is de bestel-backend gekoppeld?")
 
     # 14. TLS-certificaat: vervaldatum bewaken
     try:
