@@ -1556,6 +1556,7 @@ document.getElementById("fbGo").onclick = openSheet;
 document.getElementById("closeBtn").onclick = closeSheet;
 overlay.onclick = closeSheet;
 const form = { naam:"", tel:"", slot:"", note:"", pay:"contant", pickTs:0 };
+try{ const _kp=JSON.parse(localStorage.getItem("tta_klantprofiel")||"null"); if(_kp){ if(_kp.naam) form.naam=_kp.naam; if(_kp.tel) form.tel=_kp.tel; } }catch(e){}
 
 function renderSheet(){
   const ids = Object.keys(cart);
@@ -1667,7 +1668,8 @@ document.getElementById("waBtn").onclick = async () => {
     if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); localStorage.removeItem("tta_noauto"); ingelogdNu = true; }catch(e){} try{ updateAcctBtn(); }catch(e){} if(typeof laadDeelcode==="function") laadDeelcode(); if(typeof prefetchAccount==="function"){ _accountData=null; prefetchAccount(); } }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]); store.save();
-    form.naam=""; form.tel=""; form.note=""; form.pay="contant";
+    try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam, tel})); }catch(e){}
+    form.note=""; form.pay="contant";
     buildMenu(); updateBars();
     sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>`
       + `${ingelogdNu?`<p class="order-hint">${T().orderIngelogd}</p>`:""}`
