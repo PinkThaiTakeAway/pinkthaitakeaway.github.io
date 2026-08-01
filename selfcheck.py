@@ -900,7 +900,7 @@ def seo_checks(html):
 _EXPECTED_ACTIES = {
     "account", "adminget", "adminlog", "bezoek",
     "bezoekreset", "bezoekstats", "cbget", "cbset", "klantimport", "klantnieuw",
-    "statuscheck", "taal", "uitgenodigd", "versie", "volg", "zatnu", "audit", "auditget", "auditwis", "adminwis", "adminblock", "adminstatus",
+    "taal", "uitgenodigd", "versie", "volg", "zatnu", "audit", "auditget", "auditwis", "adminwis", "adminblock", "adminstatus",
 }
 
 def _dict_body(html, name):

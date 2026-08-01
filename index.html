@@ -779,9 +779,6 @@
       <button class="ktab active" data-tab="klanten">Klanten</button>
       <button class="ktab" data-tab="afhaal">Afhaallijst</button>
       <button class="ktab" data-tab="cijfers">Cijfers</button>
-      <button class="ktab" data-tab="bezoek">Bezoek</button>
-      <button class="ktab" data-tab="admins">Admins</button>
-      <button class="ktab" data-tab="audit">Audit</button>
       <button class="ktab" data-tab="aanbod">Aanbod</button>
     </div>
     <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam of telefoon…" autocomplete="off">
@@ -2727,15 +2724,9 @@ async function checkAccess(){
     }
   }
   try{
-    const st = await jsonp({actie:"statuscheck"});
-    const sv = (st && st.ok && typeof st.versie === "number") ? st.versie : 0;
-    if(sv >= SCRIPT_VERSIE_VERWACHT) items.push({naam:H.scriptOk(sv), status:"ok"});
-    else if(sv > 0)                  items.push({naam:H.scriptOud(sv, SCRIPT_VERSIE_VERWACHT), status:"warn"});
-    else                             items.push({naam:H.scriptOnbekend, status:"warn"});
-    if(st && st.ok && st.opschoonActief !== undefined && st.opschoonActief !== null){
-      items.push(st.opschoonActief ? {naam:H.opschoonOk, status:"ok"} : {naam:H.opschoonUit, status:"warn"});
-    }
-  }catch(e){ items.push({naam:H.scriptOnbekend, status:"warn"}); }
+    const wr = await fetch(WORKER_URL, { method:"GET", cache:"no-store" });
+    items.push((wr.ok || wr.status === 405) ? {naam:H.backendOk, status:"ok"} : {naam:H.backendFout, status:"warn"});
+  }catch(e){ items.push({naam:H.backendFout, status:"warn"}); }
   try{
     if(BEHEER && ghToken()){
       await flushPushes();   // openstaande wijzigingen eerst wegschrijven
@@ -2930,7 +2921,7 @@ const BEHEER_T = {
       tokNiet:"Publicatie-token: niet ingesteld op dit apparaat", tokVerlopen:(d)=>"Publicatie-token: verlopen ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publicatie-token: verloopt binnenkort — over "+dagen+" dag(en), op "+d, tokGeldig:(d)=>"Publicatie-token: geldig (verloopt "+d+")",
       tokGeldigKort:"Publicatie-token: geldig", tokOngeldig:"Publicatie-token: ongeldig of verlopen", tokControle:(s)=>"Publicatie-token: kon niet controleren (status "+s+")", tokNetwerk:"Publicatie-token: kon niet controleren (netwerk)",
- scriptOk:(v)=>"Apps Script: bijgewerkt (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: verouderd — opnieuw deployen (server v"+sv+", verwacht v"+exp+")", scriptOnbekend:"Apps Script: versie onbekend — mogelijk oude versie, opnieuw deployen", opschoonOk:"Automatische opschoning: actief", opschoonUit:"Automatische opschoning: niet ingesteld — draai zetAuditTrigger in Apps Script", syncOk:"Synchronisatie: lokale data komt overeen met de site", syncUit:(n)=>"Synchronisatie: "+n+" onderdeel"+(n===1?"":"en")+" wijkt af van de site — herlaad de pagina"
+ backendOk:"Bestel-backend (Cloudflare): bereikbaar", backendFout:"Bestel-backend (Cloudflare): niet bereikbaar — controleer de Worker", syncOk:"Synchronisatie: lokale data komt overeen met de site", syncUit:(n)=>"Synchronisatie: "+n+" onderdeel"+(n===1?"":"en")+" wijkt af van de site — herlaad de pagina"
     }
   },
   en: {
@@ -2970,7 +2961,7 @@ const BEHEER_T = {
       tokNiet:"Publishing token: not set on this device", tokVerlopen:(d)=>"Publishing token: expired ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publishing token: expires soon — in "+dagen+" day(s), on "+d, tokGeldig:(d)=>"Publishing token: valid (expires "+d+")",
       tokGeldigKort:"Publishing token: valid", tokOngeldig:"Publishing token: invalid or expired", tokControle:(s)=>"Publishing token: could not check (status "+s+")", tokNetwerk:"Publishing token: could not check (network)",
- scriptOk:(v)=>"Apps Script: up to date (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: outdated — redeploy (server v"+sv+", expected v"+exp+")", scriptOnbekend:"Apps Script: version unknown — possibly old, redeploy", opschoonOk:"Automatic cleanup: active", opschoonUit:"Automatic cleanup: not set up — run zetAuditTrigger in Apps Script", syncOk:"Sync: local data matches the site", syncUit:(n)=>"Sync: "+n+" item"+(n===1?"":"s")+" differ from the site — reload the page"
+ backendOk:"Order backend (Cloudflare): reachable", backendFout:"Order backend (Cloudflare): unreachable — check the Worker", syncOk:"Sync: local data matches the site", syncUit:(n)=>"Sync: "+n+" item"+(n===1?"":"s")+" differ from the site — reload the page"
     }
   },
   th: {
@@ -3010,7 +3001,7 @@ const BEHEER_T = {
       tokNiet:"โทเคนเผยแพร่: ยังไม่ได้ตั้งค่าบนอุปกรณ์นี้", tokVerlopen:(d)=>"โทเคนเผยแพร่: หมดอายุ ("+d+")",
       tokBinnenkort:(dagen,d)=>"โทเคนเผยแพร่: กำลังจะหมดอายุ — ในอีก "+dagen+" วัน วันที่ "+d, tokGeldig:(d)=>"โทเคนเผยแพร่: ใช้งานได้ (หมดอายุ "+d+")",
       tokGeldigKort:"โทเคนเผยแพร่: ใช้งานได้", tokOngeldig:"โทเคนเผยแพร่: ไม่ถูกต้องหรือหมดอายุ", tokControle:(s)=>"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (สถานะ "+s+")", tokNetwerk:"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (เครือข่าย)",
- scriptOk:(v)=>"Apps Script: อัปเดตแล้ว (v"+v+")", scriptOud:(sv,exp)=>"Apps Script: เวอร์ชันเก่า — ดีพลอยใหม่ (เซิร์ฟเวอร์ v"+sv+", ต้องการ v"+exp+")", scriptOnbekend:"Apps Script: ไม่ทราบเวอร์ชัน — อาจเป็นเวอร์ชันเก่า ดีพลอยใหม่", opschoonOk:"การล้างอัตโนมัติ: ทำงานอยู่", opschoonUit:"การล้างอัตโนมัติ: ยังไม่ตั้งค่า — รัน zetAuditTrigger ใน Apps Script", syncOk:"การซิงค์: ข้อมูลตรงกับเว็บไซต์", syncUit:(n)=>"การซิงค์: "+n+" รายการไม่ตรงกับเว็บไซต์ — โหลดหน้าใหม่"
+ backendOk:"ระบบรับออเดอร์ (Cloudflare): เข้าถึงได้", backendFout:"ระบบรับออเดอร์ (Cloudflare): เข้าถึงไม่ได้ — ตรวจสอบ Worker", syncOk:"การซิงค์: ข้อมูลตรงกับเว็บไซต์", syncUit:(n)=>"การซิงค์: "+n+" รายการไม่ตรงกับเว็บไซต์ — โหลดหน้าใหม่"
     }
   }
 };
