@@ -2758,7 +2758,6 @@ async function healthOpslaan(){
     let totErr=0, totWarn=0;
     (hd.groepen||[]).forEach(g => (g.items||[]).forEach(i => { if(i.status==="err") totErr++; else if(i.status==="warn") totWarn++; }));
     let sv = null;
-    try{ const v = await jsonp({actie:"versie"}); if(v && v.ok && typeof v.versie==="number") sv = v.versie; }catch(e){}
     const obj = {
       opgeslagen: new Date().toISOString(),
       scriptVersie: sv,
