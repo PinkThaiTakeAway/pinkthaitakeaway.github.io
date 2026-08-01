@@ -2816,9 +2816,16 @@ let _klantTokenIndex = {};
 let _kTab = "klanten";
 let _kKlantView = "compact";
 let _kForm = null;
+async function prefetchBezoek(){ try{ const r = await fetchBezoek(); if(r && r.ok) _bezoekData = r; }catch(e){} }
+async function prefetchAudit(){ try{ const r = await fetchAudit(); if(r && r.ok) _auditData = r; }catch(e){} }
+async function prefetchAdmins(){ try{ const r = await fetchAdmins(); if(r && r.ok) _adminData = r; }catch(e){} }
 function prefetchAlles(){
-  // Laad alle beheer-data van de site voor, elke keer dat beheer geopend wordt.
+  // Laad alle beheer-data (klanten, aanbod, bezoek, audit, admins) op de achtergrond voor,
+  // zodat de tabs meteen openen. Niet-blokkerend: beheer opent direct.
   try{ prefetchKlanten(); }catch(e){}
+  try{ prefetchBezoek(); }catch(e){}
+  try{ prefetchAudit(); }catch(e){}
+  try{ prefetchAdmins(); }catch(e){}
   try{ loadAanbod(); }catch(e){}
 }
 function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); prefetchAlles(); laadKlanten(); }
