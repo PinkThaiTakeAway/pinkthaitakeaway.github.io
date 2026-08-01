@@ -780,6 +780,8 @@
       <button class="ktab" data-tab="afhaal">Afhaallijst</button>
       <button class="ktab" data-tab="cijfers">Cijfers</button>
       <button class="ktab" data-tab="aanbod">Aanbod</button>
+      <button class="ktab" data-tab="audit">Audit</button>
+      <button class="ktab" data-tab="admins">Admins</button>
     </div>
     <input id="kZoek" class="kzoek" type="search" placeholder="Zoek op naam of telefoon…" autocomplete="off">
     <div id="kBody" class="hbody"></div>
@@ -941,7 +943,7 @@ const I18N = {
       cDel:"Dit gerecht uit het menu halen? Je kunt het terugzetten via de prullenbak.", trash:"Prullenbak", trashTitle:"Verwijderde gerechten", trashEmpty:"De prullenbak is leeg.", restore:"↩️ Terugzetten", purge:"✕ Definitief", cPurge:"Dit gerecht definitief verwijderen? Het is daarna niet meer terug te zetten.", emptyTrash:"🗑️ Prullenbak legen", cEmptyTrash:"De hele prullenbak definitief legen? Geen van de verwijderde gerechten is daarna nog terug te zetten.",
 
       savePrice:"Prijs opslaan", priceErr:"Ongeldige prijs.", pushOk:"✓ Opgeslagen", pushErr:"Opslaan mislukt — controleer token/internet.",
- tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", adminNaamAsk:"Wat is je naam? (wordt vastgelegd bij je logins)", gateTitle:"Beheer-login", gateSub:"Voer je naam en GitHub-token in om toegang te krijgen tot de beheersite.", gateNaamL:"Naam", gateTokenL:"GitHub-token", gateNaamPh:"Je naam", gateTokenPh:"Plak je GitHub-token", gateBtn:"Toegang", gateVul:"Vul zowel je naam als je token in.", gateCheck:"Token controleren…", gateBad:"Token ongeldig of geen toegang tot de repo. Controleer en probeer opnieuw.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publishOk:"Alles gepubliceerd ✓"}
+ tokenAsk:"Plak je GitHub-token (wordt alleen op dit apparaat bewaard, niet online):", adminNaamAsk:"Wat is je naam? (wordt vastgelegd bij je logins)", gateTitle:"Beheer-login", gateSub:"Voer je naam en GitHub-token in om toegang te krijgen tot de beheersite.", gateNaamL:"Naam", gateTokenL:"GitHub-token", gateNaamPh:"Je naam", gateTokenPh:"Plak je GitHub-token", gateBtn:"Toegang", gateVul:"Vul zowel je naam als je token in.", gateCheck:"Token controleren…", gateBad:"Token ongeldig of geen toegang tot de repo. Controleer en probeer opnieuw.", gateIngetrokken:"Je toegang tot het beheer is ingetrokken.", tokenNeed:"Stel eerst je GitHub-token in via de knop 🔑 Token om live op te slaan.", saving:"Opslaan…", tokenOk:"Token werkt ✓", tokenBad:"Token ongeldig of geen toegang tot de repo.", publishOk:"Alles gepubliceerd ✓"}
   },
   en: {
     locale:"en-GB", zaterdag:"Saturday", vrijdag:"Friday",
@@ -982,7 +984,7 @@ const I18N = {
       cDel:"Remove this dish from the menu? You can restore it from the trash.", trash:"Trash", trashTitle:"Deleted dishes", trashEmpty:"The trash is empty.", restore:"↩️ Restore", purge:"✕ Delete", cPurge:"Permanently delete this dish? It cannot be restored afterwards.", emptyTrash:"🗑️ Empty trash", cEmptyTrash:"Permanently empty the entire trash? None of the deleted dishes can be restored afterwards.",
 
       savePrice:"Save price", priceErr:"Invalid price.", pushOk:"✓ Saved", pushErr:"Save failed — check token/internet.",
- tokenAsk:"Paste your GitHub token (stored only on this device, not online):", adminNaamAsk:"What is your name? (recorded with your logins)", gateTitle:"Admin login", gateSub:"Enter your name and GitHub token to access the admin site.", gateNaamL:"Name", gateTokenL:"GitHub token", gateNaamPh:"Your name", gateTokenPh:"Paste your GitHub token", gateBtn:"Access", gateVul:"Please enter both your name and token.", gateCheck:"Checking token…", gateBad:"Invalid token or no access to the repo. Please check and try again.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publishOk:"All published ✓"}
+ tokenAsk:"Paste your GitHub token (stored only on this device, not online):", adminNaamAsk:"What is your name? (recorded with your logins)", gateTitle:"Admin login", gateSub:"Enter your name and GitHub token to access the admin site.", gateNaamL:"Name", gateTokenL:"GitHub token", gateNaamPh:"Your name", gateTokenPh:"Paste your GitHub token", gateBtn:"Access", gateVul:"Please enter both your name and token.", gateCheck:"Checking token…", gateBad:"Invalid token or no access to the repo. Please check and try again.", gateIngetrokken:"Your admin access has been revoked.", tokenNeed:"Set your GitHub token first via the 🔑 Token button to save live.", saving:"Saving…", tokenOk:"Token works ✓", tokenBad:"Token invalid or no repo access.", publishOk:"All published ✓"}
   },
   th: {
     locale:"th-TH", zaterdag:"วันเสาร์", vrijdag:"วันศุกร์",
@@ -1022,7 +1024,7 @@ const I18N = {
       cDel:"นำเมนูนี้ออกจากเมนูหรือไม่? กู้คืนได้จากถังขยะ", trash:"ถังขยะ", trashTitle:"เมนูที่ลบ", trashEmpty:"ถังขยะว่างเปล่า", restore:"↩️ กู้คืน", purge:"✕ ลบถาวร", cPurge:"ลบเมนูนี้ถาวรหรือไม่? จะกู้คืนไม่ได้อีก", emptyTrash:"🗑️ ล้างถังขยะ", cEmptyTrash:"ล้างถังขยะทั้งหมดถาวรหรือไม่? เมนูที่ลบจะกู้คืนไม่ได้อีก",
 
       savePrice:"บันทึกราคา", priceErr:"ราคาไม่ถูกต้อง", pushOk:"✓ บันทึกแล้ว", pushErr:"บันทึกไม่สำเร็จ — ตรวจสอบโทเคน/อินเทอร์เน็ต",
- tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", adminNaamAsk:"คุณชื่ออะไร? (บันทึกพร้อมการเข้าสู่ระบบ)", gateTitle:"เข้าสู่ระบบผู้ดูแล", gateSub:"กรอกชื่อและโทเคน GitHub เพื่อเข้าถึงระบบผู้ดูแล", gateNaamL:"ชื่อ", gateTokenL:"โทเคน GitHub", gateNaamPh:"ชื่อของคุณ", gateTokenPh:"วางโทเคน GitHub", gateBtn:"เข้าถึง", gateVul:"กรุณากรอกทั้งชื่อและโทเคน", gateCheck:"กำลังตรวจสอบโทเคน…", gateBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง repo กรุณาลองใหม่", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓"}
+ tokenAsk:"วางโทเคน GitHub (เก็บในเครื่องนี้เท่านั้น ไม่ออนไลน์):", adminNaamAsk:"คุณชื่ออะไร? (บันทึกพร้อมการเข้าสู่ระบบ)", gateTitle:"เข้าสู่ระบบผู้ดูแล", gateSub:"กรอกชื่อและโทเคน GitHub เพื่อเข้าถึงระบบผู้ดูแล", gateNaamL:"ชื่อ", gateTokenL:"โทเคน GitHub", gateNaamPh:"ชื่อของคุณ", gateTokenPh:"วางโทเคน GitHub", gateBtn:"เข้าถึง", gateVul:"กรุณากรอกทั้งชื่อและโทเคน", gateCheck:"กำลังตรวจสอบโทเคน…", gateBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง repo กรุณาลองใหม่", gateIngetrokken:"สิทธิ์เข้าถึงระบบผู้ดูแลของคุณถูกเพิกถอน", tokenNeed:"ตั้งค่าโทเคน GitHub ก่อน (ปุ่ม 🔑) เพื่อบันทึกแบบสด", saving:"กำลังบันทึก…", tokenOk:"โทเคนใช้งานได้ ✓", tokenBad:"โทเคนไม่ถูกต้องหรือไม่มีสิทธิ์เข้าถึง", publishOk:"เผยแพร่ทั้งหมดแล้ว ✓"}
   }
 };
 
@@ -2798,7 +2800,7 @@ function prefetchAlles(){
 function openKlanten(){ document.getElementById("klantOverlay").classList.add("open"); prefetchAlles(); laadKlanten(); }
 function _markTab(){ document.querySelectorAll(".ktab").forEach(x => x.classList.toggle("active", x.dataset.tab===_kTab)); }
 function openInstellingen(){ _kTab="instel"; _markTab(); openKlanten(); }
-function closeKlanten(){ flushPushes(); document.getElementById("klantOverlay").classList.remove("open"); }
+function closeKlanten(){ flushPushes(); flushAudit(); document.getElementById("klantOverlay").classList.remove("open"); }
 
 const VOLG_T = {
   nl: { titel:"Je bestelling", open:"🟠 We zijn met je bestelling bezig", klaar:"✅ Afgehaald", afhalen:"Afhalen", totaal:"Totaal", betaling:"Betaling", niet:"Bestelling niet gevonden. Controleer de link nog eens.", laden:"Laden…", ver:"Status vernieuwen", opnieuw:"🔁 Opnieuw bestellen", hersteld:"Je bestelling staat weer in je mandje", nietsHersteld:"Kon de bestelling niet herstellen", geslotenMand:"Je mandje is gevuld — bestellen kan zodra we weer open zijn" },
@@ -2810,7 +2812,7 @@ const BEHEER_T = {
     locale:"nl-NL",
     bar:{ tikkieOn:"💳 Tikkie: aan", tikkieOff:"💳 Tikkie: uit", orderOpen:"🟢 Bestellen: open", orderClosed:"🔴 Bestellen: dicht", health:"Health", klanten:"👥 Klanten", instellingen:"⚙️ Instellingen", blackoutOn:"⬜ Site weer online", blackoutOff:"⬛ Site op zwart" },
     kl:{
-      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabAdmins:"Admins", tabAudit:"Audit", tabAanbod:"Aanbod", aanUit:"Per bestelperiode het aanbod dat klanten konden bestellen (bestelbare gerechten met prijs).", aanGeen:"Nog geen aanbod vastgelegd.", aanLaden:"Aanbod laden…", aanGerechten:"gerechten", aanVastgelegd:"vastgelegd:", aanGerecht:"Gerecht", aanPrijs:"Prijs", tabInstel:"Instellingen", tikkieTitel:"Tikkie-betaling", tikkieUit2:"Laat klanten kiezen om via Tikkie te betalen in plaats van contant.", tikkieStatusAan:"Nu: aan", tikkieStatusUit:"Nu: uit", tikkieAanBtn:"Aanzetten", tikkieUitBtn:"Uitzetten", tokenTitel:"GitHub-token (technisch)", tokenUit2:"Nodig om wijzigingen zoals prijzen en menu live op te slaan. Wordt alleen op dit apparaat bewaard.", tokenStatusSet:"Ingesteld op dit apparaat ✓", tokenStatusNone:"Nog niet ingesteld", tokenSetBtn:"Token instellen / wijzigen", publiceerTitel:"Publiceren", publiceerUit2:"Zet alle wijzigingen (prijzen, menu, teksten) in één keer live op de website.", publiceerBtn:"⬆ Nu publiceren", adresTitel:"Adresgegevens", adresUit2:"Adres en telefoonnummer zoals ze op de website worden getoond.", adresLabel:"Adres", adresTelLabel:"Telefoon (zichtbaar op de site)", naamLabel:"Bedrijfsnaam", fotoTitel:"Foto van Pink", fotoUit2:"De foto bovenaan de homepage. Plak een link naar een afbeelding (leeg = standaardfoto).", fotoLabel:"Link naar de foto (URL)", fotoUpload:"…of upload een foto (van je telefoon)", fotoBezig:"Foto uploaden…", fotoOk:"Foto opgeslagen ✓", fotoFout:"Kon foto niet opslaan", adresOk:"Adresgegevens opgeslagen ✓", adresFout:"Kon adresgegevens niet opslaan", seoTitel:"Vindbaarheid (Google)", seoUit:"Deze gegevens bepalen hoe je zaak in Google verschijnt (keuken, bediend gebied, prijsklasse en foto).", seoKeuken:"Keuken", seoGebied:"Bediend gebied (plaatsen, komma-gescheiden)", seoPrijs:"Prijsklasse (bijv. €, €€ of €€€)", seoAfb:"Foto voor Google/delen (URL)", seoOk:"Vindbaarheid opgeslagen ✓", seoFout:"Kon vindbaarheid niet opslaan", afhTitel:"Afhaal & bestellen", afhUit2:"Afhaaldag, afhaaltijden en tot wanneer klanten kunnen bestellen.", afhDagL:"Afhaaldag", afhVanL:"Vanaf", afhTotL:"Tot", afhSluitL:"Bestellen sluit op", afhVanafL:"Afhalen pas vanaf datum (optioneel, leeg = eerstvolgende)", afhOk:"Afhaal-instellingen opgeslagen ✓", afhFout:"Kon afhaal-instellingen niet opslaan", telOpslaan:"Opslaan", laatstInlog:"laatst ingelogd:", zoek:"Zoek op naam of telefoon…", copyLink:"Kopieer inloglink", copyLinkOk:"Inloglink gekopieerd ✓", berBtn:"📣 Openingsbericht", berPerKlant:"Stuur per klant (privé, 1-op-1):", berGeen:"Geen telefoonnummers gevonden", berAlSent:"al verzonden", berWis:"wissen", berTaalOpslaan:"Taal opgeslagen ✓", taalLabel:"Taal", reload:"Opnieuw laden",
+      title:"👥 Klanten", tabKlanten:"Klanten", tabAfhaal:"Afhaallijst", tabCijfers:"Cijfers", tabBezoek:"Bezoek", tabAdmins:"Admins", tabAudit:"Audit", tabAanbod:"Aanbod", adLaden:"Admins laden…", adGeen:"Nog geen logins vastgelegd.", adUit:"Elke keer dat beheer wordt geopend, wordt hier vastgelegd wie, wanneer en op welk apparaat.", adWanneer:"Wanneer", adApparaat:"Apparaat", adOnbekend:"onbekend", auUit:"Elke wijziging in beheer wordt hier vastgelegd: wie, wanneer en wat.", auLaden:"Audit laden…", auGeen:"Nog geen wijzigingen vastgelegd.", auMut:"wijzigingen", auMut1:"wijziging", auLaatste:"laatste:", auWis:"🧹 Alles opschonen", auWisConf:"Alle audit-regels verwijderen? Dit kan niet ongedaan worden gemaakt.", auWisOk:"Audit opgeschoond ✓", adWis:"🧹 Alles opschonen", adWisConf:"Alle admin-logs verwijderen? Dit kan niet ongedaan worden gemaakt.", adWisOk:"Admin-log opgeschoond ✓", adWisEen:"🧹 Opschonen", adBlok:"⛔ Toegang ontzeggen", adDeblok:"✅ Toegang herstellen", adGeblok:"geblokkeerd", adBlokConf:"Deze admin de toegang ontzeggen? Diegene kan het beheer dan niet meer openen.", adDeblokConf:"Toegang van deze admin herstellen?", adBlokOk:"Toegang aangepast ✓", adDeblokOk:"Toegang aangepast ✓", adZelf:"Je kunt jezelf niet blokkeren.", adWisEenConf:"Alle logregels van deze admin verwijderen?", aanUit:"Per bestelperiode het aanbod dat klanten konden bestellen (bestelbare gerechten met prijs).", aanGeen:"Nog geen aanbod vastgelegd.", aanLaden:"Aanbod laden…", aanGerechten:"gerechten", aanVastgelegd:"vastgelegd:", aanGerecht:"Gerecht", aanPrijs:"Prijs", tabInstel:"Instellingen", tikkieTitel:"Tikkie-betaling", tikkieUit2:"Laat klanten kiezen om via Tikkie te betalen in plaats van contant.", tikkieStatusAan:"Nu: aan", tikkieStatusUit:"Nu: uit", tikkieAanBtn:"Aanzetten", tikkieUitBtn:"Uitzetten", tokenTitel:"GitHub-token (technisch)", tokenUit2:"Nodig om wijzigingen zoals prijzen en menu live op te slaan. Wordt alleen op dit apparaat bewaard.", tokenStatusSet:"Ingesteld op dit apparaat ✓", tokenStatusNone:"Nog niet ingesteld", tokenSetBtn:"Token instellen / wijzigen", publiceerTitel:"Publiceren", publiceerUit2:"Zet alle wijzigingen (prijzen, menu, teksten) in één keer live op de website.", publiceerBtn:"⬆ Nu publiceren", adresTitel:"Adresgegevens", adresUit2:"Adres en telefoonnummer zoals ze op de website worden getoond.", adresLabel:"Adres", adresTelLabel:"Telefoon (zichtbaar op de site)", naamLabel:"Bedrijfsnaam", fotoTitel:"Foto van Pink", fotoUit2:"De foto bovenaan de homepage. Plak een link naar een afbeelding (leeg = standaardfoto).", fotoLabel:"Link naar de foto (URL)", fotoUpload:"…of upload een foto (van je telefoon)", fotoBezig:"Foto uploaden…", fotoOk:"Foto opgeslagen ✓", fotoFout:"Kon foto niet opslaan", adresOk:"Adresgegevens opgeslagen ✓", adresFout:"Kon adresgegevens niet opslaan", seoTitel:"Vindbaarheid (Google)", seoUit:"Deze gegevens bepalen hoe je zaak in Google verschijnt (keuken, bediend gebied, prijsklasse en foto).", seoKeuken:"Keuken", seoGebied:"Bediend gebied (plaatsen, komma-gescheiden)", seoPrijs:"Prijsklasse (bijv. €, €€ of €€€)", seoAfb:"Foto voor Google/delen (URL)", seoOk:"Vindbaarheid opgeslagen ✓", seoFout:"Kon vindbaarheid niet opslaan", afhTitel:"Afhaal & bestellen", afhUit2:"Afhaaldag, afhaaltijden en tot wanneer klanten kunnen bestellen.", afhDagL:"Afhaaldag", afhVanL:"Vanaf", afhTotL:"Tot", afhSluitL:"Bestellen sluit op", afhVanafL:"Afhalen pas vanaf datum (optioneel, leeg = eerstvolgende)", afhOk:"Afhaal-instellingen opgeslagen ✓", afhFout:"Kon afhaal-instellingen niet opslaan", telOpslaan:"Opslaan", laatstInlog:"laatst ingelogd:", zoek:"Zoek op naam of telefoon…", copyLink:"Kopieer inloglink", copyLinkOk:"Inloglink gekopieerd ✓", berBtn:"📣 Openingsbericht", berPerKlant:"Stuur per klant (privé, 1-op-1):", berGeen:"Geen telefoonnummers gevonden", berAlSent:"al verzonden", berWis:"wissen", berTaalOpslaan:"Taal opgeslagen ✓", taalLabel:"Taal", reload:"Opnieuw laden",
       addKlant:"＋ Klant", importKlant:"⤓ Importeren", knNaamPh:"Naam", knTelPh:"Telefoon (voor WhatsApp)", knOpslaan:"Klant opslaan", telVerplicht:"Vul een telefoonnummer in",
       impHint:"Eén klant per regel: naam en telefoon", impPlaceholder:"Jan Jansen, 0612345678\nPiet Peters, 0698765432", impBtn:"Importeren",
       waInvite:"📲 WhatsApp-uitnodiging", waNogmaals:"📲 Nogmaals uitnodigen", uitgLabel:"uitgenodigd", waGeenTel:"Deze klant heeft geen telefoonnummer",
@@ -2848,7 +2850,7 @@ const BEHEER_T = {
     locale:"en-GB",
     bar:{ tikkieOn:"💳 Tikkie: on", tikkieOff:"💳 Tikkie: off", orderOpen:"🟢 Ordering: open", orderClosed:"🔴 Ordering: closed", health:"Health", klanten:"👥 Customers", instellingen:"⚙️ Settings", blackoutOn:"⬜ Bring site online", blackoutOff:"⬛ Blackout site" },
     kl:{
-      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabAdmins:"Admins", tabAudit:"Audit", tabAanbod:"Offering", aanUit:"The offering customers could order per order period (available dishes with price).", aanGeen:"No offering recorded yet.", aanLaden:"Loading offering…", aanGerechten:"dishes", aanVastgelegd:"recorded:", aanGerecht:"Dish", aanPrijs:"Price", tabInstel:"Settings", tikkieTitel:"Tikkie payment", tikkieUit2:"Let customers choose to pay via Tikkie instead of cash.", tikkieStatusAan:"Now: on", tikkieStatusUit:"Now: off", tikkieAanBtn:"Turn on", tikkieUitBtn:"Turn off", tokenTitel:"GitHub token (technical)", tokenUit2:"Needed to save changes like prices and menu live. Stored only on this device.", tokenStatusSet:"Set on this device ✓", tokenStatusNone:"Not set yet", tokenSetBtn:"Set / change token", publiceerTitel:"Publish", publiceerUit2:"Push all changes (prices, menu, texts) live to the website at once.", publiceerBtn:"⬆ Publish now", adresTitel:"Address details", adresUit2:"Address and phone number as shown on the website.", adresLabel:"Address", adresTelLabel:"Phone (shown on the site)", naamLabel:"Business name", fotoTitel:"Photo of Pink", fotoUit2:"The photo at the top of the homepage. Paste an image link (empty = default photo).", fotoLabel:"Image link (URL)", fotoUpload:"…or upload a photo (from your phone)", fotoBezig:"Uploading photo…", fotoOk:"Photo saved ✓", fotoFout:"Could not save photo", adresOk:"Address saved ✓", adresFout:"Could not save address", seoTitel:"Visibility (Google)", seoUit:"These details control how your business appears in Google (cuisine, area served, price range and photo).", seoKeuken:"Cuisine", seoGebied:"Area served (places, comma-separated)", seoPrijs:"Price range (e.g. €, €€ or €€€)", seoAfb:"Photo for Google/sharing (URL)", seoOk:"Visibility saved ✓", seoFout:"Could not save visibility", afhTitel:"Pickup & ordering", afhUit2:"Pickup day, pickup times and the deadline for customers to order.", afhDagL:"Pickup day", afhVanL:"From", afhTotL:"Until", afhSluitL:"Ordering closes on", afhVanafL:"Pickup only from date (optional, empty = next occurrence)", afhOk:"Pickup settings saved ✓", afhFout:"Could not save pickup settings", telOpslaan:"Save", laatstInlog:"last login:", zoek:"Search by name or phone…", copyLink:"Copy login link", copyLinkOk:"Login link copied ✓", berBtn:"📣 Opening message", berPerKlant:"Send per customer (private, 1-on-1):", berGeen:"No phone numbers found", berAlSent:"already sent", berWis:"clear", berTaalOpslaan:"Language saved ✓", taalLabel:"Language", reload:"Reload",
+      title:"👥 Customers", tabKlanten:"Customers", tabAfhaal:"Pickup list", tabCijfers:"Stats", tabBezoek:"Visits", tabAdmins:"Admins", tabAudit:"Audit", tabAanbod:"Offering", adLaden:"Loading admins…", adGeen:"No logins recorded yet.", adUit:"Every time the admin page is opened, this records who, when and on which device.", adWanneer:"When", adApparaat:"Device", adOnbekend:"unknown", auUit:"Every change in the admin page is recorded here: who, when and what.", auLaden:"Loading audit…", auGeen:"No changes recorded yet.", auMut:"changes", auMut1:"change", auLaatste:"last:", auWis:"🧹 Clear all", auWisConf:"Delete all audit entries? This cannot be undone.", auWisOk:"Audit cleared ✓", adWis:"🧹 Clear all", adWisConf:"Delete all admin logs? This cannot be undone.", adWisOk:"Admin log cleared ✓", adWisEen:"🧹 Clear", adBlok:"⛔ Revoke access", adDeblok:"✅ Restore access", adGeblok:"blocked", adBlokConf:"Revoke access for this admin? They can no longer open the admin panel.", adDeblokConf:"Restore access for this admin?", adBlokOk:"Access updated ✓", adDeblokOk:"Access updated ✓", adZelf:"You cannot block yourself.", adWisEenConf:"Delete all log entries for this admin?", aanUit:"The offering customers could order per order period (available dishes with price).", aanGeen:"No offering recorded yet.", aanLaden:"Loading offering…", aanGerechten:"dishes", aanVastgelegd:"recorded:", aanGerecht:"Dish", aanPrijs:"Price", tabInstel:"Settings", tikkieTitel:"Tikkie payment", tikkieUit2:"Let customers choose to pay via Tikkie instead of cash.", tikkieStatusAan:"Now: on", tikkieStatusUit:"Now: off", tikkieAanBtn:"Turn on", tikkieUitBtn:"Turn off", tokenTitel:"GitHub token (technical)", tokenUit2:"Needed to save changes like prices and menu live. Stored only on this device.", tokenStatusSet:"Set on this device ✓", tokenStatusNone:"Not set yet", tokenSetBtn:"Set / change token", publiceerTitel:"Publish", publiceerUit2:"Push all changes (prices, menu, texts) live to the website at once.", publiceerBtn:"⬆ Publish now", adresTitel:"Address details", adresUit2:"Address and phone number as shown on the website.", adresLabel:"Address", adresTelLabel:"Phone (shown on the site)", naamLabel:"Business name", fotoTitel:"Photo of Pink", fotoUit2:"The photo at the top of the homepage. Paste an image link (empty = default photo).", fotoLabel:"Image link (URL)", fotoUpload:"…or upload a photo (from your phone)", fotoBezig:"Uploading photo…", fotoOk:"Photo saved ✓", fotoFout:"Could not save photo", adresOk:"Address saved ✓", adresFout:"Could not save address", seoTitel:"Visibility (Google)", seoUit:"These details control how your business appears in Google (cuisine, area served, price range and photo).", seoKeuken:"Cuisine", seoGebied:"Area served (places, comma-separated)", seoPrijs:"Price range (e.g. €, €€ or €€€)", seoAfb:"Photo for Google/sharing (URL)", seoOk:"Visibility saved ✓", seoFout:"Could not save visibility", afhTitel:"Pickup & ordering", afhUit2:"Pickup day, pickup times and the deadline for customers to order.", afhDagL:"Pickup day", afhVanL:"From", afhTotL:"Until", afhSluitL:"Ordering closes on", afhVanafL:"Pickup only from date (optional, empty = next occurrence)", afhOk:"Pickup settings saved ✓", afhFout:"Could not save pickup settings", telOpslaan:"Save", laatstInlog:"last login:", zoek:"Search by name or phone…", copyLink:"Copy login link", copyLinkOk:"Login link copied ✓", berBtn:"📣 Opening message", berPerKlant:"Send per customer (private, 1-on-1):", berGeen:"No phone numbers found", berAlSent:"already sent", berWis:"clear", berTaalOpslaan:"Language saved ✓", taalLabel:"Language", reload:"Reload",
       addKlant:"＋ Customer", importKlant:"⤓ Import", knNaamPh:"Name", knTelPh:"Phone (for WhatsApp)", knOpslaan:"Save customer", telVerplicht:"Enter a phone number",
       impHint:"One customer per line: name and phone", impPlaceholder:"Jan Jansen, 0612345678\nPiet Peters, 0698765432", impBtn:"Import",
       waInvite:"📲 WhatsApp invite", waNogmaals:"📲 Invite again", uitgLabel:"invited", waGeenTel:"This customer has no phone number",
@@ -2886,7 +2888,7 @@ const BEHEER_T = {
     locale:"th-TH",
     bar:{ tikkieOn:"💳 Tikkie: เปิด", tikkieOff:"💳 Tikkie: ปิด", orderOpen:"🟢 รับออเดอร์: เปิด", orderClosed:"🔴 รับออเดอร์: ปิด", health:"สถานะ", klanten:"👥 ลูกค้า", instellingen:"⚙️ การตั้งค่า", blackoutOn:"⬜ เปิดเว็บอีกครั้ง", blackoutOff:"⬛ ปิดเว็บ (จอดำ)" },
     kl:{
-      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabAdmins:"ผู้ดูแล", tabAudit:"ตรวจสอบ", tabAanbod:"รายการ", aanUit:"รายการอาหารที่ลูกค้าสั่งได้ในแต่ละรอบสั่ง (เมนูที่สั่งได้พร้อมราคา)", aanGeen:"ยังไม่มีบันทึกรายการ", aanLaden:"กำลังโหลด…", aanGerechten:"เมนู", aanVastgelegd:"บันทึกเมื่อ:", aanGerecht:"เมนู", aanPrijs:"ราคา", tabInstel:"การตั้งค่า", tikkieTitel:"การชำระด้วย Tikkie", tikkieUit2:"ให้ลูกค้าเลือกจ่ายผ่าน Tikkie แทนเงินสด", tikkieStatusAan:"ตอนนี้: เปิด", tikkieStatusUit:"ตอนนี้: ปิด", tikkieAanBtn:"เปิด", tikkieUitBtn:"ปิด", tokenTitel:"โทเคน GitHub (ทางเทคนิค)", tokenUit2:"จำเป็นสำหรับบันทึกการเปลี่ยนแปลง เช่น ราคาและเมนู แบบสด เก็บในเครื่องนี้เท่านั้น", tokenStatusSet:"ตั้งค่าในเครื่องนี้แล้ว ✓", tokenStatusNone:"ยังไม่ได้ตั้งค่า", tokenSetBtn:"ตั้งค่า / เปลี่ยนโทเคน", publiceerTitel:"เผยแพร่", publiceerUit2:"อัปเดตการเปลี่ยนแปลงทั้งหมด (ราคา เมนู ข้อความ) ขึ้นเว็บไซต์พร้อมกัน", publiceerBtn:"⬆ เผยแพร่ตอนนี้", adresTitel:"ที่อยู่ร้าน", adresUit2:"ที่อยู่และเบอร์โทรที่แสดงบนเว็บไซต์", adresLabel:"ที่อยู่", adresTelLabel:"เบอร์โทร (แสดงบนเว็บไซต์)", naamLabel:"ชื่อร้าน", fotoTitel:"รูปของ Pink", fotoUit2:"รูปด้านบนของหน้าแรก วางลิงก์รูปภาพ (เว้นว่าง = รูปเริ่มต้น)", fotoLabel:"ลิงก์รูปภาพ (URL)", fotoUpload:"…หรืออัปโหลดรูป (จากมือถือ)", fotoBezig:"กำลังอัปโหลดรูป…", fotoOk:"บันทึกรูปแล้ว ✓", fotoFout:"บันทึกรูปไม่สำเร็จ", adresOk:"บันทึกที่อยู่แล้ว ✓", adresFout:"บันทึกที่อยู่ไม่สำเร็จ", seoTitel:"การค้นพบ (Google)", seoUit:"ข้อมูลนี้กำหนดว่าร้านจะแสดงใน Google อย่างไร (ประเภทอาหาร พื้นที่ให้บริการ ระดับราคา และรูปภาพ)", seoKeuken:"ประเภทอาหาร", seoGebied:"พื้นที่ให้บริการ (คั่นด้วยจุลภาค)", seoPrijs:"ระดับราคา (เช่น €, €€ หรือ €€€)", seoAfb:"รูปภาพสำหรับ Google/แชร์ (URL)", seoOk:"บันทึกแล้ว ✓", seoFout:"บันทึกไม่สำเร็จ", afhTitel:"การรับอาหาร & การสั่ง", afhUit2:"วันรับอาหาร เวลารับ และกำหนดเวลาสุดท้ายที่ลูกค้าสั่งได้", afhDagL:"วันรับอาหาร", afhVanL:"ตั้งแต่", afhTotL:"ถึง", afhSluitL:"ปิดรับออเดอร์เมื่อ", afhVanafL:"เริ่มรับอาหารตั้งแต่วันที่ (ไม่บังคับ, ว่าง = ครั้งถัดไป)", afhOk:"บันทึกการตั้งค่าการรับอาหารแล้ว ✓", afhFout:"บันทึกไม่สำเร็จ", telOpslaan:"บันทึก", laatstInlog:"เข้าสู่ระบบล่าสุด:", zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", copyLink:"คัดลอกลิงก์เข้าสู่ระบบ", copyLinkOk:"คัดลอกลิงก์แล้ว ✓", berBtn:"📣 ข้อความเปิดร้าน", berPerKlant:"ส่งทีละลูกค้า (ส่วนตัว):", berGeen:"ไม่พบเบอร์โทร", berAlSent:"ส่งแล้ว", berWis:"ล้าง", berTaalOpslaan:"บันทึกภาษาแล้ว ✓", taalLabel:"ภาษา", reload:"โหลดใหม่",
+      title:"👥 ลูกค้า", tabKlanten:"ลูกค้า", tabAfhaal:"รายการรับอาหาร", tabCijfers:"สถิติ", tabBezoek:"การเข้าชม", tabAdmins:"ผู้ดูแล", tabAudit:"ตรวจสอบ", tabAanbod:"รายการ", adLaden:"กำลังโหลด…", adGeen:"ยังไม่มีบันทึกการเข้าสู่ระบบ", adUit:"ทุกครั้งที่เปิดหน้าผู้ดูแล ระบบจะบันทึกว่าใคร เมื่อไร และอุปกรณ์ใด", adWanneer:"เมื่อไร", adApparaat:"อุปกรณ์", adOnbekend:"ไม่ทราบ", auUit:"ทุกการเปลี่ยนแปลงในหน้าผู้ดูแลจะถูกบันทึกที่นี่: ใคร เมื่อไร และอะไร", auLaden:"กำลังโหลด…", auGeen:"ยังไม่มีบันทึกการเปลี่ยนแปลง", auMut:"การเปลี่ยนแปลง", auMut1:"การเปลี่ยนแปลง", auLaatste:"ล่าสุด:", auWis:"🧹 ล้างทั้งหมด", auWisConf:"ลบบันทึกตรวจสอบทั้งหมด? ไม่สามารถย้อนกลับได้", auWisOk:"ล้างบันทึกแล้ว ✓", adWis:"🧹 ล้างทั้งหมด", adWisConf:"ลบบันทึกผู้ดูแลทั้งหมด? ไม่สามารถย้อนกลับได้", adWisOk:"ล้างบันทึกผู้ดูแลแล้ว ✓", adWisEen:"🧹 ล้าง", adBlok:"⛔ เพิกถอนสิทธิ์", adDeblok:"✅ คืนสิทธิ์", adGeblok:"ถูกบล็อก", adBlokConf:"เพิกถอนสิทธิ์ผู้ดูแลนี้? ผู้นั้นจะเปิดหน้าผู้ดูแลไม่ได้อีก", adDeblokConf:"คืนสิทธิ์ผู้ดูแลนี้?", adBlokOk:"อัปเดตสิทธิ์แล้ว ✓", adDeblokOk:"อัปเดตสิทธิ์แล้ว ✓", adZelf:"คุณบล็อกตัวเองไม่ได้", adWisEenConf:"ลบบันทึกทั้งหมดของผู้ดูแลนี้?", aanUit:"รายการอาหารที่ลูกค้าสั่งได้ในแต่ละรอบสั่ง (เมนูที่สั่งได้พร้อมราคา)", aanGeen:"ยังไม่มีบันทึกรายการ", aanLaden:"กำลังโหลด…", aanGerechten:"เมนู", aanVastgelegd:"บันทึกเมื่อ:", aanGerecht:"เมนู", aanPrijs:"ราคา", tabInstel:"การตั้งค่า", tikkieTitel:"การชำระด้วย Tikkie", tikkieUit2:"ให้ลูกค้าเลือกจ่ายผ่าน Tikkie แทนเงินสด", tikkieStatusAan:"ตอนนี้: เปิด", tikkieStatusUit:"ตอนนี้: ปิด", tikkieAanBtn:"เปิด", tikkieUitBtn:"ปิด", tokenTitel:"โทเคน GitHub (ทางเทคนิค)", tokenUit2:"จำเป็นสำหรับบันทึกการเปลี่ยนแปลง เช่น ราคาและเมนู แบบสด เก็บในเครื่องนี้เท่านั้น", tokenStatusSet:"ตั้งค่าในเครื่องนี้แล้ว ✓", tokenStatusNone:"ยังไม่ได้ตั้งค่า", tokenSetBtn:"ตั้งค่า / เปลี่ยนโทเคน", publiceerTitel:"เผยแพร่", publiceerUit2:"อัปเดตการเปลี่ยนแปลงทั้งหมด (ราคา เมนู ข้อความ) ขึ้นเว็บไซต์พร้อมกัน", publiceerBtn:"⬆ เผยแพร่ตอนนี้", adresTitel:"ที่อยู่ร้าน", adresUit2:"ที่อยู่และเบอร์โทรที่แสดงบนเว็บไซต์", adresLabel:"ที่อยู่", adresTelLabel:"เบอร์โทร (แสดงบนเว็บไซต์)", naamLabel:"ชื่อร้าน", fotoTitel:"รูปของ Pink", fotoUit2:"รูปด้านบนของหน้าแรก วางลิงก์รูปภาพ (เว้นว่าง = รูปเริ่มต้น)", fotoLabel:"ลิงก์รูปภาพ (URL)", fotoUpload:"…หรืออัปโหลดรูป (จากมือถือ)", fotoBezig:"กำลังอัปโหลดรูป…", fotoOk:"บันทึกรูปแล้ว ✓", fotoFout:"บันทึกรูปไม่สำเร็จ", adresOk:"บันทึกที่อยู่แล้ว ✓", adresFout:"บันทึกที่อยู่ไม่สำเร็จ", seoTitel:"การค้นพบ (Google)", seoUit:"ข้อมูลนี้กำหนดว่าร้านจะแสดงใน Google อย่างไร (ประเภทอาหาร พื้นที่ให้บริการ ระดับราคา และรูปภาพ)", seoKeuken:"ประเภทอาหาร", seoGebied:"พื้นที่ให้บริการ (คั่นด้วยจุลภาค)", seoPrijs:"ระดับราคา (เช่น €, €€ หรือ €€€)", seoAfb:"รูปภาพสำหรับ Google/แชร์ (URL)", seoOk:"บันทึกแล้ว ✓", seoFout:"บันทึกไม่สำเร็จ", afhTitel:"การรับอาหาร & การสั่ง", afhUit2:"วันรับอาหาร เวลารับ และกำหนดเวลาสุดท้ายที่ลูกค้าสั่งได้", afhDagL:"วันรับอาหาร", afhVanL:"ตั้งแต่", afhTotL:"ถึง", afhSluitL:"ปิดรับออเดอร์เมื่อ", afhVanafL:"เริ่มรับอาหารตั้งแต่วันที่ (ไม่บังคับ, ว่าง = ครั้งถัดไป)", afhOk:"บันทึกการตั้งค่าการรับอาหารแล้ว ✓", afhFout:"บันทึกไม่สำเร็จ", telOpslaan:"บันทึก", laatstInlog:"เข้าสู่ระบบล่าสุด:", zoek:"ค้นหาด้วยชื่อ หรือเบอร์โทร…", copyLink:"คัดลอกลิงก์เข้าสู่ระบบ", copyLinkOk:"คัดลอกลิงก์แล้ว ✓", berBtn:"📣 ข้อความเปิดร้าน", berPerKlant:"ส่งทีละลูกค้า (ส่วนตัว):", berGeen:"ไม่พบเบอร์โทร", berAlSent:"ส่งแล้ว", berWis:"ล้าง", berTaalOpslaan:"บันทึกภาษาแล้ว ✓", taalLabel:"ภาษา", reload:"โหลดใหม่",
       addKlant:"＋ ลูกค้า", importKlant:"⤓ นำเข้า", knNaamPh:"ชื่อ", knTelPh:"เบอร์โทร (สำหรับ WhatsApp)", knOpslaan:"บันทึกลูกค้า", telVerplicht:"กรุณากรอกเบอร์โทร",
       impHint:"หนึ่งคนต่อบรรทัด: ชื่อ และเบอร์โทร", impPlaceholder:"สมชาย, 0812345678\nสมหญิง, 0898765432", impBtn:"นำเข้า",
       waInvite:"📲 เชิญทาง WhatsApp", waNogmaals:"📲 เชิญอีกครั้ง", uitgLabel:"เชิญแล้ว", waGeenTel:"ลูกค้ารายนี้ไม่มีเบอร์โทร",
@@ -3339,6 +3341,8 @@ function renderKlanten(){
   if(_kTab==="afhaal") renderAfhaallijst();
   else if(_kTab==="cijfers") renderCijfers();
   else if(_kTab==="aanbod") renderAanbod();
+  else if(_kTab==="admins") renderAdmins();
+  else if(_kTab==="audit") renderAudit();
   else if(_kTab==="instel") renderInstellingen();
   else renderKlantenLijst();
 }
@@ -3647,7 +3651,6 @@ function exportBestellingenCSV(){
   showToast(BT().kl.cGeexporteerd.replace("{n}", rijen.length), true);
 }
 function _tokenFingerprint(s){ s=String(s||""); let hh=5381; for(let i=0;i<s.length;i++){ hh=((hh*33)^s.charCodeAt(i))>>>0; } return ("00000000"+hh.toString(16)).slice(-8); }
-async function logAdminLogin(){}   // admin-login-log verwijderd met de Google-backend
 let _adminGelogd = false, _adminPrompted = false;
 function _dishName(id){
   try{ const m = (typeof MENU!=="undefined") && MENU.find(x=>String(x.id)===String(id)); if(m && m.name) return titleCase(m.name.nl||m.name.en||String(id)); }catch(e){}
@@ -3719,7 +3722,217 @@ function _fieldDiff(prefix, dish, oud, nieuw){
   const out=[]; ["nl","en","th"].forEach(l=>{ const a=(oud&&oud[l])||"", b=(nieuw&&nieuw[l])||""; if(String(a)!==String(b)) out.push(prefix+" "+dish+" "+l+": "+_fmtAuditVal(a)+" \u2192 "+_fmtAuditVal(b)); }); return out.join("; ");
 }
 function _klantNaam(tel){ try{ const t=String(tel||"").replace(/\D/g,""); const b=((typeof _klantData!=="undefined"&&_klantData)||[]).find(x=>String(x.tel||"").replace(/\D/g,"")===t); if(b&&b.naam) return b.naam; const k=((typeof _klantRecords!=="undefined"&&_klantRecords)||[]).find(x=>String(x.tel||"").replace(/\D/g,"")===t); if(k&&k.naam) return k.naam; }catch(e){} return String(tel||""); }
-function logAudit(){}   // audit-log verwijderd met de Google-backend
+/* ===== Audit-logboek en admin-inloglog op GitHub (vervangt de oude Google-backend) ===== */
+function _logMaand(d){ return (d||new Date()).toISOString().slice(0,7); }
+function _ghUrl(path){ return "https://api.github.com/repos/"+GH_REPO+"/contents/"+path; }
+async function _ghLeesJson(path){
+  if(!ghToken()) return { arr:[], sha:null };
+  try{
+    const r = await fetch(_ghUrl(path)+"?t="+Date.now(), { headers:_ghHeaders(), cache:"no-store" });
+    if(!r.ok) return { arr:[], sha:null };
+    const j = await r.json();
+    let arr = []; try{ arr = JSON.parse(decodeURIComponent(escape(atob(String(j.content||"").replace(/\n/g,""))))); }catch(e){ arr = []; }
+    return { arr: Array.isArray(arr)?arr:[], sha: j.sha||null };
+  }catch(e){ return { arr:[], sha:null }; }
+}
+async function _ghSchrijfJson(path, arr, sha, msg){
+  const body = { message: msg||("log "+path), content:_b64u(JSON.stringify(arr)), branch:"main" };
+  if(sha) body.sha = sha;
+  try{ return await fetch(_ghUrl(path), { method:"PUT", headers: Object.assign({"Content-Type":"application/json"}, _ghHeaders()), body: JSON.stringify(body) }); }
+  catch(e){ return { ok:false, status:0 }; }
+}
+async function _ghVoegToe(path, nieuwe, cap){
+  if(!ghToken()) return false;
+  nieuwe = Array.isArray(nieuwe) ? nieuwe : [nieuwe];
+  for(let poging=0; poging<4; poging++){
+    const cur = await _ghLeesJson(path);
+    let arr = cur.arr.slice();
+    nieuwe.forEach(function(e){ arr.unshift(e); });           // nieuwste bovenaan
+    if(cap && arr.length>cap) arr = arr.slice(0, cap);
+    const resp = await _ghSchrijfJson(path, arr, cur.sha, "log "+path);
+    if(resp.ok) return true;
+    if(resp.status===409 || resp.status===422){ await new Promise(function(r){ setTimeout(r,300); }); continue; }   // sha-conflict -> opnieuw
+    return false;
+  }
+  return false;
+}
+async function _ghLijst(map){
+  if(!ghToken()) return [];
+  try{
+    const r = await fetch(_ghUrl(map)+"?t="+Date.now(), { headers:_ghHeaders(), cache:"no-store" });
+    if(!r.ok) return [];
+    const j = await r.json();
+    return Array.isArray(j) ? j.filter(function(f){ return f.name && f.name.endsWith(".json"); }) : [];
+  }catch(e){ return []; }
+}
+function _tweeMaanden(){ const nu=new Date(); const vo=new Date(nu.getFullYear(), nu.getMonth()-1, 1); return [_logMaand(nu), _logMaand(vo)]; }
+
+/* --- Audit (wijzigingslogboek) --- */
+let _auditData = null, _auditBuf = [], _auditTimer = null;
+function logAudit(path, msg){
+  try{
+    if(!BEHEER || !ghToken() || !msg) return;
+    _auditBuf.push({ tijd:new Date().toISOString(), naam:localStorage.getItem("tta_adminname")||"", adminid:localStorage.getItem("tta_adminid")||"", wat:String(msg||""), doel:String(path||"") });
+    clearTimeout(_auditTimer); _auditTimer = setTimeout(flushAudit, 1500);
+  }catch(e){}
+}
+async function flushAudit(){
+  if(!_auditBuf.length) return;
+  const batch = _auditBuf.slice(); _auditBuf = [];
+  const ok = await _ghVoegToe("audit/"+_logMaand()+".json", batch, 5000);
+  if(!ok) _auditBuf = batch.concat(_auditBuf);   // mislukt -> terug in buffer
+}
+async function fetchAudit(){
+  const mm = _tweeMaanden();
+  const a = (await _ghLeesJson("audit/"+mm[0]+".json")).arr;
+  const b = mm[1]!==mm[0] ? (await _ghLeesJson("audit/"+mm[1]+".json")).arr : [];
+  return { ok:true, audit: a.concat(b).slice(0, 1000) };
+}
+async function renderAudit(){
+  const K = BT().kl, body = document.getElementById("kBody");
+  if(_auditData) tekenAudit(_auditData); else body.innerHTML = '<p class="hloading">'+esc(K.auLaden)+'</p>';
+  const r = await fetchAudit();
+  _auditData = r;
+  if(_kTab === "audit") tekenAudit(r);
+}
+async function auditWisAlles(){
+  const K = BT().kl;
+  if(!confirm(K.auWisConf)) return;
+  const files = await _ghLijst("audit");
+  for(const f of files){ await _ghDeleteFile(f.path, f.sha, "audit opgeschoond"); }
+  _auditData = { ok:true, audit:[] };
+  if(_kTab==="audit") tekenAudit(_auditData);
+  showToast(K.auWisOk, true);
+}
+
+/* --- Admin-inloglog + toegang blokkeren --- */
+let _adminData = null;
+async function logAdminLogin(){
+  try{
+    if(!ghToken()) return;
+    const naam = localStorage.getItem("tta_adminname")||"", adminid = localStorage.getItem("tta_adminid")||"";
+    if(!naam && !adminid) return;
+    const app = (window.innerWidth||1024) < 768 ? "mobiel" : "desktop";
+    await _ghVoegToe("admin-logins/"+_logMaand()+".json", { tijd:new Date().toISOString(), naam:naam, adminid:adminid, app:app }, 4000);
+  }catch(e){}
+}
+async function _leesBlocklist(){ const cur = await _ghLeesJson("admin-blocklist.json"); return { lijst: cur.arr.map(String), sha: cur.sha }; }
+async function fetchAdmins(){
+  const mm = _tweeMaanden();
+  const a = (await _ghLeesJson("admin-logins/"+mm[0]+".json")).arr;
+  const b = mm[1]!==mm[0] ? (await _ghLeesJson("admin-logins/"+mm[1]+".json")).arr : [];
+  const bl = await _leesBlocklist(); const blSet = {}; bl.lijst.forEach(function(id){ blSet[String(id)]=1; });
+  const logins = a.concat(b).map(function(x){ return Object.assign({}, x, { geblokkeerd: !!blSet[String(x.adminid||"")] }); });
+  return { ok:true, logins:logins };
+}
+async function renderAdmins(){
+  const K = BT().kl, body = document.getElementById("kBody");
+  if(_adminData) tekenAdmins(_adminData); else body.innerHTML = '<p class="hloading">'+K.adLaden+'</p>';
+  const r = await fetchAdmins();
+  _adminData = r;
+  if(_kTab === "admins") tekenAdmins(r);
+}
+async function adminBlokkeer(ids, blok){
+  const K = BT().kl;
+  ids = (ids||[]).filter(Boolean);
+  if(!ids.length) return;
+  if(blok){ const me=localStorage.getItem("tta_adminid")||""; ids = ids.filter(function(id){ return id!==me; }); if(!ids.length){ showToast(K.adZelf, false); return; } }
+  if(!confirm(blok ? K.adBlokConf : K.adDeblokConf)) return;
+  const bl = await _leesBlocklist();
+  let lijst = bl.lijst.slice();
+  if(blok){ ids.forEach(function(id){ if(lijst.indexOf(String(id))<0) lijst.push(String(id)); }); }
+  else { const weg={}; ids.forEach(function(id){ weg[String(id)]=1; }); lijst = lijst.filter(function(id){ return !weg[String(id)]; }); }
+  const resp = await _ghSchrijfJson("admin-blocklist.json", lijst, bl.sha, "blocklist bijgewerkt");
+  if(!resp.ok){ showToast("Fout", false); return; }
+  _adminData = null; renderAdmins();
+  showToast(blok ? K.adBlokOk : K.adDeblokOk, true);
+}
+async function adminWisAlles(){
+  const K = BT().kl;
+  if(!confirm(K.adWisConf)) return;
+  const files = await _ghLijst("admin-logins");
+  for(const f of files){ await _ghDeleteFile(f.path, f.sha, "admin-log opgeschoond"); }
+  _adminData = { ok:true, logins:[] };
+  if(_kTab==="admins") tekenAdmins(_adminData);
+  showToast(K.adWisOk, true);
+}
+async function adminWisEen(naam){
+  const K = BT().kl;
+  if(!confirm(K.adWisEenConf)) return;
+  const files = await _ghLijst("admin-logins");
+  for(const f of files){
+    const cur = await _ghLeesJson(f.path);
+    const over = cur.arr.filter(function(x){ return String(x.naam||"")!==String(naam||""); });
+    if(over.length !== cur.arr.length){ await _ghSchrijfJson(f.path, over, cur.sha, "admin-log wis"); }
+  }
+  _adminData = null; renderAdmins();
+  showToast(K.adWisOk, true);
+}
+function tekenAudit(r){
+  const K = BT().kl, body = document.getElementById("kBody");
+  const rows = (r && r.audit) ? r.audit : [];
+  let html = '<p class="kinstel-uit">'+esc(K.auUit)+'</p>';
+  if(!rows.length){ body.innerHTML = html + '<p class="hloading">'+esc(K.auGeen)+'</p>'; return; }
+  html += '<div class="auditbar"><button class="auditwis-btn" onclick="auditWisAlles()">'+esc(K.auWis)+'</button></div>';
+  const groups = {};
+  rows.forEach(a=>{
+    const key = a.naam || a.adminid || K.adOnbekend;
+    if(!groups[key]) groups[key] = { naam:a.naam||"", adminid:a.adminid||"", items:[] };
+    groups[key].items.push(a);
+  });
+  // admins op meest recente activiteit (rows komen al nieuw->oud binnen)
+  const order = Object.keys(groups).sort((x,y)=>
+    fmtAuditTime(groups[y].items[0].tijd).localeCompare(fmtAuditTime(groups[x].items[0].tijd)));
+  html += '<div class="auditgrps">';
+  order.forEach((key,idx)=>{
+    const g = groups[key], naam = g.naam || g.adminid || K.adOnbekend, cnt = g.items.length;
+    const woord = (cnt===1 ? (K.auMut1||K.auMut) : K.auMut);
+    const laatste = fmtAuditTime(g.items[0].tijd);
+    html += '<details class="auditgrp"><summary>'
+      + '<span class="auditwho">'+esc(naam)+'</span>'
+      + '<span class="auditcount">'+cnt+' '+esc(woord)+'</span>'
+      + '<span class="auditlast">'+esc(K.auLaatste)+' '+esc(laatste)+'</span></summary>';
+    html += '<div class="audititems">';
+    g.items.forEach(a=>{
+      html += '<div class="audititem"><span class="auditwhen">'+esc(fmtAuditTime(a.tijd))+'</span>'
+        + '<span class="auditwhat" title="'+esc(a.wat||"")+'">'+esc(a.wat||"")+'</span></div>';
+    });
+    html += '</div></details>';
+  });
+  html += '</div>';
+  body.innerHTML = html;
+}
+function tekenAdmins(r){
+  const K = BT().kl;
+  const body = document.getElementById("kBody");
+  const rows = (r && r.logins) || [];
+  if(!rows.length){ body.innerHTML = '<p class="hloading">'+K.adGeen+'</p>'; return; }
+  const parse = t => { const d = new Date(t); return isNaN(d) ? 0 : d.getTime(); };
+  const groepen = {};
+  rows.forEach(x=>{ const key = x.naam || ""; (groepen[key] || (groepen[key] = [])).push(x); });
+  const lijst = Object.keys(groepen).map(key=>{
+    const logins = groepen[key].slice().sort((a,b)=>parse(b.tijd)-parse(a.tijd));
+    return { rawNaam:key, naam: key || K.adOnbekend, logins, laatste: logins[0] ? parse(logins[0].tijd) : 0, ids:[...new Set(logins.map(x=>x.adminid).filter(Boolean))], geblok: logins.some(x=>x.geblokkeerd) };
+  }).sort((a,b)=>b.laatste-a.laatste);
+  const tijdTekst = x => fmtInlog(x.tijd) || String(x.tijd||"").replace(/\s*GMT.*$/,"").trim();
+  let out = '<p class="kinstel-uit" style="margin:4px 2px 12px">'+esc(K.adUit)+'</p>';
+  out += '<div class="auditbar"><button class="auditwis-btn" onclick="adminWisAlles()">'+esc(K.adWis)+'</button></div>';
+  lijst.forEach(g=>{
+    const laatst = g.logins[0] ? tijdTekst(g.logins[0]) : "";
+    out += '<details class="kklant">'+
+      '<summary class="ksum"><span class="knaam">'+esc(g.naam)+(g.geblok?' <span class="adblok-badge">\u26d4 '+esc(K.adGeblok)+'</span>':'')+'</span><span class="kmeta">'+g.logins.length+'\u00d7'+(laatst?(' \u00b7 '+esc(laatst)):'')+'</span></summary>'+
+      '<div class="kdet">'+
+        '<table class="adtab"><thead><tr><th>'+esc(K.adWanneer)+'</th><th>'+esc(K.adApparaat)+'</th></tr></thead><tbody>'+
+        g.logins.map(x=>'<tr><td>'+esc(tijdTekst(x))+'</td><td>'+esc(x.app||"")+'</td></tr>').join("")+
+        '</tbody></table>'+
+        '<div class="auditbar"><button class="auditwis-btn adblok-one" data-ids="'+esc(g.ids.join(","))+'" data-blok="'+(g.geblok?"0":"1")+'">'+esc(g.geblok?K.adDeblok:K.adBlok)+'</button><button class="auditwis-btn adwis-one" data-naam="'+esc(g.rawNaam)+'">'+esc(K.adWisEen)+'</button></div>'+
+      '</div>'+
+    '</details>';
+  });
+  body.innerHTML = out;
+  body.querySelectorAll(".adwis-one").forEach(b=>{ b.onclick = ()=> adminWisEen(b.dataset.naam||""); });
+  body.querySelectorAll(".adblok-one").forEach(b=>{ b.onclick = ()=> adminBlokkeer((b.dataset.ids||"").split(",").filter(Boolean), b.dataset.blok==="1"); });
+}
 function adminBekend(){ return !!(localStorage.getItem("tta_adminname") && localStorage.getItem("tta_adminid")); }
 function verbergAdminGate(){ const g=document.getElementById("adminGate"); if(g) g.classList.remove("open"); }
 async function _gateSubmit(){
@@ -3735,6 +3948,10 @@ async function _gateSubmit(){
   if(bezig) bezig.style.display="none"; btn.disabled=false;
   if(!okToken){ err.textContent=A.gateBad; err.style.display="block"; return; }
   const fid = _tokenFingerprint(tok);
+  try{
+    const br = await fetch(_ghUrl("admin-blocklist.json")+"?t="+Date.now(), { headers:{ Authorization:"token "+tok, Accept:"application/vnd.github+json" }, cache:"no-store" });
+    if(br.ok){ const bj = await br.json(); let bl=[]; try{ bl=JSON.parse(decodeURIComponent(escape(atob(String(bj.content||"").replace(/\n/g,""))))); }catch(e){} if(Array.isArray(bl) && bl.map(String).indexOf(String(fid))>=0){ err.textContent=A.gateIngetrokken; err.style.display="block"; return; } }
+  }catch(e){}
   localStorage.setItem("tta_ghtoken", tok);
   localStorage.setItem("tta_adminname", naam);
   localStorage.setItem("tta_adminid", fid);
@@ -3857,7 +4074,7 @@ function livePush(path, getObj, msg){
 }
 // Geen wijziging verliezen: schrijf openstaande wijzigingen meteen weg bij weggaan/verbergen.
 window.addEventListener("pagehide", flushPushes);
-document.addEventListener("visibilitychange", ()=>{ if(document.hidden) flushPushes(); });
+document.addEventListener("visibilitychange", ()=>{ if(document.hidden){ flushPushes(); flushAudit(); } });
 function currentFotos(){ const d={}; MENU.forEach(m=>{ const u = chosen[m.id]||PHOTO[m.id]; if(u) d[m.id]=u; }); return d; }
 async function publishAll(){
   if(!needToken()) return;
