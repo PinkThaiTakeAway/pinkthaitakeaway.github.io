@@ -1595,7 +1595,7 @@ function renderSheet(){
   sheetBody.querySelectorAll("[data-m]").forEach(b => b.onclick = () => change(b.dataset.m, -1));
   sheetBody.querySelectorAll("[data-p]").forEach(b => b.onclick = () => change(b.dataset.p, 1));
   const map={fName:"naam",fPhone:"tel",fNote:"note"};
-  ["fName","fPhone","fNote"].forEach(idf => { const el=document.getElementById(idf); if(el) el.oninput=e=>form[map[idf]]=e.target.value; });
+  ["fName","fPhone","fNote"].forEach(idf => { const el=document.getElementById(idf); if(el) el.oninput=e=>{ form[map[idf]]=e.target.value; if(idf==="fName"||idf==="fPhone"){ try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam:form.naam||"", tel:form.tel||""})); }catch(err){} } }; });
   { const fd=document.getElementById("fDay"); if(fd) fd.onchange = e => { form.pickTs = Number(e.target.value)||0; renderSheet(); }; }
   if(!form.pay || (!TIKKIE_ON && form.pay==="tikkie")) form.pay = "contant";
   sheetBody.querySelectorAll(".payopt").forEach(b => b.onclick = () => {
