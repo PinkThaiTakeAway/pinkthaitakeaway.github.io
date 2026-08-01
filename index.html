@@ -793,16 +793,6 @@
   </div>
 </div>
 
-<div id="volgOverlay" class="hoverlay">
-  <div class="hpanel">
-    <div class="hhead">
-      <h3 id="volgTitel">Je bestelling</h3>
-      <button id="volgClose" class="hclose" aria-label="Sluiten">✕</button>
-    </div>
-    <div id="volgBody" class="hbody"></div>
-    <button id="volgReload" class="hreload">Status vernieuwen</button>
-  </div>
-</div>
 
 <div id="loginOverlay" class="hoverlay">
   <div class="hpanel">
@@ -1850,12 +1840,10 @@ function applyBeheerLang(){
   { const hs=document.getElementById("hSaveBtn"); if(hs) hs.textContent = B.hl.opslaan; }
   { const hru=document.getElementById("hRunBtn"); if(hru) hru.textContent = B.hl.runNu; }
   // Volg-scherm knop (klant)
-  const vr = document.getElementById("volgReload"); if(vr) vr.textContent = (VOLG_T[LANG]||VOLG_T.nl).ver;
   // open panelen meteen opnieuw tekenen in de nieuwe taal
   if(document.getElementById("healthOverlay").classList.contains("open")) laadHealth();
   else zetHealthBadge(_laatsteHealthStatus);
   if(document.getElementById("klantOverlay").classList.contains("open") && _klantData.length && !_kForm) renderKlanten();
-  if(document.getElementById("volgOverlay").classList.contains("open") && _volgCode) laadVolg(_volgCode);
 }
 async function initBeheer(){
   document.body.classList.add("beheer");
@@ -2965,42 +2953,9 @@ const BEHEER_T = {
 };
 function BT(){ return BEHEER_T[LANG] || BEHEER_T.nl; }
 
-let _volgCode = "";
-let _volgData = null;
-function closeVolg(){ document.getElementById("volgOverlay").classList.remove("open"); }
-async function laadVolg(code){
-  const VT = VOLG_T[LANG] || VOLG_T.nl;
-  const body = document.getElementById("volgBody");
-  document.getElementById("volgTitel").textContent = VT.titel;
-  const _vr = document.getElementById("volgReload"); if(_vr) _vr.textContent = VT.ver;
-  body.innerHTML = '<p class="hloading">'+esc(VT.laden)+'</p>';
-  const r = null;   // volg-overzicht loopt nu via Mijn account (inloglink)
-  if(!r || !r.ok || !r.bestelling){ body.innerHTML = '<p class="hloading">'+esc(VT.niet)+'</p>'; return; }
-  renderVolg(r.bestelling);
-}
-function renderVolg(b){
-  const VT = VOLG_T[LANG] || VOLG_T.nl;
-  _volgData = b;
-  const body = document.getElementById("volgBody");
-  const regels = String(b.bestelling||"").split("\n").filter(x=>x.trim())
-    .map(r=>'<div style="padding:4px 0;border-bottom:1px solid #f2f2f2">'+esc(r)+'</div>').join("");
-  const statusKlas = b.afgehaald ? "afg" : "open";
-  const statusTxt  = b.afgehaald ? VT.klaar : VT.open;
-  body.innerHTML =
-    '<div style="text-align:center;margin-bottom:16px"><span class="kbadge '+statusKlas+'" style="font-size:1rem;padding:8px 18px">'+esc(statusTxt)+'</span></div>'+
-    '<div class="kklant">'+
-      '<div class="knaam">#'+esc(b.id)+(b.naam?(' · '+esc(b.naam)):'')+'</div>'+
-      '<div class="kbbestel" style="margin:10px 0">'+regels+'</div>'+
-      '<div class="kstat"><strong>'+esc(VT.totaal)+':</strong> '+esc(b.totaal||"")+'</div>'+
-      (b.afhaal?('<div class="kstat"><strong>'+esc(VT.afhalen)+':</strong> '+esc(b.afhaal)+'</div>'):'')+
-      (b.betaling?('<div class="kstat"><strong>'+esc(VT.betaling)+':</strong> '+esc(b.betaling)+'</div>'):'')+
-    '</div>'+
-    '<button id="volgAgain" class="hreload" style="background:var(--amber);margin-top:14px">'+esc(VT.opnieuw)+'</button>';
-  const ag = document.getElementById("volgAgain"); if(ag) ag.onclick = () => herstelMand(_volgData);
-}
 function herstelMand(order){
   const VT = VOLG_T[LANG] || VOLG_T.nl;
-  const d = order || _volgData;
+  const d = order;
   if(!d) return;
   Object.keys(cart).forEach(k => delete cart[k]);
   let n = 0, mand = null;
@@ -3026,7 +2981,7 @@ function herstelMand(order){
   }catch(e){}
   try{ store.save(); }catch(e){}
   updateBars();
-  closeVolg(); closeAccount();
+  closeAccount();
   const st = (typeof orderStatus === "function") ? orderStatus() : {open:true};
   if(st.open){ openSheet(); showToast(VT.hersteld, true); }
   else { if(typeof refreshOrderingUI==="function") refreshOrderingUI(); showToast(VT.geslotenMand, true); }
@@ -4419,7 +4374,6 @@ function setLang(l){
   LANG = l; saveJSON("tta_lang_v", {l});
   applyLang(); buildMenu(); applyConfig(); updateBars(); pushNumbersIfNeeded();
   if(BEHEER) applyBeheerLang();
-  if(document.getElementById("volgOverlay").classList.contains("open") && _volgCode) laadVolg(_volgCode);
   if(document.getElementById("loginOverlay").classList.contains("open")) renderLoginForm();
   if(document.getElementById("accountOverlay").classList.contains("open")) laadAccount();
   if(sheet.classList.contains("open")) renderSheet();
@@ -4584,9 +4538,6 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
       fetch(WORKER_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ soort:"bezoek", type: BEHEER ? "beheer" : (_pp.get("volg") ? "volg" : "klant"), herkomst:_herk, toestel:(window.innerWidth||1024)<768?"mobiel":"desktop", taal:LANG, vid: myVid(), klanttoken:(localStorage.getItem("tta_klanttoken")||_pp.get("login")||""), via:_pp.get("via")||"" }) }).catch(function(){});
     }
   }catch(e){}
-  document.getElementById("volgClose").onclick = closeVolg;
-  document.getElementById("volgReload").onclick = () => laadVolg(_volgCode);
-  document.getElementById("volgOverlay").addEventListener("click", (e) => { if(e.target.id === "volgOverlay") closeVolg(); });
   document.getElementById("loginClose").onclick = closeLogin;
   document.getElementById("accountClose").onclick = closeAccount;
   document.getElementById("accountLogout").onclick = uitloggen;
