@@ -348,6 +348,9 @@
   .payopts{display:flex;gap:8px}
   .payopt{flex:1;padding:11px 8px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
   .payopt.active{border-color:var(--amber);background:#FFF3F8;color:var(--amber-deep)}
+  .modeswitch{display:flex;gap:8px;margin-top:16px}
+  .modeopt{flex:1;padding:11px 8px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .modeopt.active{border-color:var(--forest);background:#EEF6EF;color:var(--forest)}
   .nrrow{align-items:center}
   .nrrow .nrlbl{font-size:.8rem;font-weight:700;color:var(--forest)}
   .nrrow input{max-width:80px;font-weight:700;text-align:center}
@@ -914,7 +917,7 @@ const I18N = {
     payMsgCash:t=>`💵 Je betaalt <b>${t}</b> <b>contant</b> bij het ophalen. Gepast betalen wordt gewaardeerd.`,
     labelName:"Je naam", labelPhone:"Telefoon", labelNote:"Opmerking (optioneel)", labelDay:"Afhaaldag", phName:"Voor- en achternaam", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderAccountHint:"Tip: bekijk je bestellingen en bestel sneller opnieuw via 👤 bovenaan.", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", 
+    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", orderAccountHint:"Tip: bekijk je bestellingen en bestel sneller opnieuw via 👤 bovenaan.", modeVers:"Vers afhalen", modeIngevroren:"Ingevroren, op afspraak", ingevrorenNotice:"We vriezen je bestelling in en nemen contact op voor een afhaalafspraak — je kunt op elk moment bestellen.", afhaalIngevroren:"Ingevroren — op afspraak (we nemen contact op)", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", 
     orderErr:"Vul je naam en telefoon in.",
     note:"Je bestelling wordt direct aan het restaurant doorgegeven.",
     spice:["Mild pittig","Kruidig","Pittig"],
@@ -954,7 +957,7 @@ const I18N = {
     payMsgCash:t=>`💵 You'll pay <b>${t}</b> in <b>cash</b> on pickup. Exact change appreciated.`,
     labelName:"Your name", labelPhone:"Phone", labelNote:"Note (optional)", labelDay:"Pickup day", phName:"Full name", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderAccountHint:"Tip: see your orders and reorder faster via 👤 at the top.", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", 
+    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", orderAccountHint:"Tip: see your orders and reorder faster via 👤 at the top.", modeVers:"Fresh pickup", modeIngevroren:"Frozen, by appointment", ingevrorenNotice:"We'll freeze your order and contact you to arrange pickup — you can order anytime.", afhaalIngevroren:"Frozen — by appointment (we'll contact you)", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", 
     orderErr:"Please enter your name and phone.",
     note:"Your order is sent to the restaurant right away.",
     spice:["Mild","Spicy","Hot"],
@@ -995,7 +998,7 @@ const I18N = {
     payMsgCash:t=>`💵 ชำระ <b>${t}</b> <b>เงินสด</b> ตอนรับอาหาร`,
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelNote:"หมายเหตุ (ถ้ามี)", labelDay:"วันรับ", phName:"ชื่อ-นามสกุล", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderAccountHint:"เคล็ดลับ: ดูออเดอร์และสั่งซ้ำเร็วขึ้นผ่าน 👤 ด้านบน", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", 
+    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", orderAccountHint:"เคล็ดลับ: ดูออเดอร์และสั่งซ้ำเร็วขึ้นผ่าน 👤 ด้านบน", modeVers:"รับสด", modeIngevroren:"แช่แข็ง นัดรับ", ingevrorenNotice:"เราจะแช่แข็งออเดอร์และติดต่อคุณเพื่อนัดรับ — สั่งได้ตลอดเวลา", afhaalIngevroren:"แช่แข็ง — นัดรับ (เราจะติดต่อกลับ)", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", 
     orderErr:"กรุณากรอกชื่อและเบอร์โทร",
     note:"คำสั่งซื้อจะถูกส่งให้ร้านทันที",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
@@ -1562,12 +1565,17 @@ function renderSheet(){
   if(!form.pickTs || !_days.some(d=>d.getTime()===form.pickTs)) form.pickTs = (_days[0]||selectedPickupDate()).getTime();
   const _dayOpts = _days.map(d=>`<option value="${d.getTime()}" ${form.pickTs===d.getTime()?"selected":""}>${dateLabelFor(d)}</option>`).join("");
   const _w = dayWindow(selectedPickupDate().getDay());
-  html += `<div class="pickupbox">${T().pickupNotice(pickupDateLabel()+" · "+_w.van+"–"+_w.tot)}</div>
+  const _ingevroren = form.mode === "ingevroren";
+  html += `<div class="modeswitch">
+      <button type="button" class="modeopt ${!_ingevroren?"active":""}" data-mode="vers">🍽️ ${T().modeVers}</button>
+      <button type="button" class="modeopt ${_ingevroren?"active":""}" data-mode="ingevroren">❄️ ${T().modeIngevroren}</button>
+    </div>`;
+  html += `<div class="pickupbox">${_ingevroren ? T().ingevrorenNotice : T().pickupNotice(pickupDateLabel()+" · "+_w.van+"–"+_w.tot)}</div>
     <div class="fields">
       <input type="text" id="fHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
       <div class="field"><label for="fName">${T().labelName} <span class="req">*</span></label><input id="fName" type="text" placeholder="${T().phName}" autocomplete="name" value="${esc(form.naam)}"></div>
       <div class="field"><label for="fPhone">${T().labelPhone} <span class="req">*</span></label><input id="fPhone" type="tel" placeholder="06 ..." autocomplete="tel" value="${esc(form.tel)}"></div>
-      ${_days.length>1 ? `<div class="field"><label for="fDay">${T().labelDay}</label><select id="fDay">${_dayOpts}</select></div>` : ""}
+      ${(!_ingevroren && _days.length>1) ? `<div class="field"><label for="fDay">${T().labelDay}</label><select id="fDay">${_dayOpts}</select></div>` : ""}
       <div class="field"><label for="fNote">${T().labelNote}</label><textarea id="fNote" placeholder="${T().phNote}">${esc(form.note)}</textarea></div>
       <div class="field"><label>${T().payLabel}</label>
         <div class="payopts">
@@ -1582,6 +1590,7 @@ function renderSheet(){
   const map={fName:"naam",fPhone:"tel",fNote:"note"};
   ["fName","fPhone","fNote"].forEach(idf => { const el=document.getElementById(idf); if(el) el.oninput=e=>{ form[map[idf]]=e.target.value; if(idf==="fName"||idf==="fPhone"){ try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam:form.naam||"", tel:form.tel||""})); }catch(err){} } }; });
   { const fd=document.getElementById("fDay"); if(fd) fd.onchange = e => { form.pickTs = Number(e.target.value)||0; renderSheet(); }; }
+  sheetBody.querySelectorAll(".modeopt").forEach(b => b.onclick = () => { form.mode = b.dataset.mode; renderSheet(); });
   if(!form.pay || (!TIKKIE_ON && form.pay==="tikkie")) form.pay = "contant";
   sheetBody.querySelectorAll(".payopt").forEach(b => b.onclick = () => {
     form.pay = b.dataset.pay;
@@ -1623,8 +1632,9 @@ document.getElementById("waBtn").onclick = async () => {
   const _w0 = dayWindow(selectedPickupDate().getDay());
   const note=(document.getElementById("fNote")?.value||"").trim();
   const msg = document.getElementById("orderMsg");
+  const _ingevroren = form.mode === "ingevroren";
   const st = orderStatus();
-  if(!st.open){ msg.className="order-msg err"; msg.textContent=orderClosedMsg(st); return; }
+  if(!_ingevroren && !st.open){ msg.className="order-msg err"; msg.textContent=orderClosedMsg(st); return; }
   // Cooldown: niet te snel opnieuw bestellen vanaf hetzelfde apparaat
   const last = +(loadJSON("tta_lastorder").t || 0);
   if(last && Date.now() - last < 120000){ msg.className="order-msg err"; msg.textContent=T().orderCooldown; return; }
@@ -1634,7 +1644,7 @@ document.getElementById("waBtn").onclick = async () => {
   document.querySelectorAll(".field input").forEach(i=>i.classList.remove("invalid"));
   if(bad){ const f=document.getElementById(bad); f.classList.add("invalid"); f.focus(); msg.className="order-msg err"; msg.textContent=T().orderErr; return; }
   const {lines, sum} = buildOrder();
-  const afhaal = `${pickupDateLabel()} ${_w0.van}–${_w0.tot}`;
+  const afhaal = _ingevroren ? T().afhaalIngevroren : `${pickupDateLabel()} ${_w0.van}–${_w0.tot}`;
   const cash = form.pay === "contant";
   const betaling = cash ? `Contant bij ophalen (${fmt(sum)})` : `Tikkie sturen naar ${tel} (${fmt(sum)})`;
   const orderId = Math.floor(10000 + Math.random()*90000);
@@ -1642,7 +1652,7 @@ document.getElementById("waBtn").onclick = async () => {
   btn.disabled = true; msg.className="order-msg"; msg.textContent = T().orderSending;
   try{
     const r = await postOrder({
-      start: pickupISO(_w0.van), order_id: orderId, naam, tel, vid: myVid(),
+      start: _ingevroren ? "" : pickupISO(_w0.van), ingevroren: _ingevroren, order_id: orderId, naam, tel, vid: myVid(),
       bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
       afhaal, taal: LANG, mand: JSON.stringify(cart),
       klanttoken: acctToken(),
@@ -3572,7 +3582,7 @@ function renderAfhaallijst(){
     return '<div class="kafhaal-dag">🛍 '+esc(dag)+'</div>'+
       items.map(({b,tijd}) =>
         '<div class="kbest">'+
-          '<div class="kbreg"><span class="kbtijd">'+(tijd?esc(tijd)+' · ':'')+'#'+esc(b.id)+' · '+esc(b.naam||"")+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
+          '<div class="kbreg"><span class="kbtijd">'+(b.ingevroren?'❄️ ':'')+(tijd?esc(tijd)+' · ':'')+'#'+esc(b.id)+' · '+esc(b.naam||"")+'</span><span class="kbtot">'+esc(b.totaal||"")+'</span></div>'+
           '<div>'+(b.betaald?'<span class="kbadge bet">'+K.badgeBetaald+'</span>':'<span class="kbadge onbet">'+K.badgeNietBet+'</span>')+'</div>'+
           (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
           (b.opmerking?('<div style="font-size:.82rem;color:#9a6a00">📝 '+esc(b.opmerking)+'</div>'):'')+
