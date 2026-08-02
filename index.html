@@ -1306,6 +1306,14 @@ function pushNumbersIfNeeded(){
 let AANBOD = {};
 function _periodeKey(){ try{ const d=nextOrderDeadline(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }catch(e){ return ""; } }
 function _periodeLabel(){ try{ return upcomingPickupDates().map(d=>chipDate(d)).join(", "); }catch(e){ return ""; } }
+function _periodeLabelUitKey(k){
+  try{
+    const p = String(k||"").split("-"); if(p.length!==3) return "";
+    const vr = new Date(Number(p[0]), Number(p[1])-1, Number(p[2])); if(isNaN(vr.getTime())) return "";
+    const za = new Date(vr.getTime()+864e5);
+    return chipDate(vr) + ", " + chipDate(za);
+  }catch(e){ return ""; }
+}
 function _huidigAanbod(){
   return MENU.filter(m => m && m.id && !DELETED.has(m.id) && !PURGED.has(m.id) && !HIDDEN.has(m.id))
     .map(m => ({ nr:(m.nr!=null?m.nr:null), id:m.id, naam:titleCase(m.name.nl||m.id), prijs:m.price, cat:m.cat, spice:(m.spice||0) }))
@@ -3353,7 +3361,7 @@ function tekenAanbod(){
   keys.forEach((k,idx)=>{
     const pd = AANBOD[k] || {}, ger = pd.gerechten || [];
     html += '<details class="auditgrp"><summary>'
-      + '<span class="auditwho">'+esc(pd.afhaal||k)+'</span>'
+      + '<span class="auditwho">'+esc(_periodeLabelUitKey(k)||pd.afhaal||k)+'</span>'
       + '<span class="auditcount">'+ger.length+' '+esc(K.aanGerechten)+'</span>'
       + '<span class="auditlast">'+esc(K.aanVastgelegd)+' '+esc(fmtAuditTime(pd.vastgelegd||""))+'</span></summary>';
     html += '<div class="audititems"><table class="aanbodtbl"><thead><tr><th>#</th><th>'+esc(K.aanGerecht)+'</th><th>'+esc(K.aanPrijs)+'</th></tr></thead><tbody>';
