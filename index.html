@@ -1565,11 +1565,13 @@ function renderSheet(){
   if(!form.pickTs || !_days.some(d=>d.getTime()===form.pickTs)) form.pickTs = (_days[0]||selectedPickupDate()).getTime();
   const _dayOpts = _days.map(d=>`<option value="${d.getTime()}" ${form.pickTs===d.getTime()?"selected":""}>${dateLabelFor(d)}</option>`).join("");
   const _w = dayWindow(selectedPickupDate().getDay());
+  const _st = orderStatus();
+  if(!_st.open) form.mode = "vers";
   const _ingevroren = form.mode === "ingevroren";
-  html += `<div class="modeswitch">
+  html += _st.open ? `<div class="modeswitch">
       <button type="button" class="modeopt ${!_ingevroren?"active":""}" data-mode="vers">🍽️ ${T().modeVers}</button>
       <button type="button" class="modeopt ${_ingevroren?"active":""}" data-mode="ingevroren">❄️ ${T().modeIngevroren}</button>
-    </div>`;
+    </div>` : "";
   html += `<div class="pickupbox">${_ingevroren ? T().ingevrorenNotice : T().pickupNotice(pickupDateLabel()+" · "+_w.van+"–"+_w.tot)}</div>
     <div class="fields">
       <input type="text" id="fHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
@@ -1634,7 +1636,7 @@ document.getElementById("waBtn").onclick = async () => {
   const msg = document.getElementById("orderMsg");
   const _ingevroren = form.mode === "ingevroren";
   const st = orderStatus();
-  if(!_ingevroren && !st.open){ msg.className="order-msg err"; msg.textContent=orderClosedMsg(st); return; }
+  if(!st.open){ msg.className="order-msg err"; msg.textContent=orderClosedMsg(st); return; }
   // Cooldown: niet te snel opnieuw bestellen vanaf hetzelfde apparaat
   const last = +(loadJSON("tta_lastorder").t || 0);
   if(last && Date.now() - last < 120000){ msg.className="order-msg err"; msg.textContent=T().orderCooldown; return; }
