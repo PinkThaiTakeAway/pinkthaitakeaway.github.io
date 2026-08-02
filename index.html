@@ -4577,7 +4577,7 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
   setInterval(refreshOrderingUI, 60000);
   wireShare();
   try{
-    if(!sessionStorage.getItem("tta_visit")){
+    if(!BEHEER && !sessionStorage.getItem("tta_visit")){
       sessionStorage.setItem("tta_visit","1");
       const _ref=(document.referrer||"").toLowerCase();
       const _herk = !_ref ? "direct" : ((_ref.indexOf("whatsapp")>=0||_ref.indexOf("wa.me")>=0) ? "whatsapp" : (_ref.indexOf("google")>=0 ? "google" : "overig"));
