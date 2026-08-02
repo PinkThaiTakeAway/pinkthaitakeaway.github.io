@@ -3819,7 +3819,7 @@ async function _ghLijst(map){
     return Array.isArray(j) ? j.filter(function(f){ return f.name && f.name.endsWith(".json"); }) : [];
   }catch(e){ return []; }
 }
-function _tweeMaanden(){ const nu=new Date(); const vo=new Date(nu.getFullYear(), nu.getMonth()-1, 1); return [_logMaand(nu), _logMaand(vo)]; }
+function _tweeMaanden(){ const nu=new Date(); const vo=new Date(Date.UTC(nu.getUTCFullYear(), nu.getUTCMonth()-1, 1)); return [_logMaand(nu), _logMaand(vo)]; }
 
 /* --- Bezoek (bezoekersstatistiek, gevoed door de Worker) --- */
 let _bezoekData = null;
@@ -3827,7 +3827,7 @@ async function fetchBezoek(){
   const nu = new Date();
   let alle = [];
   for(let i=0;i<3;i++){
-    const m = new Date(nu.getFullYear(), nu.getMonth()-i, 1).toISOString().slice(0,7);
+    const m = new Date(Date.UTC(nu.getUTCFullYear(), nu.getUTCMonth()-i, 1)).toISOString().slice(0,7);
     const r = await _ghLeesJson("bezoek/"+m+".json");
     if(r.arr && r.arr.length) alle = alle.concat(r.arr);
   }
