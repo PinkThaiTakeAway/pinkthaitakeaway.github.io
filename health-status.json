@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-08-14T11:35:33Z",
+  "opgeslagen": "2026-08-14T13:31:21Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-08-14T11:35:33.866075+00:00",
+    "updated": "2026-08-14T13:31:21.334304+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -289,7 +289,7 @@
             "status": "ok"
           },
           {
-            "naam": "index.html compact (352 KB, geen zware inline-afbeeldingen)",
+            "naam": "index.html compact (354 KB, geen zware inline-afbeeldingen)",
             "status": "ok"
           },
           {
