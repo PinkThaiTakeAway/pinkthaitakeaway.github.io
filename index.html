@@ -351,6 +351,8 @@
   .modeswitch{display:flex;gap:8px;margin-top:16px}
   .modeopt{flex:1;padding:11px 8px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
   .modeopt.active{border-color:var(--forest);background:#EEF6EF;color:var(--forest)}
+  .spicesel{width:100%;margin-bottom:6px;padding:7px 8px;border:1.5px solid var(--line);border-radius:8px;font:inherit;font-size:.8rem;background:#fff;color:var(--forest);cursor:pointer}
+  .optrow.spicerow{justify-content:flex-end}
   .nrrow{align-items:center}
   .nrrow .nrlbl{font-size:.8rem;font-weight:700;color:var(--forest)}
   .nrrow input{max-width:80px;font-weight:700;text-align:center}
@@ -910,7 +912,7 @@ const I18N = {
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
     yourOrder:"Jouw bestelling", empty:"Je mandje is nog leeg.\nKies iets lekkers uit het menu.",
-    add:"+ Toevoegen", opt:{kip:"Kip",garnaal:"Garnalen"},
+    add:"+ Toevoegen", opt:{kip:"Kip",garnaal:"Garnalen"}, spiceKeuze:["Niet pittig","Mild","Medium","Pittig","Thai 🌶"], spiceKies:"Pittigheid",
     pickupNotice:p=>`Afhalen op <b>${p}</b>. Bestel uiterlijk vrijdag.`,
     payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
     payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
@@ -950,7 +952,7 @@ const I18N = {
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
     yourOrder:"Your order", empty:"Your basket is empty.\nPick something tasty from the menu.",
-    add:"+ Add", opt:{kip:"Chicken",garnaal:"Prawn"},
+    add:"+ Add", opt:{kip:"Chicken",garnaal:"Prawn"}, spiceKeuze:["Not spicy","Mild","Medium","Spicy","Thai 🌶"], spiceKies:"Spiciness",
     pickupNotice:p=>`Pickup on <b>${p}</b>. Order by Friday at the latest.`,
     payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
     payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
@@ -991,7 +993,7 @@ const I18N = {
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
     yourOrder:"คำสั่งซื้อของคุณ", empty:"ตะกร้าของคุณว่างเปล่า\nเลือกเมนูอร่อยๆ ได้เลย",
-    add:"+ เพิ่ม", opt:{kip:"ไก่",garnaal:"กุ้ง"},
+    add:"+ เพิ่ม", opt:{kip:"ไก่",garnaal:"กุ้ง"}, spiceKeuze:["ไม่เผ็ด","เผ็ดน้อย","กลาง","เผ็ด","เผ็ดไทย 🌶"], spiceKies:"ความเผ็ด",
     pickupNotice:p=>`รับสินค้า <b>${p}</b> · กรุณาสั่งภายในวันศุกร์`,
     payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
     payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
@@ -1461,8 +1463,9 @@ function card(m){
 }
 function baseId(key){ return String(key).split("|")[0]; }
 function variantKey(key){ return String(key).split("|")[1] || ""; }
-function variantLabel(key){ const v=variantKey(key); return v ? " · " + ((T().opt && T().opt[v]) || v) : ""; }
-function variantNL(key){ const v=variantKey(key); const nl={kip:"Kip",garnaal:"Garnalen"}; return v ? " ("+(nl[v]||v)+")" : ""; }
+function spiceKey(key){ const p=String(key).split("|"); return (p.length>=3 && p[2]!=="") ? p[2] : ""; }
+function variantLabel(key){ const v=variantKey(key), s=spiceKey(key); let o = v ? " · " + ((T().opt && T().opt[v]) || v) : ""; if(s!==""){ const SP=T().spiceKeuze||[]; o += " · \uD83C\uDF36\uFE0F " + (SP[Number(s)]||s); } return o; }
+function variantNL(key){ const v=variantKey(key), s=spiceKey(key); const nl={kip:"Kip",garnaal:"Garnalen"}; let o = v ? " ("+(nl[v]||v)+")" : ""; if(s!==""){ const SP=(I18N.nl&&I18N.nl.spiceKeuze)||[]; o += " (pittig: "+(SP[Number(s)]||s)+")"; } return o; }
 function stepperHTML(key,q){ return `<div class="stepper"><button data-mk="${key}" aria-label="-">−</button><span class="q">${q}</span><button data-pk="${key}" aria-label="+">+</button></div>`; }
 function serveTip(m){
   const L = LANG;
@@ -1479,29 +1482,35 @@ function serveTip(m){
   const t = REHEAT[m.rh||RH[m.id]||"wok"];
   return `<b>${T().micLabel}:</b> ${t.micro[L]}<br><b>${T().airLabel}:</b> ${t.air[L]}`;
 }
+const _spiceSel = {};
 function renderCtl(node, id){
   if(BEHEER){ node.innerHTML = ""; return; }
   const m = byId(id);
+  const SP = (m && m.cat === "hoofd") ? (T().spiceKeuze || []) : [];
+  const isSpice = SP.length > 0;
+  if(isSpice && _spiceSel[id]==null) _spiceSel[id] = Math.min(SP.length-1, (m && m.spice!=null ? m.spice : 2));
+  const spSel = isSpice ? Number(_spiceSel[id]) : null;
+  const spiceHtml = isSpice
+    ? `<select class="spicesel" data-sp="${id}" aria-label="${T().spiceKies||"Pittigheid"}">`+SP.map((l,i)=>`<option value="${i}"${i===spSel?" selected":""}>\uD83C\uDF36\uFE0F ${l}</option>`).join("")+`</select>`
+    : "";
   if(m && m.opts && m.opts.length){
-    node.innerHTML = `<div class="optctl">` + m.opts.map(opt => {
-      const key = id+"|"+opt, q = cart[key]||0, label = (T().opt && T().opt[opt]) || opt;
+    node.innerHTML = `<div class="optctl">` + spiceHtml + m.opts.map(opt => {
+      const key = id+"|"+opt+(isSpice?"|"+spSel:""), q = cart[key]||0, label = (T().opt && T().opt[opt]) || opt;
       const ctl = q===0 ? `<button class="add optadd" data-key="${key}">${T().add}</button>` : stepperHTML(key,q);
       return `<div class="optrow"><span class="optlbl">${label}</span>${ctl}</div>`;
     }).join("") + `</div>`;
-    node.querySelectorAll(".optadd").forEach(b => b.onclick = () => change(b.dataset.key, 1));
-    node.querySelectorAll("[data-mk]").forEach(b => b.onclick = () => change(b.dataset.mk, -1));
-    node.querySelectorAll("[data-pk]").forEach(b => b.onclick = () => change(b.dataset.pk, 1));
-    return;
-  }
-  const q = cart[id] || 0;
-  if(q === 0){
-    node.innerHTML = `<button class="add">${T().add}</button>`;
-    node.querySelector("button").onclick = () => change(id, 1);
+  } else if(isSpice){
+    const key = id+"||"+spSel, q = cart[key]||0;
+    const ctl = q===0 ? `<button class="add optadd" data-key="${key}">${T().add}</button>` : stepperHTML(key,q);
+    node.innerHTML = `<div class="optctl">${spiceHtml}<div class="optrow spicerow">${ctl}</div></div>`;
   } else {
-    node.innerHTML = stepperHTML(id,q);
-    node.querySelector("[data-mk]").onclick = () => change(id,-1);
-    node.querySelector("[data-pk]").onclick = () => change(id, 1);
+    const q = cart[id] || 0;
+    node.innerHTML = q===0 ? `<button class="add" data-key="${id}">${T().add}</button>` : stepperHTML(id,q);
   }
+  node.querySelectorAll(".add").forEach(b => b.onclick = () => change(b.dataset.key || id, 1));
+  node.querySelectorAll("[data-mk]").forEach(b => b.onclick = () => change(b.dataset.mk, -1));
+  node.querySelectorAll("[data-pk]").forEach(b => b.onclick = () => change(b.dataset.pk, 1));
+  node.querySelectorAll(".spicesel").forEach(s => s.onchange = () => { _spiceSel[s.dataset.sp] = Number(s.value); renderCtl(node, s.dataset.sp); });
 }
 function change(key, delta){
   if(delta > 0 && !orderStatus().open) return;   // bestellen dicht: niets toevoegen
