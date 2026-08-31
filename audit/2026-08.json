@@ -215,5 +215,12 @@
     "adminid": "assist",
     "wat": "SEO verbeterd: geo-coördinaten in structured data, openingsdag gecorrigeerd, sitemap opgefrist",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-08-31T20:36:34.906014Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "SEO: menu-schema (structured data) toegevoegd — bestelbare gerechten met naam/prijs voor Google rich results",
+    "doel": "beheer (code)"
   }
 ]
