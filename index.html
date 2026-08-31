@@ -1303,7 +1303,8 @@ function assignNumbers(){
   MENU.forEach(m => m.nr = (NUMS[m.id]!=null ? NUMS[m.id] : null));
 }
 function pushNumbersIfNeeded(){
-  if(_numsDirty && BEHEER && ghToken()){ _numsDirty = false; livePush("nummers.json", () => NUMS, "Bestelnummers bijgewerkt"); }
+  if(_numsDirty && BEHEER && ghToken()){ _numsDirty = false; livePush("nummers.json", () => NUMS, "Bestelnummers bijgewerkt");
+    if(EXTRA && EXTRA.length) livePush("extra.json", ()=>EXTRA, "Nummers bijgewerkt"); }   // eigen gerechten krijgen hun nr mee -> voorkomt sync-verschil
 }
 let AANBOD = {};
 function _periodeKey(){ try{ const d=nextOrderDeadline(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }catch(e){ return ""; } }
