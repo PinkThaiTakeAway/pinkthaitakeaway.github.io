@@ -1,1 +1,177 @@
-[{"tijd":"2026-08-31T19:10:50.225Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Aanbod-historie bijgewerkt","doel":"aanbod-historie.json"},{"tijd":"2026-08-31T19:10:44.590Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Aanbod-historie bijgewerkt","doel":"aanbod-historie.json"},{"tijd":"2026-08-31T18:36:15.818Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Aanbod-historie bijgewerkt","doel":"aanbod-historie.json"},{"tijd":"2026-08-31T18:35:30.126Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Aanbod-historie bijgewerkt","doel":"aanbod-historie.json"},{"tijd":"2026-08-31T18:16:41.301Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Foto Gaeng Daeng Kai Yang: eigen foto → eigen foto","doel":""},{"tijd":"2026-08-31T18:16:35.344Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Zichtbaarheid bijgewerkt","doel":"verborgen.json"},{"tijd":"2026-08-31T18:14:49.920Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Foto Gyoza Tod Kai: 960px-Fried_shrimp_dumplings_(358905501… → eigen foto","doel":""},{"tijd":"2026-08-31T18:14:42.027Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Zichtbaarheid bijgewerkt","doel":"verborgen.json"},{"tijd":"2026-08-31T18:14:39.939Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Zichtbaarheid bijgewerkt","doel":"verborgen.json"},{"tijd":"2026-08-31T18:14:27.651Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Zichtbaarheid bijgewerkt","doel":"verborgen.json"},{"tijd":"2026-08-31T17:23:24.002Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Bestellen heropend","doel":"bestelpauze.json"},{"tijd":"2026-08-31T17:22:15.066Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Aanbod-historie bijgewerkt","doel":"aanbod-historie.json"},{"tijd":"2026-08-31T17:21:57.272Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Bestellen gepauzeerd","doel":"bestelpauze.json"},{"tijd":"2026-08-31T17:05:17.342Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Afhaal-instellingen bijwerken","doel":"bedrijf.json"},{"tijd":"2026-08-31T17:04:11.396Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Afhaal-instellingen bijwerken","doel":"bedrijf.json"},{"tijd":"2026-08-31T16:57:06.061Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Bestellen heropend","doel":"bestelpauze.json"},{"tijd":"2026-08-31T16:55:43.218Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Bestellen gepauzeerd","doel":"bestelpauze.json"}]
+[
+  {
+    "tijd": "2026-08-31T19:10:50.225Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-08-31T19:10:44.590Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-08-31T18:36:15.818Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-08-31T18:35:30.126Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-08-31T18:16:41.301Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Foto Gaeng Daeng Kai Yang: eigen foto → eigen foto",
+    "doel": ""
+  },
+  {
+    "tijd": "2026-08-31T18:16:35.344Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Zichtbaarheid bijgewerkt",
+    "doel": "verborgen.json"
+  },
+  {
+    "tijd": "2026-08-31T18:14:49.920Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Foto Gyoza Tod Kai: 960px-Fried_shrimp_dumplings_(358905501… → eigen foto",
+    "doel": ""
+  },
+  {
+    "tijd": "2026-08-31T18:14:42.027Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Zichtbaarheid bijgewerkt",
+    "doel": "verborgen.json"
+  },
+  {
+    "tijd": "2026-08-31T18:14:39.939Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Zichtbaarheid bijgewerkt",
+    "doel": "verborgen.json"
+  },
+  {
+    "tijd": "2026-08-31T18:14:27.651Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Zichtbaarheid bijgewerkt",
+    "doel": "verborgen.json"
+  },
+  {
+    "tijd": "2026-08-31T17:23:24.002Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen heropend",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T17:22:15.066Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-08-31T17:21:57.272Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen gepauzeerd",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T17:05:17.342Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Afhaal-instellingen bijwerken",
+    "doel": "bedrijf.json"
+  },
+  {
+    "tijd": "2026-08-31T17:04:11.396Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Afhaal-instellingen bijwerken",
+    "doel": "bedrijf.json"
+  },
+  {
+    "tijd": "2026-08-31T16:57:06.061Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen heropend",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T16:55:43.218Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen gepauzeerd",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T18:33:36.705648Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Gerecht toegevoegd: Masaman nua (rundvlees)",
+    "doel": "extra.json"
+  },
+  {
+    "tijd": "2026-08-31T18:34:36.705648Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Serveertips + omschrijving Masaman nua gelijkgetrokken met Massaman",
+    "doel": "serveertips.json"
+  },
+  {
+    "tijd": "2026-08-31T18:48:36.705648Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Foto ingesteld: Masaman nua",
+    "doel": "fotos.json"
+  },
+  {
+    "tijd": "2026-08-31T18:53:36.705648Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Omschrijving Masaman kai: rund → kip",
+    "doel": "omschrijvingen.json"
+  },
+  {
+    "tijd": "2026-08-31T19:03:36.705648Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Gerecht toegevoegd: Nua pad khaao-phoot on (rundvlees met babymais)",
+    "doel": "extra.json"
+  },
+  {
+    "tijd": "2026-08-31T19:04:36.705648Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Foto ingesteld: Nua pad khaao-phoot on",
+    "doel": "fotos.json"
+  },
+  {
+    "tijd": "2026-08-31T19:10:36.705648Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Zichtbaarheid bijgewerkt: 13 gerechten bestelbaar, rest verborgen",
+    "doel": "verborgen.json"
+  },
+  {
+    "tijd": "2026-08-31T19:23:36.705648Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bestelnummers vastgezet: Masaman nua (22), Nua pad khaao-phoot on (23)",
+    "doel": "nummers.json"
+  }
+]
