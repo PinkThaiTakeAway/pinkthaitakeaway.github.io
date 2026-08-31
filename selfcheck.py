@@ -185,13 +185,20 @@ def check_repo():
 
     # 2f. Verwijzingen naar niet-bestaande gerechten (prullenbak / verborgen)
     if mids is not None:
+        _geldig = set(mids)
+        try:
+            _ej2 = json.load(open("extra.json", encoding="utf-8"))
+            _it2 = _ej2.get("items", _ej2) if isinstance(_ej2, dict) else _ej2
+            _geldig |= {it["id"] for it in _it2 if isinstance(it, dict) and it.get("id")}
+        except Exception:
+            pass
         dangling = 0
         for fn in ("verwijderd.json", "verborgen.json"):
             if os.path.exists(fn):
                 try: arr = json.load(open(fn, encoding="utf-8"))
                 except Exception: arr = []
                 if isinstance(arr, list):
-                    dangling += sum(1 for x in arr if x not in mids)
+                    dangling += sum(1 for x in arr if x not in _geldig)
         if dangling: warn(str(dangling) + " verwijzing(en) naar niet-bestaande gerechten (prullenbak/verborgen)")
         else: ok("geen verwijzingen naar niet-bestaande gerechten")
 
