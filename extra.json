@@ -43,7 +43,8 @@
       "noten"
     ],
     "rh": "curry",
-    "custom": true
+    "custom": true,
+    "nr": 22
   },
   {
     "id": "nuapadkhaao",
@@ -64,6 +65,7 @@
       "th": "เนื้อวัวผัดข้าวโพดอ่อน เสิร์ฟพร้อมข้าวหอมมะลิ"
     },
     "rh": "wok",
-    "custom": true
+    "custom": true,
+    "nr": 23
   }
 ]
