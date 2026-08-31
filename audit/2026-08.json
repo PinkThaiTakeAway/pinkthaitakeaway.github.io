@@ -1,55 +1,76 @@
 [
   {
-    "tijd": "2026-08-31T19:10:50.225Z",
+    "tijd": "2026-08-31T14:20:50Z",
+    "naam": "Ruchaneesarayan",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen heropend",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T14:20:55Z",
+    "naam": "Ruchaneesarayan",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen gepauzeerd",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T14:30:00Z",
+    "naam": "Ruchaneesarayan",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen heropend",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T16:55:43.218Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen gepauzeerd",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T16:57:06.061Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen heropend",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T17:04:11.396Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Afhaal-instellingen bijwerken",
+    "doel": "bedrijf.json"
+  },
+  {
+    "tijd": "2026-08-31T17:05:17.342Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Afhaal-instellingen bijwerken",
+    "doel": "bedrijf.json"
+  },
+  {
+    "tijd": "2026-08-31T17:21:57.272Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Bestellen gepauzeerd",
+    "doel": "bestelpauze.json"
+  },
+  {
+    "tijd": "2026-08-31T17:22:15.066Z",
     "naam": "Hans Stobbe",
     "adminid": "b6e18bfb",
     "wat": "Aanbod-historie bijgewerkt",
     "doel": "aanbod-historie.json"
   },
   {
-    "tijd": "2026-08-31T19:10:44.590Z",
+    "tijd": "2026-08-31T17:23:24.002Z",
     "naam": "Hans Stobbe",
     "adminid": "b6e18bfb",
-    "wat": "Aanbod-historie bijgewerkt",
-    "doel": "aanbod-historie.json"
+    "wat": "Bestellen heropend",
+    "doel": "bestelpauze.json"
   },
   {
-    "tijd": "2026-08-31T18:36:15.818Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Aanbod-historie bijgewerkt",
-    "doel": "aanbod-historie.json"
-  },
-  {
-    "tijd": "2026-08-31T18:35:30.126Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Aanbod-historie bijgewerkt",
-    "doel": "aanbod-historie.json"
-  },
-  {
-    "tijd": "2026-08-31T18:16:41.301Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Foto Gaeng Daeng Kai Yang: eigen foto → eigen foto",
-    "doel": ""
-  },
-  {
-    "tijd": "2026-08-31T18:16:35.344Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Zichtbaarheid bijgewerkt",
-    "doel": "verborgen.json"
-  },
-  {
-    "tijd": "2026-08-31T18:14:49.920Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Foto Gyoza Tod Kai: 960px-Fried_shrimp_dumplings_(358905501… → eigen foto",
-    "doel": ""
-  },
-  {
-    "tijd": "2026-08-31T18:14:42.027Z",
+    "tijd": "2026-08-31T18:14:27.651Z",
     "naam": "Hans Stobbe",
     "adminid": "b6e18bfb",
     "wat": "Zichtbaarheid bijgewerkt",
@@ -63,60 +84,32 @@
     "doel": "verborgen.json"
   },
   {
-    "tijd": "2026-08-31T18:14:27.651Z",
+    "tijd": "2026-08-31T18:14:42.027Z",
     "naam": "Hans Stobbe",
     "adminid": "b6e18bfb",
     "wat": "Zichtbaarheid bijgewerkt",
     "doel": "verborgen.json"
   },
   {
-    "tijd": "2026-08-31T17:23:24.002Z",
+    "tijd": "2026-08-31T18:14:49.920Z",
     "naam": "Hans Stobbe",
     "adminid": "b6e18bfb",
-    "wat": "Bestellen heropend",
-    "doel": "bestelpauze.json"
+    "wat": "Foto Gyoza Tod Kai: 960px-Fried_shrimp_dumplings_(358905501… → eigen foto",
+    "doel": ""
   },
   {
-    "tijd": "2026-08-31T17:22:15.066Z",
+    "tijd": "2026-08-31T18:16:35.344Z",
     "naam": "Hans Stobbe",
     "adminid": "b6e18bfb",
-    "wat": "Aanbod-historie bijgewerkt",
-    "doel": "aanbod-historie.json"
+    "wat": "Zichtbaarheid bijgewerkt",
+    "doel": "verborgen.json"
   },
   {
-    "tijd": "2026-08-31T17:21:57.272Z",
+    "tijd": "2026-08-31T18:16:41.301Z",
     "naam": "Hans Stobbe",
     "adminid": "b6e18bfb",
-    "wat": "Bestellen gepauzeerd",
-    "doel": "bestelpauze.json"
-  },
-  {
-    "tijd": "2026-08-31T17:05:17.342Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Afhaal-instellingen bijwerken",
-    "doel": "bedrijf.json"
-  },
-  {
-    "tijd": "2026-08-31T17:04:11.396Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Afhaal-instellingen bijwerken",
-    "doel": "bedrijf.json"
-  },
-  {
-    "tijd": "2026-08-31T16:57:06.061Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Bestellen heropend",
-    "doel": "bestelpauze.json"
-  },
-  {
-    "tijd": "2026-08-31T16:55:43.218Z",
-    "naam": "Hans Stobbe",
-    "adminid": "b6e18bfb",
-    "wat": "Bestellen gepauzeerd",
-    "doel": "bestelpauze.json"
+    "wat": "Foto Gaeng Daeng Kai Yang: eigen foto → eigen foto",
+    "doel": ""
   },
   {
     "tijd": "2026-08-31T18:33:36.705648Z",
@@ -131,6 +124,20 @@
     "adminid": "assist",
     "wat": "Serveertips + omschrijving Masaman nua gelijkgetrokken met Massaman",
     "doel": "serveertips.json"
+  },
+  {
+    "tijd": "2026-08-31T18:35:30.126Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-08-31T18:36:15.818Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
   },
   {
     "tijd": "2026-08-31T18:48:36.705648Z",
@@ -166,6 +173,20 @@
     "adminid": "assist",
     "wat": "Zichtbaarheid bijgewerkt: 13 gerechten bestelbaar, rest verborgen",
     "doel": "verborgen.json"
+  },
+  {
+    "tijd": "2026-08-31T19:10:44.590Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-08-31T19:10:50.225Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
   },
   {
     "tijd": "2026-08-31T19:23:36.705648Z",
