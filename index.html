@@ -647,10 +647,15 @@
     "addressRegion": "Noord-Brabant",
     "addressCountry": "NL"
   },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 51.4989,
+    "longitude": 5.1576
+  },
   "areaServed": ["Biest-Houtakker", "Hilvarenbeek", "Diessen", "Tilburg"],
   "openingHoursSpecification": [{
     "@type": "OpeningHoursSpecification",
-    "dayOfWeek": "Saturday",
+    "dayOfWeek": "Sunday",
     "opens": "17:00",
     "closes": "19:00"
   }],
@@ -1784,6 +1789,7 @@ function updateStructuredData(){
     "priceRange": CONFIG.seo.prijsklasse || "\u20AC\u20AC",
     "currenciesAccepted":"EUR",
     "address": addr,
+    "geo": { "@type":"GeoCoordinates", "latitude":51.4989, "longitude":5.1576 },
     "areaServed": (Array.isArray(CONFIG.seo.gebied) && CONFIG.seo.gebied.length ? CONFIG.seo.gebied : ["Biest-Houtakker","Hilvarenbeek","Diessen","Tilburg"]),
     "openingHoursSpecification":[{
       "@type":"OpeningHoursSpecification",
