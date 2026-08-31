@@ -1,1 +1,23 @@
-{}
+{
+  "masamannua": [
+    {
+      "m": "micro",
+      "t": 3,
+      "p": "600 W",
+      "n": {
+        "nl": "Halverwege een keer doorroeren.",
+        "en": "Stir once halfway through.",
+        "th": "คนหนึ่งครั้งตอนครึ่งเวลา"
+      }
+    },
+    {
+      "m": "pan",
+      "t": 6,
+      "n": {
+        "nl": "Regelmatig doorroeren op laag vuur.",
+        "en": "Stir regularly over low heat.",
+        "th": "คนสม่ำเสมอด้วยไฟอ่อน"
+      }
+    }
+  ]
+}
