@@ -222,5 +222,12 @@
     "adminid": "assist",
     "wat": "SEO: menu-schema (structured data) toegevoegd — bestelbare gerechten met naam/prijs voor Google rich results",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-08-31T20:52:34.110848Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Vaste 'zaterdag'-teksten (meta/hero/JSON-LD/chip/WhatsApp) gecorrigeerd naar zondag i.v.m. Google-omschrijving",
+    "doel": "beheer (code)"
   }
 ]
