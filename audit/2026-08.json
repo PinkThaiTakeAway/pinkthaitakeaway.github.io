@@ -208,5 +208,12 @@
     "adminid": "assist",
     "wat": "Beveiliging: alleen de eigenaar mag admins blokkeren — geen enkele andere admin (nu of toekomstig) kan iemand buitensluiten",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-08-31T20:23:52.125832Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "SEO verbeterd: geo-coördinaten in structured data, openingsdag gecorrigeerd, sitemap opgefrist",
+    "doel": "beheer (code)"
   }
 ]
