@@ -201,5 +201,12 @@
     "adminid": "assist",
     "wat": "Beveiliging: Hans Stobbe ingesteld als beschermde eigenaar (kan niet worden geblokkeerd/buitengesloten)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-08-31T20:04:37.289172Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Beveiliging: alleen de eigenaar mag admins blokkeren — geen enkele andere admin (nu of toekomstig) kan iemand buitensluiten",
+    "doel": "beheer (code)"
   }
 ]
