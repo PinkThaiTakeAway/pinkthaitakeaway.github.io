@@ -2626,6 +2626,7 @@ async function callmebotOpslaan(){
     showToast(String(e && e.message).indexOf("no-token")>=0 ? A.tokenNeed : K.cbFout, false);
   }
 }
+const _AUDIT_SKIP = {"prijzen.json":1,"namen.json":1,"omschrijvingen.json":1,"serveertips.json":1,"pittigheid.json":1,"fotos.json":1,"health-status.json":1,".healthrun":1};
 async function ghPut(path, obj, message, opts){
   const token = ghToken(); if(!token) throw new Error("no-token");
   let sha, _oldObj = null;
@@ -2635,6 +2636,7 @@ async function ghPut(path, obj, message, opts){
   const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
     method:"PUT", headers:{Authorization:"token "+token, "Content-Type":"application/json"}, body: JSON.stringify(body) });
   if(!r.ok) throw new Error("push-"+r.status);
+  try{ if(!_AUDIT_SKIP[path] && !(opts&&opts.noAudit) && message) logAudit(path, message); }catch(e){}
   return true;
 }
 let _toastT;
