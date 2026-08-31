@@ -1,19 +1,15 @@
 {
-  "opgeslagen": "2026-08-31T18:37:42Z",
+  "opgeslagen": "2026-08-31T18:40:17Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-08-31T18:37:42.666151+00:00",
+    "updated": "2026-08-31T18:40:17.353681+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
         "items": [
-          {
-            "naam": "fotos.json: gerecht 'masamannua' heeft een ongeldige foto",
-            "status": "err"
-          },
           {
             "naam": "index.html aanwezig met verwachte inhoud",
             "status": "ok"
