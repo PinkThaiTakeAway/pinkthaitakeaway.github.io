@@ -1765,6 +1765,24 @@ function _parseAdres(a){
 }
 function _dagEngels(d){ return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][((d%7)+7)%7] || "Saturday"; }
 // Structured data (schema.org) bijwerken vanuit CONFIG = bedrijf.json (beheer is leidend)
+function _menuSchema(){
+  try{
+    const secties = [];
+    CATS.forEach(c => {
+      const items = MENU.filter(m => m && m.id && m.cat===c.id && !DELETED.has(m.id) && !PURGED.has(m.id) && !HIDDEN.has(m.id))
+        .map(m => ({
+          "@type":"MenuItem",
+          "name": String((m.name&&m.name.nl)||"").trim(),
+          "description": String((m.desc&&m.desc.nl)||"").replace(/<[^>]*>/g,"").trim(),
+          "offers": { "@type":"Offer", "price": Number(m.price||0).toFixed(2), "priceCurrency":"EUR" }
+        }))
+        .filter(it => it.name);
+      if(items.length) secties.push({ "@type":"MenuSection", "name": (c.nm&&c.nm.nl)||c.id, "hasMenuItem": items });
+    });
+    if(!secties.length) return "https://pinkthaitakeaway.nl/";
+    return { "@type":"Menu", "name":"Menukaart Pink Thai TakeAway", "inLanguage":"nl", "hasMenuSection": secties };
+  }catch(e){ return "https://pinkthaitakeaway.nl/"; }
+}
 function updateStructuredData(){
   const el = document.querySelector('script[type="application/ld+json"]');
   if(!el) return;
@@ -1784,7 +1802,7 @@ function updateStructuredData(){
     "servesCuisine": CONFIG.seo.keuken || "Thai",
     "image": CONFIG.seo.afbeelding || "https://pinkthaitakeaway.nl/pink-thai-og.png",
     "url":"https://pinkthaitakeaway.nl/",
-    "hasMenu":"https://pinkthaitakeaway.nl/",
+    "hasMenu": _menuSchema(),
     "telephone": _phoneIntl(CONFIG.telefoon),
     "priceRange": CONFIG.seo.prijsklasse || "\u20AC\u20AC",
     "currenciesAccepted":"EUR",
