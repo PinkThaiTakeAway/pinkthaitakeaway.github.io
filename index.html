@@ -2641,6 +2641,37 @@ async function callmebotOpslaan(){
     showToast(String(e && e.message).indexOf("no-token")>=0 ? A.tokenNeed : K.cbFout, false);
   }
 }
+function _auditDiff(path, oud, nieuw){
+  try{
+    const fv = v => (v==null||v==="") ? "\u2014" : (typeof v==="object" ? JSON.stringify(v) : String(v));
+    if(path==="verborgen.json" && Array.isArray(oud) && Array.isArray(nieuw)){
+      const o=new Set(oud), n=new Set(nieuw);
+      const nm = id => { const m=byId(id); return m ? titleCase(m.name.nl) : id; };
+      const verborgen = nieuw.filter(x=>!o.has(x)).map(nm);
+      const bestelbaar = oud.filter(x=>!n.has(x)).map(nm);
+      const parts=[];
+      if(bestelbaar.length) parts.push("bestelbaar gemaakt: "+bestelbaar.join(", "));
+      if(verborgen.length) parts.push("verborgen: "+verborgen.join(", "));
+      return parts.length ? ("Zichtbaarheid \u2014 "+parts.join(" \u00b7 ")) : null;
+    }
+    if(path==="tikkie.json"){ const a=!!(oud&&oud.enabled), b=!!(nieuw&&nieuw.enabled); return a!==b ? ("Tikkie: "+(a?"aan":"uit")+" \u2192 "+(b?"aan":"uit")) : null; }
+    if(path==="blackout.json"){ const a=!!(oud&&oud.on), b=!!(nieuw&&nieuw.on); return a!==b ? ("Site op zwart: "+(a?"aan":"uit")+" \u2192 "+(b?"aan":"uit")) : null; }
+    if(path==="bedrijf.json" && oud && typeof oud==="object" && nieuw && typeof nieuw==="object"){
+      const chg=[];
+      const walk=(o,n,pre)=>{
+        const ks=new Set([...Object.keys(o||{}),...Object.keys(n||{})]);
+        ks.forEach(k=>{
+          const ov=(o||{})[k], nv=(n||{})[k];
+          if(ov && nv && typeof ov==="object" && typeof nv==="object" && !Array.isArray(ov) && !Array.isArray(nv)) walk(ov,nv,pre+k+".");
+          else if(JSON.stringify(ov)!==JSON.stringify(nv)) chg.push(pre+k+": "+fv(ov)+" \u2192 "+fv(nv));
+        });
+      };
+      walk(oud,nieuw,"");
+      return chg.length ? ("Instelling \u2014 "+chg.slice(0,6).join("; ")+(chg.length>6?" \u2026":"")) : null;
+    }
+    return null;
+  }catch(e){ return null; }
+}
 const _AUDIT_SKIP = {"prijzen.json":1,"namen.json":1,"omschrijvingen.json":1,"serveertips.json":1,"pittigheid.json":1,"fotos.json":1,"health-status.json":1,".healthrun":1};
 async function ghPut(path, obj, message, opts){
   const token = ghToken(); if(!token) throw new Error("no-token");
@@ -2651,7 +2682,7 @@ async function ghPut(path, obj, message, opts){
   const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
     method:"PUT", headers:{Authorization:"token "+token, "Content-Type":"application/json"}, body: JSON.stringify(body) });
   if(!r.ok) throw new Error("push-"+r.status);
-  try{ if(!_AUDIT_SKIP[path] && !(opts&&opts.noAudit) && message) logAudit(path, message); }catch(e){}
+  try{ if(!_AUDIT_SKIP[path] && !(opts&&opts.noAudit)){ const _w=_auditDiff(path,_oldObj,obj); if(_w||message) logAudit(path, _w||message); } }catch(e){}
   return true;
 }
 let _toastT;
