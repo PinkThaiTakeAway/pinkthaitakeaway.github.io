@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-08-31T18:28:53Z",
+  "opgeslagen": "2026-08-31T18:33:03Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-08-31T18:28:53.332793+00:00",
+    "updated": "2026-08-31T18:33:03.909062+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -163,7 +163,7 @@
             "status": "ok"
           },
           {
-            "naam": "serveertips.json: 0 vermelding(en) gecontroleerd",
+            "naam": "serveertips.json: 1 vermelding(en) gecontroleerd",
             "status": "ok"
           },
           {
