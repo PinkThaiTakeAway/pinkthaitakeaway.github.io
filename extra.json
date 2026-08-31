@@ -20,5 +20,29 @@
     "rh": "wok",
     "custom": true,
     "nr": 21
+  },
+  {
+    "id": "masamannua",
+    "cat": "hoofd",
+    "emoji": "🥘",
+    "price": 15,
+    "spice": 2,
+    "foto": "Massaman beef curry thai food",
+    "th": "แกงมัสมั่นเนื้อ",
+    "name": {
+      "nl": "Masaman nua",
+      "en": "Massaman nua",
+      "th": "แกงมัสมั่นเนื้อ"
+    },
+    "desc": {
+      "nl": "Pittige kokos-curry met rundvlees. Met jasmijnrijst.",
+      "en": "Spicy coconut curry with beef. Served with jasmine rice.",
+      "th": "แกงกะทิรสเผ็ดกับเนื้อวัว เสิร์ฟพร้อมข้าวหอมมะลิ"
+    },
+    "diet": [
+      "noten"
+    ],
+    "rh": "curry",
+    "custom": true
   }
 ]
