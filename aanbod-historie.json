@@ -834,8 +834,8 @@
   "2026-09-05": {
     "deadline": "2026-09-05T15:00:00.000Z",
     "afhaal": "zondag 6 sep",
-    "vastgelegd": "2026-08-31T17:22:13.499Z",
-    "aantal": 12,
+    "vastgelegd": "2026-08-31T18:35:28.166Z",
+    "aantal": 15,
     "gerechten": [
       {
         "nr": 1,
@@ -852,6 +852,14 @@
         "prijs": 5,
         "cat": "voorgerechten",
         "spice": 1
+      },
+      {
+        "nr": 3,
+        "id": "gyozakai",
+        "naam": "Gyoza Tod Kai",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
       },
       {
         "nr": 4,
@@ -884,6 +892,14 @@
         "prijs": 15,
         "cat": "hoofd",
         "spice": 1
+      },
+      {
+        "nr": 10,
+        "id": "gaengdaengkaiyang",
+        "naam": "Gaeng Daeng Kai Yang",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 2
       },
       {
         "nr": 11,
@@ -930,6 +946,14 @@
         "id": "xmrnaf5vp",
         "naam": "Khao Man Kai",
         "prijs": 12,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 22,
+        "id": "masamannua",
+        "naam": "Masaman Nua",
+        "prijs": 15,
         "cat": "hoofd",
         "spice": 1
       }
