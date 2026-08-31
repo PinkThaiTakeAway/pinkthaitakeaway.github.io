@@ -1,19 +1,15 @@
 {
-  "opgeslagen": "2026-08-31T18:53:48Z",
+  "opgeslagen": "2026-08-31T18:58:38Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-08-31T18:53:48.061850+00:00",
+    "updated": "2026-08-31T18:58:38.879626+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
         "items": [
-          {
-            "naam": "1 verwijzing(en) naar niet-bestaande gerechten (prullenbak/verborgen)",
-            "status": "warn"
-          },
           {
             "naam": "index.html aanwezig met verwachte inhoud",
             "status": "ok"
@@ -48,6 +44,10 @@
           },
           {
             "naam": "bestelnummers zijn uniek",
+            "status": "ok"
+          },
+          {
+            "naam": "geen verwijzingen naar niet-bestaande gerechten",
             "status": "ok"
           },
           {
