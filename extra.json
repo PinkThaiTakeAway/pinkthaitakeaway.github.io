@@ -26,7 +26,7 @@
     "cat": "hoofd",
     "emoji": "🥘",
     "price": 15,
-    "spice": 2,
+    "spice": 1,
     "foto": "Massaman beef curry thai food",
     "th": "แกงมัสมั่นเนื้อ",
     "name": {
@@ -35,9 +35,9 @@
       "th": "แกงมัสมั่นเนื้อ"
     },
     "desc": {
-      "nl": "Pittige kokos-curry met rundvlees. Met jasmijnrijst.",
-      "en": "Spicy coconut curry with beef. Served with jasmine rice.",
-      "th": "แกงกะทิรสเผ็ดกับเนื้อวัว เสิร์ฟพร้อมข้าวหอมมะลิ"
+      "nl": "Zacht gestoofd rund, aardappel en geroosterde pinda. Mild en kruidig. Met rijst.",
+      "en": "Slow-cooked beef, potato and roasted peanuts. Mild and aromatic. With rice.",
+      "th": "แกงมัสมั่นเนื้อตุ๋น มันฝรั่ง และถั่วลิสงคั่ว รสอ่อนหอมเครื่องเทศ เสิร์ฟพร้อมข้าว"
     },
     "diet": [
       "noten"
