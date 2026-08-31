@@ -194,5 +194,12 @@
     "adminid": "assist",
     "wat": "Bestelnummers vastgezet: Masaman nua (22), Nua pad khaao-phoot on (23)",
     "doel": "nummers.json"
+  },
+  {
+    "tijd": "2026-08-31T20:01:02.903677Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Beveiliging: Hans Stobbe ingesteld als beschermde eigenaar (kan niet worden geblokkeerd/buitengesloten)",
+    "doel": "beheer (code)"
   }
 ]
