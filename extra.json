@@ -44,5 +44,26 @@
     ],
     "rh": "curry",
     "custom": true
+  },
+  {
+    "id": "nuapadkhaao",
+    "cat": "hoofd",
+    "emoji": "🥩",
+    "price": 15,
+    "spice": 2,
+    "foto": "Nua pad khaao-phoot thai beef baby corn stir fry",
+    "th": "เนื้อผัดข้าวโพดอ่อน",
+    "name": {
+      "nl": "Nua pad khaao-phoot on",
+      "en": "Nua pad khaao-phoot on",
+      "th": "เนื้อผัดข้าวโพดอ่อน"
+    },
+    "desc": {
+      "nl": "Gebakken rundvlees met babymais. Met jasmijnrijst.",
+      "en": "Stir-fried beef with baby corn. Served with jasmine rice.",
+      "th": "เนื้อวัวผัดข้าวโพดอ่อน เสิร์ฟพร้อมข้าวหอมมะลิ"
+    },
+    "rh": "wok",
+    "custom": true
   }
 ]
