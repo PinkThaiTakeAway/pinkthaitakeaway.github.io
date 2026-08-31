@@ -4,12 +4,12 @@
   "telefoon": "06 48 55 58 42",
   "chefFoto": "chef.jpg",
   "afhaal": {
-    "dag": 6,
+    "dag": 0,
     "dagen": [
-      6
+      0
     ],
     "tijden": {
-      "6": {
+      "0": {
         "van": "17:00",
         "tot": "19:00"
       }
@@ -17,7 +17,7 @@
     "van": "17:00",
     "tot": "19:00",
     "vanaf": "2026-08-29",
-    "sluitDag": 5,
+    "sluitDag": 6,
     "sluitTijd": "17:00"
   },
   "seo": {
