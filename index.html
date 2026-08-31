@@ -925,7 +925,7 @@ const I18N = {
     spice:["Mild pittig","Kruidig","Pittig"],
     diet:{ vega:"Vega", glutenvrij:"Glutenvrij", noten:"Bevat noten" },
     footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t} uur`,
-    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op {dagen}.", dagEn:" en ", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
+    footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op {dagen}.", adresNote:"(voordeur aan de oprit)", dagEn:" en ", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
     reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", wis:"Wis keuzes",
       count:(n,t)=>`${n} / ${t} foto's klaar`, hidden:"VERBORGEN", actief:"BESTELBAAR", copy:"📋 Kopieer gerecht", copySuffix:" (kopie)", catNew:"➕ Nieuwe categorie…", catAskNl:"Naam van de nieuwe categorie:", catAskEmoji:"Emoji voor de categorie (optioneel):", catAdded:"Categorie toegevoegd ✓", allesUit:"🚫 Alles onbestelbaar", allesAan:"✅ Alles bestelbaar", allesUitConf:"Alle gerechten onbestelbaar maken?", allesAanConf:"Alle gerechten weer bestelbaar maken?",
@@ -965,7 +965,7 @@ const I18N = {
     spice:["Mild","Spicy","Hot"],
     diet:{ vega:"Veggie", glutenvrij:"Gluten-free", noten:"Contains nuts" },
     footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
-    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on {dagen}.", dagEn:" and ", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸",
+    footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on {dagen}.", adresNote:"(front door by the driveway)", dagEn:" and ", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸",
     reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
       descEdit:"Edit description", descSave:"Save description", nameEdit:"Edit name", nameSave:"Save name", recipeTitle:"Recipe / preparation (internal)", recipeNeed:"Needed (ingredients)", recipeNeedPh:"e.g. 200g chicken, 2 cloves garlic, fish sauce…", recipePrep:"Preparation (steps)", recipePrepPh:"e.g. 1) Heat wok 2) Fry chicken…", recipeSave:"Save recipe", serveEdit:"Edit reheating tip", serveAddRow:"＋ Add method", serveSave:"Save reheating tip", serveNotePh:"note (optional)", wis:"Clear choices",
@@ -1006,7 +1006,7 @@ const I18N = {
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
     diet:{ vega:"มังสวิรัติ", glutenvrij:"ไม่มีกลูเตน", noten:"มีถั่ว" },
     footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`,
-    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับ{dagen}", dagEn:"และ", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
+    footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับ{dagen}", adresNote:"(ประตูหน้าอยู่ตรงทางเข้ารถ)", dagEn:"และ", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
     reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", wis:"ล้างที่เลือก",
       count:(n,t)=>`${n} / ${t} รูปพร้อม`, hidden:"ซ่อนอยู่", actief:"สั่งได้", copy:"📋 คัดลอกเมนู", copySuffix:" (สำเนา)", catNew:"➕ หมวดหมู่ใหม่…", catAskNl:"ชื่อหมวดหมู่ใหม่:", catAskEmoji:"อีโมจิสำหรับหมวดหมู่ (ถ้ามี):", catAdded:"เพิ่มหมวดหมู่แล้ว ✓", allesUit:"🚫 ปิดทั้งหมด", allesAan:"✅ เปิดทั้งหมด", allesUitConf:"ปิดการสั่งซื้อเมนูทั้งหมด?", allesAanConf:"เปิดการสั่งซื้อเมนูทั้งหมดอีกครั้ง?",
@@ -1802,8 +1802,10 @@ function updateStructuredData(){
 }
 function applyConfig(){
   document.querySelectorAll(".brandname").forEach(n => { if(n.firstChild) n.firstChild.textContent = CONFIG.naam; });
-  document.getElementById("cfgAdres").textContent  = CONFIG.adres;
-  document.getElementById("cfgAdres2").textContent = CONFIG.adres;
+  const _adBase = String(CONFIG.adres||"").replace(/\s*\([^)]*\)\s*$/,"").trim();
+  const _adFull = _adBase + (T().adresNote ? " " + T().adresNote : "");
+  document.getElementById("cfgAdres").textContent  = _adFull;
+  document.getElementById("cfgAdres2").textContent = _adFull;
   document.getElementById("cfgTel").textContent    = CONFIG.telefoon;
   document.getElementById("year").textContent = new Date().getFullYear();
   { const _cf=document.getElementById("heroChefImg"); if(_cf) _cf.src = CONFIG.chefFoto || "chef.jpg"; }
