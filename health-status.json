@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-08-31T18:40:17Z",
+  "opgeslagen": "2026-08-31T18:44:29Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-08-31T18:40:17.353681+00:00",
+    "updated": "2026-08-31T18:44:29.164370+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -131,7 +131,7 @@
             "status": "ok"
           },
           {
-            "naam": "22 gerechten in het menu herkend",
+            "naam": "23 gerechten in het menu herkend",
             "status": "ok"
           },
           {
@@ -147,7 +147,7 @@
             "status": "ok"
           },
           {
-            "naam": "fotos.json: 22 vermelding(en) gecontroleerd",
+            "naam": "fotos.json: 23 vermelding(en) gecontroleerd",
             "status": "ok"
           },
           {
