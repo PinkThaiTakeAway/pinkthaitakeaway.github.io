@@ -348,5 +348,12 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: 'unieke bezoekers'-kaart klikbaar (toont per unieke bezoeker het laatste bezoek)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T17:04:09.678556Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Health-check: 3 nieuwe checks (WhatsApp ingesteld, minimaal 1 bestelbaar, gemiste ordermeldingen)",
+    "doel": "beheer (code)"
   }
 ]
