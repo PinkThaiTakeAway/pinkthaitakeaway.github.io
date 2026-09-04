@@ -250,5 +250,12 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: dag-grens op Nederlandse tijd (Europe/Amsterdam) i.p.v. UTC",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:31:03.961583Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek-detail: gegroepeerd per dag met dag-kopje (welke dag elk bezoek was)",
+    "doel": "beheer (code)"
   }
 ]
