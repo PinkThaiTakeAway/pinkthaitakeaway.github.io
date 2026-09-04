@@ -605,6 +605,10 @@
   .kdelbtn{border:1px solid #f3c0c8!important;color:#c0142c!important;background:#fff!important}
   .kstat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
   .kstat-card{background:#faf6f2;border-radius:12px;padding:14px 16px}
+  .kstat-klik{cursor:pointer;transition:background .12s,box-shadow .12s}
+  .kstat-klik:hover{background:#f3ebe2}
+  .kstat-klik.bzactief{background:#ece1d6;box-shadow:inset 0 0 0 2px var(--forest)}
+  #bzDetailTitel{list-style:none;padding:11px 14px;font-size:.9rem;color:var(--forest);text-transform:uppercase;letter-spacing:.04em;font-weight:700;border-bottom:1px solid #f2f2f2}
   .kstat-card .kv{font-size:1.5rem;font-weight:800;color:var(--forest);font-family:"Fraunces",serif}
   .kstat-card .kl{font-size:.8rem;color:#777;margin-top:2px}
   .ktop{margin-top:4px}
@@ -3970,7 +3974,7 @@ function tekenBezoek(r){
   const dagen=[]; for(let i=29;i>=0;i--){ const ds=new Date(nu.getTime()-i*864e5).toISOString().slice(0,10); dagen.push({datum:ds, aantal:perDag[ds]||0}); }
   const max=Math.max(1, ...dagen.map(function(d){return d.aantal;}));
   const bars=dagen.map(function(d){ const hh=Math.round(d.aantal/max*100), lbl=d.datum.slice(8)+'-'+d.datum.slice(5,7); return '<div class="bzbar" title="'+lbl+': '+d.aantal+'"><div class="bzbfill" style="height:'+hh+'%"></div></div>'; }).join("");
-  const kaart=function(v,l){ return '<div class="kstat-card"><div class="kv">'+v+'</div><div class="kl">'+esc(l)+'</div></div>'; };
+  const kaart=function(v,l,periode){ return '<div class="kstat-card'+(periode?' kstat-klik':'')+'"'+(periode?' data-periode="'+periode+'" data-lbl="'+esc(l)+'"':'')+'><div class="kv">'+v+'</div><div class="kl">'+esc(l)+'</div></div>'; };
   const verdeling=function(titel,obj,labels){
     const tot=Object.keys(obj).reduce(function(a,k){return a+(obj[k]||0);},0)||1;
     const rijen=Object.keys(labels).map(function(k){ const val=obj[k]||0, pct=Math.round(val/tot*100); return '<div class="ktoprow"><span>'+esc(labels[k])+'</span><span class="ktn">'+val+' ('+pct+'%)</span></div>'; }).join("");
@@ -3990,11 +3994,9 @@ function tekenBezoek(r){
   const conv = klantVids.size ? Math.round(besteld/klantVids.size*100) : 0;
   let besteldOpen=0; vidOpen.forEach(function(id){ if(orderVids.has(id)) besteldOpen++; });
   const convOpen = vidOpen.size ? Math.round(besteldOpen/vidOpen.size*100) : null;
-  // Detail-lijst: bezoekers van vandaag met alle details
+  // Detail-lijst per periode (klikbaar via de kaarten)
   const _herkL = {direct:K.bzDirect, whatsapp:K.bzWhatsapp, google:K.bzGoogle, overig:K.bzOverig};
-  const _vandaagRecs = recs.filter(function(v){ return String(v.tijd||"").slice(0,10)===vandaag; })
-    .sort(function(a,b){ return String(b.tijd||"").localeCompare(String(a.tijd||"")); });
-  const _detailRijen = _vandaagRecs.map(function(v){
+  const _bzRij = function(v){
     const d=new Date(v.tijd); const tijd = isNaN(d.getTime())?"":(String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"));
     const loc = v.plaats ? (esc(v.plaats)+(v.land?" ("+esc(v.land)+")":"")) : (v.land?esc(v.land):esc(K.bzOnbekend));
     const toe = v.toestel==="mobiel" ? "📱" : "💻";
@@ -4003,12 +4005,22 @@ function tekenBezoek(r){
     const terug = v.klant ? " · 🔁" : "";
     const volg = v.type==="volg" ? " · 🔗" : "";
     return '<div class="bzrow"><span class="bztime">'+tijd+'</span><span class="bzloc">📍 '+loc+'</span><span class="bzmeta">'+toe+' '+esc((v.taal||"").toUpperCase())+' · '+herk+' · '+opn+terug+volg+'</span></div>';
-  }).join("");
-  const detailSectie = '<details class="bzsec" open><summary class="bzsum">'+esc(K.bzVandaagDetail)+' ('+_vandaagRecs.length+')</summary><div class="bzsecin bzdetail">'+(_detailRijen||('<div class="ktoprow"><span>'+esc(K.bzGeen)+'</span></div>'))+'</div></details>';
+  };
+  const _bzFilter = function(periode){
+    if(periode==="week") return recs.filter(function(v){ return String(v.tijd||"")>=weekGrens; });
+    if(periode==="maand") return recs.filter(function(v){ return String(v.tijd||"")>=maandGrens; });
+    if(periode==="totaal") return recs.slice();
+    return recs.filter(function(v){ return String(v.tijd||"").slice(0,10)===vandaag; });
+  };
+  const _bzDetailHtml = function(periode){
+    const filt = _bzFilter(periode).sort(function(a,b){ return String(b.tijd||"").localeCompare(String(a.tijd||"")); });
+    const rijen = filt.map(_bzRij).join("");
+    return rijen || ('<div class="ktoprow"><span>'+esc(K.bzGeen)+'</span></div>');
+  };
   body.innerHTML =
     '<p class="kinstel-uit" style="margin:4px 2px 12px">'+esc(K.bzUit)+'</p>'+
-    '<div class="kstat-grid">'+kaart(cV,K.bzVandaag)+kaart(cW,K.bzWeek)+kaart(cM,K.bzMaand)+kaart(recs.length,K.bzTotaal)+kaart(vids.size,K.bzUniek)+'</div>'+
-    detailSectie+
+    '<div class="kstat-grid">'+kaart(cV,K.bzVandaag,"vandaag")+kaart(cW,K.bzWeek,"week")+kaart(cM,K.bzMaand,"maand")+kaart(recs.length,K.bzTotaal,"totaal")+kaart(vids.size,K.bzUniek)+'</div>'+
+    '<div class="bzsec" id="bzDetailSec"><div class="bzsum" id="bzDetailTitel"></div><div class="bzsecin bzdetail" id="bzDetailPanel"></div></div>'+
     '<p class="kinstel-uit" style="margin:14px 2px 6px">'+esc(K.bzConversieUit)+'</p>'+
     '<div class="kstat-grid">'+kaart(besteld,K.bzBestellers)+kaart(kijkers,K.bzKijkers)+kaart(conv+"%",K.bzConversie)+kaart(convOpen===null?"\u2014":convOpen+"%",K.bzConvOpen)+'</div>'+
     verdeling(K.bzOpenDicht, openStatus, {open:K.bzOpen, gesloten:K.bzGesloten, onbekend:K.bzOnbekend})+
@@ -4019,6 +4031,14 @@ function tekenBezoek(r){
     verdelingDyn(K.bzTaal, taal)+
     verdelingDyn(K.bzLand, land)+
     verdelingDyn(K.bzPlaats, plaats);
+  const _panel = document.getElementById("bzDetailPanel"), _titel = document.getElementById("bzDetailTitel");
+  const _toon = function(periode, lbl){
+    if(_panel) _panel.innerHTML = _bzDetailHtml(periode);
+    if(_titel) _titel.textContent = lbl + " (" + _bzFilter(periode).length + ")";
+    document.querySelectorAll(".kstat-klik").forEach(function(c){ c.classList.toggle("bzactief", c.getAttribute("data-periode")===periode); });
+  };
+  document.querySelectorAll(".kstat-klik").forEach(function(c){ c.addEventListener("click", function(){ _toon(c.getAttribute("data-periode"), c.getAttribute("data-lbl")); }); });
+  _toon("vandaag", K.bzVandaag);
 }
 /* --- Audit (wijzigingslogboek) --- */
 let _auditData = null, _auditBuf = [], _auditTimer = null;
