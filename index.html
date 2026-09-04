@@ -1397,9 +1397,9 @@ function card(m){
   const el = document.createElement("article");
   el.className = "card" + (hidden ? " hidden-dish" : "") + ((BEHEER && _openDishes.has(m.id)) ? " open" : "");
   el.innerHTML = `
-    <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(titleCase(m.name[LANG]))}" loading="lazy"></div>
+    <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(titleCase(m.name[LANG]))}" loading="lazy" decoding="async"></div>
     <div class="card-body">
-      <div class="card-title">${BEHEER ? `<img class="minithumb" data-photo="${m.id}" alt="" loading="lazy">` : ''}<div class="titletext"><div class="nmline"><span class="nm">${titleCase(m.name[LANG])}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${titleCase(sub)}</span></div></div>
+      <div class="card-title">${BEHEER ? `<img class="minithumb" data-photo="${m.id}" alt="" loading="lazy" decoding="async">` : ''}<div class="titletext"><div class="nmline"><span class="nm">${titleCase(m.name[LANG])}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${titleCase(sub)}</span></div></div>
       <p class="card-desc">${titleCase(m.desc[LANG])}</p>
       ${dietLabel(m)}
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
