@@ -257,5 +257,12 @@
     "adminid": "assist",
     "wat": "Bezoek-detail: gegroepeerd per dag met dag-kopje (welke dag elk bezoek was)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:36:18.216597Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek-tab: bots/crawlers uit de statistieken gefilterd (bot-detectie in Worker + client-filter)",
+    "doel": "beheer (code)"
   }
 ]
