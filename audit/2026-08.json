@@ -320,5 +320,12 @@
     "adminid": "assist",
     "wat": "Weekmenu-voorstel-generator toegevoegd (Aanbod-tab): top-5 bestsellers + roulerende gerechten, met goedkeuren/afkeuren",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T16:11:36.010639Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek-tab: conversie-kaarten klikbaar (bestellers/kijkers/conversie/open) — tonen de bijbehorende bezoekers",
+    "doel": "beheer (code)"
   }
 ]
