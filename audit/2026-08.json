@@ -313,5 +313,12 @@
     "adminid": "assist",
     "wat": "Beheer: volledige back-up-knop toegevoegd (download alle data als JSON, accountonafhankelijk)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T16:06:53.389018Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Weekmenu-voorstel-generator toegevoegd (Aanbod-tab): top-5 bestsellers + roulerende gerechten, met goedkeuren/afkeuren",
+    "doel": "beheer (code)"
   }
 ]
