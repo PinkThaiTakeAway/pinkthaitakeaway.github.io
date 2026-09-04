@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-09-04T15:21:04Z",
+  "opgeslagen": "2026-09-04T15:25:13Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-09-04T15:21:04.889379+00:00",
+    "updated": "2026-09-04T15:25:13.783474+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -204,8 +204,8 @@
             "status": "ok"
           },
           {
-            "naam": "geen verweesde vertaalsleutels",
-            "status": "ok"
+            "naam": "1 vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): bzVandaagDetail",
+            "status": "warn"
           },
           {
             "naam": "geen ongebruikte data-/beeldbestanden",
@@ -289,7 +289,7 @@
             "status": "ok"
           },
           {
-            "naam": "index.html compact (362 KB, geen zware inline-afbeeldingen)",
+            "naam": "index.html compact (364 KB, geen zware inline-afbeeldingen)",
             "status": "ok"
           },
           {
