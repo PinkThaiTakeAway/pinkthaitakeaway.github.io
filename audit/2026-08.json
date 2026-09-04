@@ -243,5 +243,12 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: statistiek-kaarten klikbaar gemaakt — detail-lijst per periode (vandaag/week/maand/totaal)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:28:23.902347Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek-tab: dag-grens op Nederlandse tijd (Europe/Amsterdam) i.p.v. UTC",
+    "doel": "beheer (code)"
   }
 ]
