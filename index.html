@@ -1974,6 +1974,7 @@ async function initBeheer(){
     else if(a==="afhprint") printAfhaallijst();
     else if(a==="expcsv") exportBestellingenCSV();
     else if(a==="qrshow") toonQR();
+    else if(a==="revkaart") printReviewKaart();
   });
   document.querySelectorAll(".ktab").forEach(t => t.onclick = () => {
     _kTab = t.dataset.tab;
@@ -2975,7 +2976,7 @@ const BEHEER_T = {
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
       markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", delTitle:"Bestelling verwijderen",
       afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend", kooklijst:"Kooklijst", kookBest:"bestellingen", kookKopie:"📋 Kopieer", afhPrint:"🖨 Print", printPopup:"Sta pop-ups toe om te printen", kookGekopieerd:"Kooklijst gekopieerd!",
-      cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGemOrder:"gem. per bestelling", cDrukUur:"Drukste besteltijden", cDrukDag:"Drukste besteldagen", cGeen:"Nog geen gegevens.", cMaandOmzet:"Omzet per maand", cExportMaand:"Exporteren:", cAlle:"Alle", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} bestellingen geëxporteerd", qrKnop:"QR-code van de site", qrHint:"Voor flyers of verpakking", qrTitel:"QR-code naar de website", qrDownload:"📥 Download afbeelding", qrSluiten:"Sluiten", qrFout:"QR-code laden mislukt — probeer opnieuw.", maanden:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],
+      cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGemOrder:"gem. per bestelling", cDrukUur:"Drukste besteltijden", cDrukDag:"Drukste besteldagen", cGeen:"Nog geen gegevens.", cMaandOmzet:"Omzet per maand", cExportMaand:"Exporteren:", cAlle:"Alle", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} bestellingen geëxporteerd", qrKnop:"QR-code van de site", qrHint:"Voor flyers of verpakking", revKnop:"Review-kaartje", revHint:"Vraag klanten om een Google-review", revVraag:"Plak je Google-reviewlink (uit je bedrijfsprofiel):", revLeeg:"Geen link ingevoerd.", revTitel:"Blij met je bestelling?", revTekst:"Laat een Google-review achter — het helpt ons enorm om gevonden te worden!", revScan:"Scan de QR-code met je telefoon", revPrint:"Printen", qrTitel:"QR-code naar de website", qrDownload:"📥 Download afbeelding", qrSluiten:"Sluiten", qrFout:"QR-code laden mislukt — probeer opnieuw.", maanden:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],
 
  confDelBest:"Deze bestelling verwijderen?", confDelKlant:"Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.", confDelAlleBest:(n)=>"Alle "+n+" bestelling(en) van deze klant verwijderen? De klant zelf blijft bestaan.",
 
@@ -3013,7 +3014,7 @@ const BEHEER_T = {
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
       markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", delTitle:"Delete order",
       afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown", kooklijst:"Cooking list", kookBest:"orders", kookKopie:"📋 Copy", afhPrint:"🖨 Print", printPopup:"Allow pop-ups to print", kookGekopieerd:"Cooking list copied!",
-      cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGemOrder:"avg. per order", cDrukUur:"Busiest order times", cDrukDag:"Busiest order days", cGeen:"No data yet.", cMaandOmzet:"Revenue per month", cExportMaand:"Export:", cAlle:"All", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} orders exported", qrKnop:"Site QR code", qrHint:"For flyers or packaging", qrTitel:"QR code to the website", qrDownload:"📥 Download image", qrSluiten:"Close", qrFout:"Failed to load QR code — try again.", maanden:["January","February","March","April","May","June","July","August","September","October","November","December"],
+      cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGemOrder:"avg. per order", cDrukUur:"Busiest order times", cDrukDag:"Busiest order days", cGeen:"No data yet.", cMaandOmzet:"Revenue per month", cExportMaand:"Export:", cAlle:"All", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} orders exported", qrKnop:"Site QR code", qrHint:"For flyers or packaging", revKnop:"Review card", revHint:"Ask customers for a Google review", revVraag:"Paste your Google review link (from your business profile):", revLeeg:"No link entered.", revTitel:"Happy with your order?", revTekst:"Leave a Google review — it helps us a lot to be found!", revScan:"Scan the QR code with your phone", revPrint:"Print", qrTitel:"QR code to the website", qrDownload:"📥 Download image", qrSluiten:"Close", qrFout:"Failed to load QR code — try again.", maanden:["January","February","March","April","May","June","July","August","September","October","November","December"],
 
  confDelBest:"Delete this order?", confDelKlant:"Delete all data for this customer? This cannot be undone.", confDelAlleBest:(n)=>"Delete all "+n+" order(s) for this customer? The customer will be kept.",
 
@@ -3051,7 +3052,7 @@ const BEHEER_T = {
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
       markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", delTitle:"ลบออเดอร์",
       afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ", kooklijst:"รายการทำอาหาร", kookBest:"ออเดอร์", kookKopie:"📋 คัดลอก", afhPrint:"🖨 พิมพ์", printPopup:"อนุญาตป๊อปอัปเพื่อพิมพ์", kookGekopieerd:"คัดลอกรายการแล้ว!",
-      cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGemOrder:"เฉลี่ยต่อออเดอร์", cDrukUur:"ช่วงเวลาสั่งมากสุด", cDrukDag:"วันสั่งมากสุด", cGeen:"ยังไม่มีข้อมูล", cMaandOmzet:"รายได้ต่อเดือน", cExportMaand:"ส่งออก:", cAlle:"ทั้งหมด", cExportCSV:"📥 ดาวน์โหลด CSV", cGeexporteerd:"ส่งออก {n} ออเดอร์แล้ว", qrKnop:"QR โค้ดเว็บไซต์", qrHint:"สำหรับใบปลิวหรือบรรจุภัณฑ์", qrTitel:"QR โค้ดไปยังเว็บไซต์", qrDownload:"📥 ดาวน์โหลดรูป", qrSluiten:"ปิด", qrFout:"โหลด QR ไม่สำเร็จ ลองใหม่", maanden:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
+      cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGemOrder:"เฉลี่ยต่อออเดอร์", cDrukUur:"ช่วงเวลาสั่งมากสุด", cDrukDag:"วันสั่งมากสุด", cGeen:"ยังไม่มีข้อมูล", cMaandOmzet:"รายได้ต่อเดือน", cExportMaand:"ส่งออก:", cAlle:"ทั้งหมด", cExportCSV:"📥 ดาวน์โหลด CSV", cGeexporteerd:"ส่งออก {n} ออเดอร์แล้ว", qrKnop:"QR โค้ดเว็บไซต์", qrHint:"สำหรับใบปลิวหรือบรรจุภัณฑ์", revKnop:"การ์ดรีวิว", revHint:"ขอให้ลูกค้ารีวิวใน Google", revVraag:"วางลิงก์รีวิว Google ของคุณ:", revLeeg:"ยังไม่ได้ใส่ลิงก์", revTitel:"พอใจกับอาหารไหม?", revTekst:"รีวิวใน Google ช่วยให้ร้านเราถูกค้นพบมากขึ้น!", revScan:"สแกน QR ด้วยโทรศัพท์", revPrint:"พิมพ์", qrTitel:"QR โค้ดไปยังเว็บไซต์", qrDownload:"📥 ดาวน์โหลดรูป", qrSluiten:"ปิด", qrFout:"โหลด QR ไม่สำเร็จ ลองใหม่", maanden:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
 
  confDelBest:"ลบออเดอร์นี้?", confDelKlant:"ลบข้อมูลทั้งหมดของลูกค้ารายนี้? ไม่สามารถกู้คืนได้", confDelAlleBest:(n)=>"ลบออเดอร์ทั้งหมด "+n+" รายการของลูกค้ารายนี้? ข้อมูลลูกค้าจะยังอยู่",
 
@@ -3792,7 +3793,8 @@ function renderCijfers(){
       '<select id="expMaand"><option value="alle">'+esc(K.cAlle)+'</option>'+
       maanden.map(mk=>'<option value="'+mk+'"'+(mk===maand?' selected':'')+'>'+esc(maandNaam(mk))+'</option>').join("")+'</select>'+
       '<button data-a="expcsv">'+esc(K.cExportCSV)+'</button></div>'+
-      '<div class="kexport" style="justify-content:flex-start"><button data-a="qrshow">🔳 '+esc(K.qrKnop)+'</button><span class="kqr-hint">'+esc(K.qrHint)+'</span></div>';
+      '<div class="kexport" style="justify-content:flex-start"><button data-a="qrshow">🔳 '+esc(K.qrKnop)+'</button><span class="kqr-hint">'+esc(K.qrHint)+'</span></div>'+
+      '<div class="kexport" style="justify-content:flex-start"><button data-a="revkaart">🌸 '+esc(K.revKnop)+'</button><span class="kqr-hint">'+esc(K.revHint)+'</span></div>';
   body.innerHTML =
     '<div class="kstat-grid">'+
       '<div class="kstat-card"><div class="kv">'+mBest+'</div><div class="kl">'+K.cBestMaand+'</div></div>'+
@@ -3816,6 +3818,37 @@ function laadQRLib(){
     s.onerror=()=>reject(new Error("qr"));
     document.head.appendChild(s);
   });
+}
+async function printReviewKaart(){
+  const K = BT().kl;
+  let link = (localStorage.getItem("tta_reviewlink") || "").trim();
+  const nw = prompt(K.revVraag, link);
+  if(nw===null) return;
+  link = String(nw).trim();
+  if(!link){ showToast(K.revLeeg, false); return; }
+  if(!/^https?:\/\//i.test(link)) link = "https://" + link;
+  localStorage.setItem("tta_reviewlink", link);
+  let dataUrl="";
+  try{ await laadQRLib(); const qr=window.qrcode(0,"M"); qr.addData(link); qr.make(); dataUrl=qr.createDataURL(10,4); }
+  catch(e){ showToast(K.qrFout, false); return; }
+  const e2 = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const html = '<!doctype html><html><head><meta charset="utf-8"><title>Review-kaartje</title><style>'+
+    'body{font-family:system-ui,Arial,sans-serif;margin:0;display:flex;flex-direction:column;align-items:center;padding:24px;background:#fff}'+
+    '.card{width:320px;border:2px solid #ecd9e6;border-radius:18px;padding:26px 22px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.08)}'+
+    '.card .em{font-size:36px}.card h1{font-size:20px;color:#1f3d2f;margin:6px 0 4px}'+
+    '.card p{font-size:14px;color:#555;margin:6px 4px;line-height:1.4}'+
+    '.qr{margin:16px auto 6px}.qr img{width:210px;height:210px;image-rendering:pixelated}'+
+    '.scan{font-size:12px;color:#888}.brand{font-size:14px;color:#c0508a;font-weight:800;margin-top:12px;letter-spacing:.02em}'+
+    'button{margin-top:16px;padding:9px 16px;border:1px solid #1f3d2f;border-radius:10px;background:#1f3d2f;color:#fff;font-size:14px;cursor:pointer}'+
+    '@media print{button{display:none}}'+
+    '</style></head><body><div class="card"><div class="em">🌸</div>'+
+    '<h1>'+e2(K.revTitel)+'</h1><p>'+e2(K.revTekst)+'</p>'+
+    '<div class="qr"><img src="'+dataUrl+'" alt="QR"></div><div class="scan">'+e2(K.revScan)+'</div>'+
+    '<div class="brand">Pink Thai TakeAway 🌸</div></div>'+
+    '<button onclick="window.print()">🖨 '+e2(K.revPrint)+'</button></body></html>';
+  const w = window.open("", "_blank");
+  if(!w){ showToast(K.printPopup||"Sta pop-ups toe", false); return; }
+  w.document.write(html); w.document.close();
 }
 async function toonQR(){
   const K = BT().kl, url = SITE_HOME;
