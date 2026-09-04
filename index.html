@@ -1971,6 +1971,7 @@ async function initBeheer(){
     else if(a==="berwa") berWaKlant(btn);
     else if(a==="berreset") berReset();
     else if(a==="kookkopie") kopieerKooklijst();
+    else if(a==="afhprint") printAfhaallijst();
     else if(a==="expcsv") exportBestellingenCSV();
     else if(a==="qrshow") toonQR();
   });
@@ -2973,7 +2974,7 @@ const BEHEER_T = {
       badgeAfg:"afgehaald", badgeOpen:"open", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
       markAfg:"✓ Markeer afgehaald", markNiet:"↺ Toch niet afgehaald", delTitle:"Bestelling verwijderen",
-      afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend", kooklijst:"Kooklijst", kookBest:"bestellingen", kookKopie:"📋 Kopieer", kookGekopieerd:"Kooklijst gekopieerd!",
+      afgehaaldKort:"✓ Afgehaald", geenOpen:"Geen openstaande bestellingen. 🎉", afhaalOnbekend:"Afhaaltijd onbekend", kooklijst:"Kooklijst", kookBest:"bestellingen", kookKopie:"📋 Kopieer", afhPrint:"🖨 Print", printPopup:"Sta pop-ups toe om te printen", kookGekopieerd:"Kooklijst gekopieerd!",
       cBestMaand:"bestellingen deze maand", cOmzetMaand:"omzet deze maand", cBestTotaal:"bestellingen totaal", cKlanten:"unieke klanten", cTop:"Best verkocht", cGemOrder:"gem. per bestelling", cDrukUur:"Drukste besteltijden", cDrukDag:"Drukste besteldagen", cGeen:"Nog geen gegevens.", cMaandOmzet:"Omzet per maand", cExportMaand:"Exporteren:", cAlle:"Alle", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} bestellingen geëxporteerd", qrKnop:"QR-code van de site", qrHint:"Voor flyers of verpakking", qrTitel:"QR-code naar de website", qrDownload:"📥 Download afbeelding", qrSluiten:"Sluiten", qrFout:"QR-code laden mislukt — probeer opnieuw.", maanden:["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],
 
  confDelBest:"Deze bestelling verwijderen?", confDelKlant:"Alle gegevens van deze klant verwijderen? Dit kan niet ongedaan worden gemaakt.", confDelAlleBest:(n)=>"Alle "+n+" bestelling(en) van deze klant verwijderen? De klant zelf blijft bestaan.",
@@ -3011,7 +3012,7 @@ const BEHEER_T = {
       badgeAfg:"picked up", badgeOpen:"open", badgeBetaald:"paid", badgeNietBet:"unpaid",
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
       markAfg:"✓ Mark picked up", markNiet:"↺ Not picked up after all", delTitle:"Delete order",
-      afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown", kooklijst:"Cooking list", kookBest:"orders", kookKopie:"📋 Copy", kookGekopieerd:"Cooking list copied!",
+      afgehaaldKort:"✓ Picked up", geenOpen:"No open orders. 🎉", afhaalOnbekend:"Pickup time unknown", kooklijst:"Cooking list", kookBest:"orders", kookKopie:"📋 Copy", afhPrint:"🖨 Print", printPopup:"Allow pop-ups to print", kookGekopieerd:"Cooking list copied!",
       cBestMaand:"orders this month", cOmzetMaand:"revenue this month", cBestTotaal:"orders total", cKlanten:"unique customers", cTop:"Best sellers", cGemOrder:"avg. per order", cDrukUur:"Busiest order times", cDrukDag:"Busiest order days", cGeen:"No data yet.", cMaandOmzet:"Revenue per month", cExportMaand:"Export:", cAlle:"All", cExportCSV:"📥 Download CSV", cGeexporteerd:"{n} orders exported", qrKnop:"Site QR code", qrHint:"For flyers or packaging", qrTitel:"QR code to the website", qrDownload:"📥 Download image", qrSluiten:"Close", qrFout:"Failed to load QR code — try again.", maanden:["January","February","March","April","May","June","July","August","September","October","November","December"],
 
  confDelBest:"Delete this order?", confDelKlant:"Delete all data for this customer? This cannot be undone.", confDelAlleBest:(n)=>"Delete all "+n+" order(s) for this customer? The customer will be kept.",
@@ -3049,7 +3050,7 @@ const BEHEER_T = {
       badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
       markAfg:"✓ ทำเครื่องหมายว่ารับแล้ว", markNiet:"↺ ยังไม่ได้รับ", delTitle:"ลบออเดอร์",
-      afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ", kooklijst:"รายการทำอาหาร", kookBest:"ออเดอร์", kookKopie:"📋 คัดลอก", kookGekopieerd:"คัดลอกรายการแล้ว!",
+      afgehaaldKort:"✓ รับแล้ว", geenOpen:"ไม่มีออเดอร์ค้าง 🎉", afhaalOnbekend:"ไม่ทราบเวลารับ", kooklijst:"รายการทำอาหาร", kookBest:"ออเดอร์", kookKopie:"📋 คัดลอก", afhPrint:"🖨 พิมพ์", printPopup:"อนุญาตป๊อปอัปเพื่อพิมพ์", kookGekopieerd:"คัดลอกรายการแล้ว!",
       cBestMaand:"ออเดอร์เดือนนี้", cOmzetMaand:"รายได้เดือนนี้", cBestTotaal:"ออเดอร์ทั้งหมด", cKlanten:"ลูกค้าไม่ซ้ำ", cTop:"ขายดีที่สุด", cGemOrder:"เฉลี่ยต่อออเดอร์", cDrukUur:"ช่วงเวลาสั่งมากสุด", cDrukDag:"วันสั่งมากสุด", cGeen:"ยังไม่มีข้อมูล", cMaandOmzet:"รายได้ต่อเดือน", cExportMaand:"ส่งออก:", cAlle:"ทั้งหมด", cExportCSV:"📥 ดาวน์โหลด CSV", cGeexporteerd:"ส่งออก {n} ออเดอร์แล้ว", qrKnop:"QR โค้ดเว็บไซต์", qrHint:"สำหรับใบปลิวหรือบรรจุภัณฑ์", qrTitel:"QR โค้ดไปยังเว็บไซต์", qrDownload:"📥 ดาวน์โหลดรูป", qrSluiten:"ปิด", qrFout:"โหลด QR ไม่สำเร็จ ลองใหม่", maanden:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
 
  confDelBest:"ลบออเดอร์นี้?", confDelKlant:"ลบข้อมูลทั้งหมดของลูกค้ารายนี้? ไม่สามารถกู้คืนได้", confDelAlleBest:(n)=>"ลบออเดอร์ทั้งหมด "+n+" รายการของลูกค้ารายนี้? ข้อมูลลูกค้าจะยังอยู่",
@@ -3654,6 +3655,46 @@ function bestelHtml(b){
       '<button class="kdelbtn" data-a="del" data-id="'+esc(b.id)+'" title="'+esc(K.delTitle)+'">🗑</button>'+
     '</div></div>';
 }
+function printAfhaallijst(){
+  const K = BT().kl;
+  const open = _klantData.filter(b => !b.afgehaald);
+  if(!open.length){ showToast(K.geenOpen, false); return; }
+  const kook = {};
+  open.forEach(b => parseGerechten(b.bestelling).forEach(g => { kook[g.naam] = (kook[g.naam]||0) + g.aantal; }));
+  const kookNamen = Object.keys(kook).sort((a,b)=>kook[b]-kook[a]);
+  const groepen = {};
+  open.forEach(b => { const af=b.afhaal||"?"; const m=af.match(/^(.+?)\s+(\d{1,2}:\d{2})$/); const dag=m?m[1]:af, tijd=m?m[2]:""; (groepen[dag]=groepen[dag]||[]).push({b,tijd}); });
+  const e2 = s => String(s==null?"":s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+  const datum = new Date().toLocaleDateString("nl-NL",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  let html = '<!doctype html><html><head><meta charset="utf-8"><title>Afhaallijst</title><style>'+
+    'body{font-family:system-ui,Arial,sans-serif;margin:16px;color:#111}'+
+    'h1{font-size:18px;margin:0 0 2px} .sub{color:#666;font-size:12px;margin-bottom:12px}'+
+    'h2{font-size:14px;border-bottom:2px solid #333;padding-bottom:3px;margin:16px 0 6px}'+
+    '.kook{columns:2;font-size:13px} .kook div{break-inside:avoid;padding:1px 0}'+
+    '.ord{border:1px solid #ccc;border-radius:6px;padding:7px 9px;margin:7px 0;break-inside:avoid}'+
+    '.oh{display:flex;justify-content:space-between;font-weight:700;font-size:13px;gap:8px}'+
+    '.items{font-size:12px;margin-top:3px;white-space:pre-wrap}'+
+    '.note{font-size:12px;color:#a30;margin-top:3px} .pay{font-size:11px;color:#555;margin-top:2px}'+
+    '@media print{ .noprint{display:none} }'+
+    '</style></head><body>'+
+    '<h1>🍜 Afhaallijst — Pink Thai TakeAway</h1><div class="sub">'+e2(datum)+' · '+open.length+' bestellingen</div>'+
+    '<button class="noprint" onclick="window.print()" style="padding:8px 14px;margin-bottom:8px">🖨 Printen</button>';
+  if(kookNamen.length) html += '<h2>🍳 Kooklijst (totaal)</h2><div class="kook">'+kookNamen.map(n=>'<div><b>'+kook[n]+'×</b> '+e2(n)+'</div>').join("")+'</div>';
+  Object.keys(groepen).sort().forEach(dag=>{
+    html += '<h2>🛍 '+e2(dag)+'</h2>';
+    groepen[dag].sort((a,b)=>(a.tijd||"").localeCompare(b.tijd||"")).forEach(({b,tijd})=>{
+      const items = parseGerechten(b.bestelling).map(g=>g.aantal+"× "+g.naam).join("\n") || String(b.bestelling||"");
+      html += '<div class="ord"><div class="oh"><span>'+(b.ingevroren?"❄️ ":"")+(tijd?e2(tijd)+" · ":"")+"#"+e2(b.id)+" · "+e2(b.naam||"")+'</span><span>'+e2(b.totaal||"")+'</span></div>'+
+        '<div class="items">'+e2(items)+'</div>'+
+        (b.opmerking?'<div class="note">📝 '+e2(b.opmerking)+'</div>':'')+
+        '<div class="pay">'+e2(b.tel||"")+' · '+(b.betaald?"betaald":"nog betalen")+(b.betaling?" · "+e2(b.betaling):"")+'</div></div>';
+    });
+  });
+  html += '</body></html>';
+  const w = window.open("", "_blank");
+  if(!w){ showToast(K.printPopup||"Sta pop-ups toe om te printen", false); return; }
+  w.document.write(html); w.document.close();
+}
 function renderAfhaallijst(){
   const K = BT().kl;
   const body = document.getElementById("kBody");
@@ -3667,7 +3708,7 @@ function renderAfhaallijst(){
   if(kookNamen.length){
     kookBlok = '<div class="kooklijst">'+
       '<div class="kooktitel">🍳 '+esc(K.kooklijst)+' <span class="kooksub">('+open.length+' '+esc(K.kookBest)+')</span>'+
-        '<button class="kookkopie" data-a="kookkopie">'+esc(K.kookKopie)+'</button></div>'+
+        '<button class="kookkopie" data-a="kookkopie">'+esc(K.kookKopie)+'</button><button class="kookkopie" data-a="afhprint">'+esc(K.afhPrint)+'</button></div>'+
       kookNamen.map(n=>'<div class="kookrow"><span class="kookn">'+kook[n]+'×</span> <span>'+esc(n)+'</span></div>').join("")+
     '</div>';
   }
