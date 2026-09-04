@@ -355,5 +355,12 @@
     "adminid": "assist",
     "wat": "Health-check: 3 nieuwe checks (WhatsApp ingesteld, minimaal 1 bestelbaar, gemiste ordermeldingen)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T17:10:53.860282Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Health-check: 3 extra checks (afhaal-instellingen logisch, token repo-rechten, klant-token-index leesbaar)",
+    "doel": "beheer (code)"
   }
 ]
