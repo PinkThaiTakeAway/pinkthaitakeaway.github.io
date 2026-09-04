@@ -2806,6 +2806,7 @@ async function checkAccess(){
         } else {
           items.push({naam:H.tokGeldigKort, status:"ok"});
         }
+        try{ const _sc=r.headers.get("x-oauth-scopes"); if(_sc!==null && _sc.split(",").map(function(s){return s.trim();}).indexOf("repo")<0) items.push({naam:H.tokScope, status:"warn"}); }catch(e){}
       } else if(r.status===401){
         items.push({naam:H.tokOngeldig, status:"err"});
       } else {
@@ -2830,11 +2831,23 @@ async function checkAccess(){
       const gr = await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/gemiste-meldingen.json?t="+Date.now(), {headers:{Authorization:"token "+ghToken()}, cache:"no-store"});
       if(gr.ok){ const gj=await gr.json(); const lijst=JSON.parse(decodeURIComponent(escape(atob(String(gj.content||"").replace(/\s/g,""))))); if(Array.isArray(lijst) && lijst.length) items.push({naam:H.gemist(lijst.length), status:"warn"}); }
     }catch(e){}
+    try{
+      const ir = await fetch("https://api.github.com/repos/"+GH_REPO+"/contents/klant-token-index.json?t="+Date.now(), {headers:{Authorization:"token "+ghToken()}, cache:"no-store"});
+      if(ir.ok){ const ij=await ir.json(); const idx=JSON.parse(decodeURIComponent(escape(atob(String(ij.content||"").replace(/\s/g,""))))); items.push((idx && typeof idx==="object" && !Array.isArray(idx)) ? {naam:H.idxOk(Object.keys(idx).length), status:"ok"} : {naam:H.idxFout, status:"warn"}); }
+    }catch(e){}
   }
   // Minimaal 1 gerecht bestelbaar
   try{
     const nBest = MENU.filter(m => m && m.id && !DELETED.has(m.id) && !PURGED.has(m.id) && !HIDDEN.has(m.id)).length;
     items.push(nBest===0 ? {naam:H.bestGeen, status:"err"} : {naam:H.bestOk(nBest), status:"ok"});
+  }catch(e){}
+  // Afhaal-instellingen logisch
+  try{
+    const af = (CONFIG && CONFIG.afhaal) || {};
+    const dag = af.sluitDag, tijd = String(af.sluitTijd||""), dagen = af.dagen, van=String(af.van||""), tot=String(af.tot||"");
+    let okAf = (typeof dag==="number" && dag>=0 && dag<=6) && /^\d{1,2}:\d{2}$/.test(tijd) && Array.isArray(dagen) && dagen.length>0;
+    if(okAf && /^\d{1,2}:\d{2}$/.test(van) && /^\d{1,2}:\d{2}$/.test(tot) && tot<=van) okAf=false;
+    items.push(okAf ? {naam:H.afhOk, status:"ok"} : {naam:H.afhFout, status:"warn"});
   }catch(e){}
   try{
     if(BEHEER && ghToken()){
@@ -3027,7 +3040,7 @@ const BEHEER_T = {
       tokNiet:"Publicatie-token: niet ingesteld op dit apparaat", tokVerlopen:(d)=>"Publicatie-token: verlopen ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publicatie-token: verloopt binnenkort — over "+dagen+" dag(en), op "+d, tokGeldig:(d)=>"Publicatie-token: geldig (verloopt "+d+")",
       tokGeldigKort:"Publicatie-token: geldig", tokOngeldig:"Publicatie-token: ongeldig of verlopen", tokControle:(s)=>"Publicatie-token: kon niet controleren (status "+s+")", tokNetwerk:"Publicatie-token: kon niet controleren (netwerk)",
- backendOk:"Bestel-backend (Cloudflare): bereikbaar", waOk:"WhatsApp-meldingen: ingesteld", waNiet:"WhatsApp-meldingen: niet ingesteld — je krijgt geen bestelmelding", bestGeen:"Geen enkel gerecht bestelbaar — klanten kunnen niets bestellen", bestOk:(n)=>n+" gerecht"+(n===1?"":"en")+" bestelbaar", gemist:(n)=>n+" ordermelding"+(n===1?"":"en")+" nog niet verstuurd (backend probeert opnieuw)", backendFout:"Bestel-backend (Cloudflare): niet bereikbaar — controleer de Worker", syncOk:"Synchronisatie: lokale data komt overeen met de site", syncUit:(n)=>"Synchronisatie: "+n+" onderdeel"+(n===1?"":"en")+" wijkt af van de site — herlaad de pagina"
+ backendOk:"Bestel-backend (Cloudflare): bereikbaar", waOk:"WhatsApp-meldingen: ingesteld", tokScope:"Publicatie-token mist repo-rechten — opslaan kan mislukken", afhOk:"Afhaal-instellingen: logisch", afhFout:"Afhaal-instellingen: controleer sluitdag/-tijd, afhaaldagen en van/tot", idxOk:(n)=>"Klant-inloglinks in orde ("+n+" geregistreerd)", idxFout:"Klant-token-index onleesbaar — inloglinks werken mogelijk niet", waNiet:"WhatsApp-meldingen: niet ingesteld — je krijgt geen bestelmelding", bestGeen:"Geen enkel gerecht bestelbaar — klanten kunnen niets bestellen", bestOk:(n)=>n+" gerecht"+(n===1?"":"en")+" bestelbaar", gemist:(n)=>n+" ordermelding"+(n===1?"":"en")+" nog niet verstuurd (backend probeert opnieuw)", backendFout:"Bestel-backend (Cloudflare): niet bereikbaar — controleer de Worker", syncOk:"Synchronisatie: lokale data komt overeen met de site", syncUit:(n)=>"Synchronisatie: "+n+" onderdeel"+(n===1?"":"en")+" wijkt af van de site — herlaad de pagina"
     }
   },
   en: {
@@ -3065,7 +3078,7 @@ const BEHEER_T = {
       tokNiet:"Publishing token: not set on this device", tokVerlopen:(d)=>"Publishing token: expired ("+d+")",
       tokBinnenkort:(dagen,d)=>"Publishing token: expires soon — in "+dagen+" day(s), on "+d, tokGeldig:(d)=>"Publishing token: valid (expires "+d+")",
       tokGeldigKort:"Publishing token: valid", tokOngeldig:"Publishing token: invalid or expired", tokControle:(s)=>"Publishing token: could not check (status "+s+")", tokNetwerk:"Publishing token: could not check (network)",
- backendOk:"Order backend (Cloudflare): reachable", waOk:"WhatsApp alerts: configured", waNiet:"WhatsApp alerts: not set — you won\u2019t get order notifications", bestGeen:"No dishes orderable — customers can\u2019t order anything", bestOk:(n)=>n+" dish"+(n===1?"":"es")+" orderable", gemist:(n)=>n+" order notification"+(n===1?"":"s")+" not yet sent (backend retrying)", backendFout:"Order backend (Cloudflare): unreachable — check the Worker", syncOk:"Sync: local data matches the site", syncUit:(n)=>"Sync: "+n+" item"+(n===1?"":"s")+" differ from the site — reload the page"
+ backendOk:"Order backend (Cloudflare): reachable", waOk:"WhatsApp alerts: configured", tokScope:"Publication token missing repo rights — saving may fail", afhOk:"Pickup settings: valid", afhFout:"Pickup settings: check close day/time, pickup days and from/until", idxOk:(n)=>"Customer login links OK ("+n+" registered)", idxFout:"Customer token index unreadable — login links may not work", waNiet:"WhatsApp alerts: not set — you won\u2019t get order notifications", bestGeen:"No dishes orderable — customers can\u2019t order anything", bestOk:(n)=>n+" dish"+(n===1?"":"es")+" orderable", gemist:(n)=>n+" order notification"+(n===1?"":"s")+" not yet sent (backend retrying)", backendFout:"Order backend (Cloudflare): unreachable — check the Worker", syncOk:"Sync: local data matches the site", syncUit:(n)=>"Sync: "+n+" item"+(n===1?"":"s")+" differ from the site — reload the page"
     }
   },
   th: {
@@ -3103,7 +3116,7 @@ const BEHEER_T = {
       tokNiet:"โทเคนเผยแพร่: ยังไม่ได้ตั้งค่าบนอุปกรณ์นี้", tokVerlopen:(d)=>"โทเคนเผยแพร่: หมดอายุ ("+d+")",
       tokBinnenkort:(dagen,d)=>"โทเคนเผยแพร่: กำลังจะหมดอายุ — ในอีก "+dagen+" วัน วันที่ "+d, tokGeldig:(d)=>"โทเคนเผยแพร่: ใช้งานได้ (หมดอายุ "+d+")",
       tokGeldigKort:"โทเคนเผยแพร่: ใช้งานได้", tokOngeldig:"โทเคนเผยแพร่: ไม่ถูกต้องหรือหมดอายุ", tokControle:(s)=>"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (สถานะ "+s+")", tokNetwerk:"โทเคนเผยแพร่: ตรวจสอบไม่ได้ (เครือข่าย)",
- backendOk:"ระบบรับออเดอร์ (Cloudflare): เข้าถึงได้", waOk:"แจ้งเตือน WhatsApp: ตั้งค่าแล้ว", waNiet:"แจ้งเตือน WhatsApp: ยังไม่ได้ตั้งค่า — จะไม่ได้รับแจ้งออเดอร์", bestGeen:"ไม่มีเมนูให้สั่ง — ลูกค้าสั่งไม่ได้", bestOk:(n)=>"สั่งได้ "+n+" เมนู", gemist:(n)=>"มี "+n+" แจ้งเตือนที่ยังไม่ส่ง (ระบบกำลังลองใหม่)", backendFout:"ระบบรับออเดอร์ (Cloudflare): เข้าถึงไม่ได้ — ตรวจสอบ Worker", syncOk:"การซิงค์: ข้อมูลตรงกับเว็บไซต์", syncUit:(n)=>"การซิงค์: "+n+" รายการไม่ตรงกับเว็บไซต์ — โหลดหน้าใหม่"
+ backendOk:"ระบบรับออเดอร์ (Cloudflare): เข้าถึงได้", waOk:"แจ้งเตือน WhatsApp: ตั้งค่าแล้ว", tokScope:"โทเคนขาดสิทธิ์ repo — บันทึกอาจล้มเหลว", afhOk:"การตั้งค่ารับอาหาร: ถูกต้อง", afhFout:"การตั้งค่ารับอาหาร: ตรวจสอบวัน/เวลาปิด วันรับ และเวลา", idxOk:(n)=>"ลิงก์เข้าสู่ระบบลูกค้าปกติ ("+n+" รายการ)", idxFout:"อ่านดัชนีโทเคนลูกค้าไม่ได้", waNiet:"แจ้งเตือน WhatsApp: ยังไม่ได้ตั้งค่า — จะไม่ได้รับแจ้งออเดอร์", bestGeen:"ไม่มีเมนูให้สั่ง — ลูกค้าสั่งไม่ได้", bestOk:(n)=>"สั่งได้ "+n+" เมนู", gemist:(n)=>"มี "+n+" แจ้งเตือนที่ยังไม่ส่ง (ระบบกำลังลองใหม่)", backendFout:"ระบบรับออเดอร์ (Cloudflare): เข้าถึงไม่ได้ — ตรวจสอบ Worker", syncOk:"การซิงค์: ข้อมูลตรงกับเว็บไซต์", syncUit:(n)=>"การซิงค์: "+n+" รายการไม่ตรงกับเว็บไซต์ — โหลดหน้าใหม่"
     }
   }
 };
