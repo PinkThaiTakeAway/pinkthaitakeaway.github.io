@@ -633,7 +633,8 @@
   .bzsec[open]>summary.bzsum{border-bottom:1px solid #f2f2f2}
   .bzsecin{padding:4px 14px 12px}
   .plbars{margin-top:2px}
-  .plbar-row{position:relative;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;margin:5px 0;overflow:hidden;font-size:.9rem}
+  .plbar-row{position:relative;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;margin:5px 0;overflow:hidden;font-size:.9rem;cursor:pointer}
+  .plbar-row.bzactief{box-shadow:inset 0 0 0 2px var(--forest)}
   .plbar-fill{position:absolute;top:0;bottom:0;left:0;background:#f0e7dd;border-radius:8px;z-index:0}
   .plbar-row.pllok .plbar-fill{background:#dfeee4}
   .plbar-lbl{position:relative;z-index:1;font-weight:600} .plbar-n{position:relative;z-index:1;color:#777;font-size:.82rem;white-space:nowrap}
@@ -4208,6 +4209,7 @@ function tekenBezoek(r){
     if(periode==="kijkers") return recs.filter(function(v){ return v.type!=="beheer" && v.vid && klantVids.has(v.vid) && !orderVids.has(v.vid); });
     if(periode==="conversie") return recs.filter(function(v){ return v.type!=="beheer" && v.vid && klantVids.has(v.vid); });
     if(periode==="convopen") return recs.filter(function(v){ return v.open===true; });
+    if(String(periode).indexOf("plaats:")===0){ const pl=String(periode).slice(7); return recs.filter(function(v){ return String(v.plaats||"")===pl; }); }
     return recs.filter(function(v){ return amsDate(v.tijd)===vandaag; });
   };
   const _bzLocale = (LANG==="en"?"en-GB":(LANG==="th"?"th-TH":"nl-NL"));
@@ -4236,7 +4238,7 @@ function tekenBezoek(r){
     let lokaalN=0; ent.forEach(function(e){ if(isLokaal(e[0])) lokaalN+=e[1]; });
     const lokaalPct = Math.round(lokaalN/tot*100);
     const bars = ent.slice(0,10).map(function(e){ const pct=Math.round(e[1]/tot*100), w=Math.max(4,Math.round(e[1]/max*100)), lok=isLokaal(e[0]);
-      return '<div class="plbar-row'+(lok?" pllok":"")+'"><div class="plbar-fill" style="width:'+w+'%"></div><span class="plbar-lbl">'+(lok?"📍 ":"")+esc(e[0]||K.bzOnbekend)+'</span><span class="plbar-n">'+e[1]+' ('+pct+'%)</span></div>'; }).join("");
+      return '<div class="plbar-row'+(lok?" pllok":"")+'" data-periode="plaats:'+esc(e[0]||"")+'" data-lbl="'+esc(e[0]||K.bzOnbekend)+'"><div class="plbar-fill" style="width:'+w+'%"></div><span class="plbar-lbl">'+(lok?"📍 ":"")+esc(e[0]||K.bzOnbekend)+'</span><span class="plbar-n">'+e[1]+' ('+pct+'%)</span></div>'; }).join("");
     return '<details class="bzsec" open><summary class="bzsum">🗺 '+esc(K.bzPlaats)+'</summary><div class="bzsecin">'+
       (lokaalN?'<div class="pllokaal">📍 '+lokaalPct+'% '+esc(K.bzUitOmgeving)+'</div>':"")+
       '<div class="plbars">'+bars+'</div></div></details>';
@@ -4260,9 +4262,9 @@ function tekenBezoek(r){
   const _toon = function(periode, lbl){
     if(_panel) _panel.innerHTML = _bzDetailHtml(periode);
     if(_titel) _titel.textContent = lbl + " (" + _bzFilter(periode).length + ")";
-    document.querySelectorAll(".kstat-klik").forEach(function(c){ c.classList.toggle("bzactief", c.getAttribute("data-periode")===periode); });
+    document.querySelectorAll("[data-periode]").forEach(function(c){ c.classList.toggle("bzactief", c.getAttribute("data-periode")===periode); });
   };
-  document.querySelectorAll(".kstat-klik").forEach(function(c){ c.addEventListener("click", function(){ _toon(c.getAttribute("data-periode"), c.getAttribute("data-lbl")); }); });
+  document.querySelectorAll("[data-periode]").forEach(function(c){ c.addEventListener("click", function(){ _toon(c.getAttribute("data-periode"), c.getAttribute("data-lbl")); try{ document.getElementById("bzDetailSec").scrollIntoView({behavior:"smooth", block:"nearest"}); }catch(e){} }); });
   _toon("vandaag", K.bzVandaag);
 }
 /* --- Audit (wijzigingslogboek) --- */
