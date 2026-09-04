@@ -264,5 +264,47 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: bots/crawlers uit de statistieken gefilterd (bot-detectie in Worker + client-filter)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:49:51.640850Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Pagespeed: decoding=async op gerecht-foto's",
+    "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:49:52.640850Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Cijfers-tab: gemiddelde orderwaarde + drukste besteltijden/-dagen toegevoegd",
+    "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:49:53.640850Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek: bots/crawlers uit de statistieken gefilterd (Worker-detectie + client-filter)",
+    "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:49:54.640850Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Afhaallijst: printbaar keuken-overzicht (print-knop)",
+    "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:49:55.640850Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Storings-vangnet: gemiste WhatsApp-ordermeldingen worden opgeslagen en door de cron alsnog verstuurd",
+    "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:49:56.640850Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Review-kaartje-generator met QR-code in de Cijfers-tab",
+    "doel": "beheer (code)"
   }
 ]
