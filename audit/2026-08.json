@@ -236,5 +236,12 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: detail-lijst 'Bezoekers vandaag' toegevoegd (tijd, plaats/land, toestel, taal, herkomst, open/dicht)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:23:54.457254Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek-tab: statistiek-kaarten klikbaar gemaakt — detail-lijst per periode (vandaag/week/maand/totaal)",
+    "doel": "beheer (code)"
   }
 ]
