@@ -4210,6 +4210,7 @@ function tekenBezoek(r){
     if(periode==="conversie") return recs.filter(function(v){ return v.type!=="beheer" && v.vid && klantVids.has(v.vid); });
     if(periode==="convopen") return recs.filter(function(v){ return v.open===true; });
     if(String(periode).indexOf("plaats:")===0){ const pl=String(periode).slice(7); return recs.filter(function(v){ return String(v.plaats||"")===pl; }); }
+    if(periode==="uniek"){ const laatste={}; recs.forEach(function(v){ if(!v.vid) return; const t=String(v.tijd||""); if(!laatste[v.vid] || t>String(laatste[v.vid].tijd||"")) laatste[v.vid]=v; }); return Object.keys(laatste).map(function(k){ return laatste[k]; }); }
     return recs.filter(function(v){ return amsDate(v.tijd)===vandaag; });
   };
   const _bzLocale = (LANG==="en"?"en-GB":(LANG==="th"?"th-TH":"nl-NL"));
@@ -4245,7 +4246,7 @@ function tekenBezoek(r){
   };
   body.innerHTML =
     '<p class="kinstel-uit" style="margin:4px 2px 12px">'+esc(K.bzUit)+'</p>'+
-    '<div class="kstat-grid">'+kaart(cV,K.bzVandaag,"vandaag")+kaart(cW,K.bzWeek,"week")+kaart(cM,K.bzMaand,"maand")+kaart(recs.length,K.bzTotaal,"totaal")+kaart(vids.size,K.bzUniek)+'</div>'+
+    '<div class="kstat-grid">'+kaart(cV,K.bzVandaag,"vandaag")+kaart(cW,K.bzWeek,"week")+kaart(cM,K.bzMaand,"maand")+kaart(recs.length,K.bzTotaal,"totaal")+kaart(vids.size,K.bzUniek,"uniek")+'</div>'+
     (botAantal ? '<p class="kinstel-uit" style="margin:-8px 2px 12px">🤖 '+botAantal+' '+esc(K.bzBots)+'</p>' : '')+
     '<div class="bzsec" id="bzDetailSec"><div class="bzsum" id="bzDetailTitel"></div><div class="bzsecin bzdetail" id="bzDetailPanel"></div></div>'+
     '<p class="kinstel-uit" style="margin:14px 2px 6px">'+esc(K.bzConversieUit)+'</p>'+
