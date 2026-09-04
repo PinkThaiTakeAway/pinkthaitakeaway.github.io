@@ -327,5 +327,12 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: conversie-kaarten klikbaar (bestellers/kijkers/conversie/open) — tonen de bijbehorende bezoekers",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T16:18:39.971122Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek-tab: visueel plaats-overzicht (balken + % uit jouw omgeving)",
+    "doel": "beheer (code)"
   }
 ]
