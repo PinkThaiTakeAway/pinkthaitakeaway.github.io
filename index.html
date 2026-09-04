@@ -3948,14 +3948,15 @@ function tekenBezoek(r){
   const recs = (r && r.records) || [];
   if(!recs.length){ body.innerHTML = '<p class="kinstel-uit">'+esc(K.bzUit)+'</p><p class="hloading">'+esc(K.bzGeen)+'</p>'; return; }
   const nu = new Date();
-  const vandaag = nu.toISOString().slice(0,10);
+  const amsDate = function(ts){ try{ return new Date(ts).toLocaleDateString("sv-SE", {timeZone:"Europe/Amsterdam"}); }catch(e){ return String(ts||"").slice(0,10); } };
+  const vandaag = amsDate(nu);
   const weekGrens = new Date(nu.getTime()-7*864e5).toISOString();
   const maandGrens = new Date(nu.getFullYear(), nu.getMonth(), 1).toISOString();
   let cV=0,cW=0,cM=0; const vids=new Set();
   const perDag={}, herkomst={direct:0,whatsapp:0,google:0,overig:0}, toestel={mobiel:0,desktop:0}, taal={}, type={klant:0,beheer:0,volg:0}, land={}, plaats={};
   const openStatus={open:0,gesloten:0,onbekend:0}; const vidOpen=new Set();
   recs.forEach(function(v){
-    const t=String(v.tijd||""), dag=t.slice(0,10);
+    const t=String(v.tijd||""), dag=amsDate(v.tijd);
     if(dag===vandaag) cV++;
     if(t>=weekGrens) cW++;
     if(t>=maandGrens) cM++;
@@ -3971,7 +3972,7 @@ function tekenBezoek(r){
     else if(v.open===false) openStatus.gesloten++;
     else openStatus.onbekend++;
   });
-  const dagen=[]; for(let i=29;i>=0;i--){ const ds=new Date(nu.getTime()-i*864e5).toISOString().slice(0,10); dagen.push({datum:ds, aantal:perDag[ds]||0}); }
+  const dagen=[]; for(let i=29;i>=0;i--){ const ds=amsDate(new Date(nu.getTime()-i*864e5)); dagen.push({datum:ds, aantal:perDag[ds]||0}); }
   const max=Math.max(1, ...dagen.map(function(d){return d.aantal;}));
   const bars=dagen.map(function(d){ const hh=Math.round(d.aantal/max*100), lbl=d.datum.slice(8)+'-'+d.datum.slice(5,7); return '<div class="bzbar" title="'+lbl+': '+d.aantal+'"><div class="bzbfill" style="height:'+hh+'%"></div></div>'; }).join("");
   const kaart=function(v,l,periode){ return '<div class="kstat-card'+(periode?' kstat-klik':'')+'"'+(periode?' data-periode="'+periode+'" data-lbl="'+esc(l)+'"':'')+'><div class="kv">'+v+'</div><div class="kl">'+esc(l)+'</div></div>'; };
@@ -4010,7 +4011,7 @@ function tekenBezoek(r){
     if(periode==="week") return recs.filter(function(v){ return String(v.tijd||"")>=weekGrens; });
     if(periode==="maand") return recs.filter(function(v){ return String(v.tijd||"")>=maandGrens; });
     if(periode==="totaal") return recs.slice();
-    return recs.filter(function(v){ return String(v.tijd||"").slice(0,10)===vandaag; });
+    return recs.filter(function(v){ return amsDate(v.tijd)===vandaag; });
   };
   const _bzDetailHtml = function(periode){
     const filt = _bzFilter(periode).sort(function(a,b){ return String(b.tijd||"").localeCompare(String(a.tijd||"")); });
