@@ -334,5 +334,12 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: visueel plaats-overzicht (balken + % uit jouw omgeving)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T16:21:41.701333Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek-tab: plaats-balken klikbaar — toont de bezoekers per plaats",
+    "doel": "beheer (code)"
   }
 ]
