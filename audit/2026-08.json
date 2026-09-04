@@ -306,5 +306,12 @@
     "adminid": "assist",
     "wat": "Review-kaartje-generator met QR-code in de Cijfers-tab",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T15:59:25.073211Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Beheer: volledige back-up-knop toegevoegd (download alle data als JSON, accountonafhankelijk)",
+    "doel": "beheer (code)"
   }
 ]
