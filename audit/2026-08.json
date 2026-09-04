@@ -341,5 +341,12 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: plaats-balken klikbaar — toont de bezoekers per plaats",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-04T16:48:28.638204Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek-tab: 'unieke bezoekers'-kaart klikbaar (toont per unieke bezoeker het laatste bezoek)",
+    "doel": "beheer (code)"
   }
 ]
