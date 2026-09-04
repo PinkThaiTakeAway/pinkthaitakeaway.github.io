@@ -4198,6 +4198,10 @@ function tekenBezoek(r){
     if(periode==="week") return recs.filter(function(v){ return String(v.tijd||"")>=weekGrens; });
     if(periode==="maand") return recs.filter(function(v){ return String(v.tijd||"")>=maandGrens; });
     if(periode==="totaal") return recs.slice();
+    if(periode==="bestellers") return recs.filter(function(v){ return v.type!=="beheer" && v.vid && orderVids.has(v.vid); });
+    if(periode==="kijkers") return recs.filter(function(v){ return v.type!=="beheer" && v.vid && klantVids.has(v.vid) && !orderVids.has(v.vid); });
+    if(periode==="conversie") return recs.filter(function(v){ return v.type!=="beheer" && v.vid && klantVids.has(v.vid); });
+    if(periode==="convopen") return recs.filter(function(v){ return v.open===true; });
     return recs.filter(function(v){ return amsDate(v.tijd)===vandaag; });
   };
   const _bzLocale = (LANG==="en"?"en-GB":(LANG==="th"?"th-TH":"nl-NL"));
@@ -4222,7 +4226,7 @@ function tekenBezoek(r){
     (botAantal ? '<p class="kinstel-uit" style="margin:-8px 2px 12px">🤖 '+botAantal+' '+esc(K.bzBots)+'</p>' : '')+
     '<div class="bzsec" id="bzDetailSec"><div class="bzsum" id="bzDetailTitel"></div><div class="bzsecin bzdetail" id="bzDetailPanel"></div></div>'+
     '<p class="kinstel-uit" style="margin:14px 2px 6px">'+esc(K.bzConversieUit)+'</p>'+
-    '<div class="kstat-grid">'+kaart(besteld,K.bzBestellers)+kaart(kijkers,K.bzKijkers)+kaart(conv+"%",K.bzConversie)+kaart(convOpen===null?"\u2014":convOpen+"%",K.bzConvOpen)+'</div>'+
+    '<div class="kstat-grid">'+kaart(besteld,K.bzBestellers,"bestellers")+kaart(kijkers,K.bzKijkers,"kijkers")+kaart(conv+"%",K.bzConversie,"conversie")+kaart(convOpen===null?"\u2014":convOpen+"%",K.bzConvOpen,"convopen")+'</div>'+
     verdeling(K.bzOpenDicht, openStatus, {open:K.bzOpen, gesloten:K.bzGesloten, onbekend:K.bzOnbekend})+
     '<details class="bzsec" open><summary class="bzsum">'+esc(K.bzPerDag)+'</summary><div class="bzsecin"><div class="bzchart">'+bars+'</div></div></details>'+
     verdeling(K.bzType, type, {klant:K.bzKlant, beheer:K.bzBeheer, volg:K.bzVolg})+
