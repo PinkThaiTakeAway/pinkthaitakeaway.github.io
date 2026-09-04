@@ -622,7 +622,9 @@
   .bzsec[open]>summary.bzsum{border-bottom:1px solid #f2f2f2}
   .bzsecin{padding:4px 14px 12px}
   .bzrow{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 10px;padding:7px 0;border-top:1px solid #f0f0f0;font-size:.9rem}
-  .bzdetail .bzrow:first-child{border-top:0}
+  .bzdag{font-size:.78rem;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.03em;padding:11px 0 3px;border-top:1px solid #eee}
+  .bzdetail>.bzdag:first-child{border-top:0;padding-top:2px}
+  .bzdag + .bzrow{border-top:0}
   .bztime{font-weight:700;color:var(--forest);min-width:42px}
   .bzloc{flex:1;min-width:110px}
   .bzmeta{color:#999;font-size:.82rem;width:100%}
@@ -4013,10 +4015,21 @@ function tekenBezoek(r){
     if(periode==="totaal") return recs.slice();
     return recs.filter(function(v){ return amsDate(v.tijd)===vandaag; });
   };
+  const _bzLocale = (LANG==="en"?"en-GB":(LANG==="th"?"th-TH":"nl-NL"));
   const _bzDetailHtml = function(periode){
     const filt = _bzFilter(periode).sort(function(a,b){ return String(b.tijd||"").localeCompare(String(a.tijd||"")); });
-    const rijen = filt.map(_bzRij).join("");
-    return rijen || ('<div class="ktoprow"><span>'+esc(K.bzGeen)+'</span></div>');
+    if(!filt.length) return '<div class="ktoprow"><span>'+esc(K.bzGeen)+'</span></div>';
+    let html="", laatsteDag="";
+    filt.forEach(function(v){
+      const dag = amsDate(v.tijd);
+      if(dag!==laatsteDag){
+        laatsteDag = dag;
+        let kop; try{ kop = new Date(v.tijd).toLocaleDateString(_bzLocale, {timeZone:"Europe/Amsterdam", weekday:"long", day:"numeric", month:"long"}); }catch(e){ kop = dag; }
+        html += '<div class="bzdag">'+esc(kop)+'</div>';
+      }
+      html += _bzRij(v);
+    });
+    return html;
   };
   body.innerHTML =
     '<p class="kinstel-uit" style="margin:4px 2px 12px">'+esc(K.bzUit)+'</p>'+
