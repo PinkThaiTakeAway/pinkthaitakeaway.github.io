@@ -1,1 +1,16 @@
-[{"tijd":"2026-09-06T03:21:41.630Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Aanbod-historie bijgewerkt","doel":"aanbod-historie.json"}]
+[
+  {
+    "tijd": "2026-09-06T03:21:41.630Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-09-06T20:20:18.249400Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klanten-tab: '💬 Bericht'-knop per klant (WhatsApp met sjablonen) om met klanten te communiceren",
+    "doel": "beheer (code)"
+  }
+]
