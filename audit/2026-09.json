@@ -12,5 +12,12 @@
     "adminid": "assist",
     "wat": "Klanten-tab: '💬 Bericht'-knop per klant (WhatsApp met sjablonen) om met klanten te communiceren",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-06T20:23:23.539707Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bestel-melding toont nu nieuwe (🆕) of terugkerende (🔁) klant",
+    "doel": "beheer (code)"
   }
 ]
