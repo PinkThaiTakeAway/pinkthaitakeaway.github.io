@@ -1166,5 +1166,117 @@
         "spice": 2
       }
     ]
+  },
+  "2026-09-18": {
+    "deadline": "2026-09-18T15:00:00.000Z",
+    "afhaal": "zaterdag 19 sep",
+    "vastgelegd": "2026-09-11T15:12:48.415Z",
+    "aantal": 13,
+    "gerechten": [
+      {
+        "nr": 1,
+        "id": "popia",
+        "naam": "Paw Bpia Pak",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
+      },
+      {
+        "nr": 2,
+        "id": "satay",
+        "naam": "Satay Kai",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 1
+      },
+      {
+        "nr": 3,
+        "id": "gyozakai",
+        "naam": "Gyoza Tod Kai",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
+      },
+      {
+        "nr": 4,
+        "id": "pawbpiakai",
+        "naam": "Paw Bpia Kai",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
+      },
+      {
+        "nr": 6,
+        "id": "tomkha",
+        "naam": "Tom Kha Kai",
+        "prijs": 10,
+        "cat": "soepen",
+        "spice": 1
+      },
+      {
+        "nr": 7,
+        "id": "kuaitiaokai",
+        "naam": "Kuai-Tiao Kai",
+        "prijs": 10,
+        "cat": "soepen",
+        "spice": 1
+      },
+      {
+        "nr": 8,
+        "id": "massaman",
+        "naam": "Masaman Kai",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 10,
+        "id": "gaengdaengkaiyang",
+        "naam": "Gaeng Daeng Kai Yang",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 2
+      },
+      {
+        "nr": 13,
+        "id": "padthai",
+        "naam": "Pad Thai Kai",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 14,
+        "id": "cashew",
+        "naam": "Kai Med Ma Mueang",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 20,
+        "id": "khaokaiyang",
+        "naam": "Khao Kai Yang",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 0
+      },
+      {
+        "nr": 22,
+        "id": "masamannua",
+        "naam": "Masaman Nua",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 23,
+        "id": "nuapadkhaao",
+        "naam": "Nua Pad Khaao-phoot On",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 2
+      }
+    ]
   }
 }
