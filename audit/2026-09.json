@@ -1,1 +1,44 @@
-[{"tijd":"2026-09-11T02:15:08.467Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Aanbod-historie bijgewerkt","doel":"aanbod-historie.json"},{"tijd":"2026-09-11T02:10:13.380Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Instelling — afhaal.dag: 0 → 6; afhaal.dagen: [0] → [6]; afhaal.tijden.0: {\"van\":\"17:00\",\"tot\":\"19:00\"} → —; afhaal.tijden.6: — → {\"van\":\"17:00\",\"tot\":\"19:00\"}; afhaal.sluitDag: 6 → 5","doel":"bedrijf.json"},{"tijd":"2026-09-06T03:21:41.630Z","naam":"Hans Stobbe","adminid":"b6e18bfb","wat":"Aanbod-historie bijgewerkt","doel":"aanbod-historie.json"},{"tijd":"2026-09-06T20:20:18.249400Z","naam":"Hans Stobbe (assist)","adminid":"assist","wat":"Klanten-tab: '💬 Bericht'-knop per klant (WhatsApp met sjablonen) om met klanten te communiceren","doel":"beheer (code)"},{"tijd":"2026-09-06T20:23:23.539707Z","naam":"Hans Stobbe (assist)","adminid":"assist","wat":"Bestel-melding toont nu nieuwe (🆕) of terugkerende (🔁) klant","doel":"beheer (code)"}]
+[
+  {
+    "tijd": "2026-09-11T02:15:08.467Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-09-11T02:10:13.380Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Instelling — afhaal.dag: 0 → 6; afhaal.dagen: [0] → [6]; afhaal.tijden.0: {\"van\":\"17:00\",\"tot\":\"19:00\"} → —; afhaal.tijden.6: — → {\"van\":\"17:00\",\"tot\":\"19:00\"}; afhaal.sluitDag: 6 → 5",
+    "doel": "bedrijf.json"
+  },
+  {
+    "tijd": "2026-09-06T03:21:41.630Z",
+    "naam": "Hans Stobbe",
+    "adminid": "b6e18bfb",
+    "wat": "Aanbod-historie bijgewerkt",
+    "doel": "aanbod-historie.json"
+  },
+  {
+    "tijd": "2026-09-06T20:20:18.249400Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klanten-tab: '💬 Bericht'-knop per klant (WhatsApp met sjablonen) om met klanten te communiceren",
+    "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-06T20:23:23.539707Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bestel-melding toont nu nieuwe (🆕) of terugkerende (🔁) klant",
+    "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-11T14:14:26.174662Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "CallMeBot-instellingen: activatie-blok met bot-nummers en kopieerbaar activatiebericht",
+    "doel": "beheer (code)"
+  }
+]
