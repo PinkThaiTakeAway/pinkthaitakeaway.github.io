@@ -96,5 +96,12 @@
     "adminid": "assist",
     "wat": "Hero-infobalk leesbaar gemaakt op mobiel (chip-line afbreekbaar; afhaalmomenten onder elkaar)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-14T11:43:26.317200Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Hero-infobalk hersteld en leesbaar (footPickup-fix + afhaalmomenten onder elkaar)",
+    "doel": "beheer (code)"
   }
 ]
