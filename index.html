@@ -83,6 +83,8 @@
   .chip-line{display:flex;align-items:flex-start;gap:7px;white-space:normal;max-width:100%}
   .chip .stat{width:9px;height:9px;border-radius:999px;background:#5BD27E;box-shadow:0 0 0 3px rgba(91,210,126,.25);flex:0 0 auto}
   .chip .chip-tag{font-weight:700}
+  .adr-link,.tel-link{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+  .adr-link:hover,.tel-link:hover{opacity:.75}
   .hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:var(--amber);color:var(--ink);font-weight:800;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s,background .2s}
   .hero-cta:hover{background:var(--amber-deep)}
   .hero-cta:active{transform:scale(.97)}
@@ -1868,9 +1870,12 @@ function applyConfig(){
   document.querySelectorAll(".brandname").forEach(n => { if(n.firstChild) n.firstChild.textContent = CONFIG.naam; });
   const _adBase = String(CONFIG.adres||"").replace(/\s*\([^)]*\)\s*$/,"").trim();
   const _adFull = _adBase + (T().adresNote ? " " + T().adresNote : "");
-  document.getElementById("cfgAdres").textContent  = _adFull;
-  document.getElementById("cfgAdres2").textContent = _adFull;
-  document.getElementById("cfgTel").textContent    = CONFIG.telefoon;
+  const _mapsUrl = "https://maps.google.com/?q=" + encodeURIComponent(_adBase);
+  const _telHref = "tel:" + String(CONFIG.telefoon||"").replace(/[^\d+]/g,"").replace(/^0/,"+31");
+  const _adrHtml = '<a href="'+_mapsUrl+'" target="_blank" rel="noopener" class="adr-link">'+esc(_adFull)+'</a>';
+  document.getElementById("cfgAdres").innerHTML  = _adrHtml;
+  document.getElementById("cfgAdres2").innerHTML = _adrHtml;
+  document.getElementById("cfgTel").innerHTML    = '<a href="'+_telHref+'" class="tel-link">'+esc(CONFIG.telefoon)+'</a>';
   document.getElementById("year").textContent = new Date().getFullYear();
   { const _cf=document.getElementById("heroChefImg"); if(_cf) _cf.src = CONFIG.chefFoto || "chef.jpg"; }
   updateStructuredData();
