@@ -1635,9 +1635,9 @@ function renderSheet(){
   html += `<div class="pickupbox">${_ingevroren ? T().ingevrorenNotice : (_picked ? T().pickupNotice(pickupDateLabel()+" · "+_w.van+"–"+_w.tot) : T().pickupPrompt)}</div>
     <div class="fields">
       <input type="text" id="fHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
+      ${(!_ingevroren && _days.length>1) ? `<div class="field"><label for="fDay">${T().labelMoment} <span class="req">*</span></label><select id="fDay">${_dayOpts}</select></div>` : ""}
       <div class="field"><label for="fName">${T().labelName} <span class="req">*</span></label><input id="fName" type="text" placeholder="${T().phName}" autocomplete="name" value="${esc(form.naam)}"></div>
       <div class="field"><label for="fPhone">${T().labelPhone} <span class="req">*</span></label><input id="fPhone" type="tel" placeholder="06 ..." autocomplete="tel" value="${esc(form.tel)}"></div>
-      ${(!_ingevroren && _days.length>1) ? `<div class="field"><label for="fDay">${T().labelMoment}</label><select id="fDay">${_dayOpts}</select></div>` : ""}
       <div class="field"><label for="fNote">${T().labelNote}</label><textarea id="fNote" placeholder="${T().phNote}">${esc(form.note)}</textarea></div>
       <div class="field"><label>${T().payLabel}</label>
         <div class="payopts">
