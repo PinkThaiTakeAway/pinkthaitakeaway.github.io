@@ -131,5 +131,12 @@
     "adminid": "assist",
     "wat": "Bestelformulier: Afhaalmoment-keuze naar boven verplaatst (was verstopt onder Telefoon)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-14T12:15:03.843980Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Adres nu Google Maps-link (footer + hero) en telefoonnummer belbaar (tel:)",
+    "doel": "beheer (code)"
   }
 ]
