@@ -4842,14 +4842,23 @@ function handleFile(id, file){
   const reader = new FileReader();
   reader.onload = () => {
     const img = new Image();
-    img.onload = () => {
+    img.onload = async () => {
       const max = 900;
       let w = img.width, h = img.height;
       if(w > max){ h = Math.round(h * max / w); w = max; }
       const cv = document.createElement("canvas");
       cv.width = w; cv.height = h;
       cv.getContext("2d").drawImage(img, 0, 0, w, h);
-      try{ choose(id, cv.toDataURL("image/jpeg", 0.82)); }
+      try{
+        const dataUrl = cv.toDataURL("image/jpeg", 0.82);
+        if(ghToken()){
+          showToast((BT().kl.fotoBezig)||"Foto uploaden\u2026", null);
+          await ghPutBinary("fotos/"+id+".jpg", dataUrl.split(",")[1], "Foto "+id+" ge\u00fcpload");
+          choose(id, location.origin + "/fotos/" + id + ".jpg?v=" + Date.now());   // los bestand + cache-bust
+        } else {
+          choose(id, dataUrl);   // geen token: terugval op ingebedde foto (zoals voorheen)
+        }
+      }
       catch(e){ alert(T().adm.aImgProc); }
     };
     img.onerror = () => alert(T().adm.aImg);
