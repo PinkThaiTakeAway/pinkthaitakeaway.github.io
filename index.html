@@ -1429,7 +1429,7 @@ function card(m){
     <div class="thumb">${spiceLabel(m.spice)}${m.nr?`<span class="badge-nr">#${m.nr}</span>`:""}${hidden ? `<span class="hidden-badge">${A.hidden}</span>` : ''}<div class="ph">${m.emoji}</div><img data-photo="${m.id}" alt="${esc(titleCase(m.name[LANG]))}" loading="lazy" decoding="async"></div>
     <div class="card-body">
       <div class="card-title">${BEHEER ? `<img class="minithumb" data-photo="${m.id}" alt="" loading="lazy" decoding="async">` : ''}<div class="titletext"><div class="nmline"><span class="nm">${titleCase(m.name[LANG])}</span>${BEHEER ? `<span class="dishstatus ${hidden?'off':'on'}">${hidden?A.hidden:A.actief}</span>` : ''}</div><span class="sub">${titleCase(sub)}</span></div></div>
-      <p class="card-desc">${titleCase(m.desc[LANG])}</p>
+      <p class="card-desc">${esc(m.desc[LANG])}</p>
       ${dietLabel(m)}
       <details class="reheat"><summary>🍽️ ${T().reheatLabel}</summary><p>${serveTip(m)}</p></details>
       <div class="card-foot"><span class="price">${fmt(m.price)}</span><div class="ctl" data-ctl="${m.id}"></div></div>
@@ -1453,11 +1453,11 @@ function card(m){
       <details class="desc-edit">
         <summary>📝 ${A.descEdit}</summary>
         <label class="reclabel">${A.langLabels.nl}</label>
-        <textarea class="recta" data-ds-nl="${m.id}">${esc(titleCase(m.desc.nl))}</textarea>
+        <textarea class="recta" data-ds-nl="${m.id}">${esc(m.desc.nl)}</textarea>
         <label class="reclabel">${A.langLabels.en}</label>
-        <textarea class="recta" data-ds-en="${m.id}">${esc(titleCase(m.desc.en))}</textarea>
+        <textarea class="recta" data-ds-en="${m.id}">${esc(m.desc.en)}</textarea>
         <label class="reclabel">${A.langLabels.th}</label>
-        <textarea class="recta" data-ds-th="${m.id}">${esc(titleCase(m.desc.th))}</textarea>
+        <textarea class="recta" data-ds-th="${m.id}">${esc(m.desc.th)}</textarea>
         <button class="recsave" data-dssave="${m.id}">${A.descSave}</button>
       </details>
       <details class="recipe-edit">
@@ -4712,7 +4712,7 @@ async function saveDesc(id, nl, en, th, btn){
   m.desc = desc; DESCS[id] = desc;
   if(!ghToken()){ alert(A.tokenNeed); askToken(); }
   const card = btn ? btn.closest(".card") : null;
-  if(card){ const d = card.querySelector(".card-desc"); if(d) d.textContent = titleCase(m.desc[LANG]); }
+  if(card){ const d = card.querySelector(".card-desc"); if(d) d.textContent = m.desc[LANG]; }
   const label = btn ? btn.textContent : "";
   if(btn){ btn.disabled = true; btn.textContent = "…"; }
   try{
