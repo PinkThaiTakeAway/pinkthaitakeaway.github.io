@@ -78,9 +78,9 @@
   .hero h1 em{font-style:italic;color:var(--amber)}
   .hero p{margin-top:16px;max-width:48ch;font-size:clamp(1rem,2.4vw,1.16rem);color:rgba(251,246,236,.82)}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
-  .chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;font-size:.86rem;font-weight:600}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:8px 14px;border-radius:22px;font-size:.86rem;font-weight:600;max-width:100%}
   .chip.chip-info{flex-direction:column;align-items:flex-start;gap:6px}
-  .chip-line{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .chip-line{display:flex;align-items:flex-start;gap:7px;white-space:normal;max-width:100%}
   .chip .stat{width:9px;height:9px;border-radius:999px;background:#5BD27E;box-shadow:0 0 0 3px rgba(91,210,126,.25);flex:0 0 auto}
   .chip .chip-tag{font-weight:700}
   .hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:9px;background:var(--amber);color:var(--ink);font-weight:800;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s,background .2s}
@@ -1761,11 +1761,11 @@ function applyLang(){
   document.getElementById("heroTitle").innerHTML = T().heroTitle;
   { const _hc=document.getElementById("heroChef"); if(_hc) _hc.textContent = T().heroChef || ""; }
   document.getElementById("heroP").textContent = T().heroP(afhaalDagenTekst());
-  const _pickStr = upcomingPickupDates().map(d=>T().chipPickup(chipDate(d), dayWindow(d.getDay()).van, dayWindow(d.getDay()).tot)).join("  •  ");
+  const _pickMoments = upcomingPickupDates().map(d=>T().chipPickup(chipDate(d), dayWindow(d.getDay()).van, dayWindow(d.getDay()).tot));
   const _dl = nextOrderDeadline();
   const _cutDatum = chipDate(_dl);
   const _cutTijd = String(_dl.getHours()).padStart(2,"0")+":"+String(_dl.getMinutes()).padStart(2,"0");
-  document.getElementById("chipPickup").textContent = _pickStr;
+  document.getElementById("chipPickup").innerHTML = _pickMoments.map(esc).join("<br>");
   document.getElementById("chipOrder").textContent = T().chipOrder(_cutDatum, _cutTijd);
   { const _pt=document.getElementById("chipPickTag"); if(_pt) _pt.textContent = T().pickLabel; }
   { const _ot=document.getElementById("chipOrderTag"); if(_ot) _ot.textContent = T().orderLabel; }
