@@ -1762,6 +1762,7 @@ function applyLang(){
   { const _hc=document.getElementById("heroChef"); if(_hc) _hc.textContent = T().heroChef || ""; }
   document.getElementById("heroP").textContent = T().heroP(afhaalDagenTekst());
   const _pickMoments = upcomingPickupDates().map(d=>T().chipPickup(chipDate(d), dayWindow(d.getDay()).van, dayWindow(d.getDay()).tot));
+  const _pickStr = _pickMoments.join("  •  ");
   const _dl = nextOrderDeadline();
   const _cutDatum = chipDate(_dl);
   const _cutTijd = String(_dl.getHours()).padStart(2,"0")+":"+String(_dl.getMinutes()).padStart(2,"0");
