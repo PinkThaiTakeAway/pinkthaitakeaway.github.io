@@ -82,5 +82,12 @@
     "adminid": "assist",
     "wat": "Menu-crash gefixt (tomyumkung rh:pan -> serveTip crashte); Afhaalmoment-dropdown met placeholder + datum+tijd",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-14T11:37:16.284597Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Opruiming: ongebruikte vertaalsleutel labelDay verwijderd (health-waarschuwing weg)",
+    "doel": "beheer (code)"
   }
 ]
