@@ -919,7 +919,7 @@
       <span class="logo brandname">Pink Thai TakeAway<span class="dot">.</span></span>
       <p style="margin-top:10px;max-width:34ch" id="footTagline"></p>
     </div>
-    <div class="foot-moments"><h4 id="footPickupHead"></h4><p id="footPickup">—</p><p id="footOrder">—</p></div>
+    <div class="foot-moments"><h4 id="footOrderHead"></h4><p id="footOrder">—</p><h4 id="footPickupHead" style="margin-top:14px"></h4><p id="footPickup">—</p></div>
     <div><h4 id="footFindHead"></h4><p id="cfgAdres2">—</p><p id="cfgTel">—</p></div>
   </div>
   <p class="copy">© <span id="year"></span> <span class="brandname">Pink Thai TakeAway</span></p>
@@ -964,7 +964,7 @@ const I18N = {
     note:"Je bestelling wordt direct aan het restaurant doorgegeven.",
     spice:["Mild pittig","Kruidig","Pittig"],
     diet:{ vega:"Vega", glutenvrij:"Glutenvrij", noten:"Bevat noten" },
-    footPickupHead:"Afhalen", footOrder:(d,t)=>`Bestellen t/m ${d} ${t} uur`,
+    footPickupHead:"Afhalen", footOrderHead:"Bestellen", footOrder:(d,t)=>`t/m ${d} ${t} uur`,
     footFindHead:"Vinden & bellen", footTagline:"Thais afhaalrestaurant. Bestel door de week, afhalen op {dagen}.", adresNote:"(voordeur aan de oprit)", dagEn:" en ", shareLabel:"Delen", shareText:"Bestel echte Thaise afhaalgerechten bij Pink Thai TakeAway 🌸",
     reheatLabel:"Serveertip", micLabel:"Magnetron", airLabel:"Airfryer",
     adm:{title:"Beheermodus", add:"Gerecht", wis:"Wis keuzes",
@@ -1004,7 +1004,7 @@ const I18N = {
     note:"Your order is sent to the restaurant right away.",
     spice:["Mild","Spicy","Hot"],
     diet:{ vega:"Veggie", glutenvrij:"Gluten-free", noten:"Contains nuts" },
-    footPickupHead:"Pickup", footOrder:(d,t)=>`Order until ${d} ${t}`,
+    footPickupHead:"Pickup", footOrderHead:"Ordering", footOrder:(d,t)=>`until ${d} ${t}`,
     footFindHead:"Find & call", footTagline:"Thai takeaway. Order during the week, pick up on {dagen}.", adresNote:"(front door by the driveway)", dagEn:" and ", shareLabel:"Share", shareText:"Order authentic Thai takeaway from Pink Thai TakeAway 🌸",
     reheatLabel:"Serving tip", micLabel:"Microwave", airLabel:"Air fryer",
     adm:{title:"Admin mode", add:"Dish",
@@ -1045,7 +1045,7 @@ const I18N = {
     note:"คำสั่งซื้อจะถูกส่งให้ร้านทันที",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
     diet:{ vega:"มังสวิรัติ", glutenvrij:"ไม่มีกลูเตน", noten:"มีถั่ว" },
-    footPickupHead:"รับสินค้า", footOrder:(d,t)=>`สั่งได้ถึง${d} ${t} น.`,
+    footPickupHead:"รับสินค้า", footOrderHead:"สั่งอาหาร", footOrder:(d,t)=>`ถึง${d} ${t} น.`,
     footFindHead:"ที่อยู่ & โทร", footTagline:"อาหารไทยสั่งกลับบ้าน สั่งภายในสัปดาห์ รับ{dagen}", adresNote:"(ประตูหน้าอยู่ตรงทางเข้ารถ)", dagEn:"และ", shareLabel:"แชร์", shareText:"สั่งอาหารไทยแท้จาก Pink Thai TakeAway 🌸",
     reheatLabel:"วิธีเสิร์ฟ", micLabel:"ไมโครเวฟ", airLabel:"หม้อทอดลม",
     adm:{title:"โหมดผู้ดูแล", add:"เมนู", wis:"ล้างที่เลือก",
@@ -1773,9 +1773,10 @@ function applyLang(){
   document.getElementById("heroCta").textContent = T().heroCta;
   document.getElementById("cartLabel").textContent = T().cart;
   document.getElementById("fbGo").textContent = T().viewOrder;
-  document.getElementById("footPickupHead").textContent = T().footPickupHead;
-  document.getElementById("footPickup").textContent = _pickStr;
+  document.getElementById("footOrderHead").textContent = T().footOrderHead;
   document.getElementById("footOrder").textContent = T().footOrder(_cutDatum, _cutTijd);
+  document.getElementById("footPickupHead").textContent = T().footPickupHead;
+  document.getElementById("footPickup").innerHTML = _pickMoments.map(esc).join("<br>");
   document.getElementById("footFindHead").textContent = T().footFindHead;
   document.getElementById("footTagline").textContent = T().footTagline.replace("{dagen}", afhaalDagenTekst());
   document.getElementById("shareLabel").textContent = T().shareLabel;
