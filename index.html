@@ -1324,12 +1324,14 @@ async function commonsSearch(term, limit){
     .filter(p => p.imageinfo && ["image/jpeg","image/png"].includes(p.imageinfo[0].mime))
     .map(p => ({ title:p.title.replace(/^File:/,""), url:p.imageinfo[0].thumburl || p.imageinfo[0].url }));
 }
+const _fotoGeladen = new Set();
 function setPhoto(id, url, onFail){
   PHOTO[id] = url;
   document.querySelectorAll(`img[data-photo="${id}"]`).forEach(img => {
-    img.onload = () => img.classList.add("loaded");
-    img.onerror = () => { img.classList.remove("loaded"); img.removeAttribute("src"); if(onFail){ const f=onFail; onFail=null; f(); } };
+    img.onload = () => { _fotoGeladen.add(url); img.classList.add("loaded"); };
+    img.onerror = () => { _fotoGeladen.delete(url); img.classList.remove("loaded"); img.removeAttribute("src"); if(onFail){ const f=onFail; onFail=null; f(); } };
     img.src = url;
+    if(_fotoGeladen.has(url) || img.complete) img.classList.add("loaded");
   });
   document.querySelectorAll(`img[data-cphoto="${id}"]`).forEach(img => { img.onerror = () => img.remove(); img.src = url; });
 }
@@ -1783,6 +1785,7 @@ function applyLang(){
   document.getElementById("footFindHead").textContent = T().footFindHead;
   document.getElementById("footTagline").textContent = T().footTagline.replace("{dagen}", afhaalDagenTekst());
   document.getElementById("shareLabel").textContent = T().shareLabel;
+  updateAcctBtn();
   [...document.querySelectorAll("#langsw button")].forEach(b => b.classList.toggle("on", b.dataset.lang===LANG));
   if(typeof refreshOrderingUI==="function") refreshOrderingUI();
 }
