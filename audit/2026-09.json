@@ -152,5 +152,12 @@
     "adminid": "assist",
     "wat": "Nua Pad Nomai: juiste foto geplaatst (rundvlees met bamboescheuten)",
     "doel": "aanbod"
+  },
+  {
+    "tijd": "2026-09-14T16:41:56.355957Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Foto-upload slaat nu losse bestanden op (fotos/ID.jpg) i.p.v. base64; cache-bust toegevoegd",
+    "doel": "beheer (code)"
   }
 ]
