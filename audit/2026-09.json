@@ -75,5 +75,12 @@
     "adminid": "assist",
     "wat": "Fix foto's: fotos.json van 3,4 MB naar 2,5 KB (15 base64-foto's geextraheerd naar .jpg)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-14T11:28:15.309943Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Menu-crash gefixt (tomyumkung rh:pan -> serveTip crashte); Afhaalmoment-dropdown met placeholder + datum+tijd",
+    "doel": "beheer (code)"
   }
 ]
