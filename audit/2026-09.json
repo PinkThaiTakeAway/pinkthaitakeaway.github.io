@@ -159,5 +159,12 @@
     "adminid": "assist",
     "wat": "Foto-upload slaat nu losse bestanden op (fotos/ID.jpg) i.p.v. base64; cache-bust toegevoegd",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-14T17:52:08.925551Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Omschrijvingen in zinsvorm (title-case verwijderd bij omschrijving); namen blijven met hoofdletters",
+    "doel": "aanbod"
   }
 ]
