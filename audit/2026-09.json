@@ -61,5 +61,12 @@
     "adminid": "assist",
     "wat": "Tom yum kung & Gaeng nomai kai: foto's toegevoegd, omschrijvingen en pittigheid (1) bijgewerkt",
     "doel": "aanbod"
+  },
+  {
+    "tijd": "2026-09-14T11:12:41.375391Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Afhaalmomenten: zondag 10:00-11:30 toegevoegd naast zaterdag 17:00-19:00 (weekend-fix)",
+    "doel": "afhaal"
   }
 ]
