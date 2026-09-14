@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-09-14T11:21:23Z",
+  "opgeslagen": "2026-09-14T11:31:56Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-09-14T11:21:23.430259+00:00",
+    "updated": "2026-09-14T11:31:56.279523+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -204,8 +204,8 @@
             "status": "ok"
           },
           {
-            "naam": "geen verweesde vertaalsleutels",
-            "status": "ok"
+            "naam": "1 vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): labelDay",
+            "status": "warn"
           },
           {
             "naam": "geen ongebruikte data-/beeldbestanden",
@@ -289,7 +289,7 @@
             "status": "ok"
           },
           {
-            "naam": "index.html compact (399 KB, geen zware inline-afbeeldingen)",
+            "naam": "index.html compact (400 KB, geen zware inline-afbeeldingen)",
             "status": "ok"
           },
           {
@@ -319,6 +319,67 @@
         "items": [
           {
             "naam": "Bestellingen: nog geen bestellingen ontvangen",
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "naam": "Beheer-acties",
+        "items": [
+          {
+            "naam": "Prijs aanpassen",
+            "status": "ok"
+          },
+          {
+            "naam": "Pittigheid aanpassen",
+            "status": "ok"
+          },
+          {
+            "naam": "Naam aanpassen",
+            "status": "ok"
+          },
+          {
+            "naam": "Omschrijving aanpassen",
+            "status": "ok"
+          },
+          {
+            "naam": "Recept aanpassen",
+            "status": "ok"
+          },
+          {
+            "naam": "Serveertip aanpassen",
+            "status": "ok"
+          },
+          {
+            "naam": "Foto instellen",
+            "status": "ok"
+          },
+          {
+            "naam": "Gerecht verbergen",
+            "status": "ok"
+          },
+          {
+            "naam": "Gerecht weer tonen",
+            "status": "ok"
+          },
+          {
+            "naam": "Gerecht verwijderen",
+            "status": "ok"
+          },
+          {
+            "naam": "Gerecht herstellen",
+            "status": "ok"
+          },
+          {
+            "naam": "Tikkie omschakelen",
+            "status": "ok"
+          },
+          {
+            "naam": "Bestellen pauzeren/openen",
+            "status": "ok"
+          },
+          {
+            "naam": "Nieuw gerecht toevoegen",
             "status": "ok"
           }
         ]
