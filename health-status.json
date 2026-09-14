@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-09-14T11:38:28Z",
+  "opgeslagen": "2026-09-14T11:42:44Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-09-14T11:38:28.260889+00:00",
+    "updated": "2026-09-14T11:42:44.429697+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -319,67 +319,6 @@
         "items": [
           {
             "naam": "Bestellingen: nog geen bestellingen ontvangen",
-            "status": "ok"
-          }
-        ]
-      },
-      {
-        "naam": "Beheer-acties",
-        "items": [
-          {
-            "naam": "Prijs aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Pittigheid aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Naam aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Omschrijving aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Recept aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Serveertip aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Foto instellen",
-            "status": "ok"
-          },
-          {
-            "naam": "Gerecht verbergen",
-            "status": "ok"
-          },
-          {
-            "naam": "Gerecht weer tonen",
-            "status": "ok"
-          },
-          {
-            "naam": "Gerecht verwijderen",
-            "status": "ok"
-          },
-          {
-            "naam": "Gerecht herstellen",
-            "status": "ok"
-          },
-          {
-            "naam": "Tikkie omschakelen",
-            "status": "ok"
-          },
-          {
-            "naam": "Bestellen pauzeren/openen",
-            "status": "ok"
-          },
-          {
-            "naam": "Nieuw gerecht toevoegen",
             "status": "ok"
           }
         ]
