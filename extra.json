@@ -73,7 +73,7 @@
     "cat": "soepen",
     "emoji": "🍤",
     "price": 10,
-    "spice": 2,
+    "spice": 1,
     "foto": "Tom yum kung thai spicy shrimp soup",
     "th": "ต้มยำกุ้ง",
     "name": {
@@ -82,9 +82,9 @@
       "th": "ต้มยำกุ้ง"
     },
     "desc": {
-      "nl": "Pittige, zure Thaise soep met garnalen, citroengras, galangal en kaffirlimoen.",
-      "en": "Spicy and sour Thai soup with shrimp, lemongrass, galangal and kaffir lime.",
-      "th": "ต้มยำกุ้ง รสเปรี้ยวเผ็ด กุ้ง ตะไคร้ ข่า และใบมะกรูด"
+      "nl": "Lichtpittige soep met groenten en garnalen",
+      "en": "Mildly spicy soup with vegetables and shrimp",
+      "th": "ซุปรสเผ็ดอ่อน ใส่ผักและกุ้ง"
     },
     "rh": "pan",
     "custom": true,
@@ -95,7 +95,7 @@
     "cat": "hoofd",
     "emoji": "🥘",
     "price": 15,
-    "spice": 2,
+    "spice": 1,
     "foto": "Gaeng nomai kai bamboo shoot chicken curry thai",
     "th": "แกงหน่อไม้ไก่",
     "name": {
@@ -104,9 +104,9 @@
       "th": "แกงหน่อไม้ไก่"
     },
     "desc": {
-      "nl": "Rode curry met bamboescheuten en kip. Met jasmijnrijst.",
-      "en": "Red curry with bamboo shoots and chicken. With jasmine rice.",
-      "th": "แกงเผ็ดหน่อไม้กับไก่ เสิร์ฟพร้อมข้าวหอมมะลิ"
+      "nl": "Rode curry met kip en bamboescheuten",
+      "en": "Red curry with chicken and bamboo shoots",
+      "th": "แกงเผ็ดไก่และหน่อไม้"
     },
     "rh": "curry",
     "custom": true,
