@@ -68,5 +68,12 @@
     "adminid": "assist",
     "wat": "Afhaalmomenten: zondag 10:00-11:30 toegevoegd naast zaterdag 17:00-19:00 (weekend-fix)",
     "doel": "afhaal"
+  },
+  {
+    "tijd": "2026-09-14T11:20:16.024682Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Fix foto's: fotos.json van 3,4 MB naar 2,5 KB (15 base64-foto's geextraheerd naar .jpg)",
+    "doel": "beheer (code)"
   }
 ]
