@@ -1250,7 +1250,7 @@ function pad(t){ const [h,m]=t.split(":").map(Number); return h*60+m; }
 /* ---------- Afhaaldatum + tijden ---------- */
 function pickupDays(){
   const a = (CONFIG.afhaal.dagen && CONFIG.afhaal.dagen.length) ? CONFIG.afhaal.dagen.slice() : [CONFIG.afhaal.dag];
-  return [...new Set(a)].sort((x,y)=>x-y);
+  return [...new Set(a)].sort((x,y)=>((x===0?7:x)-(y===0?7:y)));   // zondag(0) sorteert ná zaterdag(6): weekend blijft aaneengesloten
 }
 function dayWindow(dayNum){
   const t = (CONFIG.afhaal.tijden||{})[dayNum];
