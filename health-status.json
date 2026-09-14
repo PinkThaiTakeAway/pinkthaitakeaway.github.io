@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-09-14T10:54:12Z",
+  "opgeslagen": "2026-09-14T10:58:23Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-09-14T10:54:11.988601+00:00",
+    "updated": "2026-09-14T10:58:23.206457+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -131,15 +131,15 @@
             "status": "ok"
           },
           {
-            "naam": "23 gerechten in het menu herkend",
+            "naam": "25 gerechten in het menu herkend",
             "status": "ok"
           },
           {
-            "naam": "prijzen.json: 17 vermelding(en) gecontroleerd",
+            "naam": "prijzen.json: 19 vermelding(en) gecontroleerd",
             "status": "ok"
           },
           {
-            "naam": "nummers.json: 23 vermelding(en) gecontroleerd",
+            "naam": "nummers.json: 25 vermelding(en) gecontroleerd",
             "status": "ok"
           },
           {
@@ -147,7 +147,7 @@
             "status": "ok"
           },
           {
-            "naam": "fotos.json: 23 vermelding(en) gecontroleerd",
+            "naam": "fotos.json: 25 vermelding(en) gecontroleerd",
             "status": "ok"
           },
           {
@@ -319,67 +319,6 @@
         "items": [
           {
             "naam": "Bestellingen: nog geen bestellingen ontvangen",
-            "status": "ok"
-          }
-        ]
-      },
-      {
-        "naam": "Beheer-acties",
-        "items": [
-          {
-            "naam": "Prijs aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Pittigheid aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Naam aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Omschrijving aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Recept aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Serveertip aanpassen",
-            "status": "ok"
-          },
-          {
-            "naam": "Foto instellen",
-            "status": "ok"
-          },
-          {
-            "naam": "Gerecht verbergen",
-            "status": "ok"
-          },
-          {
-            "naam": "Gerecht weer tonen",
-            "status": "ok"
-          },
-          {
-            "naam": "Gerecht verwijderen",
-            "status": "ok"
-          },
-          {
-            "naam": "Gerecht herstellen",
-            "status": "ok"
-          },
-          {
-            "naam": "Tikkie omschakelen",
-            "status": "ok"
-          },
-          {
-            "naam": "Bestellen pauzeren/openen",
-            "status": "ok"
-          },
-          {
-            "naam": "Nieuw gerecht toevoegen",
             "status": "ok"
           }
         ]
