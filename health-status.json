@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-09-14T11:31:56Z",
+  "opgeslagen": "2026-09-14T11:38:28Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-09-14T11:31:56.279523+00:00",
+    "updated": "2026-09-14T11:38:28.260889+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -204,8 +204,8 @@
             "status": "ok"
           },
           {
-            "naam": "1 vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): labelDay",
-            "status": "warn"
+            "naam": "geen verweesde vertaalsleutels",
+            "status": "ok"
           },
           {
             "naam": "geen ongebruikte data-/beeldbestanden",
