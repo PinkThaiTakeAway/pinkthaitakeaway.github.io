@@ -166,5 +166,12 @@
     "adminid": "assist",
     "wat": "Omschrijvingen in zinsvorm (title-case verwijderd bij omschrijving); namen blijven met hoofdletters",
     "doel": "aanbod"
+  },
+  {
+    "tijd": "2026-09-15T04:19:17.489972Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klant blijft in overzicht na verwijderen laatste bestelling (bewaard in klanten.json)",
+    "doel": "beheer (code)"
   }
 ]
