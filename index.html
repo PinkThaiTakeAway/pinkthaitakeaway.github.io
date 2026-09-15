@@ -4592,9 +4592,24 @@ async function klantNotitie(tel, tekst){
   renderKlanten();
   showToast(ok?BT().kl.tNotitieOk:BT().kl.tNotitieFout, ok);
 }
+async function _bewaarKlantAlsNodig(order){
+  try{
+    const t = String((order&&order.tel)||"").replace(/\D/g,"");
+    if(!t) return;
+    const lijst = await _laadKlantenLijst();
+    if(lijst.some(k=>String(k.tel||"").replace(/\D/g,"")===t)) return;   // al in de persistente lijst
+    const tok = (_klantTokenIndex && _klantTokenIndex[t]) || "";
+    lijst.unshift({ naam:(order.naam||""), tel:(order.tel||""), email:(order.email||""), taal:(order.taal||""), token:tok, uitgenodigd:0 });
+    await _schrijfKlantenLijst(lijst);
+    _klantRecords = lijst;
+    try{ localStorage.removeItem("tta_klantcache"); }catch(e){}
+  }catch(e){}
+}
 async function klantVerwijder(id){
   if(!confirm(BT().kl.confDelBest)) return;
   const b=_klantData.find(x=>x.id===id); if(!b || !b._path){ showToast(BT().kl.tVerwFout, false); return; }
+  const _t = String(b.tel||"").replace(/\D/g,"");
+  if(_t && _klantData.filter(x=>x.id!==id && String(x.tel||"").replace(/\D/g,"")===_t).length===0) await _bewaarKlantAlsNodig(b);   // laatste order -> klant behouden
   const ok = await _ghDeleteFile(b._path, b._sha, "Bestelling #"+id+" verwijderd");
   if(ok){ _klantData = _klantData.filter(x=>x.id!==id); renderKlanten(); showToast(BT().kl.tBestVerw, true); }
   else showToast(BT().kl.tVerwFout, false);
@@ -4605,6 +4620,7 @@ async function klantVerwijderKlant(tel){
   const doelen=_klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")===t && x._path);
   let ok=true; for(const b of doelen){ if(!await _ghDeleteFile(b._path, b._sha, "Bestelling #"+b.id+" verwijderd")) ok=false; }
   _klantData = _klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")!==t);
+  try{ const lijst = await _laadKlantenLijst(); const nw = lijst.filter(k=>String(k.tel||"").replace(/\D/g,"")!==t); if(nw.length!==lijst.length){ await _schrijfKlantenLijst(nw); _klantRecords = nw; try{ localStorage.removeItem("tta_klantcache"); }catch(e){} } }catch(e){}
   renderKlanten();
   showToast(ok?BT().kl.tKlantVerw:BT().kl.tVerwFout, ok);
 }
@@ -4613,6 +4629,7 @@ async function klantVerwijderAlleBestellingen(tel){
   const ids = _klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")===t).map(x=>x.id);
   if(!ids.length) return;
   if(!confirm(BT().kl.confDelAlleBest(ids.length))) return;
+  await _bewaarKlantAlsNodig(_klantData.find(x=>String(x.tel||"").replace(/\D/g,"")===t) || {tel:tel});   // klant behouden
   let gelukt = 0;
   for(const id of ids){
     const b=_klantData.find(x=>x.id===id); if(!b||!b._path) continue;
