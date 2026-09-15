@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-09-15T03:55:48Z",
+  "opgeslagen": "2026-09-15T04:11:57Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-09-15T03:55:48.564146+00:00",
+    "updated": "2026-09-15T04:11:57.640482+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -322,11 +322,7 @@
         "naam": "Bestellingen",
         "items": [
           {
-            "naam": "Bestellingen: geen vergeten orders (openstaand > 10 dagen)",
-            "status": "ok"
-          },
-          {
-            "naam": "Bestellingen: 1 openstaand van 1 totaal",
+            "naam": "Bestellingen: nog geen bestellingen ontvangen",
             "status": "ok"
           }
         ]
