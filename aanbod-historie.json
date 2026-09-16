@@ -1169,9 +1169,9 @@
   },
   "2026-09-18": {
     "deadline": "2026-09-18T15:00:00.000Z",
-    "afhaal": "zaterdag 19 sep",
-    "vastgelegd": "2026-09-11T15:12:48.415Z",
-    "aantal": 13,
+    "afhaal": "zaterdag 19 sep, zondag 20 sep",
+    "vastgelegd": "2026-09-16T06:40:57.660Z",
+    "aantal": 14,
     "gerechten": [
       {
         "nr": 1,
@@ -1190,28 +1190,12 @@
         "spice": 1
       },
       {
-        "nr": 3,
-        "id": "gyozakai",
-        "naam": "Gyoza Tod Kai",
-        "prijs": 5,
-        "cat": "voorgerechten",
-        "spice": 0
-      },
-      {
         "nr": 4,
         "id": "pawbpiakai",
         "naam": "Paw Bpia Kai",
         "prijs": 5,
         "cat": "voorgerechten",
         "spice": 0
-      },
-      {
-        "nr": 6,
-        "id": "tomkha",
-        "naam": "Tom Kha Kai",
-        "prijs": 10,
-        "cat": "soepen",
-        "spice": 1
       },
       {
         "nr": 7,
@@ -1222,28 +1206,12 @@
         "spice": 1
       },
       {
-        "nr": 8,
-        "id": "massaman",
-        "naam": "Masaman Kai",
-        "prijs": 15,
-        "cat": "hoofd",
-        "spice": 1
-      },
-      {
-        "nr": 10,
-        "id": "gaengdaengkaiyang",
-        "naam": "Gaeng Daeng Kai Yang",
+        "nr": 9,
+        "id": "panang",
+        "naam": "Panang Curry",
         "prijs": 15,
         "cat": "hoofd",
         "spice": 2
-      },
-      {
-        "nr": 13,
-        "id": "padthai",
-        "naam": "Pad Thai Kai",
-        "prijs": 15,
-        "cat": "hoofd",
-        "spice": 1
       },
       {
         "nr": 14,
@@ -1254,10 +1222,42 @@
         "spice": 1
       },
       {
+        "nr": 16,
+        "id": "nuapadnomai",
+        "naam": "Nua Pad Nomai",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 17,
+        "id": "padhokkienkai",
+        "naam": "Pad Hokkien Kai",
+        "prijs": 12,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 18,
+        "id": "padkrapownua",
+        "naam": "Pad Krapow Nua",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 3
+      },
+      {
+        "nr": 19,
+        "id": "sapparod",
+        "naam": "Ananas Gebakken Rijst",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
         "nr": 20,
         "id": "khaokaiyang",
         "naam": "Khao Kai Yang",
-        "prijs": 15,
+        "prijs": 12,
         "cat": "hoofd",
         "spice": 0
       },
@@ -1270,12 +1270,20 @@
         "spice": 1
       },
       {
-        "nr": 23,
-        "id": "nuapadkhaao",
-        "naam": "Nua Pad Khaao-phoot On",
+        "nr": 24,
+        "id": "tomyumkung",
+        "naam": "Tom Yum Kung",
+        "prijs": 10,
+        "cat": "soepen",
+        "spice": 1
+      },
+      {
+        "nr": 25,
+        "id": "gaengnomaikai",
+        "naam": "Gaeng Nomai Kai",
         "prijs": 15,
         "cat": "hoofd",
-        "spice": 2
+        "spice": 1
       }
     ]
   }
