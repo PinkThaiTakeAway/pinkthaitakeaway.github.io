@@ -292,5 +292,12 @@
     "adminid": "assist",
     "wat": "Beloning-rechten per klant: eerder beschikbare beloningen blijven geldig als beheer ze uitzet; nieuwe klanten krijgen huidige instelling",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T12:54:04.595010Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Spaarkaart: bestaande leden behouden hun kaart als de hele functie wordt uitgezet; nieuwe/niet-leden vervallen",
+    "doel": "beheer (code)"
   }
 ]
