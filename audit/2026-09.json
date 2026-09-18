@@ -299,5 +299,12 @@
     "adminid": "assist",
     "wat": "Spaarkaart: bestaande leden behouden hun kaart als de hele functie wordt uitgezet; nieuwe/niet-leden vervallen",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T13:02:32.708896Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Uitgezette spaarkaart: leden maken lopende kaart af, geen nieuwe kaarten (kaartCap)",
+    "doel": "beheer (code)"
   }
 ]
