@@ -285,5 +285,12 @@
     "adminid": "assist",
     "wat": "Server-side validatie spaarkaart-beloning (voorkomt hergebruik gebruikte kaart); volle bedrag + type meegestuurd",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T12:37:24.746501Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Beloning-rechten per klant: eerder beschikbare beloningen blijven geldig als beheer ze uitzet; nieuwe klanten krijgen huidige instelling",
+    "doel": "beheer (code)"
   }
 ]
