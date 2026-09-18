@@ -1,5 +1,6 @@
 {
   "aan": false,
   "doel": 10,
-  "beloning": "een gratis voorgerecht"
+  "beloning": "een gratis voorgerecht",
+  "min": 20
 }
