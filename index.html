@@ -2591,19 +2591,18 @@ function renderInstellingen(){
   const pb=document.getElementById("pubBtn"); if(pb) pb.onclick = publishAll;
   const cbb=document.getElementById("cbSaveBtn"); if(cbb) cbb.onclick = callmebotOpslaan;
   {
-    const _loyRead=function(){
+    const _loyVelden=function(){
       const d=parseInt((document.getElementById("loyDoel")||{}).value,10); if(d>=2&&d<=50) LOYAL.doel=d;
       const m=parseFloat((document.getElementById("loyMin")||{}).value); if(isFinite(m)&&m>=0&&m<=200) LOYAL.min=m;
       LOYAL.beloning=((document.getElementById("loyBel")||{}).value||"").trim();
       LOYAL.gerechtAan=!!(document.getElementById("loyGerecht") && document.getElementById("loyGerecht").checked);
       LOYAL.kortingAan=!!(document.getElementById("loyKorting") && document.getElementById("loyKorting").checked);
       const k=parseInt((document.getElementById("loyKort")||{}).value,10); if(k>=1&&k<=100) LOYAL.korting=k;
-      delete LOYAL.type;
+      saveLoyalPatch({doel:LOYAL.doel, min:LOYAL.min, beloning:LOYAL.beloning, gerechtAan:LOYAL.gerechtAan, kortingAan:LOYAL.kortingAan, korting:LOYAL.korting});
     };
-    const _loyBewaar=function(){ _loyRead(); livePush("loyaliteit.json", ()=>LOYAL, "Stempelkaart bijgewerkt"); };
-    ["loyDoel","loyMin","loyBel","loyKort","loyGerecht","loyKorting"].forEach(function(id){ const el=document.getElementById(id); if(el){ el.onchange=_loyBewaar; } });
-    const _lt=document.getElementById("loyToggle"); if(_lt) _lt.onclick=function(){ _loyRead(); LOYAL.aan=!LOYAL.aan; livePush("loyaliteit.json", ()=>LOYAL, "Stempelkaart "+(LOYAL.aan?"aangezet":"uitgezet")); renderInstellingen(); };
-    const _ls=document.getElementById("loySave"); if(_ls) _ls.onclick=function(){ _loyRead(); livePush("loyaliteit.json", ()=>LOYAL, "Stempelkaart bijgewerkt"); showToast(BT().kl.loyOk, true); };
+    ["loyDoel","loyMin","loyBel","loyKort","loyGerecht","loyKorting"].forEach(function(id){ const el=document.getElementById(id); if(el){ el.onchange=_loyVelden; } });
+    const _lt=document.getElementById("loyToggle"); if(_lt) _lt.onclick=function(){ LOYAL.aan=!LOYAL.aan; saveLoyalPatch({aan:LOYAL.aan}); renderInstellingen(); };
+    const _ls=document.getElementById("loySave"); if(_ls) _ls.onclick=function(){ _loyVelden(); showToast(BT().kl.loyOk, true); };
   }
   const ctb=document.getElementById("cbTestBtn"); if(ctb) ctb.onclick = testWhatsapp;
   document.querySelectorAll(".cb-num[data-cbcopy]").forEach(function(b){ b.onclick=function(){ const v=b.getAttribute("data-cbcopy"); try{ navigator.clipboard.writeText(v); }catch(e){ try{ const t=document.createElement("textarea"); t.value=v; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); }catch(_){} } showToast(BT().kl.cbCopied||"Gekopieerd \u2713", true); }; });
@@ -2838,12 +2837,14 @@ async function ghPut(path, obj, message, opts){
   const token = ghToken(); if(!token) throw new Error("no-token");
   let sha, _oldObj = null;
   try{ const g = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}?t=`+Date.now(), {headers:{Authorization:"token "+token}}); if(g.ok){ const gj = await g.json(); sha = gj.sha; try{ _oldObj = JSON.parse(decodeURIComponent(escape(atob((gj.content||"").replace(/\s/g,""))))); }catch(e){ _oldObj = null; } } }catch(e){}
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));
+  let toWrite = obj;
+  if(opts && opts.merge && _oldObj && typeof _oldObj==="object" && !Array.isArray(_oldObj) && obj && typeof obj==="object" && !Array.isArray(obj)){ toWrite = Object.assign({}, _oldObj, obj); }
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(toWrite,null,2))));
   const body = {message, content, branch:"main"}; if(sha) body.sha = sha;
   const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
     method:"PUT", headers:{Authorization:"token "+token, "Content-Type":"application/json"}, body: JSON.stringify(body) });
   if(!r.ok) throw new Error("push-"+r.status);
-  try{ if(!_AUDIT_SKIP[path] && !(opts&&opts.noAudit)){ const _w=_auditDiff(path,_oldObj,obj); if(_w||message) logAudit(path, _w||message); } }catch(e){}
+  try{ if(!_AUDIT_SKIP[path] && !(opts&&opts.noAudit)){ const _w=_auditDiff(path,_oldObj,toWrite); if(_w||message) logAudit(path, _w||message); } }catch(e){}
   return true;
 }
 let _toastT;
@@ -4790,6 +4791,21 @@ function livePush(path, getObj, msg){
   _pending[path] = {getObj: getObj, msg: msg};   // pending wijziging onthouden
   clearTimeout(_dbt[path]);
   _dbt[path] = setTimeout(()=>{ flushPath(path); }, 900);
+}
+// Spaarkaart: elke wijziging als PATCH mergen op de verse server-inhoud, zodat velden en aan/uit elkaar nooit overschrijven.
+let _loySaveT=null, _loyPatch={}, _loyChain=Promise.resolve();
+function saveLoyalPatch(patch){
+  Object.assign(LOYAL, patch);
+  Object.assign(_loyPatch, patch);
+  if(!BEHEER || !needToken()) return;
+  showToast(T().adm.saving, null);
+  clearTimeout(_loySaveT);
+  _loySaveT = setTimeout(()=>{
+    const p = _loyPatch; _loyPatch = {};
+    _loyChain = _loyChain.catch(()=>{}).then(()=> ghPut("loyaliteit.json", p, "Stempelkaart bijgewerkt", {merge:true}))
+      .then(()=> showToast(T().adm.pushOk, true))
+      .catch(e=>{ if(e.message!=="no-token") showToast(T().adm.pushErr + " (" + e.message + ")", false); });
+  }, 700);
 }
 // Geen wijziging verliezen: schrijf openstaande wijzigingen meteen weg bij weggaan/verbergen.
 window.addEventListener("pagehide", flushPushes);
