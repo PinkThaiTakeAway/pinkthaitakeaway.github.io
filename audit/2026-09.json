@@ -201,5 +201,12 @@
     "adminid": "assist",
     "wat": "CallMeBot-activatieblok: klikbare link naar officiële pagina toegevoegd",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T11:06:40.886392Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Auto-login terugkerende klant: bestaand token -> account ophalen bij laden; naam bovenin",
+    "doel": "beheer (code)"
   }
 ]
