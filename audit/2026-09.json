@@ -208,5 +208,12 @@
     "adminid": "assist",
     "wat": "Auto-login terugkerende klant: bestaand token -> account ophalen bij laden; naam bovenin",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T11:12:41.904882Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Welkomstbericht (pop-up, 5s) voor terugkerende klanten bij auto-login",
+    "doel": "beheer (code)"
   }
 ]
