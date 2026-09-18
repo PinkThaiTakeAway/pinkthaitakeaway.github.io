@@ -1286,5 +1286,125 @@
         "spice": 1
       }
     ]
+  },
+  "2026-09-25": {
+    "deadline": "2026-09-25T15:00:00.000Z",
+    "afhaal": "zaterdag 26 sep, zondag 27 sep",
+    "vastgelegd": "2026-09-18T20:07:36.596Z",
+    "aantal": 14,
+    "gerechten": [
+      {
+        "nr": 1,
+        "id": "popia",
+        "naam": "Paw Bpia Pak",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
+      },
+      {
+        "nr": 2,
+        "id": "satay",
+        "naam": "Satay Kai",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 1
+      },
+      {
+        "nr": 4,
+        "id": "pawbpiakai",
+        "naam": "Paw Bpia Kai",
+        "prijs": 5,
+        "cat": "voorgerechten",
+        "spice": 0
+      },
+      {
+        "nr": 7,
+        "id": "kuaitiaokai",
+        "naam": "Kuai-Tiao Kai",
+        "prijs": 10,
+        "cat": "soepen",
+        "spice": 1
+      },
+      {
+        "nr": 9,
+        "id": "panang",
+        "naam": "Panang Curry",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 2
+      },
+      {
+        "nr": 14,
+        "id": "cashew",
+        "naam": "Kai Med Ma Mueang",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 16,
+        "id": "nuapadnomai",
+        "naam": "Nua Pad Nomai",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 17,
+        "id": "padhokkienkai",
+        "naam": "Pad Hokkien Kai",
+        "prijs": 12,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 18,
+        "id": "padkrapownua",
+        "naam": "Pad Krapow Nua",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 3
+      },
+      {
+        "nr": 19,
+        "id": "sapparod",
+        "naam": "Ananas Gebakken Rijst",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 20,
+        "id": "khaokaiyang",
+        "naam": "Khao Kai Yang",
+        "prijs": 12,
+        "cat": "hoofd",
+        "spice": 0
+      },
+      {
+        "nr": 22,
+        "id": "masamannua",
+        "naam": "Masaman Nua",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      },
+      {
+        "nr": 24,
+        "id": "tomyumkung",
+        "naam": "Tom Yum Kung",
+        "prijs": 10,
+        "cat": "soepen",
+        "spice": 1
+      },
+      {
+        "nr": 25,
+        "id": "gaengnomaikai",
+        "naam": "Gaeng Nomai Kai",
+        "prijs": 15,
+        "cat": "hoofd",
+        "spice": 1
+      }
+    ]
   }
 }
