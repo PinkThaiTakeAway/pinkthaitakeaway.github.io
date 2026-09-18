@@ -222,5 +222,12 @@
     "adminid": "assist",
     "wat": "Klant-voorkeurstaal over apparaten: taal in account bewaard (Worker) + toegepast bij auto-login (site)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T11:34:31.015276Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Toevoegingen: 'Opnieuw bestellen'-knop in leeg mandje + 'Zet in agenda'-knop (.ics) bij bestelbevestiging",
+    "doel": "beheer (code)"
   }
 ]
