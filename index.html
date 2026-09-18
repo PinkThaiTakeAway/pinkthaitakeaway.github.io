@@ -1730,7 +1730,7 @@ document.getElementById("waBtn").onclick = async () => {
     });
     try{ if(window.turnstile) turnstile.reset(); }catch(e){}
     if(!r || !r.ok) throw new Error("bestelling niet doorgekomen");
-    if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); _accountData=null; localStorage.removeItem("tta_acctcache"); }catch(e){} try{ updateAcctBtn(); }catch(e){} }
+    if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); localStorage.removeItem("tta_noauto"); _accountData=null; localStorage.removeItem("tta_acctcache"); }catch(e){} try{ updateAcctBtn(); }catch(e){} try{ fetchAccount().then(function(a){ if(a && a.ok){ _accountData={token:r.token, r:a}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:r.token, r:a})); }catch(e){} try{ updateAcctBtn(); }catch(e){} } }).catch(function(){}); }catch(e){} }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]); store.save();
     try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam, tel})); }catch(e){}
@@ -5066,7 +5066,8 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
   document.getElementById("accountLogout").onclick = uitloggen;
   { const _ab=document.getElementById("acctBtn"); if(_ab) _ab.onclick = function(){ acctToken() ? openAccount() : openLogin(); }; }
   try{ updateAcctBtn(); }catch(e){}
-  { const _lp = new URLSearchParams(location.search).get("login"); if(_lp){ localStorage.setItem("tta_klanttoken", _lp); try{ localStorage.removeItem("tta_noauto"); }catch(e){} try{ history.replaceState(null,"",location.pathname); }catch(e){} try{ updateAcctBtn(); }catch(e){} openAccount(); } }
+  { const _lp = new URLSearchParams(location.search).get("login"); if(_lp){ localStorage.setItem("tta_klanttoken", _lp); try{ localStorage.removeItem("tta_noauto"); }catch(e){} try{ history.replaceState(null,"",location.pathname); }catch(e){} try{ updateAcctBtn(); }catch(e){} openAccount(); }
+    else if(acctToken() && localStorage.getItem("tta_noauto")!=="1"){ fetchAccount().then(function(r){ if(r && r.ok){ _accountData={token:acctToken(), r:r}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:acctToken(), r:r})); }catch(e){} try{ updateAcctBtn(); }catch(e){} } else if(r && r.ok===false){ try{ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); }catch(e){} _accountData=null; try{ updateAcctBtn(); }catch(e){} } }).catch(function(){}); } }
   if(BEHEER){ initBeheer().then(()=>{ hideLoader(); loadAanbod().then(()=>{ try{ snapshotAanbod(); }catch(e){} }); }, hideLoader); toonBeheerder(); prefetchAlles(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { await resolvePhotos(); hideLoader(); }
 })();
 </script>
