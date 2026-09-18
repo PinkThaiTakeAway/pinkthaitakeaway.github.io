@@ -229,5 +229,12 @@
     "adminid": "assist",
     "wat": "Toevoegingen: 'Opnieuw bestellen'-knop in leeg mandje + 'Zet in agenda'-knop (.ics) bij bestelbevestiging",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T11:47:28.384369Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Digitale stempelkaart/loyaliteit toegevoegd (aan/uit + doel + beloning; standaard uit)",
+    "doel": "beheer (code)"
   }
 ]
