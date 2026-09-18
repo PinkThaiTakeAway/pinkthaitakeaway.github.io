@@ -3,7 +3,7 @@
   "doel": 10,
   "beloning": "een gratis voorgerecht",
   "min": 20,
-  "gerechtAan": false,
+  "gerechtAan": true,
   "kortingAan": false,
   "korting": 10
 }
