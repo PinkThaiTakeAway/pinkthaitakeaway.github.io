@@ -250,5 +250,12 @@
     "adminid": "assist",
     "wat": "Spaarkaart: minimaal orderbedrag per stempel (instelbaar, standaard €20) + aanmoediging bij bedrag onder de drempel",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T12:13:40.461768Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Spaarkaart-beloning: keuze gratis item of kortingspercentage (korting wordt echt verrekend op het totaal)",
+    "doel": "beheer (code)"
   }
 ]
