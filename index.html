@@ -324,6 +324,9 @@
 
   .pickupbox{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.88rem}
   .pickupbox b{color:var(--forest)}
+  .belbox{display:flex;align-items:flex-start;gap:10px;margin-top:12px;background:#fbeaf3;border:1.5px solid #f3c6de;border-radius:12px;padding:12px 14px;font-size:.9rem;font-weight:600;color:#b8006b;cursor:pointer}
+  .belbox input{margin-top:2px;width:18px;height:18px;flex:0 0 auto;accent-color:#e5007d}
+  .loyalcard.klaar{background:#fbeaf3;border-color:#f3c6de}
   .afhdagen{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px}
   .afhdag{display:flex;align-items:center;gap:5px;font-size:.9rem;cursor:pointer}
   .afhlegenda{font-size:.78rem;color:#888;margin:2px 0 4px}
@@ -971,7 +974,7 @@ const I18N = {
     payMsgCash:t=>`💵 Je betaalt <b>${t}</b> <b>contant</b> bij het ophalen. Gepast betalen wordt gewaardeerd.`,
     labelName:"Je naam", labelPhone:"Telefoon", labelNote:"Opmerking (optioneel)", labelMoment:"Afhaalmoment", phMoment:"Kies een afhaalmoment", kiesMoment:"Kies eerst een afhaalmoment.", pickupPrompt:"Kies je afhaalmoment om verder te gaan.", phName:"Voor- en achternaam", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
-    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", agendaBtn:"Zet in mijn agenda", orderAccountHint:"Tip: bekijk je bestellingen en bestel sneller opnieuw via 👤 bovenaan.", modeVers:"Vers afhalen", modeIngevroren:"Ingevroren, op afspraak", ingevrorenNotice:"We vriezen je bestelling in en nemen contact op voor een afhaalafspraak — je kunt op elk moment bestellen.", afhaalIngevroren:"Ingevroren — op afspraak (we nemen contact op)", orderOkIngevroren:"Bestelling geplaatst! 🌸 We vriezen 'm voor je in en nemen contact op voor een afhaalafspraak. Tot snel!", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", 
+    orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", agendaBtn:"Zet in mijn agenda", belGebruik:(bel)=>"Gebruik je gespaarde "+(bel||"beloning")+" bij deze bestelling? (anders bewaar je 'm)", orderAccountHint:"Tip: bekijk je bestellingen en bestel sneller opnieuw via 👤 bovenaan.", modeVers:"Vers afhalen", modeIngevroren:"Ingevroren, op afspraak", ingevrorenNotice:"We vriezen je bestelling in en nemen contact op voor een afhaalafspraak — je kunt op elk moment bestellen.", afhaalIngevroren:"Ingevroren — op afspraak (we nemen contact op)", orderOkIngevroren:"Bestelling geplaatst! 🌸 We vriezen 'm voor je in en nemen contact op voor een afhaalafspraak. Tot snel!", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", 
     orderErr:"Vul je naam en telefoon in.",
     note:"Je bestelling wordt direct aan het restaurant doorgegeven.",
     spice:["Mild pittig","Kruidig","Pittig"],
@@ -1011,7 +1014,7 @@ const I18N = {
     payMsgCash:t=>`💵 You'll pay <b>${t}</b> in <b>cash</b> on pickup. Exact change appreciated.`,
     labelName:"Your name", labelPhone:"Phone", labelNote:"Note (optional)", labelMoment:"Pickup moment", phMoment:"Choose a pickup moment", kiesMoment:"Please choose a pickup moment first.", pickupPrompt:"Choose your pickup moment to continue.", phName:"Full name", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
-    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", agendaBtn:"Add to my calendar", orderAccountHint:"Tip: see your orders and reorder faster via 👤 at the top.", modeVers:"Fresh pickup", modeIngevroren:"Frozen, by appointment", ingevrorenNotice:"We'll freeze your order and contact you to arrange pickup — you can order anytime.", afhaalIngevroren:"Frozen — by appointment (we'll contact you)", orderOkIngevroren:"Order placed! 🌸 We'll freeze it for you and contact you to arrange pickup. See you soon!", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", 
+    orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", agendaBtn:"Add to my calendar", belGebruik:(bel)=>"Use your saved "+(bel||"reward")+" on this order? (otherwise you keep it)", orderAccountHint:"Tip: see your orders and reorder faster via 👤 at the top.", modeVers:"Fresh pickup", modeIngevroren:"Frozen, by appointment", ingevrorenNotice:"We'll freeze your order and contact you to arrange pickup — you can order anytime.", afhaalIngevroren:"Frozen — by appointment (we'll contact you)", orderOkIngevroren:"Order placed! 🌸 We'll freeze it for you and contact you to arrange pickup. See you soon!", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", 
     orderErr:"Please enter your name and phone.",
     note:"Your order is sent to the restaurant right away.",
     spice:["Mild","Spicy","Hot"],
@@ -1052,7 +1055,7 @@ const I18N = {
     payMsgCash:t=>`💵 ชำระ <b>${t}</b> <b>เงินสด</b> ตอนรับอาหาร`,
     labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelNote:"หมายเหตุ (ถ้ามี)", labelMoment:"เวลารับอาหาร", phMoment:"เลือกเวลารับอาหาร", kiesMoment:"กรุณาเลือกเวลารับอาหารก่อน", pickupPrompt:"เลือกเวลารับอาหารเพื่อดำเนินการต่อ", phName:"ชื่อ-นามสกุล", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
-    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", agendaBtn:"เพิ่มลงในปฏิทินของฉัน", orderAccountHint:"เคล็ดลับ: ดูออเดอร์และสั่งซ้ำเร็วขึ้นผ่าน 👤 ด้านบน", modeVers:"รับสด", modeIngevroren:"แช่แข็ง นัดรับ", ingevrorenNotice:"เราจะแช่แข็งออเดอร์และติดต่อคุณเพื่อนัดรับ — สั่งได้ตลอดเวลา", afhaalIngevroren:"แช่แข็ง — นัดรับ (เราจะติดต่อกลับ)", orderOkIngevroren:"สั่งซื้อสำเร็จ! 🌸 เราจะแช่แข็งให้และติดต่อคุณเพื่อนัดรับ แล้วพบกันเร็วๆ นี้!", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", 
+    orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", agendaBtn:"เพิ่มลงในปฏิทินของฉัน", belGebruik:(bel)=>"ใช้ "+(bel||"ของรางวัล")+" ที่สะสมไว้กับออเดอร์นี้? (ไม่ใช้ = เก็บไว้)", orderAccountHint:"เคล็ดลับ: ดูออเดอร์และสั่งซ้ำเร็วขึ้นผ่าน 👤 ด้านบน", modeVers:"รับสด", modeIngevroren:"แช่แข็ง นัดรับ", ingevrorenNotice:"เราจะแช่แข็งออเดอร์และติดต่อคุณเพื่อนัดรับ — สั่งได้ตลอดเวลา", afhaalIngevroren:"แช่แข็ง — นัดรับ (เราจะติดต่อกลับ)", orderOkIngevroren:"สั่งซื้อสำเร็จ! 🌸 เราจะแช่แข็งให้และติดต่อคุณเพื่อนัดรับ แล้วพบกันเร็วๆ นี้!", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", 
     orderErr:"กรุณากรอกชื่อและเบอร์โทร",
     note:"คำสั่งซื้อจะถูกส่งให้ร้านทันที",
     spice:["เผ็ดน้อย","เผ็ดปานกลาง","เผ็ดมาก"],
@@ -1617,7 +1620,7 @@ document.getElementById("cartBtn").onclick = openSheet;
 document.getElementById("fbGo").onclick = openSheet;
 document.getElementById("closeBtn").onclick = closeSheet;
 overlay.onclick = closeSheet;
-const form = { naam:"", tel:"", slot:"", note:"", pay:"contant", pickTs:0 };
+const form = { naam:"", tel:"", slot:"", note:"", pay:"contant", pickTs:0, gebruikBeloning:false };
 try{ const _kp=JSON.parse(localStorage.getItem("tta_klantprofiel")||"null"); if(_kp){ if(_kp.naam) form.naam=_kp.naam; if(_kp.tel) form.tel=_kp.tel; } }catch(e){}
 
 function renderSheet(){
@@ -1652,6 +1655,7 @@ function renderSheet(){
       <button type="button" class="modeopt ${_ingevroren?"active":""}" data-mode="ingevroren">❄️ ${T().modeIngevroren}</button>
     </div>` : "";
   html += `<div class="pickupbox">${_ingevroren ? T().ingevrorenNotice : (_picked ? T().pickupNotice(pickupDateLabel()+" · "+_w.van+"–"+_w.tot) : T().pickupPrompt)}</div>
+    ${(!_ingevroren && LOYAL.aan && _belBeschikbaar()>0) ? `<label class="belbox"><input type="checkbox" id="fBeloning" ${form.gebruikBeloning?"checked":""}><span>🎁 ${T().belGebruik(LOYAL.beloning)}</span></label>` : ""}
     <div class="fields">
       <input type="text" id="fHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
       ${(!_ingevroren && _days.length>1) ? `<div class="field"><label for="fDay">${T().labelMoment} <span class="req">*</span></label><select id="fDay">${_dayOpts}</select></div>` : ""}
@@ -1671,6 +1675,7 @@ function renderSheet(){
   const map={fName:"naam",fPhone:"tel",fNote:"note"};
   ["fName","fPhone","fNote"].forEach(idf => { const el=document.getElementById(idf); if(el) el.oninput=e=>{ form[map[idf]]=e.target.value; if(idf==="fName"||idf==="fPhone"){ try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam:form.naam||"", tel:form.tel||""})); }catch(err){} } }; });
   { const fd=document.getElementById("fDay"); if(fd) fd.onchange = e => { form.pickTs = Number(e.target.value)||0; renderSheet(); }; }
+  { const fb=document.getElementById("fBeloning"); if(fb) fb.onchange = e => { form.gebruikBeloning = !!e.target.checked; }; }
   sheetBody.querySelectorAll(".modeopt").forEach(b => b.onclick = () => { form.mode = b.dataset.mode; renderSheet(); });
   if(!form.pay || (!TIKKIE_ON && form.pay==="tikkie")) form.pay = "contant";
   sheetBody.querySelectorAll(".payopt").forEach(b => b.onclick = () => {
@@ -1739,6 +1744,8 @@ document.getElementById("waBtn").onclick = async () => {
       bestelling: lines.join("\n"), totaal: fmt(sum), betaling, opmerking: note,
       afhaal, taal: LANG, mand: JSON.stringify(cart),
       klanttoken: acctToken(),
+      gebruikBeloning: (LOYAL.aan && _belBeschikbaar()>0 && !!(document.getElementById("fBeloning") && document.getElementById("fBeloning").checked)),
+      beloning: LOYAL.beloning,
       turnstile: (window.turnstile && turnstile.getResponse) ? (turnstile.getResponse() || "") : ""
     });
     try{ if(window.turnstile) turnstile.reset(); }catch(e){}
@@ -3221,15 +3228,15 @@ const LOGIN_T = {
   nl: { lblInloggen:"Inloggen", welkomTerug:(n)=>"Welkom terug"+(n?", "+n:"")+"! Leuk dat je er weer bent 🌸", lblAccount:"Mijn account",
     inTitel:"Inloggen",
  inGeenLogin:"Je wordt automatisch ingelogd zodra je op dit apparaat een bestelling plaatst. Daarna zie je hier je bestellingen en kun je met één tik opnieuw bestellen. Tip: bewaar deze site als favoriet op je telefoon.",
-    inBeheerderTitel:"Beheerder", inBeheerder:"Je bent op dit apparaat herkend als beheerder {naam}. Je hebt geen klant-account — ga naar de beheersite om te beheren.", inNaarBeheer:"Naar beheer", inAlsKlant:"Inloggen als klant", inKlantGeen:"Dit apparaat is nog niet aan een klant-account gekoppeld. Plaats één keer een bestelling of gebruik je persoonlijke inloglink.", accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen", accLoyaliteit:(n)=>"Je hebt al "+n+" keer besteld 🌸", loyalTitel:"🌸 Spaarkaart", loyalNog:(nog,bel)=>"Nog "+nog+" bestelling"+(nog===1?"":"en")+" tot "+(bel||"een beloning")+"! 🌸", loyalVerdiend:(bel)=>"🎉 "+(bel||"een beloning")+" verdiend! Vraag ernaar bij je volgende bestelling.", accKopieerLink:"🔗 Kopieer mijn inloglink" },
+    inBeheerderTitel:"Beheerder", inBeheerder:"Je bent op dit apparaat herkend als beheerder {naam}. Je hebt geen klant-account — ga naar de beheersite om te beheren.", inNaarBeheer:"Naar beheer", inAlsKlant:"Inloggen als klant", inKlantGeen:"Dit apparaat is nog niet aan een klant-account gekoppeld. Plaats één keer een bestelling of gebruik je persoonlijke inloglink.", accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen", accLoyaliteit:(n)=>"Je hebt al "+n+" keer besteld 🌸", loyalTitel:"🌸 Spaarkaart", loyalNog:(nog,bel)=>"Nog "+nog+" bestelling"+(nog===1?"":"en")+" tot "+(bel||"een beloning")+"! 🌸", loyalKlaar:(besch,bel)=>"🎁 "+(besch>1?besch+"× ":"")+(bel||"een beloning")+" klaar! Gebruik 'm bij je volgende bestelling.", accKopieerLink:"🔗 Kopieer mijn inloglink" },
   en: { lblInloggen:"Log in", welkomTerug:(n)=>"Welcome back"+(n?", "+n:"")+"! Great to see you again 🌸", lblAccount:"My account",
     inTitel:"Log in",
  inGeenLogin:"You are logged in automatically once you place an order on this device. After that you can see your orders here and reorder in one tap. Tip: bookmark this site on your phone.",
-    inBeheerderTitel:"Admin", inBeheerder:"This device is recognized as admin {naam}. You don't have a customer account — go to the admin site to manage.", inNaarBeheer:"Go to admin", inAlsKlant:"Log in as customer", inKlantGeen:"This device isn't linked to a customer account yet. Place an order once or use your personal login link.", accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out", accLoyaliteit:(n)=>"You've ordered "+n+" times already 🌸", loyalTitel:"🌸 Loyalty card", loyalNog:(nog,bel)=>"Only "+nog+" more order"+(nog===1?"":"s")+" until "+(bel||"a reward")+"! 🌸", loyalVerdiend:(bel)=>"🎉 "+(bel||"a reward")+" earned! Ask for it on your next order.", accKopieerLink:"🔗 Copy my login link" },
+    inBeheerderTitel:"Admin", inBeheerder:"This device is recognized as admin {naam}. You don't have a customer account — go to the admin site to manage.", inNaarBeheer:"Go to admin", inAlsKlant:"Log in as customer", inKlantGeen:"This device isn't linked to a customer account yet. Place an order once or use your personal login link.", accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out", accLoyaliteit:(n)=>"You've ordered "+n+" times already 🌸", loyalTitel:"🌸 Loyalty card", loyalNog:(nog,bel)=>"Only "+nog+" more order"+(nog===1?"":"s")+" until "+(bel||"a reward")+"! 🌸", loyalKlaar:(besch,bel)=>"🎁 "+(besch>1?besch+"× ":"")+(bel||"a reward")+" ready! Use it on your next order.", accKopieerLink:"🔗 Copy my login link" },
   th: { lblInloggen:"เข้าสู่ระบบ", welkomTerug:(n)=>"ยินดีต้อนรับกลับมา"+(n?" คุณ"+n:"")+"! ดีใจที่ได้พบคุณอีกครั้ง 🌸", lblAccount:"บัญชีของฉัน",
     inTitel:"เข้าสู่ระบบ",
  inGeenLogin:"คุณจะเข้าสู่ระบบอัตโนมัติเมื่อสั่งซื้อบนอุปกรณ์นี้ จากนั้นดูออเดอร์และสั่งซ้ำได้ในแตะเดียว เคล็ดลับ: บันทึกเว็บนี้ไว้ในหน้าจอหลัก",
-    inBeheerderTitel:"ผู้ดูแล", inBeheerder:"อุปกรณ์นี้ถูกจดจำเป็นผู้ดูแล {naam} คุณไม่มีบัญชีลูกค้า — ไปที่หน้าผู้ดูแลเพื่อจัดการ", inNaarBeheer:"ไปที่ผู้ดูแล", inAlsKlant:"เข้าสู่ระบบในฐานะลูกค้า", inKlantGeen:"อุปกรณ์นี้ยังไม่ได้เชื่อมกับบัญชีลูกค้า สั่งซื้อหนึ่งครั้งหรือใช้ลิงก์เข้าสู่ระบบส่วนตัว", accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ", accLoyaliteit:(n)=>"คุณสั่งไปแล้ว "+n+" ครั้ง 🌸", loyalTitel:"🌸 บัตรสะสมแต้ม", loyalNog:(nog,bel)=>"อีก "+nog+" ออเดอร์ก็จะได้ "+(bel||"ของรางวัล")+"! 🌸", loyalVerdiend:(bel)=>"🎉 ได้รับ "+(bel||"ของรางวัล")+" แล้ว! แจ้งเราตอนสั่งครั้งถัดไป", accKopieerLink:"🔗 คัดลอกลิงก์เข้าสู่ระบบของฉัน" }
+    inBeheerderTitel:"ผู้ดูแล", inBeheerder:"อุปกรณ์นี้ถูกจดจำเป็นผู้ดูแล {naam} คุณไม่มีบัญชีลูกค้า — ไปที่หน้าผู้ดูแลเพื่อจัดการ", inNaarBeheer:"ไปที่ผู้ดูแล", inAlsKlant:"เข้าสู่ระบบในฐานะลูกค้า", inKlantGeen:"อุปกรณ์นี้ยังไม่ได้เชื่อมกับบัญชีลูกค้า สั่งซื้อหนึ่งครั้งหรือใช้ลิงก์เข้าสู่ระบบส่วนตัว", accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ", accLoyaliteit:(n)=>"คุณสั่งไปแล้ว "+n+" ครั้ง 🌸", loyalTitel:"🌸 บัตรสะสมแต้ม", loyalNog:(nog,bel)=>"อีก "+nog+" ออเดอร์ก็จะได้ "+(bel||"ของรางวัล")+"! 🌸", loyalKlaar:(besch,bel)=>"🎁 "+(bel||"ของรางวัล")+" พร้อมใช้! ใช้ในออเดอร์ถัดไป"+(besch>1?" ("+besch+")":""), accKopieerLink:"🔗 คัดลอกลิงก์เข้าสู่ระบบของฉัน" }
 };
 function acctToken(){ return localStorage.getItem("tta_klanttoken") || ""; }
 function myVid(){ try{ var v=localStorage.getItem("tta_vid")||""; if(!v){ v=Date.now().toString(36)+Math.random().toString(36).slice(2,10); localStorage.setItem("tta_vid",v); } return v; }catch(e){ return ""; } }
@@ -3347,11 +3354,12 @@ function renderAccount(a){
   let html = '<p style="font-weight:700;color:var(--forest);font-size:1.05rem;margin-bottom:12px">'+esc(LT.accHallo(a.naam||""))+'</p>';
   if(a.aantal) html += '<p style="color:var(--forest);font-size:.92rem;margin:-6px 0 12px">'+esc(LT.accLoyaliteit(a.aantal))+'</p>';
   if(LOYAL.aan){
-    const _doel = LOYAL.doel||10, _n = a.aantal||0;
-    const _gd = _n % _doel, _verd = _n>0 && _gd===0, _vol = _verd ? _doel : _gd, _nog = _doel - _gd;
-    let _st = ""; for(let i=0;i<_doel;i++){ _st += '<span class="stamp'+(i<_vol?" vol":"")+'">'+(i<_vol?"🌸":"")+'</span>'; }
-    html += '<div class="loyalcard"><div class="loyal-top">'+esc(LT.loyalTitel)+'</div><div class="loyal-stamps">'+_st+'</div>'
-      + '<div class="loyal-msg">'+esc(_verd ? LT.loyalVerdiend(LOYAL.beloning) : LT.loyalNog(_nog, LOYAL.beloning))+'</div></div>';
+    const _doel = LOYAL.doel||10, _n = a.aantal||0, _used = a.beloningGebruikt||0;
+    const _besch = Math.max(0, Math.floor(_n/_doel) - _used);
+    const _gd = _n % _doel, _nog = _doel - _gd;
+    let _st = ""; for(let i=0;i<_doel;i++){ _st += '<span class="stamp'+(i<_gd?" vol":"")+'">'+(i<_gd?"🌸":"")+'</span>'; }
+    html += '<div class="loyalcard'+(_besch>0?" klaar":"")+'"><div class="loyal-top">'+esc(LT.loyalTitel)+'</div><div class="loyal-stamps">'+_st+'</div>'
+      + '<div class="loyal-msg">'+esc(_besch>0 ? LT.loyalKlaar(_besch, LOYAL.beloning) : LT.loyalNog(_nog, LOYAL.beloning))+'</div></div>';
   }
   if(!best.length){ html += '<p class="hloading">'+esc(LT.accGeen)+'</p>'; }
   else {
@@ -3938,6 +3946,7 @@ function renderAfhaallijst(){
           '<div>'+(b.betaald?'<span class="kbadge bet">'+K.badgeBetaald+'</span>':'<span class="kbadge onbet">'+K.badgeNietBet+'</span>')+'</div>'+
           (b.bestelling?('<div class="kbbestel">'+esc(b.bestelling)+'</div>'):'')+
           (b.opmerking?('<div style="font-size:.82rem;color:#9a6a00">📝 '+esc(b.opmerking)+'</div>'):'')+
+          (b.beloning?('<div style="font-size:.82rem;color:#b8006b;font-weight:700">🎁 SPAARKAART: geef '+esc(b.beloning)+' gratis</div>'):'')+
           '<div class="kacts"><button data-a="afg" data-id="'+esc(b.id)+'" data-w="1">'+K.afgehaaldKort+'</button>'+
             '<button data-a="bet" data-id="'+esc(b.id)+'" data-w="'+(b.betaald?'0':'1')+'">'+(b.betaald?K.markNietBet:K.markBetaald)+'</button></div>'+
         '</div>'
@@ -5065,6 +5074,9 @@ async function loadTikkie(){
 }
 async function loadLoyal(){
   try{ const r = await fetch("loyaliteit.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object"){ LOYAL.aan=!!p.aan; if(typeof p.doel==="number"&&p.doel>=2&&p.doel<=50) LOYAL.doel=p.doel; if(typeof p.beloning==="string") LOYAL.beloning=p.beloning; } } }catch(e){}
+}
+function _belBeschikbaar(){
+  try{ if(!LOYAL.aan || !acctToken() || !(_accountData && _accountData.r)) return 0; const doel=LOYAL.doel||10; return Math.max(0, Math.floor((_accountData.r.aantal||0)/doel) - (_accountData.r.beloningGebruikt||0)); }catch(e){ return 0; }
 }
 async function loadPauze(){
   try{ const r = await fetch("bestelpauze.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object"){
