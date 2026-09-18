@@ -4,6 +4,6 @@
   "beloning": "een gratis voorgerecht",
   "min": 20,
   "gerechtAan": false,
-  "kortingAan": true,
+  "kortingAan": false,
   "korting": 10
 }
