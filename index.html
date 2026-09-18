@@ -604,7 +604,7 @@
   .kinstel-h{margin:4px 0 6px;font-size:1.05rem}
   .kinstel-uit{font-size:.9rem;color:#555;margin:0 0 14px;line-height:1.45}
   .kinstel-l{display:block;font-size:.82rem;font-weight:700;color:#444;margin:10px 0 4px}
-  .kinstel input,.kinstel select{width:100%;padding:11px 12px;border:1px solid #ccc;border-radius:9px;font-family:inherit;font-size:1rem;box-sizing:border-box;background:#fff}
+  .kinstel input:not([type=checkbox]),.kinstel select{width:100%;padding:11px 12px;border:1px solid #ccc;border-radius:9px;font-family:inherit;font-size:1rem;box-sizing:border-box;background:#fff}
   .adtab{width:100%;border-collapse:collapse;font-size:.9rem}
   .adtab th,.adtab td{text-align:left;padding:8px 6px;border-bottom:1px solid #eee}
   .adtab th{color:#003D7A;font-weight:700}
@@ -2590,8 +2590,21 @@ function renderInstellingen(){
   };
   const pb=document.getElementById("pubBtn"); if(pb) pb.onclick = publishAll;
   const cbb=document.getElementById("cbSaveBtn"); if(cbb) cbb.onclick = callmebotOpslaan;
-  { const _lt=document.getElementById("loyToggle"); if(_lt) _lt.onclick=function(){ LOYAL.aan=!LOYAL.aan; livePush("loyaliteit.json", ()=>LOYAL, "Stempelkaart "+(LOYAL.aan?"aangezet":"uitgezet")); renderInstellingen(); }; }
-  { const _ls=document.getElementById("loySave"); if(_ls) _ls.onclick=function(){ const d=parseInt((document.getElementById("loyDoel")||{}).value,10); LOYAL.doel=(d>=2&&d<=50)?d:(LOYAL.doel||10); LOYAL.beloning=((document.getElementById("loyBel")||{}).value||"").trim(); const _m=parseFloat((document.getElementById("loyMin")||{}).value); LOYAL.min=(isFinite(_m)&&_m>=0&&_m<=200)?_m:(LOYAL.min||0); LOYAL.gerechtAan=!!(document.getElementById("loyGerecht") && document.getElementById("loyGerecht").checked); LOYAL.kortingAan=!!(document.getElementById("loyKorting") && document.getElementById("loyKorting").checked); const _k=parseInt((document.getElementById("loyKort")||{}).value,10); LOYAL.korting=(_k>=1&&_k<=100)?_k:(LOYAL.korting||10); delete LOYAL.type; livePush("loyaliteit.json", ()=>LOYAL, "Stempelkaart bijgewerkt"); showToast(BT().kl.loyOk, true); }; }
+  {
+    const _loyRead=function(){
+      const d=parseInt((document.getElementById("loyDoel")||{}).value,10); if(d>=2&&d<=50) LOYAL.doel=d;
+      const m=parseFloat((document.getElementById("loyMin")||{}).value); if(isFinite(m)&&m>=0&&m<=200) LOYAL.min=m;
+      LOYAL.beloning=((document.getElementById("loyBel")||{}).value||"").trim();
+      LOYAL.gerechtAan=!!(document.getElementById("loyGerecht") && document.getElementById("loyGerecht").checked);
+      LOYAL.kortingAan=!!(document.getElementById("loyKorting") && document.getElementById("loyKorting").checked);
+      const k=parseInt((document.getElementById("loyKort")||{}).value,10); if(k>=1&&k<=100) LOYAL.korting=k;
+      delete LOYAL.type;
+    };
+    const _loyBewaar=function(){ _loyRead(); livePush("loyaliteit.json", ()=>LOYAL, "Stempelkaart bijgewerkt"); };
+    ["loyDoel","loyMin","loyBel","loyKort","loyGerecht","loyKorting"].forEach(function(id){ const el=document.getElementById(id); if(el){ el.onchange=_loyBewaar; } });
+    const _lt=document.getElementById("loyToggle"); if(_lt) _lt.onclick=function(){ _loyRead(); LOYAL.aan=!LOYAL.aan; livePush("loyaliteit.json", ()=>LOYAL, "Stempelkaart "+(LOYAL.aan?"aangezet":"uitgezet")); renderInstellingen(); };
+    const _ls=document.getElementById("loySave"); if(_ls) _ls.onclick=function(){ _loyRead(); livePush("loyaliteit.json", ()=>LOYAL, "Stempelkaart bijgewerkt"); showToast(BT().kl.loyOk, true); };
+  }
   const ctb=document.getElementById("cbTestBtn"); if(ctb) ctb.onclick = testWhatsapp;
   document.querySelectorAll(".cb-num[data-cbcopy]").forEach(function(b){ b.onclick=function(){ const v=b.getAttribute("data-cbcopy"); try{ navigator.clipboard.writeText(v); }catch(e){ try{ const t=document.createElement("textarea"); t.value=v; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); }catch(_){} } showToast(BT().kl.cbCopied||"Gekopieerd \u2713", true); }; });
   laadCallmebot();
