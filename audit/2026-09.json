@@ -306,5 +306,12 @@
     "adminid": "assist",
     "wat": "Uitgezette spaarkaart: leden maken lopende kaart af, geen nieuwe kaarten (kaartCap)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T13:05:37.747041Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klant-account: spaarpunten-aantal tonen + spaarkaart activeren (opt-in) wanneer beheer aan heeft",
+    "doel": "beheer (code)"
   }
 ]
