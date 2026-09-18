@@ -1,8 +1,9 @@
 {
-  "aan": false,
+  "aan": true,
   "doel": 10,
   "beloning": "een gratis voorgerecht",
   "min": 20,
-  "type": "gerecht",
+  "gerechtAan": true,
+  "kortingAan": false,
   "korting": 10
 }
