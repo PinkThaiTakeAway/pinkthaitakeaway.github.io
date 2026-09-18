@@ -364,6 +364,8 @@
   .pricerow input{max-width:100px;font-weight:700}
   .pricerow button{background:var(--forest);color:#fff;border-color:var(--forest)}
   .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(18px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:24px;font-size:.85rem;font-weight:700;z-index:120;opacity:0;transition:.25s;pointer-events:none;max-width:88%;text-align:center}
+  .welkom-toast{position:fixed;left:50%;top:76px;transform:translateX(-50%) translateY(-14px);background:var(--forest,#1b4332);color:#fff;padding:12px 22px;border-radius:999px;font-size:.95rem;font-weight:700;z-index:200;opacity:0;transition:opacity .4s,transform .4s;pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 10px 34px rgba(0,0,0,.28)}
+  .welkom-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast.ok{background:var(--forest)}
   .toast.err{background:var(--chili)}
@@ -3191,15 +3193,15 @@ function herstelMand(order){
 }
 
 const LOGIN_T = {
-  nl: { lblInloggen:"Inloggen", lblAccount:"Mijn account",
+  nl: { lblInloggen:"Inloggen", welkomTerug:(n)=>"Welkom terug"+(n?", "+n:"")+"! Leuk dat je er weer bent 🌸", lblAccount:"Mijn account",
     inTitel:"Inloggen",
  inGeenLogin:"Je wordt automatisch ingelogd zodra je op dit apparaat een bestelling plaatst. Daarna zie je hier je bestellingen en kun je met één tik opnieuw bestellen. Tip: bewaar deze site als favoriet op je telefoon.",
     inBeheerderTitel:"Beheerder", inBeheerder:"Je bent op dit apparaat herkend als beheerder {naam}. Je hebt geen klant-account — ga naar de beheersite om te beheren.", inNaarBeheer:"Naar beheer", inAlsKlant:"Inloggen als klant", inKlantGeen:"Dit apparaat is nog niet aan een klant-account gekoppeld. Plaats één keer een bestelling of gebruik je persoonlijke inloglink.", accTitel:"Mijn bestellingen", accHallo:(n)=>"Hallo "+n+"!", accGeen:"Je hebt nog geen bestellingen.", accOpnieuw:"🔁 Opnieuw bestellen", accFavoriet:"⭐ Bestel je favoriet opnieuw", accLaden:"Laden…", accUitloggen:"Uitloggen", accLoyaliteit:(n)=>"Je hebt al "+n+" keer besteld 🌸", accKopieerLink:"🔗 Kopieer mijn inloglink" },
-  en: { lblInloggen:"Log in", lblAccount:"My account",
+  en: { lblInloggen:"Log in", welkomTerug:(n)=>"Welcome back"+(n?", "+n:"")+"! Great to see you again 🌸", lblAccount:"My account",
     inTitel:"Log in",
  inGeenLogin:"You are logged in automatically once you place an order on this device. After that you can see your orders here and reorder in one tap. Tip: bookmark this site on your phone.",
     inBeheerderTitel:"Admin", inBeheerder:"This device is recognized as admin {naam}. You don't have a customer account — go to the admin site to manage.", inNaarBeheer:"Go to admin", inAlsKlant:"Log in as customer", inKlantGeen:"This device isn't linked to a customer account yet. Place an order once or use your personal login link.", accTitel:"My orders", accHallo:(n)=>"Hello "+n+"!", accGeen:"You have no orders yet.", accOpnieuw:"🔁 Order again", accFavoriet:"⭐ Reorder your favourite", accLaden:"Loading…", accUitloggen:"Log out", accLoyaliteit:(n)=>"You've ordered "+n+" times already 🌸", accKopieerLink:"🔗 Copy my login link" },
-  th: { lblInloggen:"เข้าสู่ระบบ", lblAccount:"บัญชีของฉัน",
+  th: { lblInloggen:"เข้าสู่ระบบ", welkomTerug:(n)=>"ยินดีต้อนรับกลับมา"+(n?" คุณ"+n:"")+"! ดีใจที่ได้พบคุณอีกครั้ง 🌸", lblAccount:"บัญชีของฉัน",
     inTitel:"เข้าสู่ระบบ",
  inGeenLogin:"คุณจะเข้าสู่ระบบอัตโนมัติเมื่อสั่งซื้อบนอุปกรณ์นี้ จากนั้นดูออเดอร์และสั่งซ้ำได้ในแตะเดียว เคล็ดลับ: บันทึกเว็บนี้ไว้ในหน้าจอหลัก",
     inBeheerderTitel:"ผู้ดูแล", inBeheerder:"อุปกรณ์นี้ถูกจดจำเป็นผู้ดูแล {naam} คุณไม่มีบัญชีลูกค้า — ไปที่หน้าผู้ดูแลเพื่อจัดการ", inNaarBeheer:"ไปที่ผู้ดูแล", inAlsKlant:"เข้าสู่ระบบในฐานะลูกค้า", inKlantGeen:"อุปกรณ์นี้ยังไม่ได้เชื่อมกับบัญชีลูกค้า สั่งซื้อหนึ่งครั้งหรือใช้ลิงก์เข้าสู่ระบบส่วนตัว", accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ", accLoyaliteit:(n)=>"คุณสั่งไปแล้ว "+n+" ครั้ง 🌸", accKopieerLink:"🔗 คัดลอกลิงก์เข้าสู่ระบบของฉัน" }
@@ -4651,6 +4653,17 @@ function showToast(msg, ok){
   clearTimeout(_toastT);
   if(ok!==null) _toastT = setTimeout(()=> t.classList.remove("show"), 1800);
 }
+function toonWelkom(naam){
+  try{
+    const LT = LOGIN_T[LANG] || LOGIN_T.nl;
+    let el = document.getElementById("welkomToast");
+    if(!el){ el = document.createElement("div"); el.id="welkomToast"; el.className="welkom-toast"; el.setAttribute("role","status"); document.body.appendChild(el); }
+    el.textContent = LT.welkomTerug ? LT.welkomTerug(naam||"") : ("Welkom terug"+(naam?", "+naam:"")+"!");
+    el.classList.add("show");
+    clearTimeout(el._t);
+    el._t = setTimeout(function(){ el.classList.remove("show"); }, 5000);   // na 5s vanzelf weg
+  }catch(e){}
+}
 let _pushGuard = false;
 function needToken(){
   if(ghToken()) return true;
@@ -5067,7 +5080,7 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
   { const _ab=document.getElementById("acctBtn"); if(_ab) _ab.onclick = function(){ acctToken() ? openAccount() : openLogin(); }; }
   try{ updateAcctBtn(); }catch(e){}
   { const _lp = new URLSearchParams(location.search).get("login"); if(_lp){ localStorage.setItem("tta_klanttoken", _lp); try{ localStorage.removeItem("tta_noauto"); }catch(e){} try{ history.replaceState(null,"",location.pathname); }catch(e){} try{ updateAcctBtn(); }catch(e){} openAccount(); }
-    else if(acctToken() && localStorage.getItem("tta_noauto")!=="1"){ fetchAccount().then(function(r){ if(r && r.ok){ _accountData={token:acctToken(), r:r}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:acctToken(), r:r})); }catch(e){} try{ updateAcctBtn(); }catch(e){} } else if(r && r.ok===false){ try{ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); }catch(e){} _accountData=null; try{ updateAcctBtn(); }catch(e){} } }).catch(function(){}); } }
+    else if(acctToken() && localStorage.getItem("tta_noauto")!=="1"){ fetchAccount().then(function(r){ if(r && r.ok){ _accountData={token:acctToken(), r:r}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:acctToken(), r:r})); }catch(e){} try{ updateAcctBtn(); }catch(e){} try{ if(!sessionStorage.getItem("tta_welkom")){ sessionStorage.setItem("tta_welkom","1"); toonWelkom((r&&r.naam)||""); } }catch(e){} } else if(r && r.ok===false){ try{ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); }catch(e){} _accountData=null; try{ updateAcctBtn(); }catch(e){} } }).catch(function(){}); } }
   if(BEHEER){ initBeheer().then(()=>{ hideLoader(); loadAanbod().then(()=>{ try{ snapshotAanbod(); }catch(e){} }); }, hideLoader); toonBeheerder(); prefetchAlles(); ensureAdminEnLog(); startKlantAutoRefresh(); } else { await resolvePhotos(); hideLoader(); }
 })();
 </script>
