@@ -215,5 +215,12 @@
     "adminid": "assist",
     "wat": "Welkomstbericht (pop-up, 5s) voor terugkerende klanten bij auto-login",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T11:24:17.438858Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klant-voorkeurstaal over apparaten: taal in account bewaard (Worker) + toegepast bij auto-login (site)",
+    "doel": "beheer (code)"
   }
 ]
