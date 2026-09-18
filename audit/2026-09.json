@@ -243,5 +243,12 @@
     "adminid": "assist",
     "wat": "Spaarkaart: verdiende beloning gebruiken of opsparen (voorstel bij bestellen); Worker verrekent + markeert order",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T12:05:47.785529Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Spaarkaart: minimaal orderbedrag per stempel (instelbaar, standaard €20) + aanmoediging bij bedrag onder de drempel",
+    "doel": "beheer (code)"
   }
 ]
