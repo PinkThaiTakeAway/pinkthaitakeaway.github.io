@@ -257,5 +257,12 @@
     "adminid": "assist",
     "wat": "Spaarkaart-beloning: keuze gratis item of kortingspercentage (korting wordt echt verrekend op het totaal)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T12:21:46.622330Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Spaarkaart: klant kiest zelf meesparen (aan/uit); beheerder zet gratis item en/of korting aan; klant kiest beloning bij inwisselen",
+    "doel": "beheer (code)"
   }
 ]
