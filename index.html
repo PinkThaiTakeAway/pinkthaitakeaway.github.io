@@ -1662,7 +1662,7 @@ function renderSheet(){
       <button type="button" class="modeopt ${_ingevroren?"active":""}" data-mode="ingevroren">❄️ ${T().modeIngevroren}</button>
     </div>` : "";
   html += `<div class="pickupbox">${_ingevroren ? T().ingevrorenNotice : (_picked ? T().pickupNotice(pickupDateLabel()+" · "+_w.van+"–"+_w.tot) : T().pickupPrompt)}</div>
-    ${(!_ingevroren && LOYAL.aan && (LOYAL.min||0)>0 && totals().sum>0 && totals().sum < LOYAL.min) ? `<div class="belnudge">🌸 ${T().belBijna(fmt(LOYAL.min - totals().sum))}</div>` : ""}
+    ${(!_ingevroren && _loyActief() && (LOYAL.min||0)>0 && totals().sum>0 && totals().sum < LOYAL.min) ? `<div class="belnudge">🌸 ${T().belBijna(fmt(LOYAL.min - totals().sum))}</div>` : ""}
     ${(!_ingevroren && _kanBeloning()) ? `<div class="belbox"><div class="belbox-t">🎁 ${T().belTitel}</div>${_beloningRechten().indexOf("gerecht")>=0?`<label class="belopt"><input type="radio" name="belkeuze" value="gerecht" ${form.beloningKeuze==="gerecht"?"checked":""}><span>${esc(T().belKiesGerecht(LOYAL.beloning))}</span></label>`:""}${_beloningRechten().indexOf("korting")>=0?`<label class="belopt"><input type="radio" name="belkeuze" value="korting" ${form.beloningKeuze==="korting"?"checked":""}><span>${esc(T().belKiesKorting(LOYAL.korting))}</span></label>`:""}<label class="belopt"><input type="radio" name="belkeuze" value="" ${!form.beloningKeuze?"checked":""}><span>${esc(T().belBewaar)}</span></label></div>` : ""}
     <div class="fields">
       <input type="text" id="fHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
@@ -1757,6 +1757,7 @@ document.getElementById("waBtn").onclick = async () => {
       klanttoken: acctToken(),
       gebruikBeloning: _gebruiktBeloning(),
       beloningType: form.beloningKeuze,
+      spaarOpt: _spaarOpt(),
       totaalVol: fmt(totals().sum),
       beloning: _gebruiktBeloning() ? _beloningTekst(form.beloningKeuze) : "",
       turnstile: (window.turnstile && turnstile.getResponse) ? (turnstile.getResponse() || "") : ""
@@ -3372,7 +3373,7 @@ function renderAccount(a){
   const best = a.bestellingen || [];
   let html = '<p style="font-weight:700;color:var(--forest);font-size:1.05rem;margin-bottom:12px">'+esc(LT.accHallo(a.naam||""))+'</p>';
   if(a.aantal) html += '<p style="color:var(--forest);font-size:.92rem;margin:-6px 0 12px">'+esc(LT.accLoyaliteit(a.aantal))+'</p>';
-  if(LOYAL.aan && _beloningRechten().length>0){
+  if(_loyActief() && _beloningRechten().length>0){
     if(_spaarOpt()){
       const _doel = LOYAL.doel||10, _n = _stempels(a.bestellingen), _used = a.beloningGebruikt||0;
       const _besch = Math.max(0, Math.floor(_n/_doel) - _used);
@@ -5104,10 +5105,11 @@ function _belBeschikbaar(){
   try{ if(!LOYAL.aan || !acctToken() || !(_accountData && _accountData.r)) return 0; const doel=LOYAL.doel||10; return Math.max(0, Math.floor(_stempels(_accountData.r.bestellingen)/doel) - (_accountData.r.beloningGebruikt||0)); }catch(e){ return 0; }
 }
 function _spaarOpt(){ try{ return localStorage.getItem("tta_spaar")!=="0"; }catch(e){ return true; } }
+function _loyActief(){ return LOYAL.aan || !!(_accountData && _accountData.r && _accountData.r.spaarLid); }
 function _beloningRechten(){ try{ const r=_accountData && _accountData.r && _accountData.r.belRechten; if(Array.isArray(r) && r.length) return r; }catch(e){} const a=[]; if(LOYAL.gerechtAan)a.push("gerecht"); if(LOYAL.kortingAan)a.push("korting"); return a; }
 function _beloningTekst(keuze){ return keuze==="korting" ? ((LOYAL.korting||0)+"% korting") : (LOYAL.beloning||""); }
 function _beloningSamenvatting(){ const r=_beloningRechten(); const a=[]; if(r.indexOf("gerecht")>=0 && LOYAL.beloning) a.push(LOYAL.beloning); if(r.indexOf("korting")>=0) a.push((LOYAL.korting||0)+"% korting"); return a.join(" / ") || "een beloning"; }
-function _kanBeloning(){ return _spaarOpt() && LOYAL.aan && _beloningRechten().length>0 && _belBeschikbaar()>0; }
+function _kanBeloning(){ return _spaarOpt() && _loyActief() && _beloningRechten().length>0 && _belBeschikbaar()>0; }
 function _gebruiktBeloning(){ const k=form.beloningKeuze; if(!k || !_kanBeloning()) return false; return _beloningRechten().indexOf(k)>=0; }
 function _kortingActief(){ return _gebruiktBeloning() && form.beloningKeuze==="korting" && (LOYAL.korting||0)>0; }
 function _teBetalen(sum){ return _kortingActief() ? Math.round(sum*(1-(LOYAL.korting||0)/100)*100)/100 : sum; }
