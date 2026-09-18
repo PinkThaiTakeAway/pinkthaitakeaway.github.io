@@ -236,5 +236,12 @@
     "adminid": "assist",
     "wat": "Digitale stempelkaart/loyaliteit toegevoegd (aan/uit + doel + beloning; standaard uit)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-18T12:00:15.028931Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Spaarkaart: verdiende beloning gebruiken of opsparen (voorstel bij bestellen); Worker verrekent + markeert order",
+    "doel": "beheer (code)"
   }
 ]
