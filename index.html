@@ -1756,6 +1756,8 @@ document.getElementById("waBtn").onclick = async () => {
       afhaal, taal: LANG, mand: JSON.stringify(cart),
       klanttoken: acctToken(),
       gebruikBeloning: _gebruiktBeloning(),
+      beloningType: form.beloningKeuze,
+      totaalVol: fmt(totals().sum),
       beloning: _gebruiktBeloning() ? _beloningTekst(form.beloningKeuze) : "",
       turnstile: (window.turnstile && turnstile.getResponse) ? (turnstile.getResponse() || "") : ""
     });
