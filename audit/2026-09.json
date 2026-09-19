@@ -747,5 +747,12 @@
     "adminid": "assist",
     "wat": "Standaard variant direct opslaan bij wijziging (account + beheer)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T06:26:11.350431Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Auto-opslaan overal met aparte Opslaan-knop; opschoon-check (code schoon) + grootte-drempel 600 KB",
+    "doel": "beheer (code)"
   }
 ]
