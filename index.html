@@ -1583,6 +1583,21 @@ function _allergChipClick(chip){
   const idx=parts.map(function(s){return s.toLowerCase();}).indexOf(lab.toLowerCase());
   if(idx>=0){ parts.splice(idx,1); chip.classList.remove("on"); } else { parts.push(lab); chip.classList.add("on"); }
   inp.value=parts.join(", ");
+  _allergAutoSave(inp);
+}
+let _allergSaveT=null;
+function _allergAutoSave(inp){
+  if(!inp) return; clearTimeout(_allergSaveT);
+  _allergSaveT=setTimeout(function(){
+    try{
+      if(inp.id==="agAllergie"){ klantProfielOpslaan(true); return; }
+      if(inp.classList && inp.classList.contains("kgallergie")){
+        const box=inp.closest(".kgeg"); if(!box) return; const btn=box.querySelector('button[data-a="gegevens"]'); const q=function(s){ return box.querySelector(s); };
+        const nm=q(".kgnaam"),tl=q(".kgtel"),em=q(".kgemail"),st=q(".kgstraat"),pc=q(".kgpostcode"),pl=q(".kgplaats"),pit=q(".kgpittig"),al=q(".kgallergie"),va=q(".kgvariant");
+        if(btn) klantGegevensWijzig(btn.dataset.oudtel||"", btn.dataset.oudemail||"", nm?nm.value:"", tl?tl.value:"", em?em.value:"", st?st.value:"", pc?pc.value:"", pl?pl.value:"", pit?pit.value:"", al?al.value:"", va?va.value:"", true);
+      }
+    }catch(e){}
+  }, 700);
 }
 function renderCtl(node, id){
   if(BEHEER){ node.innerHTML = ""; return; }
@@ -2073,6 +2088,7 @@ async function initBeheer(){
   document.getElementById("kZoek").addEventListener("input", renderKlanten);
   document.getElementById("klantOverlay").addEventListener("click", (e) => { if(e.target.id === "klantOverlay") closeKlanten(); });
   document.getElementById("kBody").addEventListener("change", (e) => { const s=e.target.closest&&e.target.closest(".bersel"); if(s) berTaalWijzig(s); });
+  document.getElementById("kBody").addEventListener("input", (e) => { if(e.target && e.target.classList && e.target.classList.contains("kgallergie")) _allergAutoSave(e.target); });
   document.getElementById("kBody").addEventListener("click", (e) => {
     const _ac = e.target.closest(".allergchip"); if(_ac){ _allergChipClick(_ac); return; }
     const btn = e.target.closest("button[data-a]"); if(!btn) return;
@@ -3322,7 +3338,7 @@ const LOGIN_T = {
     inBeheerderTitel:"ผู้ดูแล", inBeheerder:"อุปกรณ์นี้ถูกจดจำเป็นผู้ดูแล {naam} คุณไม่มีบัญชีลูกค้า — ไปที่หน้าผู้ดูแลเพื่อจัดการ", inNaarBeheer:"ไปที่ผู้ดูแล", inAlsKlant:"เข้าสู่ระบบในฐานะลูกค้า", inKlantGeen:"อุปกรณ์นี้ยังไม่ได้เชื่อมกับบัญชีลูกค้า สั่งซื้อหนึ่งครั้งหรือใช้ลิงก์เข้าสู่ระบบส่วนตัว", accTitel:"ออเดอร์ของฉัน", accHallo:(n)=>"สวัสดีค่ะคุณ "+n, accGeen:"คุณยังไม่มีออเดอร์", accOpnieuw:"🔁 สั่งอีกครั้ง", accFavoriet:"⭐ สั่งเมนูโปรดอีกครั้ง", accLaden:"กำลังโหลด…", accUitloggen:"ออกจากระบบ", accLoyaliteit:(n)=>"คุณสั่งไปแล้ว "+n+" ครั้ง 🌸", loyalTitel:"🌸 บัตรสะสมแต้ม", spaarAan:"🌸 เข้าร่วมสะสมแต้ม", spaarUit:"เลิกสะสมแต้ม", loyalAfgerond:"บัตรสะสมแต้มของคุณเสร็จสมบูรณ์ — โปรแกรมสิ้นสุดแล้ว 🌸", loyalPunten:(n)=>"คุณมี "+n+" แต้ม", loyalNog:(nog,bel)=>"อีก "+nog+" ออเดอร์ก็จะได้ "+(bel||"ของรางวัล")+"! 🌸", loyalKlaar:(besch,bel)=>"🎁 "+(bel||"ของรางวัล")+" พร้อมใช้! ใช้ในออเดอร์ถัดไป"+(besch>1?" ("+besch+")":""), accKopieerLink:"🔗 คัดลอกลิงก์เข้าสู่ระบบของฉัน", gegBewerk:"✏️ แก้ไขข้อมูลของฉัน", gegNaam:"ชื่อ", gegTel:"โทรศัพท์", gegEmail:"อีเมล", gegStraat:"ถนนและบ้านเลขที่", gegPostcode:"รหัสไปรษณีย์", gegPlaats:"เมือง", gegPittig:"ความเผ็ดเริ่มต้น", gegPittigGeen:"ไม่ระบุ", gegAllergie:"ภูมิแพ้ / ข้อจำกัดอาหาร", gegVariant:"ตัวเลือกเริ่มต้น", gegVariantGeen:"ไม่ระบุ", gegOpslaan:"บันทึก", profielTelBevestig:"เปลี่ยนเบอร์โทร? ออเดอร์และแต้มจะย้ายตามไปด้วย", profielOpgeslagen:"บันทึกข้อมูลแล้ว ✓", profielFout:"บันทึกไม่สำเร็จ ลองอีกครั้ง", gegVerwijder:"🗑 ลบข้อมูลของฉัน", gegVerwijderBevestig:"แน่ใจหรือไม่ว่าต้องการลบข้อมูลทั้งหมด? บัญชี ที่อยู่ และแต้มจะถูกลบ ไม่สามารถย้อนกลับได้", gegVerwijderd:"ลบข้อมูลของคุณแล้ว" }
 };
 function acctToken(){ return localStorage.getItem("tta_klanttoken") || ""; }
-async function klantProfielOpslaan(){
+async function klantProfielOpslaan(stil){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   const tok=acctToken(); if(!tok) return;
   const naam=(document.getElementById("agNaam")&&document.getElementById("agNaam").value||"").trim();
@@ -3340,7 +3356,7 @@ async function klantProfielOpslaan(){
   try{
     const r=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({soort:"profiel", token:tok, naam:naam, tel:tel, email:email, straat:straat, postcode:postcode, plaats:plaats, allergie:allergie, variant:variant, pittig:pittig})});
     const j=await r.json();
-    if(j&&j.ok){ try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam:naam, tel:tel, email:email, straat:straat, postcode:postcode, plaats:plaats, allergie:allergie})); if(pittig==="") localStorage.removeItem("tta_pittig"); else localStorage.setItem("tta_pittig", String(pittig)); if(variant) localStorage.setItem("tta_variant", variant); else localStorage.removeItem("tta_variant"); }catch(e){} showToast(LT.profielOpgeslagen, true); laadAccount(); }
+    if(j&&j.ok){ try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam:naam, tel:tel, email:email, straat:straat, postcode:postcode, plaats:plaats, allergie:allergie})); if(pittig==="") localStorage.removeItem("tta_pittig"); else localStorage.setItem("tta_pittig", String(pittig)); if(variant) localStorage.setItem("tta_variant", variant); else localStorage.removeItem("tta_variant"); }catch(e){} showToast(LT.profielOpgeslagen, true); if(!stil) laadAccount(); }
     else showToast(LT.profielFout, false);
   }catch(e){ showToast(LT.profielFout, false); }
 }
@@ -3534,6 +3550,7 @@ function renderAccount(a){
   { const _ags=document.getElementById("agSave"); if(_ags) _ags.onclick=klantProfielOpslaan; }
   { const _adb=document.getElementById("acctDelBtn"); if(_adb) _adb.onclick=klantGegevensVerwijder; }
   document.querySelectorAll("#accountBody .allergchip").forEach(function(c){ c.onclick=function(){ _allergChipClick(c); }; });
+  { const _aa=document.getElementById("agAllergie"); if(_aa) _aa.oninput=function(){ _allergAutoSave(_aa); }; }
   const _accNB = document.getElementById("accNaarBeheer");
   if(_accNB){ _accNB.textContent = (LOGIN_T[LANG]||LOGIN_T.nl).inNaarBeheer; _accNB.onclick = function(){ location.href = location.pathname + "?beheer"; }; }
 }
@@ -4792,7 +4809,7 @@ async function klantPuntenWijzig(tel, waarde, base){
     showToast(BT().kl.puntenOpslaan, true);
   }catch(e){ showToast(BT().kl.tNietBij, false); }
 }
-async function klantGegevensWijzig(oudTel, oudEmail, naam, tel, email, straat, postcode, plaats, pittig, allergie, variant){
+async function klantGegevensWijzig(oudTel, oudEmail, naam, tel, email, straat, postcode, plaats, pittig, allergie, variant, stil){
   const oldT=String(oudTel||"").replace(/\D/g,""), newT=String(tel||"").replace(/\D/g,""), oldE=String(oudEmail||"").toLowerCase();
   naam=(naam||"").trim(); email=(email||"").trim(); tel=(tel||"").trim(); straat=(straat||"").trim(); postcode=(postcode||"").trim(); plaats=(plaats||"").trim();
   const pit=(pittig===""||pittig==null)?null:Math.max(0,Math.min(4,parseInt(pittig,10)||0));
@@ -4816,7 +4833,7 @@ async function klantGegevensWijzig(oudTel, oudEmail, naam, tel, email, straat, p
     }
     try{ localStorage.removeItem("tta_klantcache"); }catch(e){}
     try{ logAudit("", "Klantgegevens gewijzigd: "+(naam||tel||email)); }catch(e){}
-    showToast(BT().kl.gegevensOpslaan, true); renderKlanten();
+    showToast(BT().kl.gegevensOpslaan, true); if(!stil) renderKlanten();
   }catch(e){ showToast(BT().kl.tNietBij, false); }
 }
 async function _bewaarKlantAlsNodig(order){
