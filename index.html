@@ -2042,8 +2042,8 @@ async function initBeheer(){
     else if(a==="delklant") klantVerwijderKlant(btn.dataset.tel);
     else if(a==="delbest-all") klantVerwijderAlleBestellingen(btn.dataset.tel);
     else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.tel, ta ? ta.value : ""); }
-    else if(a==="punten"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp) klantPuntenWijzig(btn.dataset.tel, inp.value, inp.dataset.base); }
-    else if(a==="punt+"||a==="punt-"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp){ const v=Math.max(0,(parseInt(inp.value,10)||0)+(a==="punt+"?1:-1)); inp.value=v; klantPuntenWijzig(inp.dataset.tel, v, inp.dataset.base); } }
+    else if(a==="punten"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp) _puntDeb(btn.dataset.tel, inp.value, inp.dataset.base); }
+    else if(a==="punt+"||a==="punt-"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp){ const v=Math.max(0,(parseInt(inp.value,10)||0)+(a==="punt+"?1:-1)); inp.value=v; _puntDeb(inp.dataset.tel, v, inp.dataset.base); } }
     else if(a==="kview"){ _kKlantView = btn.dataset.v; renderKlantenLijst(); }
     else if(a==="kform"){ _kForm = (_kForm===btn.dataset.f)?null:btn.dataset.f; renderKlantenLijst(); }
     else if(a==="knieuw-ok") klantNieuwOpslaan();
@@ -4691,6 +4691,8 @@ async function klantNotitie(tel, tekst){
   renderKlanten();
   showToast(ok?BT().kl.tNotitieOk:BT().kl.tNotitieFout, ok);
 }
+let _puntDebT=null, _puntDebArg=null;
+function _puntDeb(tel, waarde, base){ _puntDebArg={tel:tel, waarde:waarde, base:base}; clearTimeout(_puntDebT); _puntDebT=setTimeout(function(){ const a=_puntDebArg; _puntDebArg=null; if(a) klantPuntenWijzig(a.tel, a.waarde, a.base); }, 600); }
 async function klantPuntenWijzig(tel, waarde, base){
   const t=String(tel||"").replace(/\D/g,"");
   const totaal=Math.max(0, Math.round(Number(waarde)||0));
@@ -4703,7 +4705,7 @@ async function klantPuntenWijzig(tel, waarde, base){
     _klantRecords = lijst;
     try{ localStorage.removeItem("tta_klantcache"); }catch(e){}
     try{ logAudit("", "Spaarpunten klant "+(_klantNaam(tel)||tel)+" \u2192 "+totaal); }catch(e){}
-    showToast(BT().kl.puntenOpslaan, true); renderKlanten();
+    showToast(BT().kl.puntenOpslaan, true);
   }catch(e){ showToast(BT().kl.tNietBij, false); }
 }
 async function _bewaarKlantAlsNodig(order){
