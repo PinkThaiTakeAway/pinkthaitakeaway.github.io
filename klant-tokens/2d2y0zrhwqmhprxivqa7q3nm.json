@@ -11,5 +11,8 @@
   "kaartCap": 1,
   "email": "hansstobbe@proton.me",
   "adres": "",
-  "pittig": 3
+  "pittig": 3,
+  "straat": "Goordijk 24",
+  "postcode": "5081 WD",
+  "plaats": "Hilvarenbeek"
 }
