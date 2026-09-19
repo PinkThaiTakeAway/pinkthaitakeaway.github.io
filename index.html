@@ -2173,7 +2173,7 @@ function updatePauzeBtn(){
 function togglePauze(){
   const st = orderStatus();
   if(st.open){ ORDER_STATE.manualPause = true; }          // nu open → sluiten
-  else { ORDER_STATE.manualPause = false; ORDER_STATE.openedAt = Date.now(); try{ ORDER_STATE.openTot = nextOrderDeadline().getTime(); }catch(e){ ORDER_STATE.openTot = 0; } }  // nu dicht → openen: leg de sluiting van deze cyclus vast (daarna automatisch dicht)
+  else { ORDER_STATE.manualPause = false; ORDER_STATE.openedAt = Date.now(); try{ ORDER_STATE.openTot = nextOrderDeadline().getTime(); }catch(e){ ORDER_STATE.openTot = 0; } try{ fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({soort:"open-melding", token:ghToken(), naam:(localStorage.getItem("tta_adminname")||"")})}); }catch(e){} }  // nu dicht → openen: deadline vastleggen + WhatsApp-melding
   updatePauzeBtn();
   if(sheet.classList.contains("open")) renderSheet();
   refreshOrderingUI();
