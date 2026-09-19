@@ -3403,7 +3403,8 @@ function renderAccount(a){
         + '<div class="loyal-stamps">'+_st+'</div>'
         + '<div class="loyal-msg">'+esc(_besch>0 ? LT.loyalKlaar(_besch, _sam) : (_capOp ? LT.loyalAfgerond : LT.loyalNog(_nog, _sam)))+'</div></div>';
     }
-    if(LOYAL.aan){ html += '<button class="loyal-opt" id="spaarOptBtn">'+esc(_spaarOpt()?LT.spaarUit:LT.spaarAan)+'</button>'; }
+    if(_spaarOpt()){ html += '<button class="loyal-opt" id="spaarOptBtn">'+esc(LT.spaarUit)+'</button>'; }
+    else if(LOYAL.aan){ html += '<button class="loyal-opt" id="spaarOptBtn">'+esc(LT.spaarAan)+'</button>'; }
   }
   if(!best.length){ html += '<p class="hloading">'+esc(LT.accGeen)+'</p>'; }
   else {
