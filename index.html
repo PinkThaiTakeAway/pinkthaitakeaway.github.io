@@ -1243,6 +1243,7 @@ const HIDDEN = new Set();
 let TIKKIE_ON = true;
 let LOYAL = {aan:false, doel:10, beloning:"een gratis voorgerecht", min:20, gerechtAan:true, kortingAan:false, korting:10};
 let ORDER_STATE = { openedAt: 0, manualPause: false };
+let _lastMenuClosed;
 let BLACKOUT = false;
 let _boBypass = false;
 const DELETED = new Set();
@@ -1432,7 +1433,7 @@ function buildMenu(){
   catnav.innerHTML = ""; menuEl.innerHTML = "";
   assignNumbers();
   CATS.forEach(c => {
-    const items = MENU.filter(m => m.cat === c.id && !DELETED.has(m.id) && !PURGED.has(m.id) && (BEHEER || !HIDDEN.has(m.id)));
+    const items = MENU.filter(m => m.cat === c.id && !DELETED.has(m.id) && !PURGED.has(m.id) && (BEHEER || (ORDER_STATE && ORDER_STATE.manualPause) || !HIDDEN.has(m.id)));
     if(!items.length) return;
     const link = document.createElement("button");
     link.type = "button"; link.className = "cat-link";
@@ -1677,6 +1678,7 @@ function refreshOrderingUI(){
   if(b){ b.classList.toggle("show", hide); b.textContent = T().closedBanner; }
   const cb = document.getElementById("cartBtn");
   if(cb) cb.style.display = hide ? "none" : "";
+  { const _c = !BEHEER && closed; if(_c !== _lastMenuClosed){ _lastMenuClosed = _c; buildMenu(); } }
   updateBars();
 }
 
