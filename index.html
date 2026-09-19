@@ -3123,7 +3123,7 @@ const BEHEER_T = {
       laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
       nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
       sleutelVraag:"Voer je beheersleutel in om het klantenbestand te bekijken.", sleutelFout:"De sleutel klopt niet. Probeer opnieuw.", sleutelPh:"Beheersleutel", sleutelOpen:"Openen",
-      naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"),
+      naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"), spaarpunten:(n)=>"🌸 "+n+" spaarpunt"+(n===1?"":"en"),
       notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", klantVerw:"🗑 Klant verwijderen", alleBestVerw:"🗑 Alle bestellingen wissen",
       badgeAfg:"afgehaald", badgeOpen:"open", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
@@ -3161,7 +3161,7 @@ const BEHEER_T = {
       laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
       nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
       sleutelVraag:"Enter your admin key to view the customer file.", sleutelFout:"That key is incorrect. Please try again.", sleutelPh:"Admin key", sleutelOpen:"Open",
-      naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"),
+      naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"), spaarpunten:(n)=>"🌸 "+n+" stamp"+(n===1?"":"s"),
       notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", klantVerw:"🗑 Delete customer", alleBestVerw:"🗑 Delete all orders",
       badgeAfg:"picked up", badgeOpen:"open", badgeBetaald:"paid", badgeNietBet:"unpaid",
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
@@ -3199,7 +3199,7 @@ const BEHEER_T = {
       laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
       nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
       sleutelVraag:"กรอกรหัสผู้ดูแลเพื่อดูข้อมูลลูกค้า", sleutelFout:"รหัสไม่ถูกต้อง กรุณาลองใหม่", sleutelPh:"รหัสผู้ดูแล", sleutelOpen:"เปิด",
-      naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์",
+      naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์", spaarpunten:(n)=>"🌸 "+n+" แต้ม",
       notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", klantVerw:"🗑 ลบลูกค้า", alleBestVerw:"🗑 ลบออเดอร์ทั้งหมด",
       badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
@@ -3882,6 +3882,7 @@ function renderKlantenLijst(){
   '</div>';
   body.innerHTML = topBar + tog + klanten.map(k=>{
     const n = k.bestellingen.length;
+    const _punten = _stempels(k.bestellingen);
     k.token = k.token || (_klantTokenIndex[String(k.tel||"").replace(/\D/g,"")]||"");
     const vast = n>=5 ? '<span class="klabel">'+K.vasteKlant+'</span>' : '';
     const notitie = k.notitie||"";
@@ -3890,7 +3891,7 @@ function renderKlantenLijst(){
       '<div class="kdet">'+
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
       (k.uitgenodigd>0?('<div class="kuitg">📲 '+esc(K.uitgLabel)+' '+k.uitgenodigd+'×'+(k.laatstUitgenodigd?(' · '+esc(fmtInlog(k.laatstUitgenodigd))):'')+'</div>'):'')+
-      '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+
+      '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+'<div class="kstat">'+esc(K.spaarpunten(_punten))+'</div>'+
       (k.tel?('<div class="knotitie"><textarea placeholder="'+esc(K.notitiePh)+'">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>'):'')+
       (k.tel?('<div class="ktaal">'+esc(K.taalLabel)+': <select class="bersel" data-token="'+esc(k.token||"")+'" data-tel="'+esc(k.tel||"")+'" aria-label="taal">'+["nl","en","th"].map(function(l){ return '<option value="'+l+'"'+((k.taal||"nl").toLowerCase()===l?" selected":"")+'>'+l.toUpperCase()+'</option>'; }).join("")+'</select></div>'):'')+
       (_kKlantView==="vol" ? k.bestellingen.map(bestelHtml).join("") : "")+
