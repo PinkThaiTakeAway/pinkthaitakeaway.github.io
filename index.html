@@ -337,6 +337,8 @@
   .allergchip{border:1px solid #ccc;border-radius:999px;background:#fff;color:#444;font-family:inherit;font-size:.82rem;font-weight:600;padding:5px 11px;cursor:pointer}
   .allergchip.on{background:#c0392b;border-color:#c0392b;color:#fff}
   .allergchip.allerggeen.on{background:#2e7d32;border-color:#2e7d32;color:#fff}
+  .allergchips.geen-actief .allergchip:not(.allerggeen){display:none}
+  .allergchips.geen-actief + .allerginput{display:none}
   .adresdetails summary{cursor:pointer;font-size:.9rem;font-weight:600;color:var(--forest);padding:6px 0}
   .loyalcard.klaar{background:#fbeaf3;border-color:#f3c6de}
   .afhdagen{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px}
@@ -1576,7 +1578,7 @@ function _klantPittig(){ try{ const v=localStorage.getItem("tta_pittig"); if(v==
 function _klantVariant(){ try{ const v=localStorage.getItem("tta_variant"); return (v==="kip"||v==="garnaal")?v:""; }catch(e){ return ""; } }
 function _allergChipsHtml(current){
   const opts=(T().allergOpties||[]); const geen=(T().allergGeen||"Geen"); const cur=String(current||"").toLowerCase().trim(); const isGeen=(cur===String(geen).toLowerCase());
-  let out='<div class="allergchips"><button type="button" class="allergchip allerggeen'+(isGeen?" on":"")+'" data-geen="1" data-lab="'+esc(geen)+'">'+esc(geen)+'</button>';
+  let out='<div class="allergchips'+(isGeen?" geen-actief":"")+'"><button type="button" class="allergchip allerggeen'+(isGeen?" on":"")+'" data-geen="1" data-lab="'+esc(geen)+'">'+esc(geen)+'</button>';
   out+=opts.map(function(l){ const on=!isGeen && cur.indexOf(String(l).toLowerCase())>=0; return '<button type="button" class="allergchip'+(on?" on":"")+'" data-lab="'+esc(l)+'">'+esc(l)+'</button>'; }).join("");
   return out+'</div>';
 }
@@ -1594,6 +1596,7 @@ function _allergChipClick(chip){
   }
   const curL=String(inp.value||"").toLowerCase().trim();
   wrap.querySelectorAll(".allergchip").forEach(function(c){ const g=c.dataset.geen==="1"; const on=g?(curL===geenL):(curL!==geenL && curL.indexOf((c.dataset.lab||"").toLowerCase())>=0); c.classList.toggle("on", on); });
+  wrap.classList.toggle("geen-actief", curL===geenL);
   _allergAutoSave(inp);
 }
 let _allergSaveT=null;
