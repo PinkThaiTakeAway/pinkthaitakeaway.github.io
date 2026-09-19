@@ -1598,6 +1598,8 @@ function _allergAutoSave(el){
     }catch(e){}
   }, 700);
 }
+let _notSaveT=null;
+function _notitieAutoSave(ta){ clearTimeout(_notSaveT); _notSaveT=setTimeout(function(){ try{ const box=ta.closest(".knotitie"); const btn=box&&box.querySelector('button[data-a="note"]'); if(btn) klantNotitie(btn.dataset.tel, ta.value, true); }catch(e){} }, 900); }
 function renderCtl(node, id){
   if(BEHEER){ node.innerHTML = ""; return; }
   const m = byId(id);
@@ -2086,8 +2088,8 @@ async function initBeheer(){
   document.getElementById("kReload").onclick = laadKlanten;
   document.getElementById("kZoek").addEventListener("input", renderKlanten);
   document.getElementById("klantOverlay").addEventListener("click", (e) => { if(e.target.id === "klantOverlay") closeKlanten(); });
-  document.getElementById("kBody").addEventListener("change", (e) => { const s=e.target.closest&&e.target.closest(".bersel"); if(s){ berTaalWijzig(s); return; } if(e.target && e.target.classList && e.target.classList.contains("kgvariant")) _allergAutoSave(e.target); });
-  document.getElementById("kBody").addEventListener("input", (e) => { if(e.target && e.target.classList && e.target.classList.contains("kgallergie")) _allergAutoSave(e.target); });
+  document.getElementById("kBody").addEventListener("change", (e) => { const s=e.target.closest&&e.target.closest(".bersel"); if(s){ berTaalWijzig(s); return; } const t=e.target; if(t && t.closest && t.closest(".kgeg") && t.tagName==="SELECT") _allergAutoSave(t); });
+  document.getElementById("kBody").addEventListener("input", (e) => { const t=e.target; if(!t||!t.closest) return; if(t.classList && t.classList.contains("kpuntinput")){ _puntDeb(t.dataset.tel, t.value, t.dataset.base); return; } if(t.closest(".kgeg") && t.tagName==="INPUT" && !(t.classList&&t.classList.contains("kgtel"))){ _allergAutoSave(t); return; } if(t.tagName==="TEXTAREA" && t.closest(".knotitie")){ _notitieAutoSave(t); return; } });
   document.getElementById("kBody").addEventListener("click", (e) => {
     const _ac = e.target.closest(".allergchip"); if(_ac){ _allergChipClick(_ac); return; }
     const btn = e.target.closest("button[data-a]"); if(!btn) return;
@@ -2673,6 +2675,10 @@ function renderInstellingen(){
   const ab=document.getElementById("adrSaveBtn"); if(ab) ab.onclick = adresOpslaan;
   const seb=document.getElementById("seoSaveBtn"); if(seb) seb.onclick = seoOpslaan;
   const afb=document.getElementById("afhSaveBtn"); if(afb) afb.onclick = afhaalOpslaan;
+  ["adrIn","adrTelIn"].forEach(function(id){ const el=document.getElementById(id); if(el) el.onchange=adresOpslaan; });
+  ["seoGebied","seoKeuken","seoPrijs","seoAfb"].forEach(function(id){ const el=document.getElementById(id); if(el) el.onchange=seoOpslaan; });
+  ["afhVanaf","afhDagen"].forEach(function(id){ const el=document.getElementById(id); if(el) el.onchange=afhaalOpslaan; });
+  ["cbTelIn","cbKeyIn"].forEach(function(id){ const el=document.getElementById(id); if(el) el.onchange=callmebotOpslaan; });
   document.querySelectorAll('#afhDagen input[data-afh-on]').forEach(cb => cb.onchange = () => { const r=cb.closest('.afhdagrij'); if(r) r.classList.toggle('uit', !cb.checked); });
   const fsb=document.getElementById("fotoSaveBtn"); if(fsb) fsb.onclick = fotoOpslaan;
   { const ff=document.getElementById("fotoFile"); if(ff) ff.onchange = (e)=>{ if(e.target.files && e.target.files[0]) uploadChefFoto(e.target.files[0]); }; }
@@ -3341,7 +3347,8 @@ async function klantProfielOpslaan(stil){
   const LT = LOGIN_T[LANG] || LOGIN_T.nl;
   const tok=acctToken(); if(!tok) return;
   const naam=(document.getElementById("agNaam")&&document.getElementById("agNaam").value||"").trim();
-  const tel=(document.getElementById("agTel")&&document.getElementById("agTel").value||"").trim();
+  let tel=(document.getElementById("agTel")&&document.getElementById("agTel").value||"").trim();
+  if(stil){ tel=String((_accountData&&_accountData.r&&_accountData.r.tel)||"").trim(); }
   const email=(document.getElementById("agEmail")&&document.getElementById("agEmail").value||"").trim();
   const straat=(document.getElementById("agStraat")&&document.getElementById("agStraat").value||"").trim();
   const postcode=(document.getElementById("agPostcode")&&document.getElementById("agPostcode").value||"").trim();
@@ -3551,6 +3558,7 @@ function renderAccount(a){
   document.querySelectorAll("#accountBody .allergchip").forEach(function(c){ c.onclick=function(){ _allergChipClick(c); }; });
   { const _aa=document.getElementById("agAllergie"); if(_aa) _aa.oninput=function(){ _allergAutoSave(_aa); }; }
   { const _av=document.getElementById("agVariant"); if(_av) _av.onchange=function(){ _allergAutoSave(_av); }; }
+  { const _ab=document.getElementById("accountBody"); if(_ab && !_ab._auto){ _ab._auto=1; const _h=function(e){ const t=e.target; if(!t||!t.closest||!t.closest(".acctedit-b")||t.id==="agTel") return; if(t.tagName==="INPUT"||t.tagName==="SELECT"||t.tagName==="TEXTAREA") _allergAutoSave(t); }; _ab.addEventListener("input", _h); _ab.addEventListener("change", _h); } }
   const _accNB = document.getElementById("accNaarBeheer");
   if(_accNB){ _accNB.textContent = (LOGIN_T[LANG]||LOGIN_T.nl).inNaarBeheer; _accNB.onclick = function(){ location.href = location.pathname + "?beheer"; }; }
 }
@@ -4783,13 +4791,13 @@ async function klantBetaald(id, waarde){
   if(sha){ b.betaald=waarde; b._sha=sha; renderKlanten(); showToast(BT().kl.tBijgewerkt, true); }
   else showToast(BT().kl.tNietBij, false);
 }
-async function klantNotitie(tel, tekst){
+async function klantNotitie(tel, tekst, stil){
   const t=String(tel||"").replace(/\D/g,"");
   const doelen=_klantData.filter(x=>String(x.tel||"").replace(/\D/g,"")===t && x._path);
-  if(!doelen.length){ showToast(BT().kl.tNotitieFout, false); return; }
+  if(!doelen.length){ if(!stil) showToast(BT().kl.tNotitieFout, false); return; }
   let ok=true;
   for(const b of doelen){ const o=_schoonOrder(b); o.notitie=tekst; const sha=await _ghWriteOrder(b._path,o,b._sha,"Notitie "+t); if(sha){ b.notitie=tekst; b._sha=sha; } else ok=false; }
-  renderKlanten();
+  if(!stil) renderKlanten();
   showToast(ok?BT().kl.tNotitieOk:BT().kl.tNotitieFout, ok);
 }
 let _puntDebT=null, _puntDebArg=null;
@@ -4810,6 +4818,7 @@ async function klantPuntenWijzig(tel, waarde, base){
   }catch(e){ showToast(BT().kl.tNietBij, false); }
 }
 async function klantGegevensWijzig(oudTel, oudEmail, naam, tel, email, straat, postcode, plaats, pittig, allergie, variant, stil){
+  if(stil) tel = oudTel;
   const oldT=String(oudTel||"").replace(/\D/g,""), newT=String(tel||"").replace(/\D/g,""), oldE=String(oudEmail||"").toLowerCase();
   naam=(naam||"").trim(); email=(email||"").trim(); tel=(tel||"").trim(); straat=(straat||"").trim(); postcode=(postcode||"").trim(); plaats=(plaats||"").trim();
   const pit=(pittig===""||pittig==null)?null:Math.max(0,Math.min(4,parseInt(pittig,10)||0));
