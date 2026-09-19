@@ -1586,16 +1586,15 @@ function _allergChipClick(chip){
   _allergAutoSave(inp);
 }
 let _allergSaveT=null;
-function _allergAutoSave(inp){
-  if(!inp) return; clearTimeout(_allergSaveT);
+function _allergAutoSave(el){
+  if(!el) return; clearTimeout(_allergSaveT);
   _allergSaveT=setTimeout(function(){
     try{
-      if(inp.id==="agAllergie"){ klantProfielOpslaan(true); return; }
-      if(inp.classList && inp.classList.contains("kgallergie")){
-        const box=inp.closest(".kgeg"); if(!box) return; const btn=box.querySelector('button[data-a="gegevens"]'); const q=function(s){ return box.querySelector(s); };
+      const box=el.closest && el.closest(".kgeg");
+      if(box){ const btn=box.querySelector('button[data-a="gegevens"]'); const q=function(s){ return box.querySelector(s); };
         const nm=q(".kgnaam"),tl=q(".kgtel"),em=q(".kgemail"),st=q(".kgstraat"),pc=q(".kgpostcode"),pl=q(".kgplaats"),pit=q(".kgpittig"),al=q(".kgallergie"),va=q(".kgvariant");
-        if(btn) klantGegevensWijzig(btn.dataset.oudtel||"", btn.dataset.oudemail||"", nm?nm.value:"", tl?tl.value:"", em?em.value:"", st?st.value:"", pc?pc.value:"", pl?pl.value:"", pit?pit.value:"", al?al.value:"", va?va.value:"", true);
-      }
+        if(btn) klantGegevensWijzig(btn.dataset.oudtel||"", btn.dataset.oudemail||"", nm?nm.value:"", tl?tl.value:"", em?em.value:"", st?st.value:"", pc?pc.value:"", pl?pl.value:"", pit?pit.value:"", al?al.value:"", va?va.value:"", true); return; }
+      if(el.closest && el.closest(".acctedit-b")){ klantProfielOpslaan(true); }
     }catch(e){}
   }, 700);
 }
@@ -2087,7 +2086,7 @@ async function initBeheer(){
   document.getElementById("kReload").onclick = laadKlanten;
   document.getElementById("kZoek").addEventListener("input", renderKlanten);
   document.getElementById("klantOverlay").addEventListener("click", (e) => { if(e.target.id === "klantOverlay") closeKlanten(); });
-  document.getElementById("kBody").addEventListener("change", (e) => { const s=e.target.closest&&e.target.closest(".bersel"); if(s) berTaalWijzig(s); });
+  document.getElementById("kBody").addEventListener("change", (e) => { const s=e.target.closest&&e.target.closest(".bersel"); if(s){ berTaalWijzig(s); return; } if(e.target && e.target.classList && e.target.classList.contains("kgvariant")) _allergAutoSave(e.target); });
   document.getElementById("kBody").addEventListener("input", (e) => { if(e.target && e.target.classList && e.target.classList.contains("kgallergie")) _allergAutoSave(e.target); });
   document.getElementById("kBody").addEventListener("click", (e) => {
     const _ac = e.target.closest(".allergchip"); if(_ac){ _allergChipClick(_ac); return; }
@@ -3551,6 +3550,7 @@ function renderAccount(a){
   { const _adb=document.getElementById("acctDelBtn"); if(_adb) _adb.onclick=klantGegevensVerwijder; }
   document.querySelectorAll("#accountBody .allergchip").forEach(function(c){ c.onclick=function(){ _allergChipClick(c); }; });
   { const _aa=document.getElementById("agAllergie"); if(_aa) _aa.oninput=function(){ _allergAutoSave(_aa); }; }
+  { const _av=document.getElementById("agVariant"); if(_av) _av.onchange=function(){ _allergAutoSave(_av); }; }
   const _accNB = document.getElementById("accNaarBeheer");
   if(_accNB){ _accNB.textContent = (LOGIN_T[LANG]||LOGIN_T.nl).inNaarBeheer; _accNB.onclick = function(){ location.href = location.pathname + "?beheer"; }; }
 }
