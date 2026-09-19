@@ -469,6 +469,10 @@
   .kpuntinput{width:56px;font-family:inherit;font-size:.9rem;padding:5px 8px;border:1px solid #ccc;border-radius:8px;text-align:center}
   .kpuntpm{width:32px;height:32px;border:1px solid #ccc;border-radius:8px;background:#fff;font-size:1.1rem;font-weight:700;color:var(--forest);cursor:pointer;line-height:1}
   .kpuntpm:hover{border-color:var(--pink)}
+  .kgeg{display:flex;flex-direction:column;gap:3px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .kgeg label{font-size:.76rem;font-weight:700;color:#666;margin-top:4px}
+  .kgeg input{font-family:inherit;font-size:.95rem;padding:8px 10px;border:1px solid #ccc;border-radius:8px}
+  .kgeg .knsave{margin-top:8px;align-self:flex-start}
 .bermsg{white-space:pre-line;background:#faf6f0;border:1px solid #eadfd0;border-radius:10px;padding:10px 12px;font-size:.9rem;color:#333;line-height:1.5}
   .kaddok{padding:10px;border:none;border-radius:8px;background:var(--forest);color:#fff;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
   .sk-pill{display:inline-block;height:34px;width:96px;border-radius:999px;background:#ece5d5;flex:0 0 auto;margin-right:8px;position:relative;overflow:hidden}
@@ -2044,6 +2048,7 @@ async function initBeheer(){
     else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.tel, ta ? ta.value : ""); }
     else if(a==="punten"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp) _puntDeb(btn.dataset.tel, inp.value, inp.dataset.base); }
     else if(a==="punt+"||a==="punt-"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp){ const v=Math.max(0,(parseInt(inp.value,10)||0)+(a==="punt+"?1:-1)); inp.value=v; _puntDeb(inp.dataset.tel, v, inp.dataset.base); } }
+    else if(a==="gegevens"){ const w=btn.parentElement; const nm=w.querySelector(".kgnaam"), tl=w.querySelector(".kgtel"), em=w.querySelector(".kgemail"); klantGegevensWijzig(btn.dataset.oudtel||"", btn.dataset.oudemail||"", nm?nm.value:"", tl?tl.value:"", em?em.value:""); }
     else if(a==="kview"){ _kKlantView = btn.dataset.v; renderKlantenLijst(); }
     else if(a==="kform"){ _kForm = (_kForm===btn.dataset.f)?null:btn.dataset.f; renderKlantenLijst(); }
     else if(a==="knieuw-ok") klantNieuwOpslaan();
@@ -3129,7 +3134,7 @@ const BEHEER_T = {
       laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
       nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
       sleutelVraag:"Voer je beheersleutel in om het klantenbestand te bekijken.", sleutelFout:"De sleutel klopt niet. Probeer opnieuw.", sleutelPh:"Beheersleutel", sleutelOpen:"Openen",
-      naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"), spaarpunten:(n)=>"🌸 "+n+" spaarpunt"+(n===1?"":"en"), spaarpuntenL:"Spaarpunten", puntenOpslaan:"Spaarpunten opgeslagen ✓",
+      naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"), spaarpunten:(n)=>"🌸 "+n+" spaarpunt"+(n===1?"":"en"), spaarpuntenL:"Spaarpunten", puntenOpslaan:"Spaarpunten opgeslagen ✓", kgNaamL:"Naam", kgTelL:"Telefoon", kgEmailL:"E-mail", kgSave:"Gegevens opslaan", gegevensOpslaan:"Gegevens opgeslagen ✓",
       notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", klantVerw:"🗑 Klant verwijderen", alleBestVerw:"🗑 Alle bestellingen wissen",
       badgeAfg:"afgehaald", badgeOpen:"open", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
@@ -3167,7 +3172,7 @@ const BEHEER_T = {
       laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
       nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
       sleutelVraag:"Enter your admin key to view the customer file.", sleutelFout:"That key is incorrect. Please try again.", sleutelPh:"Admin key", sleutelOpen:"Open",
-      naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"), spaarpunten:(n)=>"🌸 "+n+" stamp"+(n===1?"":"s"), spaarpuntenL:"Stamps", puntenOpslaan:"Stamps saved ✓",
+      naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"), spaarpunten:(n)=>"🌸 "+n+" stamp"+(n===1?"":"s"), spaarpuntenL:"Stamps", puntenOpslaan:"Stamps saved ✓", kgNaamL:"Name", kgTelL:"Phone", kgEmailL:"Email", kgSave:"Save details", gegevensOpslaan:"Details saved ✓",
       notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", klantVerw:"🗑 Delete customer", alleBestVerw:"🗑 Delete all orders",
       badgeAfg:"picked up", badgeOpen:"open", badgeBetaald:"paid", badgeNietBet:"unpaid",
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
@@ -3205,7 +3210,7 @@ const BEHEER_T = {
       laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
       nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
       sleutelVraag:"กรอกรหัสผู้ดูแลเพื่อดูข้อมูลลูกค้า", sleutelFout:"รหัสไม่ถูกต้อง กรุณาลองใหม่", sleutelPh:"รหัสผู้ดูแล", sleutelOpen:"เปิด",
-      naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์", spaarpunten:(n)=>"🌸 "+n+" แต้ม", spaarpuntenL:"แต้ม", puntenOpslaan:"บันทึกแต้มแล้ว ✓",
+      naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์", spaarpunten:(n)=>"🌸 "+n+" แต้ม", spaarpuntenL:"แต้ม", puntenOpslaan:"บันทึกแต้มแล้ว ✓", kgNaamL:"ชื่อ", kgTelL:"โทรศัพท์", kgEmailL:"อีเมล", kgSave:"บันทึกข้อมูล", gegevensOpslaan:"บันทึกข้อมูลแล้ว ✓",
       notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", klantVerw:"🗑 ลบลูกค้า", alleBestVerw:"🗑 ลบออเดอร์ทั้งหมด",
       badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
@@ -3896,6 +3901,7 @@ function renderKlantenLijst(){
     return '<details class="kklant">'+
       '<summary class="ksum"><span class="knaam">'+esc(k.naam||K.naamOnbekend)+vast+'</span>'+(k.tel?('<span class="kmeta">'+esc(k.tel)+'</span>'):'')+'</summary>'+
       '<div class="kdet">'+
+      '<div class="kgeg"><label>'+esc(K.kgNaamL)+'</label><input class="kgnaam" type="text" value="'+esc(k.naam||"")+'"><label>'+esc(K.kgTelL)+'</label><input class="kgtel" type="tel" value="'+esc(k.tel||"")+'"><label>'+esc(K.kgEmailL)+'</label><input class="kgemail" type="email" value="'+esc(k.email||"")+'"><button class="knsave" data-a="gegevens" data-oudtel="'+esc(k.tel||"")+'" data-oudemail="'+esc(k.email||"")+'">'+esc(K.kgSave)+'</button></div>'+
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
       (k.uitgenodigd>0?('<div class="kuitg">📲 '+esc(K.uitgLabel)+' '+k.uitgenodigd+'×'+(k.laatstUitgenodigd?(' · '+esc(fmtInlog(k.laatstUitgenodigd))):'')+'</div>'):'')+
       '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+(k.tel ? ('<div class="kpuntedit">🌸 '+esc(K.spaarpuntenL)+': <button class="kpuntpm" data-a="punt-" data-tel="'+esc(k.tel)+'" aria-label="-1">\u2212</button><input type="number" min="0" class="kpuntinput" data-tel="'+esc(k.tel)+'" data-base="'+_punten+'" value="'+(_punten+(k.puntenBonus||0))+'"><button class="kpuntpm" data-a="punt+" data-tel="'+esc(k.tel)+'" aria-label="+1">+</button><button class="knsave" data-a="punten" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>') : ('<div class="kstat">'+esc(K.spaarpunten(_punten+(k.puntenBonus||0)))+'</div>'))+
@@ -4706,6 +4712,28 @@ async function klantPuntenWijzig(tel, waarde, base){
     try{ localStorage.removeItem("tta_klantcache"); }catch(e){}
     try{ logAudit("", "Spaarpunten klant "+(_klantNaam(tel)||tel)+" \u2192 "+totaal); }catch(e){}
     showToast(BT().kl.puntenOpslaan, true);
+  }catch(e){ showToast(BT().kl.tNietBij, false); }
+}
+async function klantGegevensWijzig(oudTel, oudEmail, naam, tel, email){
+  const oldT=String(oudTel||"").replace(/\D/g,""), newT=String(tel||"").replace(/\D/g,""), oldE=String(oudEmail||"").toLowerCase();
+  naam=(naam||"").trim(); email=(email||"").trim(); tel=(tel||"").trim();
+  try{
+    const lijst = await _laadKlantenLijst(); let rec=null;
+    lijst.forEach(function(k){ const kt=String(k.tel||"").replace(/\D/g,""), ke=String(k.email||"").toLowerCase(); if((oldT&&kt===oldT)||(oldE&&ke===oldE)){ k.naam=naam; k.tel=tel; k.email=email; rec=k; } });
+    if(!rec){ rec={naam:naam, tel:tel, email:email, uitgenodigd:0}; lijst.unshift(rec); }
+    await _schrijfKlantenLijst(lijst); _klantRecords=lijst;
+    if(oldT && newT && oldT!==newT){
+      const doelen=(_klantData||[]).filter(x=>String(x.tel||"").replace(/\D/g,"")===oldT && x._path);
+      for(const b of doelen){ const o=_schoonOrder(b); o.tel=tel; if(naam) o.naam=naam; const sha=await _ghWriteOrder(b._path,o,b._sha,"Klant tel "+oldT+">"+newT); if(sha){ b.tel=tel; if(naam) b.naam=naam; b._sha=sha; } }
+      const tok=(_klantTokenIndex&&_klantTokenIndex[oldT])||(rec&&rec.token)||"";
+      if(tok){ try{ await ghPut("klant-tokens/"+tok+".json", {telDigits:newT, tel:tel, naam:naam}, "Token her-sleutelen "+oldT+">"+newT, {merge:true}); }catch(e){} if(_klantTokenIndex){ delete _klantTokenIndex[oldT]; _klantTokenIndex[newT]=tok; } }
+    } else if(oldT){
+      const doelen=(_klantData||[]).filter(x=>String(x.tel||"").replace(/\D/g,"")===oldT && x._path);
+      for(const b of doelen){ if((b.naam||"")!==naam){ const o=_schoonOrder(b); o.naam=naam; const sha=await _ghWriteOrder(b._path,o,b._sha,"Klantnaam "+oldT); if(sha){ b.naam=naam; b._sha=sha; } } }
+    }
+    try{ localStorage.removeItem("tta_klantcache"); }catch(e){}
+    try{ logAudit("", "Klantgegevens gewijzigd: "+(naam||tel||email)); }catch(e){}
+    showToast(BT().kl.gegevensOpslaan, true); renderKlanten();
   }catch(e){ showToast(BT().kl.tNietBij, false); }
 }
 async function _bewaarKlantAlsNodig(order){
