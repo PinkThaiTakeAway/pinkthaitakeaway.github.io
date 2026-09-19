@@ -684,5 +684,12 @@
     "adminid": "assist",
     "wat": "Klant kan adres + standaard pittigheid instellen (standaard pittigheid pre-selecteert bij bestellen)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T05:24:42.668003Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klant-adres opgesplitst in straat/postcode/plaats",
+    "doel": "beheer (code)"
   }
 ]
