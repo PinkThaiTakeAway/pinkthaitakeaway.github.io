@@ -474,5 +474,12 @@
     "adminid": "assist",
     "wat": "Klant wordt spaarlid bij activeren (grandfathering); account herlaadt na (de)activeren",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T02:36:22.957414Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Geactiveerd lid mag huidige (ook lege) kaart afmaken bij uitgezette spaarfunctie (kaartCap min 1)",
+    "doel": "beheer (code)"
   }
 ]
