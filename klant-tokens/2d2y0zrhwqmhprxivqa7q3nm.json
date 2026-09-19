@@ -2,5 +2,10 @@
   "telDigits": "0628498822",
   "tel": "0628498822",
   "naam": "Hans Stobbe",
-  "aangemaakt": "2026-09-15T03:35:38.759Z"
+  "aangemaakt": "2026-09-15T03:35:38.759Z",
+  "spaarLid": true,
+  "belRechten": [
+    "gerecht",
+    "korting"
+  ]
 }
