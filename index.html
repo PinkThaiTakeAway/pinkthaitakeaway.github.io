@@ -3404,7 +3404,7 @@ function renderAccount(a){
         + '<div class="loyal-msg">'+esc(_besch>0 ? LT.loyalKlaar(_besch, _sam) : (_capOp ? LT.loyalAfgerond : LT.loyalNog(_nog, _sam)))+'</div></div>';
     }
     if(_spaarOpt()){ html += '<button class="loyal-opt" id="spaarOptBtn">'+esc(LT.spaarUit)+'</button>'; }
-    else if(LOYAL.aan){ html += '<button class="loyal-opt" id="spaarOptBtn">'+esc(LT.spaarAan)+'</button>'; }
+    else if(_kanActiveren()){ html += '<button class="loyal-opt" id="spaarOptBtn">'+esc(LT.spaarAan)+'</button>'; }
   }
   if(!best.length){ html += '<p class="hloading">'+esc(LT.accGeen)+'</p>'; }
   else {
@@ -5144,6 +5144,16 @@ function _belBeschikbaar(){
 }
 function _spaarOpt(){ try{ return localStorage.getItem("tta_spaar")==="1"; }catch(e){ return false; } }
 function _loyActief(){ return LOYAL.aan || !!(_accountData && _accountData.r && _accountData.r.spaarLid); }
+function _kanActiveren(){
+  if(LOYAL.aan) return true;                       // beheer aan: iedereen kan (opnieuw) activeren
+  try{                                             // beheer uit: alleen bestaand lid met een nog niet-afgeronde kaart
+    const r=_accountData && _accountData.r; if(!r || !r.spaarLid) return false;
+    const doel=LOYAL.doel||10, verd=Math.floor(_stempels(r.bestellingen)/doel);
+    const cap=(typeof r.kaartCap==="number")?Math.max(1,r.kaartCap):1;
+    const besch=Math.max(0, Math.min(verd,cap)-(r.beloningGebruikt||0));
+    return verd < cap || besch > 0;                // nog te vullen of nog een onbenutte beloning
+  }catch(e){ return false; }
+}
 function _beloningRechten(){ try{ const r=_accountData && _accountData.r && _accountData.r.belRechten; if(Array.isArray(r) && r.length) return r; }catch(e){} const a=[]; if(LOYAL.gerechtAan)a.push("gerecht"); if(LOYAL.kortingAan)a.push("korting"); return a; }
 function _beloningTekst(keuze){ return keuze==="korting" ? ((LOYAL.korting||0)+"% korting") : (LOYAL.beloning||""); }
 function _beloningSamenvatting(){ const r=_beloningRechten(); const a=[]; if(r.indexOf("gerecht")>=0 && LOYAL.beloning) a.push(LOYAL.beloning); if(r.indexOf("korting")>=0) a.push((LOYAL.korting||0)+"% korting"); return a.join(" / ") || "een beloning"; }
