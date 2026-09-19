@@ -740,5 +740,12 @@
     "adminid": "assist",
     "wat": "Allergie direct opslaan bij wijziging (chip/tekst), debounced",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T06:16:19.961251Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Standaard variant direct opslaan bij wijziging (account + beheer)",
+    "doel": "beheer (code)"
   }
 ]
