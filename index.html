@@ -3392,7 +3392,7 @@ function renderAccount(a){
   if(_loyActief() && _beloningRechten().length>0){
     if(_spaarOpt()){
       const _doel = LOYAL.doel||10, _n = _stempels(a.bestellingen), _used = a.beloningGebruikt||0, _sam = _beloningSamenvatting();
-      const _cap = (!LOYAL.aan && typeof a.kaartCap==="number") ? a.kaartCap : null;
+      const _cap = (!LOYAL.aan && typeof a.kaartCap==="number") ? Math.max(1, a.kaartCap) : null;
       const _verd = (_cap!==null) ? Math.min(Math.floor(_n/_doel), _cap) : Math.floor(_n/_doel);
       const _besch = Math.max(0, _verd - _used);
       const _capOp = (_cap!==null && Math.floor(_n/_doel) >= _cap);
@@ -5138,7 +5138,7 @@ async function loadLoyal(){
 function _parseBedrag(s){ const m=String(s||"").replace(/[^0-9,\.]/g,"").replace(/\.(?=\d{3}\b)/g,"").replace(",","."); const v=parseFloat(m); return isFinite(v)?v:0; }
 function _stempels(orders){ const mn=LOYAL.min||0; return (orders||[]).filter(o=>_parseBedrag(o.totaal)>=mn).length; }
 function _belBeschikbaar(){
-  try{ if(!_loyActief() || !acctToken() || !(_accountData && _accountData.r)) return 0; const doel=LOYAL.doel||10, r=_accountData.r; let v=Math.floor(_stempels(r.bestellingen)/doel); if(!LOYAL.aan && typeof r.kaartCap==="number") v=Math.min(v, r.kaartCap); return Math.max(0, v - (r.beloningGebruikt||0)); }catch(e){ return 0; }
+  try{ if(!_loyActief() || !acctToken() || !(_accountData && _accountData.r)) return 0; const doel=LOYAL.doel||10, r=_accountData.r; let v=Math.floor(_stempels(r.bestellingen)/doel); if(!LOYAL.aan && typeof r.kaartCap==="number") v=Math.min(v, Math.max(1, r.kaartCap)); return Math.max(0, v - (r.beloningGebruikt||0)); }catch(e){ return 0; }
 }
 function _spaarOpt(){ try{ return localStorage.getItem("tta_spaar")==="1"; }catch(e){ return false; } }
 function _loyActief(){ return LOYAL.aan || !!(_accountData && _accountData.r && _accountData.r.spaarLid); }
