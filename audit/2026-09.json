@@ -488,5 +488,12 @@
     "adminid": "assist",
     "wat": "Beheer klantenlijst toont gespaarde spaarpunten per klant",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T03:03:51.159796Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Heractiveren mogelijk voor lid met niet-afgeronde kaart (ook bij beheer-uit); niet meer na afronden",
+    "doel": "beheer (code)"
   }
 ]
