@@ -465,6 +465,8 @@
 .ktaal{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:.85rem;color:#777}
 .bersel{font-family:inherit;font-weight:600;font-size:.82rem;color:var(--forest);padding:6px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer}
 .bersel:hover{border-color:var(--pink)}
+  .kpuntedit{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.85rem;font-weight:600;color:var(--forest);margin:4px 0}
+  .kpuntinput{width:72px;font-family:inherit;font-size:.9rem;padding:5px 8px;border:1px solid #ccc;border-radius:8px}
 .bermsg{white-space:pre-line;background:#faf6f0;border:1px solid #eadfd0;border-radius:10px;padding:10px 12px;font-size:.9rem;color:#333;line-height:1.5}
   .kaddok{padding:10px;border:none;border-radius:8px;background:var(--forest);color:#fff;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
   .sk-pill{display:inline-block;height:34px;width:96px;border-radius:999px;background:#ece5d5;flex:0 0 auto;margin-right:8px;position:relative;overflow:hidden}
@@ -2038,6 +2040,7 @@ async function initBeheer(){
     else if(a==="delklant") klantVerwijderKlant(btn.dataset.tel);
     else if(a==="delbest-all") klantVerwijderAlleBestellingen(btn.dataset.tel);
     else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.tel, ta ? ta.value : ""); }
+    else if(a==="punten"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp) klantPuntenWijzig(btn.dataset.tel, inp.value, inp.dataset.base); }
     else if(a==="kview"){ _kKlantView = btn.dataset.v; renderKlantenLijst(); }
     else if(a==="kform"){ _kForm = (_kForm===btn.dataset.f)?null:btn.dataset.f; renderKlantenLijst(); }
     else if(a==="knieuw-ok") klantNieuwOpslaan();
@@ -3123,7 +3126,7 @@ const BEHEER_T = {
       laden:"Klanten laden…", geenVerb:"Kon geen verbinding maken.<br>Is de agenda-koppeling al bijgewerkt met het nieuwe script?",
       nietLaden:"Kon klanten niet laden.", geenKlanten:"Nog geen bestellingen in het klantenbestand.", geenGevonden:"Geen klanten gevonden.",
       sleutelVraag:"Voer je beheersleutel in om het klantenbestand te bekijken.", sleutelFout:"De sleutel klopt niet. Probeer opnieuw.", sleutelPh:"Beheersleutel", sleutelOpen:"Openen",
-      naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"), spaarpunten:(n)=>"🌸 "+n+" spaarpunt"+(n===1?"":"en"),
+      naamOnbekend:"(naam onbekend)", vasteKlant:"⭐ vaste klant", bestellingen:(n)=>n+" bestelling"+(n===1?"":"en"), spaarpunten:(n)=>"🌸 "+n+" spaarpunt"+(n===1?"":"en"), spaarpuntenL:"Spaarpunten", puntenOpslaan:"Spaarpunten opgeslagen ✓",
       notitiePh:"Notitie (voorkeuren, allergieën…)", notitieSave:"Notitie opslaan", klantVerw:"🗑 Klant verwijderen", alleBestVerw:"🗑 Alle bestellingen wissen",
       badgeAfg:"afgehaald", badgeOpen:"open", badgeBetaald:"betaald", badgeNietBet:"niet betaald",
       markBetaald:"€ Markeer betaald", markNietBet:"↺ Toch niet betaald", klantViewCompact:"Alleen klanten", klantViewVol:"Met bestellingen",
@@ -3161,7 +3164,7 @@ const BEHEER_T = {
       laden:"Loading customers…", geenVerb:"Could not connect.<br>Has the calendar link been updated with the new script yet?",
       nietLaden:"Could not load customers.", geenKlanten:"No orders in the customer file yet.", geenGevonden:"No customers found.",
       sleutelVraag:"Enter your admin key to view the customer file.", sleutelFout:"That key is incorrect. Please try again.", sleutelPh:"Admin key", sleutelOpen:"Open",
-      naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"), spaarpunten:(n)=>"🌸 "+n+" stamp"+(n===1?"":"s"),
+      naamOnbekend:"(name unknown)", vasteKlant:"⭐ regular", bestellingen:(n)=>n+" order"+(n===1?"":"s"), spaarpunten:(n)=>"🌸 "+n+" stamp"+(n===1?"":"s"), spaarpuntenL:"Stamps", puntenOpslaan:"Stamps saved ✓",
       notitiePh:"Note (preferences, allergies…)", notitieSave:"Save note", klantVerw:"🗑 Delete customer", alleBestVerw:"🗑 Delete all orders",
       badgeAfg:"picked up", badgeOpen:"open", badgeBetaald:"paid", badgeNietBet:"unpaid",
       markBetaald:"€ Mark paid", markNietBet:"↺ Mark unpaid", klantViewCompact:"Customers only", klantViewVol:"With orders",
@@ -3199,7 +3202,7 @@ const BEHEER_T = {
       laden:"กำลังโหลดลูกค้า…", geenVerb:"เชื่อมต่อไม่ได้<br>อัปเดตการเชื่อมต่อปฏิทินด้วยสคริปต์ใหม่แล้วหรือยัง?",
       nietLaden:"โหลดข้อมูลลูกค้าไม่ได้", geenKlanten:"ยังไม่มีออเดอร์ในระบบลูกค้า", geenGevonden:"ไม่พบลูกค้า",
       sleutelVraag:"กรอกรหัสผู้ดูแลเพื่อดูข้อมูลลูกค้า", sleutelFout:"รหัสไม่ถูกต้อง กรุณาลองใหม่", sleutelPh:"รหัสผู้ดูแล", sleutelOpen:"เปิด",
-      naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์", spaarpunten:(n)=>"🌸 "+n+" แต้ม",
+      naamOnbekend:"(ไม่ทราบชื่อ)", vasteKlant:"⭐ ลูกค้าประจำ", bestellingen:(n)=>n+" ออเดอร์", spaarpunten:(n)=>"🌸 "+n+" แต้ม", spaarpuntenL:"แต้ม", puntenOpslaan:"บันทึกแต้มแล้ว ✓",
       notitiePh:"บันทึก (ความชอบ, อาการแพ้…)", notitieSave:"บันทึกโน้ต", klantVerw:"🗑 ลบลูกค้า", alleBestVerw:"🗑 ลบออเดอร์ทั้งหมด",
       badgeAfg:"รับแล้ว", badgeOpen:"รอ", badgeBetaald:"จ่ายแล้ว", badgeNietBet:"ยังไม่จ่าย",
       markBetaald:"€ ทำเครื่องหมายจ่ายแล้ว", markNietBet:"↺ ยกเลิกจ่ายแล้ว", klantViewCompact:"เฉพาะลูกค้า", klantViewVol:"พร้อมออเดอร์",
@@ -3391,7 +3394,7 @@ function renderAccount(a){
   if(a.aantal) html += '<p style="color:var(--forest);font-size:.92rem;margin:-6px 0 12px">'+esc(LT.accLoyaliteit(a.aantal))+'</p>';
   if(_loyActief() && _beloningRechten().length>0){
     if(_spaarOpt()){
-      const _doel = LOYAL.doel||10, _n = _stempels(a.bestellingen), _used = a.beloningGebruikt||0, _sam = _beloningSamenvatting();
+      const _doel = LOYAL.doel||10, _n = _puntenTot(a), _used = a.beloningGebruikt||0, _sam = _beloningSamenvatting();
       const _cap = (!LOYAL.aan && typeof a.kaartCap==="number") ? Math.max(1, a.kaartCap) : null;
       const _verd = (_cap!==null) ? Math.min(Math.floor(_n/_doel), _cap) : Math.floor(_n/_doel);
       const _besch = Math.max(0, _verd - _used);
@@ -3718,7 +3721,7 @@ function klantAggregatie(){
   (_klantRecords||[]).forEach(k=>{
     const key = k.email ? ("e:"+String(k.email).toLowerCase()) : (k.tel ? ("t:"+String(k.tel).replace(/\D/g,"")) : (k.naam?("n:"+String(k.naam).toLowerCase()):""));
     if(!key) return;
-    if(!map[key]) map[key] = {naam:k.naam, email:k.email, tel:k.tel, notitie:k.notitie||"", laatstIngelogd:k.laatstIngelogd||"", uitgenodigd:k.uitgenodigd||0, laatstUitgenodigd:k.laatstUitgenodigd||"", taal:k.taal||"", token:k.token||"", bestellingen:[]};
+    if(!map[key]) map[key] = {naam:k.naam, email:k.email, tel:k.tel, notitie:k.notitie||"", laatstIngelogd:k.laatstIngelogd||"", uitgenodigd:k.uitgenodigd||0, laatstUitgenodigd:k.laatstUitgenodigd||"", taal:k.taal||"", token:k.token||"", puntenBonus:k.puntenBonus||0, bestellingen:[]};
   });
   _klantData.forEach(b=>{
     const key = b.email ? ("e:"+String(b.email).toLowerCase()) : (b.tel ? ("t:"+String(b.tel).replace(/\D/g,"")) : (b.naam?("n:"+String(b.naam).toLowerCase()):"?"));
@@ -3892,7 +3895,7 @@ function renderKlantenLijst(){
       '<div class="kdet">'+
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
       (k.uitgenodigd>0?('<div class="kuitg">📲 '+esc(K.uitgLabel)+' '+k.uitgenodigd+'×'+(k.laatstUitgenodigd?(' · '+esc(fmtInlog(k.laatstUitgenodigd))):'')+'</div>'):'')+
-      '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+'<div class="kstat">'+esc(K.spaarpunten(_punten))+'</div>'+
+      '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+(k.tel ? ('<div class="kpuntedit">🌸 '+esc(K.spaarpuntenL)+': <input type="number" min="0" class="kpuntinput" data-tel="'+esc(k.tel)+'" data-base="'+_punten+'" value="'+(_punten+(k.puntenBonus||0))+'"><button class="knsave" data-a="punten" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>') : ('<div class="kstat">'+esc(K.spaarpunten(_punten+(k.puntenBonus||0)))+'</div>'))+
       (k.tel?('<div class="knotitie"><textarea placeholder="'+esc(K.notitiePh)+'">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>'):'')+
       (k.tel?('<div class="ktaal">'+esc(K.taalLabel)+': <select class="bersel" data-token="'+esc(k.token||"")+'" data-tel="'+esc(k.tel||"")+'" aria-label="taal">'+["nl","en","th"].map(function(l){ return '<option value="'+l+'"'+((k.taal||"nl").toLowerCase()===l?" selected":"")+'>'+l.toUpperCase()+'</option>'; }).join("")+'</select></div>'):'')+
       (_kKlantView==="vol" ? k.bestellingen.map(bestelHtml).join("") : "")+
@@ -4685,6 +4688,21 @@ async function klantNotitie(tel, tekst){
   renderKlanten();
   showToast(ok?BT().kl.tNotitieOk:BT().kl.tNotitieFout, ok);
 }
+async function klantPuntenWijzig(tel, waarde, base){
+  const t=String(tel||"").replace(/\D/g,"");
+  const totaal=Math.max(0, Math.round(Number(waarde)||0));
+  const bonus=totaal - Math.round(Number(base)||0);
+  try{
+    const lijst = await _laadKlantenLijst(); let found=false;
+    lijst.forEach(function(k){ if(t && String(k.tel||"").replace(/\D/g,"")===t){ k.puntenBonus=bonus; found=true; } });
+    if(!found) lijst.unshift({ naam:(_klantNaam(tel)||""), tel:String(tel||""), token:((_klantTokenIndex&&_klantTokenIndex[t])||""), puntenBonus:bonus, uitgenodigd:0 });
+    await _schrijfKlantenLijst(lijst);
+    _klantRecords = lijst;
+    try{ localStorage.removeItem("tta_klantcache"); }catch(e){}
+    try{ logAudit("", "Spaarpunten klant "+(_klantNaam(tel)||tel)+" \u2192 "+totaal); }catch(e){}
+    showToast(BT().kl.puntenOpslaan, true); renderKlanten();
+  }catch(e){ showToast(BT().kl.tNietBij, false); }
+}
 async function _bewaarKlantAlsNodig(order){
   try{
     const t = String((order&&order.tel)||"").replace(/\D/g,"");
@@ -5139,8 +5157,9 @@ async function loadLoyal(){
 }
 function _parseBedrag(s){ const m=String(s||"").replace(/[^0-9,\.]/g,"").replace(/\.(?=\d{3}\b)/g,"").replace(",","."); const v=parseFloat(m); return isFinite(v)?v:0; }
 function _stempels(orders){ const mn=LOYAL.min||0; return (orders||[]).filter(o=>_parseBedrag(o.totaal)>=mn).length; }
+function _puntenTot(r){ try{ return _stempels(r.bestellingen) + ((r && typeof r.puntenBonus==="number")?r.puntenBonus:0); }catch(e){ return 0; } }
 function _belBeschikbaar(){
-  try{ if(!_loyActief() || !acctToken() || !(_accountData && _accountData.r)) return 0; const doel=LOYAL.doel||10, r=_accountData.r; let v=Math.floor(_stempels(r.bestellingen)/doel); if(!LOYAL.aan && typeof r.kaartCap==="number") v=Math.min(v, Math.max(1, r.kaartCap)); return Math.max(0, v - (r.beloningGebruikt||0)); }catch(e){ return 0; }
+  try{ if(!_loyActief() || !acctToken() || !(_accountData && _accountData.r)) return 0; const doel=LOYAL.doel||10, r=_accountData.r; let v=Math.floor(_puntenTot(r)/doel); if(!LOYAL.aan && typeof r.kaartCap==="number") v=Math.min(v, Math.max(1, r.kaartCap)); return Math.max(0, v - (r.beloningGebruikt||0)); }catch(e){ return 0; }
 }
 function _spaarOpt(){ try{ return localStorage.getItem("tta_spaar")==="1"; }catch(e){ return false; } }
 function _loyActief(){ return LOYAL.aan || !!(_accountData && _accountData.r && _accountData.r.spaarLid); }
@@ -5148,7 +5167,7 @@ function _kanActiveren(){
   if(LOYAL.aan) return true;                       // beheer aan: iedereen kan (opnieuw) activeren
   try{                                             // beheer uit: alleen bestaand lid met een nog niet-afgeronde kaart
     const r=_accountData && _accountData.r; if(!r || !r.spaarLid) return false;
-    const doel=LOYAL.doel||10, verd=Math.floor(_stempels(r.bestellingen)/doel);
+    const doel=LOYAL.doel||10, verd=Math.floor(_puntenTot(r)/doel);
     const cap=(typeof r.kaartCap==="number")?Math.max(1,r.kaartCap):1;
     const besch=Math.max(0, Math.min(verd,cap)-(r.beloningGebruikt||0));
     return verd < cap || besch > 0;                // nog te vullen of nog een onbenutte beloning
