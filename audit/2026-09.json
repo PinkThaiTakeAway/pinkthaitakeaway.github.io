@@ -677,5 +677,12 @@
     "adminid": "assist",
     "wat": "Klant kan eigen naam/telefoon/e-mail wijzigen in account (profiel-endpoint); bevestiging bij telefoonwijziging (klant + beheer)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T05:21:41.320577Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klant kan adres + standaard pittigheid instellen (standaard pittigheid pre-selecteert bij bestellen)",
+    "doel": "beheer (code)"
   }
 ]
