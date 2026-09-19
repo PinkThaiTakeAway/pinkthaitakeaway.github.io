@@ -466,7 +466,9 @@
 .bersel{font-family:inherit;font-weight:600;font-size:.82rem;color:var(--forest);padding:6px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer}
 .bersel:hover{border-color:var(--pink)}
   .kpuntedit{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.85rem;font-weight:600;color:var(--forest);margin:4px 0}
-  .kpuntinput{width:72px;font-family:inherit;font-size:.9rem;padding:5px 8px;border:1px solid #ccc;border-radius:8px}
+  .kpuntinput{width:56px;font-family:inherit;font-size:.9rem;padding:5px 8px;border:1px solid #ccc;border-radius:8px;text-align:center}
+  .kpuntpm{width:32px;height:32px;border:1px solid #ccc;border-radius:8px;background:#fff;font-size:1.1rem;font-weight:700;color:var(--forest);cursor:pointer;line-height:1}
+  .kpuntpm:hover{border-color:var(--pink)}
 .bermsg{white-space:pre-line;background:#faf6f0;border:1px solid #eadfd0;border-radius:10px;padding:10px 12px;font-size:.9rem;color:#333;line-height:1.5}
   .kaddok{padding:10px;border:none;border-radius:8px;background:var(--forest);color:#fff;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
   .sk-pill{display:inline-block;height:34px;width:96px;border-radius:999px;background:#ece5d5;flex:0 0 auto;margin-right:8px;position:relative;overflow:hidden}
@@ -2041,6 +2043,7 @@ async function initBeheer(){
     else if(a==="delbest-all") klantVerwijderAlleBestellingen(btn.dataset.tel);
     else if(a==="note"){ const ta = btn.parentElement.querySelector("textarea"); klantNotitie(btn.dataset.tel, ta ? ta.value : ""); }
     else if(a==="punten"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp) klantPuntenWijzig(btn.dataset.tel, inp.value, inp.dataset.base); }
+    else if(a==="punt+"||a==="punt-"){ const inp = btn.parentElement.querySelector(".kpuntinput"); if(inp){ const v=Math.max(0,(parseInt(inp.value,10)||0)+(a==="punt+"?1:-1)); inp.value=v; klantPuntenWijzig(inp.dataset.tel, v, inp.dataset.base); } }
     else if(a==="kview"){ _kKlantView = btn.dataset.v; renderKlantenLijst(); }
     else if(a==="kform"){ _kForm = (_kForm===btn.dataset.f)?null:btn.dataset.f; renderKlantenLijst(); }
     else if(a==="knieuw-ok") klantNieuwOpslaan();
@@ -3895,7 +3898,7 @@ function renderKlantenLijst(){
       '<div class="kdet">'+
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
       (k.uitgenodigd>0?('<div class="kuitg">📲 '+esc(K.uitgLabel)+' '+k.uitgenodigd+'×'+(k.laatstUitgenodigd?(' · '+esc(fmtInlog(k.laatstUitgenodigd))):'')+'</div>'):'')+
-      '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+(k.tel ? ('<div class="kpuntedit">🌸 '+esc(K.spaarpuntenL)+': <input type="number" min="0" class="kpuntinput" data-tel="'+esc(k.tel)+'" data-base="'+_punten+'" value="'+(_punten+(k.puntenBonus||0))+'"><button class="knsave" data-a="punten" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>') : ('<div class="kstat">'+esc(K.spaarpunten(_punten+(k.puntenBonus||0)))+'</div>'))+
+      '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+(k.tel ? ('<div class="kpuntedit">🌸 '+esc(K.spaarpuntenL)+': <button class="kpuntpm" data-a="punt-" data-tel="'+esc(k.tel)+'" aria-label="-1">\u2212</button><input type="number" min="0" class="kpuntinput" data-tel="'+esc(k.tel)+'" data-base="'+_punten+'" value="'+(_punten+(k.puntenBonus||0))+'"><button class="kpuntpm" data-a="punt+" data-tel="'+esc(k.tel)+'" aria-label="+1">+</button><button class="knsave" data-a="punten" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>') : ('<div class="kstat">'+esc(K.spaarpunten(_punten+(k.puntenBonus||0)))+'</div>'))+
       (k.tel?('<div class="knotitie"><textarea placeholder="'+esc(K.notitiePh)+'">'+esc(notitie)+'</textarea><button class="knsave" data-a="note" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>'):'')+
       (k.tel?('<div class="ktaal">'+esc(K.taalLabel)+': <select class="bersel" data-token="'+esc(k.token||"")+'" data-tel="'+esc(k.tel||"")+'" aria-label="taal">'+["nl","en","th"].map(function(l){ return '<option value="'+l+'"'+((k.taal||"nl").toLowerCase()===l?" selected":"")+'>'+l.toUpperCase()+'</option>'; }).join("")+'</select></div>'):'')+
       (_kKlantView==="vol" ? k.bestellingen.map(bestelHtml).join("") : "")+
