@@ -333,6 +333,9 @@
   .belopt input{width:18px;height:18px;flex:0 0 auto;accent-color:#e5007d}
   .belnudge{margin-top:12px;background:#fff4e0;border:1.5px solid #f0d089;border-radius:12px;padding:11px 14px;font-size:.9rem;font-weight:600;color:#9a6a00}
   .adresdetails{margin-top:2px}
+  .allergchips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
+  .allergchip{border:1px solid #ccc;border-radius:999px;background:#fff;color:#444;font-family:inherit;font-size:.82rem;font-weight:600;padding:5px 11px;cursor:pointer}
+  .allergchip.on{background:#c0392b;border-color:#c0392b;color:#fff}
   .adresdetails summary{cursor:pointer;font-size:.9rem;font-weight:600;color:var(--forest);padding:6px 0}
   .loyalcard.klaar{background:#fbeaf3;border-color:#f3c6de}
   .afhdagen{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px}
@@ -992,7 +995,7 @@ const I18N = {
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
     yourOrder:"Jouw bestelling", empty:"Je mandje is nog leeg.\nKies iets lekkers uit het menu.",
-    add:"+ Toevoegen", opt:{kip:"Kip",garnaal:"Garnalen"}, spiceKeuze:["Niet pittig","Mild","Medium","Pittig","Thai 🌶"], spiceKies:"Pittigheid",
+    add:"+ Toevoegen", opt:{kip:"Kip",garnaal:"Garnalen"}, spiceKeuze:["Niet pittig","Mild","Medium","Pittig","Thai 🌶"], spiceKies:"Pittigheid", allergOpties:["Pinda","Noten","Schaaldieren","Vis","Gluten","Lactose","Ei","Soja","Sesam"],
     pickupNotice:p=>`Afhalen op <b>${p}</b>. Bestel uiterlijk vrijdag.`,
     payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
     payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
@@ -1032,7 +1035,7 @@ const I18N = {
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
     yourOrder:"Your order", empty:"Your basket is empty.\nPick something tasty from the menu.",
-    add:"+ Add", opt:{kip:"Chicken",garnaal:"Prawn"}, spiceKeuze:["Not spicy","Mild","Medium","Spicy","Thai 🌶"], spiceKies:"Spiciness",
+    add:"+ Add", opt:{kip:"Chicken",garnaal:"Prawn"}, spiceKeuze:["Not spicy","Mild","Medium","Spicy","Thai 🌶"], spiceKies:"Spiciness", allergOpties:["Peanuts","Tree nuts","Shellfish","Fish","Gluten","Dairy","Egg","Soy","Sesame"],
     pickupNotice:p=>`Pickup on <b>${p}</b>. Order by Friday at the latest.`,
     payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
     payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
@@ -1073,7 +1076,7 @@ const I18N = {
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
     yourOrder:"คำสั่งซื้อของคุณ", empty:"ตะกร้าของคุณว่างเปล่า\nเลือกเมนูอร่อยๆ ได้เลย",
-    add:"+ เพิ่ม", opt:{kip:"ไก่",garnaal:"กุ้ง"}, spiceKeuze:["ไม่เผ็ด","เผ็ดน้อย","กลาง","เผ็ด","เผ็ดไทย 🌶"], spiceKies:"ความเผ็ด",
+    add:"+ เพิ่ม", opt:{kip:"ไก่",garnaal:"กุ้ง"}, spiceKeuze:["ไม่เผ็ด","เผ็ดน้อย","กลาง","เผ็ด","เผ็ดไทย 🌶"], spiceKies:"ความเผ็ด", allergOpties:["ถั่วลิสง","ถั่วเปลือกแข็ง","หอย/กุ้ง/ปู","ปลา","กลูเตน","นม","ไข่","ถั่วเหลือง","งา"],
     pickupNotice:p=>`รับสินค้า <b>${p}</b> · กรุณาสั่งภายในวันศุกร์`,
     payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
     payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
@@ -1570,6 +1573,17 @@ function serveTip(m){
 const _spiceSel = {};
 function _klantPittig(){ try{ const v=localStorage.getItem("tta_pittig"); if(v==null||v==="") return null; const n=parseInt(v,10); return isFinite(n)?Math.max(0,Math.min(4,n)):null; }catch(e){ return null; } }
 function _klantVariant(){ try{ const v=localStorage.getItem("tta_variant"); return (v==="kip"||v==="garnaal")?v:""; }catch(e){ return ""; } }
+function _allergChipsHtml(current){
+  const opts=(T().allergOpties||[]); const cur=String(current||"").toLowerCase();
+  return '<div class="allergchips">'+opts.map(function(l){ const on=cur.indexOf(String(l).toLowerCase())>=0; return '<button type="button" class="allergchip'+(on?" on":"")+'" data-lab="'+esc(l)+'">'+esc(l)+'</button>'; }).join("")+'</div>';
+}
+function _allergChipClick(chip){
+  const wrap=chip.closest(".allergchips"); if(!wrap) return; const inp=wrap.nextElementSibling; if(!inp||inp.tagName!=="INPUT") return;
+  const lab=chip.dataset.lab||""; let parts=String(inp.value||"").split(",").map(function(s){return s.trim();}).filter(Boolean);
+  const idx=parts.map(function(s){return s.toLowerCase();}).indexOf(lab.toLowerCase());
+  if(idx>=0){ parts.splice(idx,1); chip.classList.remove("on"); } else { parts.push(lab); chip.classList.add("on"); }
+  inp.value=parts.join(", ");
+}
 function renderCtl(node, id){
   if(BEHEER){ node.innerHTML = ""; return; }
   const m = byId(id);
@@ -2060,6 +2074,7 @@ async function initBeheer(){
   document.getElementById("klantOverlay").addEventListener("click", (e) => { if(e.target.id === "klantOverlay") closeKlanten(); });
   document.getElementById("kBody").addEventListener("change", (e) => { const s=e.target.closest&&e.target.closest(".bersel"); if(s) berTaalWijzig(s); });
   document.getElementById("kBody").addEventListener("click", (e) => {
+    const _ac = e.target.closest(".allergchip"); if(_ac){ _allergChipClick(_ac); return; }
     const btn = e.target.closest("button[data-a]"); if(!btn) return;
     const a = btn.dataset.a;
     if(a==="afg") klantAfgehaald(btn.dataset.id, btn.dataset.w==="1");
@@ -3504,7 +3519,7 @@ function renderAccount(a){
     }).join("");
   }
   let _admN = ""; try{ _admN = localStorage.getItem("tta_adminname")||""; }catch(e){}
-  html += '<details class="acctedit"><summary>'+esc(LT.gegBewerk)+'</summary><div class="acctedit-b">'+'<label>'+esc(LT.gegNaam)+'</label><input id="agNaam" type="text" value="'+esc(a.naam||"")+'">'+'<label>'+esc(LT.gegTel)+'</label><input id="agTel" type="tel" value="'+esc(a.tel||"")+'">'+'<label>'+esc(LT.gegEmail)+'</label><input id="agEmail" type="email" value="'+esc(a.email||"")+'">'+'<label>'+esc(LT.gegStraat)+'</label><input id="agStraat" type="text" value="'+esc(a.straat||"")+'">'+'<label>'+esc(LT.gegPostcode)+'</label><input id="agPostcode" type="text" value="'+esc(a.postcode||"")+'">'+'<label>'+esc(LT.gegPlaats)+'</label><input id="agPlaats" type="text" value="'+esc(a.plaats||"")+'">'+'<label>'+esc(LT.gegAllergie)+'</label><input id="agAllergie" type="text" value="'+esc(a.allergie||"")+'">'+'<label>'+esc(LT.gegVariant)+'</label><select id="agVariant"><option value="">'+esc(LT.gegVariantGeen)+'</option><option value="kip"'+(a.variant==="kip"?" selected":"")+'>'+esc((T().opt&&T().opt.kip)||"Kip")+'</option><option value="garnaal"'+(a.variant==="garnaal"?" selected":"")+'>'+esc((T().opt&&T().opt.garnaal)||"Garnalen")+'</option></select>'+'<label>'+esc(LT.gegPittig)+'</label><select id="agPittig"><option value="">'+esc(LT.gegPittigGeen)+'</option>'+(T().spiceKeuze||[]).map(function(l,i){ return '<option value="'+i+'"'+((a.pittig!=null&&Number(a.pittig)===i)?" selected":"")+'>🌶️ '+esc(l)+'</option>'; }).join("")+'</select>'+'<button class="acctedit-save" id="agSave">'+esc(LT.gegOpslaan)+'</button>'+'</div></details>';
+  html += '<details class="acctedit"><summary>'+esc(LT.gegBewerk)+'</summary><div class="acctedit-b">'+'<label>'+esc(LT.gegNaam)+'</label><input id="agNaam" type="text" value="'+esc(a.naam||"")+'">'+'<label>'+esc(LT.gegTel)+'</label><input id="agTel" type="tel" value="'+esc(a.tel||"")+'">'+'<label>'+esc(LT.gegEmail)+'</label><input id="agEmail" type="email" value="'+esc(a.email||"")+'">'+'<label>'+esc(LT.gegStraat)+'</label><input id="agStraat" type="text" value="'+esc(a.straat||"")+'">'+'<label>'+esc(LT.gegPostcode)+'</label><input id="agPostcode" type="text" value="'+esc(a.postcode||"")+'">'+'<label>'+esc(LT.gegPlaats)+'</label><input id="agPlaats" type="text" value="'+esc(a.plaats||"")+'">'+'<label>'+esc(LT.gegAllergie)+'</label>'+_allergChipsHtml(a.allergie||"")+'<input id="agAllergie" class="allerginput" type="text" value="'+esc(a.allergie||"")+'">'+'<label>'+esc(LT.gegVariant)+'</label><select id="agVariant"><option value="">'+esc(LT.gegVariantGeen)+'</option><option value="kip"'+(a.variant==="kip"?" selected":"")+'>'+esc((T().opt&&T().opt.kip)||"Kip")+'</option><option value="garnaal"'+(a.variant==="garnaal"?" selected":"")+'>'+esc((T().opt&&T().opt.garnaal)||"Garnalen")+'</option></select>'+'<label>'+esc(LT.gegPittig)+'</label><select id="agPittig"><option value="">'+esc(LT.gegPittigGeen)+'</option>'+(T().spiceKeuze||[]).map(function(l,i){ return '<option value="'+i+'"'+((a.pittig!=null&&Number(a.pittig)===i)?" selected":"")+'>🌶️ '+esc(l)+'</option>'; }).join("")+'</select>'+'<button class="acctedit-save" id="agSave">'+esc(LT.gegOpslaan)+'</button>'+'</div></details>';
   if(_admN){ html += '<button class="agbtn" id="accNaarBeheer" style="margin-top:12px"></button>'; }
   html += '<button class="agbtn" id="accCopyLink" style="margin-top:12px">'+esc(LT.accKopieerLink)+'</button>';
   html += '<button class="acct-del" id="acctDelBtn">'+esc(LT.gegVerwijder)+'</button>';
@@ -3518,6 +3533,7 @@ function renderAccount(a){
   { const _so=document.getElementById("spaarOptBtn"); if(_so) _so.onclick=function(){ try{ localStorage.setItem("tta_spaar", _spaarOpt()?"0":"1"); }catch(e){} laadAccount(); }; }
   { const _ags=document.getElementById("agSave"); if(_ags) _ags.onclick=klantProfielOpslaan; }
   { const _adb=document.getElementById("acctDelBtn"); if(_adb) _adb.onclick=klantGegevensVerwijder; }
+  document.querySelectorAll("#accountBody .allergchip").forEach(function(c){ c.onclick=function(){ _allergChipClick(c); }; });
   const _accNB = document.getElementById("accNaarBeheer");
   if(_accNB){ _accNB.textContent = (LOGIN_T[LANG]||LOGIN_T.nl).inNaarBeheer; _accNB.onclick = function(){ location.href = location.pathname + "?beheer"; }; }
 }
@@ -3962,7 +3978,7 @@ function renderKlantenLijst(){
     return '<details class="kklant">'+
       '<summary class="ksum"><span class="knaam">'+esc(k.naam||K.naamOnbekend)+vast+'</span>'+(k.tel?('<span class="kmeta">'+esc(k.tel)+'</span>'):'')+'</summary>'+
       '<div class="kdet">'+
-      '<div class="kgeg"><label>'+esc(K.kgNaamL)+'</label><input class="kgnaam" type="text" value="'+esc(k.naam||"")+'"><label>'+esc(K.kgTelL)+'</label><input class="kgtel" type="tel" value="'+esc(k.tel||"")+'"><label>'+esc(K.kgEmailL)+'</label><input class="kgemail" type="email" value="'+esc(k.email||"")+'"><label>'+esc(K.kgStraatL)+'</label><input class="kgstraat" type="text" value="'+esc(k.straat||"")+'"><label>'+esc(K.kgPostcodeL)+'</label><input class="kgpostcode" type="text" value="'+esc(k.postcode||"")+'"><label>'+esc(K.kgPlaatsL)+'</label><input class="kgplaats" type="text" value="'+esc(k.plaats||"")+'"><label>'+esc(K.kgPittigL)+'</label><select class="kgpittig"><option value="">'+esc(K.kgPittigGeen)+'</option>'+(T().spiceKeuze||[]).map(function(l,i){ return '<option value="'+i+'"'+((k.pittig!=null&&Number(k.pittig)===i)?" selected":"")+'>🌶️ '+esc(l)+'</option>'; }).join("")+'</select><label>'+esc(K.kgAllergieL)+'</label><input class="kgallergie" type="text" value="'+esc(k.allergie||"")+'"><label>'+esc(K.kgVariantL)+'</label><select class="kgvariant"><option value="">'+esc(K.kgVariantGeen)+'</option><option value="kip"'+(k.variant==="kip"?" selected":"")+'>'+esc((T().opt&&T().opt.kip)||"Kip")+'</option><option value="garnaal"'+(k.variant==="garnaal"?" selected":"")+'>'+esc((T().opt&&T().opt.garnaal)||"Garnalen")+'</option></select><button class="knsave" data-a="gegevens" data-oudtel="'+esc(k.tel||"")+'" data-oudemail="'+esc(k.email||"")+'">'+esc(K.kgSave)+'</button></div>'+
+      '<div class="kgeg"><label>'+esc(K.kgNaamL)+'</label><input class="kgnaam" type="text" value="'+esc(k.naam||"")+'"><label>'+esc(K.kgTelL)+'</label><input class="kgtel" type="tel" value="'+esc(k.tel||"")+'"><label>'+esc(K.kgEmailL)+'</label><input class="kgemail" type="email" value="'+esc(k.email||"")+'"><label>'+esc(K.kgStraatL)+'</label><input class="kgstraat" type="text" value="'+esc(k.straat||"")+'"><label>'+esc(K.kgPostcodeL)+'</label><input class="kgpostcode" type="text" value="'+esc(k.postcode||"")+'"><label>'+esc(K.kgPlaatsL)+'</label><input class="kgplaats" type="text" value="'+esc(k.plaats||"")+'"><label>'+esc(K.kgPittigL)+'</label><select class="kgpittig"><option value="">'+esc(K.kgPittigGeen)+'</option>'+(T().spiceKeuze||[]).map(function(l,i){ return '<option value="'+i+'"'+((k.pittig!=null&&Number(k.pittig)===i)?" selected":"")+'>🌶️ '+esc(l)+'</option>'; }).join("")+'</select><label>'+esc(K.kgAllergieL)+'</label>'+_allergChipsHtml(k.allergie||"")+'<input class="kgallergie allerginput" type="text" value="'+esc(k.allergie||"")+'"><label>'+esc(K.kgVariantL)+'</label><select class="kgvariant"><option value="">'+esc(K.kgVariantGeen)+'</option><option value="kip"'+(k.variant==="kip"?" selected":"")+'>'+esc((T().opt&&T().opt.kip)||"Kip")+'</option><option value="garnaal"'+(k.variant==="garnaal"?" selected":"")+'>'+esc((T().opt&&T().opt.garnaal)||"Garnalen")+'</option></select><button class="knsave" data-a="gegevens" data-oudtel="'+esc(k.tel||"")+'" data-oudemail="'+esc(k.email||"")+'">'+esc(K.kgSave)+'</button></div>'+
       (k.laatstIngelogd?('<div class="kinlog">🔓 '+esc(K.laatstInlog)+' '+esc(fmtInlog(k.laatstIngelogd))+'</div>'):'')+
       (k.uitgenodigd>0?('<div class="kuitg">📲 '+esc(K.uitgLabel)+' '+k.uitgenodigd+'×'+(k.laatstUitgenodigd?(' · '+esc(fmtInlog(k.laatstUitgenodigd))):'')+'</div>'):'')+
       '<div class="kstat">'+esc(K.bestellingen(n))+'</div>'+(k.tel ? ('<div class="kpuntedit">🌸 '+esc(K.spaarpuntenL)+': <button class="kpuntpm" data-a="punt-" data-tel="'+esc(k.tel)+'" aria-label="-1">\u2212</button><input type="number" min="0" class="kpuntinput" data-tel="'+esc(k.tel)+'" data-base="'+_punten+'" value="'+(_punten+(k.puntenBonus||0))+'"><button class="kpuntpm" data-a="punt+" data-tel="'+esc(k.tel)+'" aria-label="+1">+</button><button class="knsave" data-a="punten" data-tel="'+esc(k.tel)+'">'+K.notitieSave+'</button></div>') : ('<div class="kstat">'+esc(K.spaarpunten(_punten+(k.puntenBonus||0)))+'</div>'))+
