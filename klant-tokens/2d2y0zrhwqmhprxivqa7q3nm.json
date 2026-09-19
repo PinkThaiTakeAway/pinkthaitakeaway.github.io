@@ -14,5 +14,7 @@
   "pittig": 3,
   "straat": "Goordijk 24",
   "postcode": "5081 WD",
-  "plaats": "Hilvarenbeek"
+  "plaats": "Hilvarenbeek",
+  "allergie": "",
+  "variant": "garnaal"
 }
