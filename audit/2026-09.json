@@ -663,5 +663,12 @@
     "adminid": "assist",
     "wat": "Beheer: naam/telefoon/e-mail per klant bewerkbaar (tel-wijziging verhuist bestellingen + token mee)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T05:08:24.922102Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Optioneel e-mailveld bij afronden bestelling (opgeslagen + zichtbaar in beheer)",
+    "doel": "beheer (code)"
   }
 ]
