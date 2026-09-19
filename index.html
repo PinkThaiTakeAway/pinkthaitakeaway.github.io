@@ -1242,7 +1242,7 @@ const PHOTO = {};
 const HIDDEN = new Set();
 let TIKKIE_ON = true;
 let LOYAL = {aan:false, doel:10, beloning:"een gratis voorgerecht", min:20, gerechtAan:true, kortingAan:false, korting:10};
-let ORDER_STATE = { openedAt: 0, manualPause: false };
+let ORDER_STATE = { openedAt: 0, manualPause: false, openTot: 0 };
 let _lastMenuClosed;
 let BLACKOUT = false;
 let _boBypass = false;
@@ -2173,7 +2173,7 @@ function updatePauzeBtn(){
 function togglePauze(){
   const st = orderStatus();
   if(st.open){ ORDER_STATE.manualPause = true; }          // nu open → sluiten
-  else { ORDER_STATE.manualPause = false; ORDER_STATE.openedAt = Date.now(); }  // nu dicht → openen + weekteller resetten
+  else { ORDER_STATE.manualPause = false; ORDER_STATE.openedAt = Date.now(); try{ ORDER_STATE.openTot = nextOrderDeadline().getTime(); }catch(e){ ORDER_STATE.openTot = 0; } }  // nu dicht → openen: leg de sluiting van deze cyclus vast (daarna automatisch dicht)
   updatePauzeBtn();
   if(sheet.classList.contains("open")) renderSheet();
   refreshOrderingUI();
@@ -5342,6 +5342,7 @@ async function loadPauze(){
   try{ const r = await fetch("bestelpauze.json?t=" + Date.now(), {cache:"no-store"}); if(r.ok){ const p = await r.json(); if(p && typeof p==="object"){
     if(typeof p.openedAt==="number") ORDER_STATE.openedAt = p.openedAt;
     if(typeof p.manualPause==="boolean") ORDER_STATE.manualPause = p.manualPause;
+    if(typeof p.openTot==="number") ORDER_STATE.openTot = p.openTot;
     if(typeof p.paused==="boolean") ORDER_STATE.manualPause = p.paused; // oud formaat
   } } }catch(e){}
 }
@@ -5357,7 +5358,8 @@ async function loadBedrijf(){
 }
 function orderStatus(){
   if(ORDER_STATE.manualPause) return {open:false, reason:"paused"};
-  return {open:true};   // bestellen is altijd mogelijk; de ingestelde sluiting bepaalt welke afhaaldatum nog te kiezen is
+  if(ORDER_STATE.openTot && Date.now() > ORDER_STATE.openTot) return {open:false, reason:"deadline"};   // na de sluiting automatisch dicht tot de beheerder heropent
+  return {open:true};
 }
 function orderClosedMsg(st){
   return T().orderPausedMsg;
@@ -5383,6 +5385,7 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
   applyBlackout();
   updateBars();
   refreshOrderingUI();
+  if(!BEHEER){ setInterval(function(){ try{ refreshOrderingUI(); }catch(e){} }, 60000); }
   setInterval(refreshOrderingUI, 60000);
   wireShare();
   try{
