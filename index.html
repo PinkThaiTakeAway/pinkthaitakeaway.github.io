@@ -336,6 +336,7 @@
   .allergchips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
   .allergchip{border:1px solid #ccc;border-radius:999px;background:#fff;color:#444;font-family:inherit;font-size:.82rem;font-weight:600;padding:5px 11px;cursor:pointer}
   .allergchip.on{background:#c0392b;border-color:#c0392b;color:#fff}
+  .allergchip.allerggeen.on{background:#2e7d32;border-color:#2e7d32;color:#fff}
   .adresdetails summary{cursor:pointer;font-size:.9rem;font-weight:600;color:var(--forest);padding:6px 0}
   .loyalcard.klaar{background:#fbeaf3;border-color:#f3c6de}
   .afhdagen{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px}
@@ -995,7 +996,7 @@ const I18N = {
     heroCta:"Bekijk het menu →", cart:"Mandje", viewOrder:"Bekijk bestelling →",
     items:n=>n+" "+(n===1?"gerecht":"gerechten"),
     yourOrder:"Jouw bestelling", empty:"Je mandje is nog leeg.\nKies iets lekkers uit het menu.",
-    add:"+ Toevoegen", opt:{kip:"Kip",garnaal:"Garnalen"}, spiceKeuze:["Niet pittig","Mild","Medium","Pittig","Thai 🌶"], spiceKies:"Pittigheid", allergOpties:["Pinda","Noten","Schaaldieren","Vis","Gluten","Lactose","Ei","Soja","Sesam"],
+    add:"+ Toevoegen", opt:{kip:"Kip",garnaal:"Garnalen"}, spiceKeuze:["Niet pittig","Mild","Medium","Pittig","Thai 🌶"], spiceKies:"Pittigheid", allergOpties:["Pinda","Noten","Schaaldieren","Vis","Gluten","Lactose","Ei","Soja","Sesam"], allergGeen:"Geen",
     pickupNotice:p=>`Afhalen op <b>${p}</b>. Bestel uiterlijk vrijdag.`,
     payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
     payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
@@ -1035,7 +1036,7 @@ const I18N = {
     heroCta:"View the menu →", cart:"Basket", viewOrder:"View order →",
     items:n=>n+" "+(n===1?"item":"items"),
     yourOrder:"Your order", empty:"Your basket is empty.\nPick something tasty from the menu.",
-    add:"+ Add", opt:{kip:"Chicken",garnaal:"Prawn"}, spiceKeuze:["Not spicy","Mild","Medium","Spicy","Thai 🌶"], spiceKies:"Spiciness", allergOpties:["Peanuts","Tree nuts","Shellfish","Fish","Gluten","Dairy","Egg","Soy","Sesame"],
+    add:"+ Add", opt:{kip:"Chicken",garnaal:"Prawn"}, spiceKeuze:["Not spicy","Mild","Medium","Spicy","Thai 🌶"], spiceKies:"Spiciness", allergOpties:["Peanuts","Tree nuts","Shellfish","Fish","Gluten","Dairy","Egg","Soy","Sesame"], allergGeen:"None",
     pickupNotice:p=>`Pickup on <b>${p}</b>. Order by Friday at the latest.`,
     payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
     payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
@@ -1076,7 +1077,7 @@ const I18N = {
     heroCta:"ดูเมนู →", cart:"ตะกร้า", viewOrder:"ดูคำสั่งซื้อ →",
     items:n=>n+" รายการ",
     yourOrder:"คำสั่งซื้อของคุณ", empty:"ตะกร้าของคุณว่างเปล่า\nเลือกเมนูอร่อยๆ ได้เลย",
-    add:"+ เพิ่ม", opt:{kip:"ไก่",garnaal:"กุ้ง"}, spiceKeuze:["ไม่เผ็ด","เผ็ดน้อย","กลาง","เผ็ด","เผ็ดไทย 🌶"], spiceKies:"ความเผ็ด", allergOpties:["ถั่วลิสง","ถั่วเปลือกแข็ง","หอย/กุ้ง/ปู","ปลา","กลูเตน","นม","ไข่","ถั่วเหลือง","งา"],
+    add:"+ เพิ่ม", opt:{kip:"ไก่",garnaal:"กุ้ง"}, spiceKeuze:["ไม่เผ็ด","เผ็ดน้อย","กลาง","เผ็ด","เผ็ดไทย 🌶"], spiceKies:"ความเผ็ด", allergOpties:["ถั่วลิสง","ถั่วเปลือกแข็ง","หอย/กุ้ง/ปู","ปลา","กลูเตน","นม","ไข่","ถั่วเหลือง","งา"], allergGeen:"ไม่มี",
     pickupNotice:p=>`รับสินค้า <b>${p}</b> · กรุณาสั่งภายในวันศุกร์`,
     payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
     payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
@@ -1574,15 +1575,25 @@ const _spiceSel = {};
 function _klantPittig(){ try{ const v=localStorage.getItem("tta_pittig"); if(v==null||v==="") return null; const n=parseInt(v,10); return isFinite(n)?Math.max(0,Math.min(4,n)):null; }catch(e){ return null; } }
 function _klantVariant(){ try{ const v=localStorage.getItem("tta_variant"); return (v==="kip"||v==="garnaal")?v:""; }catch(e){ return ""; } }
 function _allergChipsHtml(current){
-  const opts=(T().allergOpties||[]); const cur=String(current||"").toLowerCase();
-  return '<div class="allergchips">'+opts.map(function(l){ const on=cur.indexOf(String(l).toLowerCase())>=0; return '<button type="button" class="allergchip'+(on?" on":"")+'" data-lab="'+esc(l)+'">'+esc(l)+'</button>'; }).join("")+'</div>';
+  const opts=(T().allergOpties||[]); const geen=(T().allergGeen||"Geen"); const cur=String(current||"").toLowerCase().trim(); const isGeen=(cur===String(geen).toLowerCase());
+  let out='<div class="allergchips"><button type="button" class="allergchip allerggeen'+(isGeen?" on":"")+'" data-geen="1" data-lab="'+esc(geen)+'">'+esc(geen)+'</button>';
+  out+=opts.map(function(l){ const on=!isGeen && cur.indexOf(String(l).toLowerCase())>=0; return '<button type="button" class="allergchip'+(on?" on":"")+'" data-lab="'+esc(l)+'">'+esc(l)+'</button>'; }).join("");
+  return out+'</div>';
 }
 function _allergChipClick(chip){
   const wrap=chip.closest(".allergchips"); if(!wrap) return; const inp=wrap.nextElementSibling; if(!inp||inp.tagName!=="INPUT") return;
-  const lab=chip.dataset.lab||""; let parts=String(inp.value||"").split(",").map(function(s){return s.trim();}).filter(Boolean);
-  const idx=parts.map(function(s){return s.toLowerCase();}).indexOf(lab.toLowerCase());
-  if(idx>=0){ parts.splice(idx,1); chip.classList.remove("on"); } else { parts.push(lab); chip.classList.add("on"); }
-  inp.value=parts.join(", ");
+  const geenLab=(T().allergGeen||"Geen"), geenL=geenLab.toLowerCase();
+  if(chip.dataset.geen==="1"){
+    inp.value = (String(inp.value||"").toLowerCase().trim()===geenL) ? "" : geenLab;
+  } else {
+    const lab=chip.dataset.lab||""; let parts=String(inp.value||"").split(",").map(function(s){return s.trim();}).filter(Boolean);
+    parts=parts.filter(function(s){ return s.toLowerCase()!==geenL; });
+    const idx=parts.map(function(s){return s.toLowerCase();}).indexOf(lab.toLowerCase());
+    if(idx>=0){ parts.splice(idx,1); } else { parts.push(lab); }
+    inp.value=parts.join(", ");
+  }
+  const curL=String(inp.value||"").toLowerCase().trim();
+  wrap.querySelectorAll(".allergchip").forEach(function(c){ const g=c.dataset.geen==="1"; const on=g?(curL===geenL):(curL!==geenL && curL.indexOf((c.dataset.lab||"").toLowerCase())>=0); c.classList.toggle("on", on); });
   _allergAutoSave(inp);
 }
 let _allergSaveT=null;
