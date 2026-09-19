@@ -789,5 +789,12 @@
     "adminid": "assist",
     "wat": "Bestellen sluit automatisch na de cyclus-deadline; beheerder heropent handmatig",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T14:29:12.828643Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "WhatsApp-melding bij heropenen bestellen (door beheerder)",
+    "doel": "beheer (code)"
   }
 ]
