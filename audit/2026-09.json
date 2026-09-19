@@ -670,5 +670,12 @@
     "adminid": "assist",
     "wat": "Optioneel e-mailveld bij afronden bestelling (opgeslagen + zichtbaar in beheer)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T05:15:20.634120Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klant kan eigen naam/telefoon/e-mail wijzigen in account (profiel-endpoint); bevestiging bij telefoonwijziging (klant + beheer)",
+    "doel": "beheer (code)"
   }
 ]
