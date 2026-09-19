@@ -712,5 +712,12 @@
     "adminid": "assist",
     "wat": "Beheer toont/bewerkt standaard pittigheid per klant",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T05:57:10.992496Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Klant-zelfservice uitgebreid: allergieën/dieetwensen, standaard variant, en 'mijn gegevens verwijderen' (AVG)",
+    "doel": "beheer (code)"
   }
 ]
