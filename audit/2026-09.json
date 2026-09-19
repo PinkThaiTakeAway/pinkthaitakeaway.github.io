@@ -481,5 +481,12 @@
     "adminid": "assist",
     "wat": "Geactiveerd lid mag huidige (ook lege) kaart afmaken bij uitgezette spaarfunctie (kaartCap min 1)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T02:45:34.386937Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Beheer klantenlijst toont gespaarde spaarpunten per klant",
+    "doel": "beheer (code)"
   }
 ]
