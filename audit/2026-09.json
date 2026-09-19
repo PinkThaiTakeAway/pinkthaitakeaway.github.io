@@ -733,5 +733,12 @@
     "adminid": "assist",
     "wat": "Allergieen: keuzemenu (chips) + vrije tekst",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T06:14:27.704534Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Allergie direct opslaan bij wijziging (chip/tekst), debounced",
+    "doel": "beheer (code)"
   }
 ]
