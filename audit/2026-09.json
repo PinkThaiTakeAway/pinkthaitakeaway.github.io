@@ -705,5 +705,12 @@
     "adminid": "assist",
     "wat": "Optioneel adres bij bestellen (op order + profiel bijgewerkt); token behoudt profielvelden",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T05:42:29.115264Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Beheer toont/bewerkt standaard pittigheid per klant",
+    "doel": "beheer (code)"
   }
 ]
