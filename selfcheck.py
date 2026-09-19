@@ -586,13 +586,13 @@ _MAIL_MARKERS = [
     (r"promptOnderwerp", "promptOnderwerp"), (r"promptBericht", "promptBericht"),
     (r"losseMail", "losseMail"), (r"emailFout", "emailFout"), (r"emailOfTel", "emailOfTel"),
     (r"impGeenEmail", "impGeenEmail"),
-    (r"labelEmail", "labelEmail"), (r"phEmail", "phEmail"), (r'"fEmail"', "fEmail-veld"), (r"\bemailOk\b", "emailOk"),
+    (r"\bemailOk\b", "emailOk"),
 ]
 _MAIL_KEY_NAMES = {
     "bedankBtn", "bedankAl", "confBedank", "badgeBedankt", "bulkOnderwerp", "bulkOnderwerpDef",
     "bulkBericht", "bulkConf", "bulkBezig", "bulk", "tBedankVerz", "tMailVerz", "tMailFout",
     "tGeenMail", "tBulkKlaar", "tBulkFout", "promptOnderwerp", "promptOnderwerpDef", "promptBericht",
-    "losseMail", "emailFout", "emailOfTel", "impGeenEmail", "labelEmail", "phEmail",
+    "losseMail", "emailFout", "emailOfTel", "impGeenEmail",
 }
 
 def restant_checks(html):
