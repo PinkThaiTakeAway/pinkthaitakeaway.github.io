@@ -3376,6 +3376,7 @@ async function laadAccount(){
   if(!cache){ try{ cache = JSON.parse(localStorage.getItem("tta_acctcache")||"null"); }catch(e){} }
   if(cache && cache.token===tok && cache.r) renderAccount(cache.r);
   else body.innerHTML = '<p class="hloading">'+esc(LT.accLaden)+'</p>';
+  try{ await loadLoyal(); }catch(e){}   // verse spaarkaart-stand vóór de definitieve weergave
   const r = await fetchAccount();
   if(!r || !r.ok){ localStorage.removeItem("tta_klanttoken"); localStorage.removeItem("tta_acctcache"); _accountData=null; updateAcctBtn(); closeAccount(); openLogin(); return; }
   _accountData = {token:tok, r:r};
