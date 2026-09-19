@@ -956,7 +956,7 @@ def maintenance_checks(html):
     kb = len(html.encode("utf-8")) / 1024
     big = [m for m in re.findall(r'data:image/[^;]+;base64,([A-Za-z0-9+/=]+)', html) if len(m) > 60000]
     msgs = []
-    if kb > 450: msgs.append(f"index.html is {kb:.0f} KB (boven 450)")
+    if kb > 600: msgs.append(f"index.html is {kb:.0f} KB (boven 600 \u2014 tijd om op te schonen)")
     if big: msgs.append(f"{len(big)} grote inline-afbeelding(en) ingebed")
     items.append({"naam": ("; ".join(msgs)) if msgs
                   else f"index.html compact ({kb:.0f} KB, geen zware inline-afbeeldingen)",
