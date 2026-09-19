@@ -761,5 +761,12 @@
     "adminid": "assist",
     "wat": "Allergieen: 'Geen'-optie (wederzijds uitsluitend)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T06:49:05.455931Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Allergie 'Geen' verbergt overige keuzes + tekstveld; uitklikken toont ze weer",
+    "doel": "beheer (code)"
   }
 ]
