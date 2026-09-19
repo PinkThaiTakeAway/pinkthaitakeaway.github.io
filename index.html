@@ -332,6 +332,8 @@
   .kinstel-check input{width:18px;height:18px;flex:0 0 auto;accent-color:#e5007d}
   .belopt input{width:18px;height:18px;flex:0 0 auto;accent-color:#e5007d}
   .belnudge{margin-top:12px;background:#fff4e0;border:1.5px solid #f0d089;border-radius:12px;padding:11px 14px;font-size:.9rem;font-weight:600;color:#9a6a00}
+  .adresdetails{margin-top:2px}
+  .adresdetails summary{cursor:pointer;font-size:.9rem;font-weight:600;color:var(--forest);padding:6px 0}
   .loyalcard.klaar{background:#fbeaf3;border-color:#f3c6de}
   .afhdagen{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px}
   .afhdag{display:flex;align-items:center;gap:5px;font-size:.9rem;cursor:pointer}
@@ -994,7 +996,7 @@ const I18N = {
     payLabel:"Betaling", payOptTikkie:"Tikkie", payOptCash:"Contant bij ophalen",
     payMsgTikkie:t=>`💳 Je krijgt een <b>Tikkie</b>-betaalverzoek voor <b>${t}</b> op je telefoonnummer. Betaal vóór de afhaaldag.`,
     payMsgCash:t=>`💵 Je betaalt <b>${t}</b> <b>contant</b> bij het ophalen. Gepast betalen wordt gewaardeerd.`,
-    labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail (optioneel)", phEmail:"naam@voorbeeld.nl", labelNote:"Opmerking (optioneel)", labelMoment:"Afhaalmoment", phMoment:"Kies een afhaalmoment", kiesMoment:"Kies eerst een afhaalmoment.", pickupPrompt:"Kies je afhaalmoment om verder te gaan.", phName:"Voor- en achternaam", phNote:"Bijv. niet te pittig, geen pinda's...",
+    labelName:"Je naam", labelPhone:"Telefoon", labelEmail:"E-mail (optioneel)", phEmail:"naam@voorbeeld.nl", labelAdresOpt:"➕ Adres toevoegen (optioneel)", labelStraat:"Straat en huisnummer", labelPostcode:"Postcode", labelPlaats:"Plaats", labelNote:"Opmerking (optioneel)", labelMoment:"Afhaalmoment", phMoment:"Kies een afhaalmoment", kiesMoment:"Kies eerst een afhaalmoment.", pickupPrompt:"Kies je afhaalmoment om verder te gaan.", phName:"Voor- en achternaam", phNote:"Bijv. niet te pittig, geen pinda's...",
     subtotal:"Subtotaal", total:"Totaal", placeOrder:"Bestelling plaatsen",
     orderOk:"Bestelling geplaatst! 🌸 We zien je op de gekozen tijd bij Pink Thai TakeAway. Tot dan!", optioneel:"optioneel", orderSending:"Versturen…", orderFail:"Versturen mislukt. Controleer je internetverbinding en probeer het opnieuw.", orderNr:"Bestelnummer", orderShareBtn:"Deel Pink Thai met vrienden", agendaBtn:"Zet in mijn agenda", belTitel:"Je hebt een beloning gespaard — wat wil je?", belKiesGerecht:(bel)=>(bel||"een gratis item"), belKiesKorting:(k)=>k+"% korting op deze bestelling", belBewaar:"Bewaar voor een volgende keer", belBijna:(bedrag)=>"Nog "+bedrag+" tot een spaarstempel — iets extra's erbij? 🌸", kortingLabel:(k)=>"Korting ("+k+"%)", orderAccountHint:"Tip: bekijk je bestellingen en bestel sneller opnieuw via 👤 bovenaan.", modeVers:"Vers afhalen", modeIngevroren:"Ingevroren, op afspraak", ingevrorenNotice:"We vriezen je bestelling in en nemen contact op voor een afhaalafspraak — je kunt op elk moment bestellen.", afhaalIngevroren:"Ingevroren — op afspraak (we nemen contact op)", orderOkIngevroren:"Bestelling geplaatst! 🌸 We vriezen 'm voor je in en nemen contact op voor een afhaalafspraak. Tot snel!", orderCooldown:"Je hebt zojuist besteld. Wacht even voordat je een nieuwe bestelling plaatst.", orderPausedMsg:"We zijn tijdelijk gesloten voor bestellingen. Kom binnenkort terug! 🌸", closedBanner:"🔴 Bestellen is gesloten — bekijk gerust het menu", 
     orderErr:"Vul je naam en telefoon in.",
@@ -1034,7 +1036,7 @@ const I18N = {
     payLabel:"Payment", payOptTikkie:"Tikkie", payOptCash:"Cash on pickup",
     payMsgTikkie:t=>`💳 You'll receive a <b>Tikkie</b> payment request for <b>${t}</b> on your phone. Pay before pickup day.`,
     payMsgCash:t=>`💵 You'll pay <b>${t}</b> in <b>cash</b> on pickup. Exact change appreciated.`,
-    labelName:"Your name", labelPhone:"Phone", labelEmail:"Email (optional)", phEmail:"name@example.com", labelNote:"Note (optional)", labelMoment:"Pickup moment", phMoment:"Choose a pickup moment", kiesMoment:"Please choose a pickup moment first.", pickupPrompt:"Choose your pickup moment to continue.", phName:"Full name", phNote:"E.g. not too spicy, no peanuts...",
+    labelName:"Your name", labelPhone:"Phone", labelEmail:"Email (optional)", phEmail:"name@example.com", labelAdresOpt:"➕ Add address (optional)", labelStraat:"Street and number", labelPostcode:"Postcode", labelPlaats:"City", labelNote:"Note (optional)", labelMoment:"Pickup moment", phMoment:"Choose a pickup moment", kiesMoment:"Please choose a pickup moment first.", pickupPrompt:"Choose your pickup moment to continue.", phName:"Full name", phNote:"E.g. not too spicy, no peanuts...",
     subtotal:"Subtotal", total:"Total", placeOrder:"Place order",
     orderOk:"Order placed! 🌸 See you at your chosen time at Pink Thai TakeAway!", optioneel:"optional", orderSending:"Sending…", orderFail:"Sending failed. Check your connection and try again.", orderNr:"Order number", orderShareBtn:"Share Pink Thai with friends", agendaBtn:"Add to my calendar", belTitel:"You\u2019ve earned a reward — what would you like?", belKiesGerecht:(bel)=>(bel||"a free item"), belKiesKorting:(k)=>k+"% off this order", belBewaar:"Save it for next time", belBijna:(bedrag)=>"Only "+bedrag+" more for a stamp — add something extra? 🌸", kortingLabel:(k)=>"Discount ("+k+"%)", orderAccountHint:"Tip: see your orders and reorder faster via 👤 at the top.", modeVers:"Fresh pickup", modeIngevroren:"Frozen, by appointment", ingevrorenNotice:"We'll freeze your order and contact you to arrange pickup — you can order anytime.", afhaalIngevroren:"Frozen — by appointment (we'll contact you)", orderOkIngevroren:"Order placed! 🌸 We'll freeze it for you and contact you to arrange pickup. See you soon!", orderCooldown:"You just placed an order. Please wait a moment before ordering again.", orderPausedMsg:"We're temporarily closed for orders. Please check back soon! 🌸", closedBanner:"🔴 Ordering closed — you can still browse the menu", 
     orderErr:"Please enter your name and phone.",
@@ -1075,7 +1077,7 @@ const I18N = {
     payLabel:"การชำระเงิน", payOptTikkie:"Tikkie", payOptCash:"เงินสดตอนรับอาหาร",
     payMsgTikkie:t=>`💳 คุณจะได้รับคำขอชำระเงิน <b>Tikkie</b> <b>${t}</b> ทางโทรศัพท์ กรุณาชำระก่อนวันรับ`,
     payMsgCash:t=>`💵 ชำระ <b>${t}</b> <b>เงินสด</b> ตอนรับอาหาร`,
-    labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล (ถ้ามี)", phEmail:"name@example.com", labelNote:"หมายเหตุ (ถ้ามี)", labelMoment:"เวลารับอาหาร", phMoment:"เลือกเวลารับอาหาร", kiesMoment:"กรุณาเลือกเวลารับอาหารก่อน", pickupPrompt:"เลือกเวลารับอาหารเพื่อดำเนินการต่อ", phName:"ชื่อ-นามสกุล", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
+    labelName:"ชื่อ", labelPhone:"โทรศัพท์", labelEmail:"อีเมล (ถ้ามี)", phEmail:"name@example.com", labelAdresOpt:"➕ เพิ่มที่อยู่ (ถ้ามี)", labelStraat:"ถนนและบ้านเลขที่", labelPostcode:"รหัสไปรษณีย์", labelPlaats:"เมือง", labelNote:"หมายเหตุ (ถ้ามี)", labelMoment:"เวลารับอาหาร", phMoment:"เลือกเวลารับอาหาร", kiesMoment:"กรุณาเลือกเวลารับอาหารก่อน", pickupPrompt:"เลือกเวลารับอาหารเพื่อดำเนินการต่อ", phName:"ชื่อ-นามสกุล", phNote:"เช่น ไม่เผ็ดมาก ไม่ใส่ถั่ว...",
     subtotal:"ยอดรวมย่อย", total:"ยอดรวม", placeOrder:"สั่งซื้อ",
     orderOk:"สั่งซื้อสำเร็จ! 🌸 เจอกันตามเวลาที่เลือกที่ Pink Thai TakeAway นะคะ", optioneel:"ไม่บังคับ", orderSending:"กำลังส่ง…", orderFail:"ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่", orderNr:"หมายเลขคำสั่งซื้อ", orderShareBtn:"แชร์ Pink Thai ให้เพื่อน", agendaBtn:"เพิ่มลงในปฏิทินของฉัน", belTitel:"คุณได้รับรางวัล — ต้องการอะไร?", belKiesGerecht:(bel)=>(bel||"ของฟรีหนึ่งรายการ"), belKiesKorting:(k)=>"ลด "+k+"% ออเดอร์นี้", belBewaar:"เก็บไว้ครั้งหน้า", belBijna:(bedrag)=>"อีก "+bedrag+" ก็ได้แต้ม — สั่งเพิ่มไหม? 🌸", kortingLabel:(k)=>"ส่วนลด ("+k+"%)", orderAccountHint:"เคล็ดลับ: ดูออเดอร์และสั่งซ้ำเร็วขึ้นผ่าน 👤 ด้านบน", modeVers:"รับสด", modeIngevroren:"แช่แข็ง นัดรับ", ingevrorenNotice:"เราจะแช่แข็งออเดอร์และติดต่อคุณเพื่อนัดรับ — สั่งได้ตลอดเวลา", afhaalIngevroren:"แช่แข็ง — นัดรับ (เราจะติดต่อกลับ)", orderOkIngevroren:"สั่งซื้อสำเร็จ! 🌸 เราจะแช่แข็งให้และติดต่อคุณเพื่อนัดรับ แล้วพบกันเร็วๆ นี้!", orderCooldown:"คุณเพิ่งสั่งซื้อไป กรุณารอสักครู่ก่อนสั่งใหม่", orderPausedMsg:"ปิดรับออเดอร์ชั่วคราว กลับมาใหม่เร็ว ๆ นี้! 🌸", closedBanner:"🔴 ปิดรับออเดอร์ — ดูเมนูได้", 
     orderErr:"กรุณากรอกชื่อและเบอร์โทร",
@@ -1643,8 +1645,8 @@ document.getElementById("cartBtn").onclick = openSheet;
 document.getElementById("fbGo").onclick = openSheet;
 document.getElementById("closeBtn").onclick = closeSheet;
 overlay.onclick = closeSheet;
-const form = { naam:"", tel:"", email:"", slot:"", note:"", pay:"contant", pickTs:0, beloningKeuze:"" };
-try{ const _kp=JSON.parse(localStorage.getItem("tta_klantprofiel")||"null"); if(_kp){ if(_kp.naam) form.naam=_kp.naam; if(_kp.tel) form.tel=_kp.tel; if(_kp.email) form.email=_kp.email; } }catch(e){}
+const form = { naam:"", tel:"", email:"", straat:"", postcode:"", plaats:"", slot:"", note:"", pay:"contant", pickTs:0, beloningKeuze:"" };
+try{ const _kp=JSON.parse(localStorage.getItem("tta_klantprofiel")||"null"); if(_kp){ if(_kp.naam) form.naam=_kp.naam; if(_kp.tel) form.tel=_kp.tel; if(_kp.email) form.email=_kp.email; if(_kp.straat) form.straat=_kp.straat; if(_kp.postcode) form.postcode=_kp.postcode; if(_kp.plaats) form.plaats=_kp.plaats; } }catch(e){}
 
 function renderSheet(){
   const ids = Object.keys(cart);
@@ -1686,6 +1688,11 @@ function renderSheet(){
       <div class="field"><label for="fName">${T().labelName} <span class="req">*</span></label><input id="fName" type="text" placeholder="${T().phName}" autocomplete="name" value="${esc(form.naam)}"></div>
       <div class="field"><label for="fPhone">${T().labelPhone} <span class="req">*</span></label><input id="fPhone" type="tel" placeholder="06 ..." autocomplete="tel" value="${esc(form.tel)}"></div>
       <div class="field"><label for="fEmail">${T().labelEmail}</label><input id="fEmail" type="email" placeholder="${T().phEmail}" autocomplete="email" value="${esc(form.email||"")}"></div>
+      <details class="adresdetails"${(form.straat||form.postcode||form.plaats)?" open":""}><summary>${T().labelAdresOpt}</summary>
+      <div class="field"><label for="fStraat">${T().labelStraat}</label><input id="fStraat" type="text" autocomplete="street-address" value="${esc(form.straat||"")}"></div>
+      <div class="field"><label for="fPostcode">${T().labelPostcode}</label><input id="fPostcode" type="text" autocomplete="postal-code" value="${esc(form.postcode||"")}"></div>
+      <div class="field"><label for="fPlaats">${T().labelPlaats}</label><input id="fPlaats" type="text" autocomplete="address-level2" value="${esc(form.plaats||"")}"></div>
+      </details>
       <div class="field"><label for="fNote">${T().labelNote}</label><textarea id="fNote" placeholder="${T().phNote}">${esc(form.note)}</textarea></div>
       <div class="field"><label>${T().payLabel}</label>
         <div class="payopts">
@@ -1697,8 +1704,8 @@ function renderSheet(){
   sheetBody.innerHTML = html;
   sheetBody.querySelectorAll("[data-m]").forEach(b => b.onclick = () => change(b.dataset.m, -1));
   sheetBody.querySelectorAll("[data-p]").forEach(b => b.onclick = () => change(b.dataset.p, 1));
-  const map={fName:"naam",fPhone:"tel",fNote:"note",fEmail:"email"};
-  ["fName","fPhone","fNote","fEmail"].forEach(idf => { const el=document.getElementById(idf); if(el) el.oninput=e=>{ form[map[idf]]=e.target.value; if(idf==="fName"||idf==="fPhone"||idf==="fEmail"){ try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam:form.naam||"", tel:form.tel||"", email:form.email||""})); }catch(err){} } }; });
+  const map={fName:"naam",fPhone:"tel",fNote:"note",fEmail:"email",fStraat:"straat",fPostcode:"postcode",fPlaats:"plaats"};
+  ["fName","fPhone","fNote","fEmail","fStraat","fPostcode","fPlaats"].forEach(idf => { const el=document.getElementById(idf); if(el) el.oninput=e=>{ form[map[idf]]=e.target.value; if(idf!=="fNote"){ try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam:form.naam||"", tel:form.tel||"", email:form.email||"", straat:form.straat||"", postcode:form.postcode||"", plaats:form.plaats||""})); }catch(err){} } }; });
   { const fd=document.getElementById("fDay"); if(fd) fd.onchange = e => { form.pickTs = Number(e.target.value)||0; renderSheet(); }; }
   sheetBody.querySelectorAll("input[name=belkeuze]").forEach(function(r){ r.onchange = function(e){ form.beloningKeuze = e.target.value; renderSheet(); }; });
   sheetBody.querySelectorAll(".modeopt").forEach(b => b.onclick = () => { form.mode = b.dataset.mode; renderSheet(); });
@@ -1743,6 +1750,9 @@ document.getElementById("waBtn").onclick = async () => {
   const naam=(document.getElementById("fName")?.value||"").trim();
   const tel =(document.getElementById("fPhone")?.value||"").trim();
   const email=(document.getElementById("fEmail")?.value||"").trim();
+  const straat=(document.getElementById("fStraat")?.value||"").trim();
+  const postcode=(document.getElementById("fPostcode")?.value||"").trim();
+  const plaats=(document.getElementById("fPlaats")?.value||"").trim();
   const _w0 = dayWindow(selectedPickupDate().getDay());
   const _pickDate = selectedPickupDate();
   const note=(document.getElementById("fNote")?.value||"").trim();
@@ -1769,7 +1779,7 @@ document.getElementById("waBtn").onclick = async () => {
   btn.disabled = true; msg.className="order-msg"; msg.textContent = T().orderSending;
   try{
     const r = await postOrder({
-      start: _ingevroren ? "" : pickupISO(_w0.van), ingevroren: _ingevroren, order_id: orderId, naam, tel, email, vid: myVid(),
+      start: _ingevroren ? "" : pickupISO(_w0.van), ingevroren: _ingevroren, order_id: orderId, naam, tel, email, straat, postcode, plaats, vid: myVid(),
       bestelling: lines.join("\n"), totaal: fmt(_teBet), betaling, opmerking: note,
       afhaal, taal: LANG, mand: JSON.stringify(cart),
       klanttoken: acctToken(),
@@ -1785,7 +1795,7 @@ document.getElementById("waBtn").onclick = async () => {
     if(r.token){ try{ localStorage.setItem("tta_klanttoken", r.token); localStorage.removeItem("tta_noauto"); _accountData=null; localStorage.removeItem("tta_acctcache"); }catch(e){} try{ updateAcctBtn(); }catch(e){} try{ fetchAccount().then(function(a){ if(a && a.ok){ _accountData={token:r.token, r:a}; try{ localStorage.setItem("tta_acctcache", JSON.stringify({token:r.token, r:a})); }catch(e){} try{ updateAcctBtn(); }catch(e){} } }).catch(function(){}); }catch(e){} }
     saveJSON("tta_lastorder", {t: Date.now()});
     Object.keys(cart).forEach(k => delete cart[k]); store.save();
-    try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam, tel, email})); }catch(e){}
+    try{ localStorage.setItem("tta_klantprofiel", JSON.stringify({naam, tel, email, straat, postcode, plaats})); }catch(e){}
     form.note=""; form.pay="contant";
     buildMenu(); updateBars();
     sheetBody.innerHTML = `<div class="empty"><div class="big">🌸</div><p>${_ingevroren ? T().orderOkIngevroren : T().orderOk}</p><p class="ordernr">${T().orderNr}: #${orderId}</p>`
