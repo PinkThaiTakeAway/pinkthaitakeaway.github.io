@@ -2,10 +2,14 @@
   {
     "naam": "Hans Stobbe",
     "tel": "0628498822",
-    "email": "",
+    "email": "hansstobbe@proton.me",
     "taal": "nl",
     "token": "2d2y0zrhwqmhprxivqa7q3nm",
     "uitgenodigd": 0,
-    "puntenBonus": 1
+    "puntenBonus": 1,
+    "straat": "Goordijk 24",
+    "postcode": "5081 WD",
+    "plaats": "Hilvarenbeek",
+    "pittig": 3
   }
 ]
