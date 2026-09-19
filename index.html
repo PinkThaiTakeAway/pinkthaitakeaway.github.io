@@ -3769,12 +3769,12 @@ function renderKlanten(){
 function klantAggregatie(){
   const map = {};
   (_klantRecords||[]).forEach(k=>{
-    const key = k.email ? ("e:"+String(k.email).toLowerCase()) : (k.tel ? ("t:"+String(k.tel).replace(/\D/g,"")) : (k.naam?("n:"+String(k.naam).toLowerCase()):""));
+    const key = k.tel ? ("t:"+String(k.tel).replace(/\D/g,"")) : (k.email ? ("e:"+String(k.email).toLowerCase()) : (k.naam?("n:"+String(k.naam).toLowerCase()):""));
     if(!key) return;
     if(!map[key]) map[key] = {naam:k.naam, email:k.email, tel:k.tel, notitie:k.notitie||"", laatstIngelogd:k.laatstIngelogd||"", uitgenodigd:k.uitgenodigd||0, laatstUitgenodigd:k.laatstUitgenodigd||"", taal:k.taal||"", token:k.token||"", puntenBonus:k.puntenBonus||0, straat:k.straat||"", postcode:k.postcode||"", plaats:k.plaats||"", bestellingen:[]};
   });
   _klantData.forEach(b=>{
-    const key = b.email ? ("e:"+String(b.email).toLowerCase()) : (b.tel ? ("t:"+String(b.tel).replace(/\D/g,"")) : (b.naam?("n:"+String(b.naam).toLowerCase()):"?"));
+    const key = b.tel ? ("t:"+String(b.tel).replace(/\D/g,"")) : (b.email ? ("e:"+String(b.email).toLowerCase()) : (b.naam?("n:"+String(b.naam).toLowerCase()):"?"));
     if(!map[key]) map[key] = {naam:b.naam, email:b.email, tel:b.tel, notitie:b.notitie||"", bestellingen:[]};
     if(!map[key].naam && b.naam) map[key].naam = b.naam;
     if(!map[key].tel && b.tel) map[key].tel = b.tel;
