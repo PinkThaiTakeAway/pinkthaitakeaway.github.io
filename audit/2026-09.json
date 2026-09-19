@@ -719,5 +719,12 @@
     "adminid": "assist",
     "wat": "Klant-zelfservice uitgebreid: allergieën/dieetwensen, standaard variant, en 'mijn gegevens verwijderen' (AVG)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T06:04:38.510306Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Allergieën: keuzemenu (chips) + vrije tekst (account + beheer)",
+    "doel": "beheer (code)"
   }
 ]
