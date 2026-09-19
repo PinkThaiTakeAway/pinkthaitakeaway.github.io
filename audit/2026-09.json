@@ -698,5 +698,12 @@
     "adminid": "assist",
     "wat": "Beheer toont/bewerkt klant-adres (straat/postcode/plaats) + e-mail; sync klanten.json <-> token",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-19T05:35:17.012236Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Optioneel adres bij bestellen (op order + profiel bijgewerkt); token behoudt profielvelden",
+    "doel": "beheer (code)"
   }
 ]
