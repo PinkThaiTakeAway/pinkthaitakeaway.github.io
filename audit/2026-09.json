@@ -824,5 +824,12 @@
     "adminid": "assist",
     "wat": "Test-WhatsApp toont hetzelfde sluit-overzicht (preview)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-20T07:59:26.605579Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Test-WhatsApp toont fictief voorbeeld in sluit-overzicht-opmaak",
+    "doel": "beheer (code)"
   }
 ]
