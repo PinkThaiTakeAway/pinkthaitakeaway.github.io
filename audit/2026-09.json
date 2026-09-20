@@ -817,5 +817,12 @@
     "adminid": "assist",
     "wat": "Sluit-overzicht (WhatsApp): totaalbedrag + per-gerecht 'te maken' + per-klant wat gemaakt moet worden",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-20T07:58:32.663347Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Test-WhatsApp toont hetzelfde sluit-overzicht (preview)",
+    "doel": "beheer (code)"
   }
 ]
