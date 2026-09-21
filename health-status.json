@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-09-21T07:17:37Z",
+  "opgeslagen": "2026-09-21T12:21:00Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-09-21T07:17:37.133103+00:00",
+    "updated": "2026-09-21T12:21:00.365671+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -444,7 +444,7 @@
             "status": "ok"
           },
           {
-            "naam": "TLS-certificaat geldig, nog 77 dagen (tot 07-12-2026)",
+            "naam": "TLS-certificaat geldig, nog 76 dagen (tot 07-12-2026)",
             "status": "ok"
           },
           {
