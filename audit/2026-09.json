@@ -852,5 +852,12 @@
     "adminid": "assist",
     "wat": "Bezoek-tab: leesbare per-dag-lijst laatste 14 dagen",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-26T10:07:51.385139Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek: dag in 14-dagen-lijst klikbaar -> unieke bezoekers van die dag",
+    "doel": "beheer (code)"
   }
 ]
