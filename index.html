@@ -4558,7 +4558,7 @@ function tekenBezoek(r){
     const lokaalPct = Math.round(lokaalN/tot*100);
     const bars = ent.slice(0,10).map(function(e){ const pct=Math.round(e[1]/tot*100), w=Math.max(4,Math.round(e[1]/max*100)), lok=isLokaal(e[0]);
       return '<div class="plbar-row'+(lok?" pllok":"")+'" data-periode="plaats:'+esc(e[0]||"")+'" data-lbl="'+esc(e[0]||K.bzOnbekend)+'"><div class="plbar-fill" style="width:'+w+'%"></div><span class="plbar-lbl">'+(lok?"📍 ":"")+esc(e[0]||K.bzOnbekend)+'</span><span class="plbar-n">'+e[1]+' ('+pct+'%)</span></div>'; }).join("");
-    return '<details class="bzsec" open><summary class="bzsum">🗺 '+esc(K.bzPlaats)+'</summary><div class="bzsecin">'+
+    return '<details class="bzsec"><summary class="bzsum">🗺 '+esc(K.bzPlaats)+'</summary><div class="bzsecin">'+
       (lokaalN?'<div class="pllokaal">📍 '+lokaalPct+'% '+esc(K.bzUitOmgeving)+'</div>':"")+
       '<div class="plbars">'+bars+'</div></div></details>';
   };
