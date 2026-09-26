@@ -701,6 +701,8 @@
   .ktoprow .ktn{font-weight:700;color:#555;min-width:26px}
   .kafhaal-dag{font-weight:700;color:var(--forest);margin:14px 0 6px;font-size:.95rem}
   .bzchart{display:flex;align-items:flex-end;gap:2px;height:90px;padding:6px 0;border-bottom:1px solid #eee;margin-bottom:6px}
+  .bz14dagen{margin-top:8px;border-top:1px solid var(--line);padding-top:6px}
+  .bz14dagen .ktn{font-weight:800;color:var(--forest)}
   .bzbar{flex:1;height:100%;display:flex;align-items:flex-end}
   .bzbfill{width:100%;background:var(--amber);border-radius:2px 2px 0 0;min-height:1px;transition:height .2s}
   .bztabs-note{font-size:.76rem;color:#999;margin:2px 0 10px}
@@ -4555,6 +4557,7 @@ function tekenBezoek(r){
       (lokaalN?'<div class="pllokaal">📍 '+lokaalPct+'% '+esc(K.bzUitOmgeving)+'</div>':"")+
       '<div class="plbars">'+bars+'</div></div></details>';
   };
+  let dag14Rijen=""; for(let i=0;i<14;i++){ const ds=amsDate(new Date(nu.getTime()-i*864e5)); const dt=new Date(ds+"T12:00:00"); const wd=isNaN(dt.getTime())?"":dt.toLocaleDateString(_bzLocale,{weekday:"short"}); const lbl=ds.slice(8)+"-"+ds.slice(5,7); dag14Rijen+='<div class="ktoprow"><span>'+esc(wd)+' '+lbl+'</span><span class="ktn">'+(perDag[ds]||0)+'</span></div>'; }
   body.innerHTML =
     '<p class="kinstel-uit" style="margin:4px 2px 12px">'+esc(K.bzUit)+'</p>'+
     '<div class="kstat-grid">'+kaart(cV,K.bzVandaag,"vandaag")+kaart(cW,K.bzWeek,"week")+kaart(cM,K.bzMaand,"maand")+kaart(recs.length,K.bzTotaal,"totaal")+kaart(vids.size,K.bzUniek,"uniek")+'</div>'+
@@ -4563,7 +4566,7 @@ function tekenBezoek(r){
     '<p class="kinstel-uit" style="margin:14px 2px 6px">'+esc(K.bzConversieUit)+'</p>'+
     '<div class="kstat-grid">'+kaart(besteld,K.bzBestellers,"bestellers")+kaart(kijkers,K.bzKijkers,"kijkers")+kaart(conv+"%",K.bzConversie,"conversie")+kaart(convOpen===null?"\u2014":convOpen+"%",K.bzConvOpen,"convopen")+'</div>'+
     verdeling(K.bzOpenDicht, openStatus, {open:K.bzOpen, gesloten:K.bzGesloten, onbekend:K.bzOnbekend})+
-    '<details class="bzsec" open><summary class="bzsum">'+esc(K.bzPerDag)+'</summary><div class="bzsecin"><div class="bzchart">'+bars+'</div></div></details>'+
+    '<details class="bzsec" open><summary class="bzsum">'+esc(K.bzPerDag)+'</summary><div class="bzsecin"><div class="bzchart">'+bars+'</div><div class="bz14dagen">'+dag14Rijen+'</div></div></details>'+
     verdeling(K.bzType, type, {klant:K.bzKlant, beheer:K.bzBeheer, volg:K.bzVolg})+
     verdeling(K.bzHerkomst, herkomst, {direct:K.bzDirect, whatsapp:K.bzWhatsapp, google:K.bzGoogle, overig:K.bzOverig})+
     verdeling(K.bzToestel, toestel, {mobiel:K.bzMobiel, desktop:K.bzDesktop})+
