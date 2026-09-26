@@ -1,11 +1,11 @@
 {
-  "opgeslagen": "2026-09-26T10:51:07Z",
+  "opgeslagen": "2026-09-26T11:10:36Z",
   "scriptVersie": null,
   "verwachteVersie": null,
   "versieOk": false,
   "bron": "automatisch via GitHub Actions (live script bevraagd)",
   "selfcheck": {
-    "updated": "2026-09-26T10:51:06.859693+00:00",
+    "updated": "2026-09-26T11:10:36.219755+00:00",
     "groepen": [
       {
         "naam": "Bronbestanden",
@@ -216,8 +216,8 @@
             "status": "ok"
           },
           {
-            "naam": "2 vertaalsleutel(s) lijken ongebruikt (mogelijke restanten): bzLand, bzPlaats",
-            "status": "warn"
+            "naam": "geen verweesde vertaalsleutels",
+            "status": "ok"
           },
           {
             "naam": "geen ongebruikte data-/beeldbestanden",
