@@ -711,6 +711,7 @@
   .bzdagsum > span:first-of-type{flex:1}
   .bzdagsum .ktn{font-weight:800;color:var(--forest)}
   .bzdaginhoud{padding:2px 4px 10px}
+  .bzsub{font-weight:400;font-size:.8rem;color:#999}
   .bzbar{flex:1;height:100%;display:flex;align-items:flex-end}
   .bzbfill{width:100%;background:var(--amber);border-radius:2px 2px 0 0;min-height:1px;transition:height .2s}
   .bztabs-note{font-size:.76rem;color:#999;margin:2px 0 10px}
@@ -4469,14 +4470,14 @@ function tekenBezoek(r){
   const maandGrens = new Date(nu.getFullYear(), nu.getMonth(), 1).toISOString();
   let cV=0,cW=0,cM=0; const vids=new Set();
   const perDag={}, herkomst={direct:0,whatsapp:0,google:0,overig:0}, toestel={mobiel:0,desktop:0}, taal={}, type={klant:0,beheer:0,volg:0}, land={}, plaats={};
-  const openStatus={open:0,gesloten:0,onbekend:0}; const vidOpen=new Set();
+  const openStatus={open:0,gesloten:0,onbekend:0}; const vidOpen=new Set(); const perDagU={};
   recs.forEach(function(v){
     const t=String(v.tijd||""), dag=amsDate(v.tijd);
     if(dag===vandaag) cV++;
     if(t>=weekGrens) cW++;
     if(t>=maandGrens) cM++;
     if(v.vid) vids.add(v.vid);
-    perDag[dag]=(perDag[dag]||0)+1;
+    perDag[dag]=(perDag[dag]||0)+1; if(!perDagU[dag]) perDagU[dag]={v:new Set(),z:0}; if(v.vid) perDagU[dag].v.add(v.vid); else perDagU[dag].z++;
     if(herkomst[v.herkomst]!=null) herkomst[v.herkomst]++; else herkomst.overig++;
     if(toestel[v.toestel]!=null) toestel[v.toestel]++;
     if(v.taal) taal[v.taal]=(taal[v.taal]||0)+1;
@@ -4566,7 +4567,7 @@ function tekenBezoek(r){
       (lokaalN?'<div class="pllokaal">📍 '+lokaalPct+'% '+esc(K.bzUitOmgeving)+'</div>':"")+
       '<div class="plbars">'+bars+'</div></div></details>';
   };
-  let dag14Rijen=""; for(let i=0;i<14;i++){ const ds=amsDate(new Date(nu.getTime()-i*864e5)); const dt=new Date(ds+"T12:00:00"); const wd=isNaN(dt.getTime())?"":dt.toLocaleDateString(_bzLocale,{weekday:"short"}); const lbl=ds.slice(8)+"-"+ds.slice(5,7); dag14Rijen+='<details class="bzdagdet" data-dag="'+ds+'"><summary class="bzdagsum"><span>'+esc(wd)+' '+lbl+'</span><span class="ktn">'+(perDag[ds]||0)+'</span></summary><div class="bzdaginhoud"></div></details>'; }
+  let dag14Rijen=""; for(let i=0;i<14;i++){ const ds=amsDate(new Date(nu.getTime()-i*864e5)); const dt=new Date(ds+"T12:00:00"); const wd=isNaN(dt.getTime())?"":dt.toLocaleDateString(_bzLocale,{weekday:"short"}); const lbl=ds.slice(8)+"-"+ds.slice(5,7); const _tot=perDag[ds]||0, _u=perDagU[ds]?(perDagU[ds].v.size+perDagU[ds].z):0; dag14Rijen+='<details class="bzdagdet" data-dag="'+ds+'"><summary class="bzdagsum"><span>'+esc(wd)+' '+lbl+'</span><span class="ktn">'+_u+(_tot>_u?' <span class="bzsub">('+_tot+'\u00d7)</span>':'')+'</span></summary><div class="bzdaginhoud"></div></details>'; }
   body.innerHTML =
     '<p class="kinstel-uit" style="margin:4px 2px 12px">'+esc(K.bzUit)+'</p>'+
     '<div class="kstat-grid">'+kaart(cV,K.bzVandaag,"vandaag")+kaart(cW,K.bzWeek,"week")+kaart(cM,K.bzMaand,"maand")+kaart(recs.length,K.bzTotaal,"totaal")+kaart(vids.size,K.bzUniek,"uniek")+'</div>'+
