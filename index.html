@@ -703,6 +703,9 @@
   .bzchart{display:flex;align-items:flex-end;gap:2px;height:90px;padding:6px 0;border-bottom:1px solid #eee;margin-bottom:6px}
   .bz14dagen{margin-top:8px;border-top:1px solid var(--line);padding-top:6px}
   .bz14dagen .ktn{font-weight:800;color:var(--forest)}
+  .bzdagrij{cursor:pointer;border-radius:6px}
+  .bzdagrij:hover{background:#faf6ef}
+  .bzdagrij.bzactief{background:#f3eadf}
   .bzbar{flex:1;height:100%;display:flex;align-items:flex-end}
   .bzbfill{width:100%;background:var(--amber);border-radius:2px 2px 0 0;min-height:1px;transition:height .2s}
   .bztabs-note{font-size:.76rem;color:#999;margin:2px 0 10px}
@@ -4523,6 +4526,7 @@ function tekenBezoek(r){
     if(periode==="conversie") return recs.filter(function(v){ return v.type!=="beheer" && v.vid && klantVids.has(v.vid); });
     if(periode==="convopen") return recs.filter(function(v){ return v.open===true; });
     if(String(periode).indexOf("plaats:")===0){ const pl=String(periode).slice(7); return recs.filter(function(v){ return String(v.plaats||"")===pl; }); }
+    if(String(periode).indexOf("dag:")===0){ const dg=String(periode).slice(4); const laatste={}; let _n=0; recs.forEach(function(v){ if(amsDate(v.tijd)!==dg) return; if(!v.vid){ laatste["_"+(_n++)]=v; return; } const t=String(v.tijd||""); if(!laatste[v.vid] || t>String(laatste[v.vid].tijd||"")) laatste[v.vid]=v; }); return Object.keys(laatste).map(function(k){ return laatste[k]; }); }
     if(periode==="uniek"){ const laatste={}; recs.forEach(function(v){ if(!v.vid) return; const t=String(v.tijd||""); if(!laatste[v.vid] || t>String(laatste[v.vid].tijd||"")) laatste[v.vid]=v; }); return Object.keys(laatste).map(function(k){ return laatste[k]; }); }
     return recs.filter(function(v){ return amsDate(v.tijd)===vandaag; });
   };
@@ -4557,7 +4561,7 @@ function tekenBezoek(r){
       (lokaalN?'<div class="pllokaal">📍 '+lokaalPct+'% '+esc(K.bzUitOmgeving)+'</div>':"")+
       '<div class="plbars">'+bars+'</div></div></details>';
   };
-  let dag14Rijen=""; for(let i=0;i<14;i++){ const ds=amsDate(new Date(nu.getTime()-i*864e5)); const dt=new Date(ds+"T12:00:00"); const wd=isNaN(dt.getTime())?"":dt.toLocaleDateString(_bzLocale,{weekday:"short"}); const lbl=ds.slice(8)+"-"+ds.slice(5,7); dag14Rijen+='<div class="ktoprow"><span>'+esc(wd)+' '+lbl+'</span><span class="ktn">'+(perDag[ds]||0)+'</span></div>'; }
+  let dag14Rijen=""; for(let i=0;i<14;i++){ const ds=amsDate(new Date(nu.getTime()-i*864e5)); const dt=new Date(ds+"T12:00:00"); const wd=isNaN(dt.getTime())?"":dt.toLocaleDateString(_bzLocale,{weekday:"short"}); const lbl=ds.slice(8)+"-"+ds.slice(5,7); dag14Rijen+='<div class="ktoprow bzdagrij" data-periode="dag:'+ds+'" data-lbl="'+esc(wd+' '+lbl)+'"><span>'+esc(wd)+' '+lbl+'</span><span class="ktn">'+(perDag[ds]||0)+' \u203a</span></div>'; }
   body.innerHTML =
     '<p class="kinstel-uit" style="margin:4px 2px 12px">'+esc(K.bzUit)+'</p>'+
     '<div class="kstat-grid">'+kaart(cV,K.bzVandaag,"vandaag")+kaart(cW,K.bzWeek,"week")+kaart(cM,K.bzMaand,"maand")+kaart(recs.length,K.bzTotaal,"totaal")+kaart(vids.size,K.bzUniek,"uniek")+'</div>'+
