@@ -859,5 +859,12 @@
     "adminid": "assist",
     "wat": "Bezoek: dag in 14-dagen-lijst klikbaar -> unieke bezoekers van die dag",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-26T10:12:46.937046Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek: dag vouwt ter plekke uit met unieke bezoekers (accordeon)",
+    "doel": "beheer (code)"
   }
 ]
