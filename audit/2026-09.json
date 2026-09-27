@@ -957,5 +957,12 @@
     "adminid": "assist",
     "wat": "History opgeschoond tot 2026-08-27: audit, admin-logins en aanbod-historie ouder dan 1 maand verwijderd",
     "doel": "beheer (data)"
+  },
+  {
+    "tijd": "2026-09-27T12:29:03.746427Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek: via-veld benut in nieuwe 'Via / campagne'-sectie",
+    "doel": "beheer (code)"
   }
 ]
