@@ -716,6 +716,7 @@
   .bzlandin{padding:2px 4px 8px 14px}
   .appsub{font-weight:700;color:#888;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;margin:8px 0 2px}
   .appsub:first-child{margin-top:2px}
+  .bzip{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;color:#999}
   .bzsub{font-weight:400;font-size:.8rem;color:#999}
   .bzbar{flex:1;height:100%;display:flex;align-items:flex-end;cursor:pointer}
   .bzbar:hover .bzbfill{filter:brightness(.88)}
@@ -4522,7 +4523,7 @@ function tekenBezoek(r){
     const herk = esc(_herkL[v.herkomst]||v.herkomst||K.bzOverig);
     const terug = v.klant ? " · 🔁" : "";
     const volg = v.type==="volg" ? " · 🔗" : "";
-    return '<div class="bzrow"><span class="bztime">'+tijd+'</span><span class="bzloc">📍 '+loc+'</span><span class="bzmeta">'+toe+' '+esc((v.taal||"").toUpperCase())+' · '+herk+' · '+opn+terug+volg+'</span></div>';
+    return '<div class="bzrow"><span class="bztime">'+tijd+'</span><span class="bzloc">📍 '+loc+'</span><span class="bzmeta">'+toe+' '+esc((v.taal||"").toUpperCase())+' · '+herk+' · '+opn+terug+volg+(v.ip?' · <span class="bzip">'+esc(v.ip)+'</span>':'')+'</span></div>';
   };
   const _bzFilter = function(periode){
     if(periode==="week") return recs.filter(function(v){ return String(v.tijd||"")>=weekGrens; });
