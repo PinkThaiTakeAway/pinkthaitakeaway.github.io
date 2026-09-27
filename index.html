@@ -5420,7 +5420,7 @@ function hideLoader(){ const l=document.getElementById("appLoader"); if(l && !l.
       const _ref=(document.referrer||"").toLowerCase();
       const _herk = !_ref ? "direct" : ((_ref.indexOf("whatsapp")>=0||_ref.indexOf("wa.me")>=0) ? "whatsapp" : (_ref.indexOf("google")>=0 ? "google" : "overig"));
       const _pp = new URLSearchParams(location.search);
-      fetch(WORKER_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ soort:"bezoek", type: BEHEER ? "beheer" : (_pp.get("volg") ? "volg" : "klant"), herkomst:_herk, toestel:(window.innerWidth||1024)<768?"mobiel":"desktop", taal:LANG, vid: myVid(), klanttoken:(localStorage.getItem("tta_klanttoken")||_pp.get("login")||""), via:_pp.get("via")||"", open:(function(){ try{ return !!orderStatus().open; }catch(e){ return null; } })() }) }).catch(function(){});
+      fetch(WORKER_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ soort:"bezoek", type: (BEHEER || (function(){ try{ return !!localStorage.getItem("tta_ghtoken"); }catch(e){ return false; } })()) ? "beheer" : (_pp.get("volg") ? "volg" : "klant"), herkomst:_herk, toestel:(window.innerWidth||1024)<768?"mobiel":"desktop", taal:LANG, vid: myVid(), klanttoken:(localStorage.getItem("tta_klanttoken")||_pp.get("login")||""), via:_pp.get("via")||"", open:(function(){ try{ return !!orderStatus().open; }catch(e){ return null; } })() }) }).catch(function(){});
     }
   }catch(e){}
   document.getElementById("loginClose").onclick = closeLogin;
