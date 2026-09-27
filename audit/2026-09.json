@@ -971,5 +971,12 @@
     "adminid": "assist",
     "wat": "Deel-knop: niet-klant-shares getagd (?via=deel) voor zichtbaarheid",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-27T12:36:46.803306Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek: share-tik gelogd + apart geteld ('X keer gedeeld')",
+    "doel": "beheer (code)"
   }
 ]
