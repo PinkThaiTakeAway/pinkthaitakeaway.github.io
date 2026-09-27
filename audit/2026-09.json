@@ -929,5 +929,12 @@
     "adminid": "assist",
     "wat": "Bezoek: verdelingen alleen tonen na doorklik vanuit een tegel (per periode)",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-27T11:46:06.963089Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek: laagste-niveau percentages t.o.v. het totaal (gebruiksaandeel)",
+    "doel": "beheer (code)"
   }
 ]
