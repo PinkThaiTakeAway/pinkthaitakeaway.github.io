@@ -922,5 +922,12 @@
     "adminid": "assist",
     "wat": "Bezoek: device-first sectie (Apparaat -> browser/provider/toestel); losse secties samengevoegd",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-27T11:41:43.419586Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek: verdelingen alleen tonen na doorklik vanuit een tegel (per periode)",
+    "doel": "beheer (code)"
   }
 ]
