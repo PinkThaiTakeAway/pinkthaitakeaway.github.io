@@ -887,5 +887,12 @@
     "adminid": "assist",
     "wat": "Bezoek: Land & Plaats gecombineerd, per land uitvouwbaar naar plaatsen",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-27T11:12:47.946508Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoek: admin-bezoeken uitgesloten uit alle statistiek (niet als bots geteld; notitie toont aantal uitgesloten)",
+    "doel": "beheer (code)"
   }
 ]
