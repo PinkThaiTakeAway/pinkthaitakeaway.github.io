@@ -2957,7 +2957,7 @@ async function laadDeelcode(){
   try{ if(_accountData && _accountData.r && _accountData.r.deelcode){ _deelcode = _accountData.r.deelcode; return; } const r = await fetchAccount(); if(r && r.ok && r.deelcode) _deelcode = r.deelcode; }catch(e){}
 }
 async function deelPagina(){
-  const url = SITE_HOME + (_deelcode ? ("?via=" + _deelcode) : "");
+  const url = SITE_HOME + "?via=" + (_deelcode ? _deelcode : "deel");
   window.open("https://wa.me/?text=" + encodeURIComponent(T().shareText + " " + url), "_blank");
 }
 function wireShare(){
