@@ -943,5 +943,12 @@
     "adminid": "assist",
     "wat": "Bezoek: IP-adres vastleggen (Worker) + tonen in bezoekenlijst",
     "doel": "beheer (code)"
+  },
+  {
+    "tijd": "2026-09-27T11:54:31.727085Z",
+    "naam": "Hans Stobbe (assist)",
+    "adminid": "assist",
+    "wat": "Bezoekstatistiek gereset: alle bezoekrecords verwijderd (2026-08.json, 2026-09.json)",
+    "doel": "beheer (data)"
   }
 ]
